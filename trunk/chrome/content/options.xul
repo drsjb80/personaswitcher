@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE prefwindow SYSTEM "chrome://personaswitcher/locale/options.dtd">
+<prefwindow
+    id="personaswitcher-preferences"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    title="&prefwindow.title;">
+    <prefpane id="pane1" label="&pane1.title;">
+	<preferences>
+	    <preference
+		id="personaswitcher-default-key-shift"
+		name="extensions.personaswitcher.defshift"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-default-key-control"
+		name="extensions.personaswitcher.defcontrol"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-default-key-alt"
+		name="extensions.personaswitcher.defalt"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-default-key-meta"
+		name="extensions.personaswitcher.defmeta"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-default-key"
+		name="extensions.personaswitcher.defkey"
+		type="string"/>
+
+	    <preference
+		id="personaswitcher-rotate-key-shift"
+		name="extensions.personaswitcher.rotshift"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-rotate-key-control"
+		name="extensions.personaswitcher.rotcontrol"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-rotate-key-alt"
+		name="extensions.personaswitcher.rotalt"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-rotate-key-meta"
+		name="extensions.personaswitcher.rotmeta"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-rotate-key"
+		name="extensions.personaswitcher.rotkey"
+		type="string"/>
+
+	    <preference
+		id="personaswitcher-auto-key-shift"
+		name="extensions.personaswitcher.autoshift"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-auto-key-control"
+		name="extensions.personaswitcher.autocontrol"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-auto-key-alt"
+		name="extensions.personaswitcher.autoalt"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-auto-key-meta"
+		name="extensions.personaswitcher.autometa"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-auto-key"
+		name="extensions.personaswitcher.autokey"
+		type="string"/>
+
+	    <preference
+		id="personaswitcher-auto"
+		name="extensions.personaswitcher.auto"
+		type="bool"/>
+	    <preference
+		id="personaswitcher-auto-minutes"
+		name="extensions.personaswitcher.autominutes"
+		type="int"/>
+
+	    <preference
+		id="personaswitcher-preview"
+		name="extensions.personaswitcher.preview"
+		type="bool"/>
+	</preferences>
+
+	<!-- each one of the preferences below reference an id= from above
+	    with a preference= -->
+	<vbox>
+	    <groupbox>
+		<caption label="Keyboard shortcuts"/>
+		<hbox>
+		    <hbox flex="1" pack="end">
+			<label value="Default persona key combination"/>
+		    </hbox>
+		    <checkbox
+			id="default-key-shift"
+			preference="personaswitcher-default-key-shift"
+			label="shift"/>
+		    <checkbox
+			id="default-key-control"
+			preference="personaswitcher-default-key-control"
+			label="control"/>
+		    <checkbox
+			id="default-key-alt"
+			preference="personaswitcher-default-key-alt"
+			label="alt"/>
+		    <checkbox
+			id="default-key-meta"
+			preference="personaswitcher-default-key-meta"
+			label="meta"/>
+		    <label>Key</label>
+		    <textbox
+			id="default-key"
+			preference="personaswitcher-default-key"/>
+		</hbox>
+		<hbox>
+		    <hbox flex="1" pack="end">
+			<label value="Rotate persona key combination"/>
+		    </hbox>
+		    <checkbox
+			id="rotate-key-shift"
+			preference="personaswitcher-rotate-key-shift"
+			label="shift"/>
+		    <checkbox
+			id="rotate-key-control"
+			preference="personaswitcher-rotate-key-control"
+			label="control"/>
+		    <checkbox
+			id="rotate-key-alt"
+			preference="personaswitcher-rotate-key-alt"
+			label="alt"/>
+		    <checkbox
+			id="rotate-key-meta"
+			preference="personaswitcher-rotate-key-meta"
+			label="meta"/>
+		    <label>Key</label>
+		    <textbox
+			id="rotate-key"
+			preference="personaswitcher-rotate-key"/>
+		</hbox>
+		<hbox>
+		    <hbox flex="1" pack="end">
+			<label value="Toggle auto-switch key combination"/>
+		    </hbox>
+		    <checkbox
+			id="auto-key-shift"
+			preference="personaswitcher-auto-key-shift"
+			label="shift"/>
+		    <checkbox
+			id="auto-key-control"
+			preference="personaswitcher-auto-key-control"
+			label="control"/>
+		    <checkbox
+			id="auto-key-alt"
+			preference="personaswitcher-auto-key-alt"
+			label="alt"/>
+		    <checkbox
+			id="auto-key-meta"
+			preference="personaswitcher-auto-key-meta"
+			label="meta"/>
+		    <label>Key</label>
+		    <textbox
+			id="auto-key"
+			preference="personaswitcher-auto-key"/>
+		</hbox>
+	    </groupbox>
+	    <groupbox>
+		<caption label="Autmatic rotation"/>
+		<hbox>
+		    <checkbox
+			id="auto"
+			preference="personaswitcher-auto"
+			label="Automatically switch every"/>
+		    <textbox preference="personaswitcher-auto-minutes"/>
+		    <label value="minutes"/>
+		</hbox>
+	    </groupbox>
+	    <groupbox>
+		<caption label="Mouseover preview"/>
+		<hbox>
+			<checkbox
+			    id="preview"
+			    preference="personaswitcher-preview"/>
+
+			<vbox>
+			    <description>
+				Preview personas on menu mouseover.
+				Doesn't work on Macs.
+			    </description>
+			    <description>
+				Also removes the Default entry in
+				the menu, but the key combination still works.
+			    </description>
+			</vbox>
+		</hbox>
+	    </groupbox>
+	</vbox>
+    </prefpane>
+</prefwindow>
