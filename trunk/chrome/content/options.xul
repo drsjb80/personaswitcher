@@ -4,8 +4,8 @@
 <prefwindow
     id="personaswitcher-preferences"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-    title="&prefwindow.title;">
-    <prefpane id="pane1" label="&pane1.title;">
+    title="&options.title;">
+    <prefpane id="pane1" label="&options.pane1;">
 	<preferences>
 	    <preference
 		id="personaswitcher-default-key-shift"
@@ -89,110 +89,103 @@
 	    with a preference= -->
 	<vbox>
 	    <groupbox>
-		<caption label="Keyboard shortcuts"/>
+		<caption label="&options.kbshortcuts.title;"/>
 		<hbox>
 		    <hbox flex="1" pack="end">
-			<label value="Default persona key combination"/>
+			<label value="&options.kbshortcuts.default;"/>
 		    </hbox>
 		    <checkbox
 			id="default-key-shift"
 			preference="personaswitcher-default-key-shift"
-			label="shift"/>
+			label="&options.kbshortcuts.shift;"/>
 		    <checkbox
 			id="default-key-control"
 			preference="personaswitcher-default-key-control"
-			label="control"/>
+			label="&options.kbshortcuts.control;"/>
 		    <checkbox
 			id="default-key-alt"
 			preference="personaswitcher-default-key-alt"
-			label="alt"/>
+			label="&options.kbshortcuts.alt;"/>
 		    <checkbox
 			id="default-key-meta"
 			preference="personaswitcher-default-key-meta"
-			label="meta"/>
-		    <label>Key</label>
+			label="&options.kbshortcuts.meta;"/>
+		    <label>&options.kbshortcuts.key;</label>
 		    <textbox
 			id="default-key"
 			preference="personaswitcher-default-key"/>
 		</hbox>
 		<hbox>
 		    <hbox flex="1" pack="end">
-			<label value="Rotate persona key combination"/>
+			<label value="&options.kbshortcuts.rotate;"/>
 		    </hbox>
 		    <checkbox
 			id="rotate-key-shift"
 			preference="personaswitcher-rotate-key-shift"
-			label="shift"/>
+			label="&options.kbshortcuts.shift;"/>
 		    <checkbox
 			id="rotate-key-control"
 			preference="personaswitcher-rotate-key-control"
-			label="control"/>
+			label="&options.kbshortcuts.control;"/>
 		    <checkbox
 			id="rotate-key-alt"
 			preference="personaswitcher-rotate-key-alt"
-			label="alt"/>
+			label="&options.kbshortcuts.alt;"/>
 		    <checkbox
 			id="rotate-key-meta"
 			preference="personaswitcher-rotate-key-meta"
-			label="meta"/>
-		    <label>Key</label>
+			label="&options.kbshortcuts.meta;"/>
+		    <label>&options.kbshortcuts.key;</label>
 		    <textbox
 			id="rotate-key"
 			preference="personaswitcher-rotate-key"/>
 		</hbox>
 		<hbox>
 		    <hbox flex="1" pack="end">
-			<label value="Toggle auto-switch key combination"/>
+			<label value="&options.kbshortcuts.toggle;"/>
 		    </hbox>
 		    <checkbox
 			id="auto-key-shift"
 			preference="personaswitcher-auto-key-shift"
-			label="shift"/>
+			label="&options.kbshortcuts.shift;"/>
 		    <checkbox
 			id="auto-key-control"
 			preference="personaswitcher-auto-key-control"
-			label="control"/>
+			label="&options.kbshortcuts.control;"/>
 		    <checkbox
 			id="auto-key-alt"
 			preference="personaswitcher-auto-key-alt"
-			label="alt"/>
+			label="&options.kbshortcuts.alt;"/>
 		    <checkbox
 			id="auto-key-meta"
 			preference="personaswitcher-auto-key-meta"
-			label="meta"/>
-		    <label>Key</label>
+			label="&options.kbshortcuts.meta;"/>
+		    <label>&options.kbshortcuts.key;</label>
 		    <textbox
 			id="auto-key"
 			preference="personaswitcher-auto-key"/>
 		</hbox>
 	    </groupbox>
 	    <groupbox>
-		<caption label="Autmatic rotation"/>
+		<caption label="&options.autoevery;"/>
 		<hbox>
 		    <checkbox
 			id="auto"
 			preference="personaswitcher-auto"
-			label="Automatically switch every"/>
+			label="&options.autoevery.switch;"/>
 		    <textbox preference="personaswitcher-auto-minutes"/>
-		    <label value="minutes"/>
+		    <label value="&options.autoevery.minutes;"/>
 		</hbox>
 	    </groupbox>
 	    <groupbox>
-		<caption label="Mouseover preview"/>
+		<caption label="&options.preview;"/>
 		<hbox>
 			<checkbox
 			    id="preview"
 			    preference="personaswitcher-preview"/>
-
 			<vbox>
-			    <description>
-				Preview personas on menu mouseover.
-				Doesn't work on Macs.
-			    </description>
-			    <description>
-				Also removes the Default entry in
-				the menu, but the key combination still works.
-			    </description>
+			    <description>&options.preview.desc1;</description>
+			    <description>&options.preview.desc2;</description>
 			</vbox>
 		</hbox>
 	    </groupbox>

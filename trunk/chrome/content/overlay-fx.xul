@@ -16,7 +16,7 @@
     </keyset>
 
     <menupopup id="menu_ToolsPopup">
-        <menu id="personaswitcher-menu" label="Persona Switcher">
+        <menu id="personaswitcher-menu" label="&personaswitcher.label;">
 	    <menupopup id="personaswitcher-menupopup"/>
 	</menu>
     </menupopup>

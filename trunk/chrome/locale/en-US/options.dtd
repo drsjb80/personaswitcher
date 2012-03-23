@@ -1,2 +1,20 @@
-<!ENTITY prefwindow.title "Persona Switcher preferences">
-<!ENTITY pane1.title "Persona Switcher preferences">
+<!ENTITY options.title "Persona Switcher preferences">
+<!ENTITY options.pane1 "Persona Switcher preferences">
+<!ENTITY options.kbshortcuts.title "Keyboard shortcuts">
+<!ENTITY options.kbshortcuts.default "Default persona key combination">
+<!ENTITY options.kbshortcuts.rotate "Rotate persona key combination">
+<!ENTITY options.kbshortcuts.toggle "Toggle auto-switch key combination">
+<!ENTITY options.kbshortcuts.auto "Automatic rotation">
+<!ENTITY options.kbshortcuts.key "Key">
+<!ENTITY options.kbshortcuts.shift "Shift">
+<!ENTITY options.kbshortcuts.control "Control">
+<!ENTITY options.kbshortcuts.alt "Alt">
+<!ENTITY options.kbshortcuts.meta "Meta">
+
+<!ENTITY options.autoevery "Automatic switching">
+<!ENTITY options.autoevery.switch "Switch every">
+<!ENTITY options.autoevery.minutes "minutes">
+
+<!ENTITY options.preview "Mouseover preview">
+<!ENTITY options.preview.desc1 "Preview personas on menu mouseover.  Doesn't work on Macs.">
+<!ENTITY options.preview.desc2 "Also removes the Default entry in the menu, but the key combination still works.">
