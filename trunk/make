@@ -13,5 +13,6 @@ zip personaswitcher.xpi \
     chrome/locale/en-US/about.dtd \
     chrome/locale/en-US/options.dtd \
     chrome/locale/en-US/overlay.dtd \
+    chrome/locale/en-US/personaswitcher.properties \
     defaults/preferences/prefs.js \
     LWTS/PersonaSwitcher.jsm

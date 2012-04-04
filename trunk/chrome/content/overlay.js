@@ -72,10 +72,22 @@ PersonaSwitcher.subMenu = function (event)
 
 	var arr = LightweightThemeManager.usedThemes;
 
-	for (var i = 0; i < arr.length; i++)
+	if (arr.length == 0)
 	{
-	    var item = PersonaSwitcher.createMenuItem (arr[i]);
+	    var stringsBundle = document.getElementById ("string-bundle");
+	    var changeString = stringsBundle.getString ('noPersonas');
+
+	    var item = PersonaSwitcher.doc.createElementNS (XUL_NS, "menuitem");
+	    item.setAttribute ("label", "No Personas Found");
 	    menupopup.appendChild (item);
+	}
+	else
+	{
+	    for (var i = 0; i < arr.length; i++)
+	    {
+		var item = PersonaSwitcher.createMenuItem (arr[i]);
+		menupopup.appendChild (item);
+	    }
 	}
     }
     else

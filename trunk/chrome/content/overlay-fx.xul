@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE overlay SYSTEM "chrome://personaswitcher/locale/overlay.dtd">
 
 <overlay
@@ -6,6 +7,12 @@
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script src="overlay.js"/>
+
+    <stringbundleset id="stringbundleset">
+	<stringbundle
+	id="string-bundle"
+	src="chrome://personaswitcher/locale/personaswitcher.properties"/>
+    </stringbundleset>
 
     <keyset>
         <!--
