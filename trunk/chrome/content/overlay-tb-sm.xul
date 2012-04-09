@@ -6,13 +6,14 @@
     id="personaswitcher-overlay"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <script src="overlay.js"/>
-
+    <!-- Have to add this into preexisting set?  -->
     <stringbundleset id="stringbundleset">
 	<stringbundle 
-	id="string-bundle"
-	src="chrome://personaswitcher/locale/personaswitcher.properties"/>
+	    id="stringbundle_personaswitcher"
+	    src="chrome://personaswitcher/locale/personaswitcher.properties"/>
     </stringbundleset>
+
+    <script src="overlay.js"/>
 
     <keyset>
         <!--

@@ -74,11 +74,12 @@ PersonaSwitcher.subMenu = function (event)
 
 	if (arr.length == 0)
 	{
-	    var stringsBundle = document.getElementById ("string-bundle");
-	    var changeString = stringsBundle.getString ('noPersonas');
+	    var stringBundle = document.getElementById
+		("stringbundle_personaswitcher");
+	    var changeString = stringBundle.getString ('noPersonas');
 
 	    var item = PersonaSwitcher.doc.createElementNS (XUL_NS, "menuitem");
-	    item.setAttribute ("label", "No Personas Found");
+	    item.setAttribute ("label", changeString);
 	    menupopup.appendChild (item);
 	}
 	else
