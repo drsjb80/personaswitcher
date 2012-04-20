@@ -9,7 +9,7 @@
     <!-- Have to add this into preexisting set?  -->
     <stringbundleset id="stringbundleset">
 	<stringbundle
-	    id="stringbundle_personaswitcher"
+	    id="stringbundle-personaswitcher"
 	    src="chrome://personaswitcher/locale/personaswitcher.properties"/>
     </stringbundleset>
 

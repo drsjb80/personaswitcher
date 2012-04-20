@@ -16,7 +16,7 @@
 	    <text
 	        value="Persona Switcher"
 		style="font-weight: bold; font-size: x-large;"/>
-	    <text value="&version; 1.8"/>
+	    <text value="&version; 1.9"/>
 	    <separator class="thin"/>
 	    <text value="&createdBy;" style="font-weight: bold;"/>
 	    <text value="Steve Beaty"/>

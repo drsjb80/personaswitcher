@@ -13,9 +13,9 @@ const XUL_NS =
 
 PersonaSwitcher.createMenuItem = function (which)
 {
-    if (PersonaSwitcher.doc != null)
+    if (document != null)
     {
-	var item = PersonaSwitcher.doc.createElementNS (XUL_NS, "menuitem");
+	var item = document.createElementNS (XUL_NS, "menuitem");
 	item.setAttribute ("label", which.name);
 	item.addEventListener
 	(
@@ -36,7 +36,7 @@ PersonaSwitcher.createMenuItem = function (which)
     }
     else
     {
-        alert ("Persona Switcher: PersonaSwitcher.doc is null!");
+        alert ("Persona Switcher: document is null!");
         PersonaSwitcher.log (which);
     }
 
@@ -46,11 +46,13 @@ PersonaSwitcher.createMenuItem = function (which)
 // lightweight-theme-list-changed
 PersonaSwitcher.subMenu = function (event)
 {
-    var menupopup = PersonaSwitcher.doc.getElementById
-        ("personaswitcher-menupopup");
+    PersonaSwitcher.log (event);
+
+    var menupopup = document.getElementById ("personaswitcher-menupopup");
 
     if (menupopup != null)
     {
+	PersonaSwitcher.log ("removing nodes");
 	while (menupopup.hasChildNodes())
 	{
 	    menupopup.removeChild (menupopup.firstChild);
@@ -58,7 +60,9 @@ PersonaSwitcher.subMenu = function (event)
 
 	if (! PersonaSwitcher.prefs.getBoolPref ("preview"))
 	{
-	    var item = PersonaSwitcher.doc.createElementNS (XUL_NS, "menuitem");
+	    PersonaSwitcher.log ("adding default");
+
+	    var item = document.createElementNS (XUL_NS, "menuitem");
 	    item.setAttribute ("label", "Default");
 
 	    item.addEventListener
@@ -74,11 +78,13 @@ PersonaSwitcher.subMenu = function (event)
 
 	if (arr.length == 0)
 	{
+	    PersonaSwitcher.log ("no themes");
+
 	    var stringBundle = document.getElementById
 		("stringbundle_personaswitcher");
 	    var changeString = stringBundle.getString ('noPersonas');
 
-	    var item = PersonaSwitcher.doc.createElementNS (XUL_NS, "menuitem");
+	    var item = document.createElementNS (XUL_NS, "menuitem");
 	    item.setAttribute ("label", changeString);
 	    menupopup.appendChild (item);
 	}
@@ -86,6 +92,8 @@ PersonaSwitcher.subMenu = function (event)
 	{
 	    for (var i = 0; i < arr.length; i++)
 	    {
+		PersonaSwitcher.log ("adding item number " + i);
+
 		var item = PersonaSwitcher.createMenuItem (arr[i]);
 		menupopup.appendChild (item);
 	    }
@@ -123,7 +131,7 @@ PersonaSwitcher.findMods = function (which)
 
 PersonaSwitcher.makeKey = function (id, mods, which, command)
 {
-    var key = PersonaSwitcher.doc.createElement ("key");
+    var key = document.createElement ("key");
     key.setAttribute ("id", id); 
     if (mods != "")
 	key.setAttribute ("modifiers", mods);
@@ -138,14 +146,13 @@ PersonaSwitcher.setKeyset = function()
 {
     PersonaSwitcher.log();
 
-    var keyset = PersonaSwitcher.doc.getElementById ("default-persona-key").
-        parentNode;
+    var keyset = document.getElementById ("default-persona-key").parentNode;
     PersonaSwitcher.log(keyset);
     var parent = keyset.parentNode;
 
     parent.removeChild (keyset);
 
-    keyset = PersonaSwitcher.doc.createElement ("keyset");
+    keyset = document.createElement ("keyset");
 
     var keys =
     [
@@ -184,14 +191,16 @@ PersonaSwitcher.setKeyset = function()
 // can't call this before window is loaded
 PersonaSwitcher.onload = function()
 {
-    PersonaSwitcher.log(window.onload);
-    PersonaSwitcher.log();
-    PersonaSwitcher.doc = window.document;
+    PersonaSwitcher.log (window.onload);
+    PersonaSwitcher.log (window.name);
+    PersonaSwitcher.log (window.document);
+    PersonaSwitcher.log (window.navigator);
+    PersonaSwitcher.log (window.menubar);
 
-    if (PersonaSwitcher.doc != null)
+    if (document != null)
     {
-        var element = PersonaSwitcher.doc.getElementById
-	    ("personaswitcher-menupopup")
+        var element = document.getElementById ("personaswitcher-menupopup")
+
 	if (element != null)
 	{
 	    element.addEventListener ("popupshowing",
@@ -207,8 +216,8 @@ PersonaSwitcher.onload = function()
     }
     else
     {
-        alert ("PersonaSwitcher.doc is null!");
-        PersonaSwitcher.log ("PersonaSwitcher.doc is null!");
+        alert ("document is null!");
+        PersonaSwitcher.log ("document is null!");
     }
 
     /*
