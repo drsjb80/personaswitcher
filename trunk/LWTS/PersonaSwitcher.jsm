@@ -8,7 +8,8 @@ var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.timerIsRunning = false;
-PersonaSwitcher.debug = false;
+PersonaSwitcher.debug = true;
+PersonaSwitcher.stringBundle;
 
 PersonaSwitcher.prefs =
     Components.classes["@mozilla.org/preferences-service;1"].
@@ -18,6 +19,9 @@ PersonaSwitcher.prefs =
 // needed for addObserver
 PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 
+/*
+** an observer for changing perferences.
+*/
 var myObserver =
 {
     observe: function (subject, topic, data)
@@ -31,9 +35,9 @@ var myObserver =
         if (data == "auto")
         {
             if (PersonaSwitcher.prefs.getBoolPref ("auto"))
-            PersonaSwitcher.autoOn (true);
+                PersonaSwitcher.autoOn (true);
             else
-            PersonaSwitcher.autoOff();
+                PersonaSwitcher.autoOff();
         }
         else if (data == "autominutes")
         {
@@ -57,13 +61,11 @@ PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"]
 
 PersonaSwitcher.startTimer = function()
 {
-    PersonaSwitcher.log ();
+    PersonaSwitcher.log();
 
-    if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
-        return;
+    if (! PersonaSwitcher.prefs.getBoolPref ("auto")) return;
 
-    if (PersonaSwitcher.timerIsRunning)
-        PersonaSwitcher.timer.cancel();
+    if (PersonaSwitcher.timerIsRunning) PersonaSwitcher.timer.cancel();
 
     var minutes = PersonaSwitcher.prefs.getIntPref ("autominutes");
 
@@ -83,8 +85,7 @@ PersonaSwitcher.autoOff = function()
 {
     PersonaSwitcher.log();
 
-    if (PersonaSwitcher.timerIsRunning)
-        PersonaSwitcher.timer.cancel();
+    if (PersonaSwitcher.timerIsRunning) PersonaSwitcher.timer.cancel();
 
     PersonaSwitcher.prefs.setBoolPref ("auto", 0);
 }
@@ -96,8 +97,7 @@ PersonaSwitcher.autoOn = function (doRotate)
     PersonaSwitcher.startTimer();
     PersonaSwitcher.prefs.setBoolPref ("auto", 1);
 
-    if (doRotate)
-        PersonaSwitcher.rotate();
+    if (doRotate) PersonaSwitcher.rotate();
 }
 
 PersonaSwitcher.toggleAuto = function()
@@ -114,16 +114,18 @@ PersonaSwitcher.toggleAuto = function()
     }
 }
 
-PersonaSwitcher.switchTo = function(toWhich)
+PersonaSwitcher.switchTo = function (toWhich)
 {
-    // http://www.idealog.us/2007/02/check_if_a_java.html
+    /*
+    ** http://www.idealog.us/2007/02/check_if_a_java.html
+    */
     if (typeof LightweightThemeManager.themeChanged != 'function')
     {
         LightweightThemeManager.currentTheme = toWhich;
     }
     else
     {
-    // 3.* compatability
+        // 3.* compatability
         LightweightThemeManager.themeChanged (toWhich);
     }
 }
@@ -134,8 +136,7 @@ PersonaSwitcher.rotate = function()
 
     var arr = LightweightThemeManager.usedThemes;
 
-    if (arr.length < 1)
-        return;
+    if (arr.length < 1) return;
 
     PersonaSwitcher.switchTo (arr[arr.length-1]);
 }
@@ -146,14 +147,15 @@ PersonaSwitcher.previous = function()
 
     var arr = LightweightThemeManager.usedThemes;
 
-    if (arr.length < 1)
-        return;
+    if (arr.length < 1) return;
 
     PersonaSwitcher.switchTo (arr[1]);
 }
 
-// if the user pressed the rotate keyboard command, rotate and
-// reset the timer.
+/*
+** if the user pressed the rotate keyboard command, rotate and
+** reset the timer.
+*/
 PersonaSwitcher.rotateKey = function()
 {
     PersonaSwitcher.log();
@@ -167,9 +169,7 @@ PersonaSwitcher.setDefault = function()
     PersonaSwitcher.log();
 
     if (LightweightThemeManager.currentTheme != null)
-    {
         PersonaSwitcher.switchTo (null);
-    }
 
     PersonaSwitcher.autoOff();
 }
@@ -184,8 +184,7 @@ PersonaSwitcher.onMenuItemCommand = function (which)
 
 PersonaSwitcher.log = function()
 {
-    if (! PersonaSwitcher.debug)
-        return;
+    if (! PersonaSwitcher.debug) return;
 
     var message = "";
 

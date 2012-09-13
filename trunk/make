@@ -1,3 +1,5 @@
+rm personaswitcher.xpi
+
 zip personaswitcher.xpi \
     make \
     install.rdf \

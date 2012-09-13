@@ -8,24 +8,37 @@
 
     <!-- Have to add this into preexisting set?  -->
     <stringbundleset id="stringbundleset">
-	<stringbundle
-	    id="stringbundle-personaswitcher"
-	    src="chrome://personaswitcher/locale/personaswitcher.properties"/>
+        <stringbundle
+            id="stringbundle-personaswitcher"
+            src="chrome://personaswitcher/locale/personaswitcher.properties"/>
     </stringbundleset>
-
-    <script src="overlay.js"/>
 
     <keyset>
         <!--
 	    Have to have something here, keyset's can't have unique id's
 	    https://developer.mozilla.org/en/Overlay#Overlays_and_ID_Attributes
-	-->
-	<key id="default-persona-key"/>
+        -->
+        <key id="default-persona-key"/>
     </keyset>
 
+    <!-- 
     <menupopup id="menu_ToolsPopup">
         <menu id="personaswitcher-menu" label="&personaswitcher.label;">
-	    <menupopup id="personaswitcher-menupopup"/>
-	</menu>
+            <menupopup id="personaswitcher-menupopup"/>
+        </menu>
     </menupopup>
+    -->
+
+    <!--
+    <menubar id="main-menubar">
+        <menu label="Search" insertbefore="tools-menu">
+            <menupopup>
+                <menuitem label="Web"/>
+                <menuitem label="Mail"/>
+            </menupopup>
+        </menu>
+    </menubar>
+    -->
+
+    <script src="overlay.js"/>
 </overlay>

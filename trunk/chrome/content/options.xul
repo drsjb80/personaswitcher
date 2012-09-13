@@ -6,189 +6,218 @@
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     title="&options.title;">
     <prefpane id="pane1" label="&options.pane1;">
-	<preferences>
-	    <preference
-		id="personaswitcher-default-key-shift"
-		name="extensions.personaswitcher.defshift"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-default-key-control"
-		name="extensions.personaswitcher.defcontrol"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-default-key-alt"
-		name="extensions.personaswitcher.defalt"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-default-key-meta"
-		name="extensions.personaswitcher.defmeta"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-default-key"
-		name="extensions.personaswitcher.defkey"
-		type="string"/>
+        <preferences>
+            <preference
+                id="personaswitcher-default-key-shift"
+                name="extensions.personaswitcher.defshift"
+                type="bool"/>
+            <preference
+                id="personaswitcher-default-key-control"
+                name="extensions.personaswitcher.defcontrol"
+                type="bool"/>
+            <preference
+                id="personaswitcher-default-key-alt"
+                name="extensions.personaswitcher.defalt"
+                type="bool"/>
+            <preference
+                id="personaswitcher-default-key-meta"
+                name="extensions.personaswitcher.defmeta"
+                type="bool"/>
+            <preference
+                id="personaswitcher-default-key"
+                name="extensions.personaswitcher.defkey"
+                type="string"/>
 
-	    <preference
-		id="personaswitcher-rotate-key-shift"
-		name="extensions.personaswitcher.rotshift"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-rotate-key-control"
-		name="extensions.personaswitcher.rotcontrol"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-rotate-key-alt"
-		name="extensions.personaswitcher.rotalt"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-rotate-key-meta"
-		name="extensions.personaswitcher.rotmeta"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-rotate-key"
-		name="extensions.personaswitcher.rotkey"
-		type="string"/>
+            <preference
+                id="personaswitcher-rotate-key-shift"
+                name="extensions.personaswitcher.rotshift"
+                type="bool"/>
+            <preference
+                id="personaswitcher-rotate-key-control"
+                name="extensions.personaswitcher.rotcontrol"
+                type="bool"/>
+            <preference
+                id="personaswitcher-rotate-key-alt"
+                name="extensions.personaswitcher.rotalt"
+                type="bool"/>
+            <preference
+                id="personaswitcher-rotate-key-meta"
+                name="extensions.personaswitcher.rotmeta"
+                type="bool"/>
+            <preference
+                id="personaswitcher-rotate-key"
+                name="extensions.personaswitcher.rotkey"
+                type="string"/>
 
-	    <preference
-		id="personaswitcher-auto-key-shift"
-		name="extensions.personaswitcher.autoshift"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-auto-key-control"
-		name="extensions.personaswitcher.autocontrol"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-auto-key-alt"
-		name="extensions.personaswitcher.autoalt"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-auto-key-meta"
-		name="extensions.personaswitcher.autometa"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-auto-key"
-		name="extensions.personaswitcher.autokey"
-		type="string"/>
+            <preference
+                id="personaswitcher-auto-key-shift"
+                name="extensions.personaswitcher.autoshift"
+                type="bool"/>
+            <preference
+                id="personaswitcher-auto-key-control"
+                name="extensions.personaswitcher.autocontrol"
+                type="bool"/>
+            <preference
+                id="personaswitcher-auto-key-alt"
+                name="extensions.personaswitcher.autoalt"
+                type="bool"/>
+            <preference
+                id="personaswitcher-auto-key-meta"
+                name="extensions.personaswitcher.autometa"
+                type="bool"/>
+            <preference
+                id="personaswitcher-auto-key"
+                name="extensions.personaswitcher.autokey"
+                type="string"/>
 
-	    <preference
-		id="personaswitcher-auto"
-		name="extensions.personaswitcher.auto"
-		type="bool"/>
-	    <preference
-		id="personaswitcher-auto-minutes"
-		name="extensions.personaswitcher.autominutes"
-		type="int"/>
+            <preference
+                id="personaswitcher-auto"
+                name="extensions.personaswitcher.auto"
+                type="bool"/>
+            <preference
+                id="personaswitcher-auto-minutes"
+                name="extensions.personaswitcher.autominutes"
+                type="int"/>
 
-	    <preference
-		id="personaswitcher-preview"
-		name="extensions.personaswitcher.preview"
-		type="bool"/>
-	</preferences>
+            <preference
+                id="personaswitcher-preview"
+                name="extensions.personaswitcher.preview"
+                type="bool"/>
 
-	<!-- each one of the preferences below reference an id= from above
-	    with a preference= -->
-	<vbox>
-	    <groupbox>
-		<caption label="&options.kbshortcuts.title;"/>
-		<hbox>
-		    <hbox flex="1" pack="end">
-			<label value="&options.kbshortcuts.default;"/>
-		    </hbox>
-		    <checkbox
-			id="default-key-shift"
-			preference="personaswitcher-default-key-shift"
-			label="&options.kbshortcuts.shift;"/>
-		    <checkbox
-			id="default-key-control"
-			preference="personaswitcher-default-key-control"
-			label="&options.kbshortcuts.control;"/>
-		    <checkbox
-			id="default-key-alt"
-			preference="personaswitcher-default-key-alt"
-			label="&options.kbshortcuts.alt;"/>
-		    <checkbox
-			id="default-key-meta"
-			preference="personaswitcher-default-key-meta"
-			label="&options.kbshortcuts.meta;"/>
-		    <label>&options.kbshortcuts.key;</label>
-		    <textbox
-			id="default-key"
-			preference="personaswitcher-default-key"/>
-		</hbox>
-		<hbox>
-		    <hbox flex="1" pack="end">
-			<label value="&options.kbshortcuts.rotate;"/>
-		    </hbox>
-		    <checkbox
-			id="rotate-key-shift"
-			preference="personaswitcher-rotate-key-shift"
-			label="&options.kbshortcuts.shift;"/>
-		    <checkbox
-			id="rotate-key-control"
-			preference="personaswitcher-rotate-key-control"
-			label="&options.kbshortcuts.control;"/>
-		    <checkbox
-			id="rotate-key-alt"
-			preference="personaswitcher-rotate-key-alt"
-			label="&options.kbshortcuts.alt;"/>
-		    <checkbox
-			id="rotate-key-meta"
-			preference="personaswitcher-rotate-key-meta"
-			label="&options.kbshortcuts.meta;"/>
-		    <label>&options.kbshortcuts.key;</label>
-		    <textbox
-			id="rotate-key"
-			preference="personaswitcher-rotate-key"/>
-		</hbox>
-		<hbox>
-		    <hbox flex="1" pack="end">
-			<label value="&options.kbshortcuts.toggle;"/>
-		    </hbox>
-		    <checkbox
-			id="auto-key-shift"
-			preference="personaswitcher-auto-key-shift"
-			label="&options.kbshortcuts.shift;"/>
-		    <checkbox
-			id="auto-key-control"
-			preference="personaswitcher-auto-key-control"
-			label="&options.kbshortcuts.control;"/>
-		    <checkbox
-			id="auto-key-alt"
-			preference="personaswitcher-auto-key-alt"
-			label="&options.kbshortcuts.alt;"/>
-		    <checkbox
-			id="auto-key-meta"
-			preference="personaswitcher-auto-key-meta"
-			label="&options.kbshortcuts.meta;"/>
-		    <label>&options.kbshortcuts.key;</label>
-		    <textbox
-			id="auto-key"
-			preference="personaswitcher-auto-key"/>
-		</hbox>
-	    </groupbox>
-	    <groupbox>
-		<caption label="&options.autoevery;"/>
-		<hbox>
-		    <checkbox
-			id="auto"
-			preference="personaswitcher-auto"
-			label="&options.autoevery.switch;"/>
-		    <textbox preference="personaswitcher-auto-minutes"/>
-		    <label value="&options.autoevery.minutes;"/>
-		</hbox>
-	    </groupbox>
-	    <groupbox>
-		<caption label="&options.preview;"/>
-		<hbox>
-			<checkbox
-			    id="preview"
-			    preference="personaswitcher-preview"/>
-			<vbox>
-			    <description>&options.preview.desc1;</description>
-			    <description>&options.preview.desc2;</description>
-			</vbox>
-		</hbox>
-	    </groupbox>
-	</vbox>
+            <preference
+                id="personaswitcher-toolbar-menu"
+                name="extensions.personaswitcher.toolbar-menu"
+                type="bool"/>
+
+            <preference
+                id="personaswitcher-addon-menu"
+                name="extensions.personaswitcher.addon-menu"
+                type="bool"/>
+
+        </preferences>
+
+        <!-- each one of the preferences below reference an id= from above
+            with a preference= -->
+        <vbox>
+            <groupbox>
+                <caption label="&options.kbshortcuts.title;"/>
+                <hbox>
+                    <hbox flex="1" pack="end">
+                        <label value="&options.kbshortcuts.default;"/>
+                    </hbox>
+                    <checkbox
+                        id="default-key-shift"
+                        preference="personaswitcher-default-key-shift"
+                        label="&options.kbshortcuts.shift;"/>
+                    <checkbox
+                        id="default-key-control"
+                        preference="personaswitcher-default-key-control"
+                        label="&options.kbshortcuts.control;"/>
+                    <checkbox
+                        id="default-key-alt"
+                        preference="personaswitcher-default-key-alt"
+                        label="&options.kbshortcuts.alt;"/>
+                    <checkbox
+                        id="default-key-meta"
+                        preference="personaswitcher-default-key-meta"
+                        label="&options.kbshortcuts.meta;"/>
+                    <label>&options.kbshortcuts.key;</label>
+                    <textbox
+                        id="default-key"
+                        preference="personaswitcher-default-key"/>
+                </hbox>
+                <hbox>
+                    <hbox flex="1" pack="end">
+                        <label value="&options.kbshortcuts.rotate;"/>
+                    </hbox>
+                    <checkbox
+                        id="rotate-key-shift"
+                        preference="personaswitcher-rotate-key-shift"
+                        label="&options.kbshortcuts.shift;"/>
+                    <checkbox
+                        id="rotate-key-control"
+                        preference="personaswitcher-rotate-key-control"
+                        label="&options.kbshortcuts.control;"/>
+                    <checkbox
+                        id="rotate-key-alt"
+                        preference="personaswitcher-rotate-key-alt"
+                        label="&options.kbshortcuts.alt;"/>
+                    <checkbox
+                        id="rotate-key-meta"
+                        preference="personaswitcher-rotate-key-meta"
+                        label="&options.kbshortcuts.meta;"/>
+                    <label>&options.kbshortcuts.key;</label>
+                    <textbox
+                        id="rotate-key"
+                        preference="personaswitcher-rotate-key"/>
+                </hbox>
+                <hbox>
+                    <hbox flex="1" pack="end">
+                        <label value="&options.kbshortcuts.toggle;"/>
+                    </hbox>
+                    <checkbox
+                        id="auto-key-shift"
+                        preference="personaswitcher-auto-key-shift"
+                        label="&options.kbshortcuts.shift;"/>
+                    <checkbox
+                        id="auto-key-control"
+                        preference="personaswitcher-auto-key-control"
+                        label="&options.kbshortcuts.control;"/>
+                    <checkbox
+                        id="auto-key-alt"
+                        preference="personaswitcher-auto-key-alt"
+                        label="&options.kbshortcuts.alt;"/>
+                    <checkbox
+                        id="auto-key-meta"
+                        preference="personaswitcher-auto-key-meta"
+                        label="&options.kbshortcuts.meta;"/>
+                    <label>&options.kbshortcuts.key;</label>
+                    <textbox
+                        id="auto-key"
+                        preference="personaswitcher-auto-key"/>
+                </hbox>
+            </groupbox>
+
+            <groupbox>
+                <caption label="&options.autoevery;"/>
+                <hbox>
+                    <checkbox
+                        id="auto"
+                        preference="personaswitcher-auto"
+                        label="&options.autoevery.switch;"/>
+                    <textbox preference="personaswitcher-auto-minutes"/>
+                    <label value="&options.autoevery.minutes;"/>
+                </hbox>
+            </groupbox>
+
+            <groupbox>
+                <caption label="&options.preview;"/>
+                <hbox>
+                    <checkbox
+                        id="preview"
+                        preference="personaswitcher-preview"/>
+                    <vbox>
+                        <description>&options.preview.desc1;</description>
+                        <description>&options.preview.desc2;</description>
+                    </vbox>
+                </hbox>
+            </groupbox>
+
+            <groupbox>
+                <caption label="&options.menus;"/>
+                <hbox>
+                    <checkbox
+                        id="toolbar-menu"
+                        preference="personaswitcher-toolbar-menu"/>
+                    <description>&options.toolbar-menu;</description>
+                </hbox>
+                <hbox>
+                    <checkbox
+                        id="addon-menu"
+                        preference="personaswitcher-addon-menu"/>
+                    <description>&options.addon-menu;</description>
+                </hbox>
+            </groupbox>
+        </vbox>
     </prefpane>
 </prefwindow>
