@@ -1,0 +1,7 @@
+#personaswitcher-button {
+  list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher24.png");
+}
+
+toolbar[iconsize="small"] #personaswitcher-button {
+  list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher16.png");
+}
