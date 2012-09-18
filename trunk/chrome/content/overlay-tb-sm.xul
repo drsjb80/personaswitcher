@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE overlay SYSTEM "chrome://personaswitcher/locale/overlay.dtd">
 
+<?xml-stylesheet href="chrome://personaswitcher/skin/toolbar-button.css"
+    type="text/css"?>
+
 <overlay
     id="personaswitcher-overlay"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -22,14 +25,6 @@
                 onpopupshowing="PersonaSwitcher.buttonPopup (event);"/>
         </toolbarbutton>
     </toolbarpalette>
-
-    <keyset>
-        <!--
-	    Have to have something here, keyset's can't have unique id's
-	    https://developer.mozilla.org/en/Overlay#Overlays_and_ID_Attributes
-        -->
-        <key id="default-persona-key"/>
-    </keyset>
 
     <script src="overlay.js"/>
 </overlay>

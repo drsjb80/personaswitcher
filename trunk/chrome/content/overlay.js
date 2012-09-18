@@ -64,8 +64,11 @@ PersonaSwitcher.createMenuPopup = function (id)
         return;
     }
 
+    PersonaSwitcher.log (menupopup.id);
+
     while (menupopup.hasChildNodes())
     {
+        PersonaSwitcher.log ("removing child");
         menupopup.removeChild (menupopup.firstChild);
     }
 
@@ -145,31 +148,41 @@ PersonaSwitcher.findMods = function (which)
 }
 
 // http://unixpapa.com/js/key.html
-
 PersonaSwitcher.makeKey = function (id, mods, which, command)
 {
     var key = document.createElement ("key");
 
     key.setAttribute ("id", id); 
-    if (mods != "") key.setAttribute ("modifiers", mods);
     key.setAttribute ("key", which);
     key.setAttribute ("oncommand", command);
+    if (mods != "")
+        key.setAttribute ("modifiers", mods);
 
     return (key);
+}
+
+PersonaSwitcher.getKeyset = function()
+{
+    var names = new Array ("mainKeyset", "tasksKeys");
+    var types = new Array ("firefox", "thunderbird");
+
+    return (PersonaSwitcher.seachForId (names, types));
 }
 
 // http://stackoverflow.com/questions/549650/how-to-dynamically-change-shortcut-key-in-firefox
 PersonaSwitcher.setKeyset = function()
 {
-    var keyset = document.getElementById ("default-persona-key").parentNode;
-    PersonaSwitcher.log (keyset.id);
+    var mainKeyset = PersonaSwitcher.getKeyset();
 
-    var parent = keyset.parentNode;
-    PersonaSwitcher.log (parent.id);
+    var keyset = document.getElementById ("personswitcher-keyset");
 
-    parent.removeChild (keyset);
+    if (keyset != null)
+    {
+        PersonaSwitcher.log ("removing " + keyset.id + " from " +
+            mainKeyset.id);
 
-    keyset = document.createElement ("keyset");
+        mainKeyset.removeChild (keyset);
+    }
 
     var keys =
     [
@@ -196,14 +209,17 @@ PersonaSwitcher.setKeyset = function()
         ]
     ];
 
-    for (var i in keys)
+    keyset = document.createElement ("keyset");
+    keyset.setAttribute ("id", "personswitcher-keyset");
+
+    for (var key in keys)
     {
-        PersonaSwitcher.log (i);
         keyset.appendChild (PersonaSwitcher.makeKey
-            (keys[i][0], keys[i][1], keys[i][2], keys[i][3]));
+            (keys[key][0], keys[key][1], keys[key][2], keys[key][3]));
     }
 
-    parent.appendChild (keyset);
+    PersonaSwitcher.log ("appending " + keyset.id + " to " + mainKeyset.id);
+    mainKeyset.appendChild (keyset);
 }
 
 PersonaSwitcher.seachForId = function (names, types)

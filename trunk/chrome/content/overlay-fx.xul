@@ -27,13 +27,5 @@
         </toolbarbutton>
     </toolbarpalette>
 
-    <keyset>
-        <!--
-	    Have to have something here, keyset's can't have unique id's
-	    https://developer.mozilla.org/en/Overlay#Overlays_and_ID_Attributes
-        -->
-        <key id="default-persona-key"/>
-    </keyset>
-
     <script src="overlay.js"/>
 </overlay>
