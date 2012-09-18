@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE overlay SYSTEM "chrome://personaswitcher/locale/overlay.dtd">
+
+<?xml-stylesheet href="chrome://personaswitcher/skin/toolbar-button.css"
+    type="text/css"?>
+
+<overlay
+    id="personaswitcher-overlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle 
+            id="stringbundle_personaswitcher"
+            src="chrome://personaswitcher/locale/personaswitcher.properties"/>
+    </stringbundleset>
+
+    <toolbarpalette id="MailToolbarPalette">
+        <toolbarbutton
+            id="personaswitcher-button"
+            label="&personaswitcher-button.label;"
+            tooltiptext="&personaswitcher-button.tooltip;"
+            type="menu">
+            <menupopup
+                id="personaswitcher-addon"
+                onpopupshowing="PersonaSwitcher.buttonPopup (event);"/>
+        </toolbarbutton>
+    </toolbarpalette>
+
+    <script src="overlay.js"/>
+</overlay>
