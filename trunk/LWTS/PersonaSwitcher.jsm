@@ -32,24 +32,59 @@ var myObserver =
 
         if (topic != "nsPref:changed") return;
 
-        if (data == "auto")
+        switch (data)
         {
-            if (PersonaSwitcher.prefs.getBoolPref ("auto"))
-                PersonaSwitcher.autoOn (true);
-            else
-                PersonaSwitcher.autoOff();
-        }
-        else if (data == "autominutes")
-        {
-            PersonaSwitcher.startTimer();
-        }
-        else if (data == "preview")
-        {
-            return;    // nothing to do as the value is queried elsewhere
-        }
-        else
-        {
-            PersonaSwitcher.setKeyset();
+            case "auto":
+            {
+                if (PersonaSwitcher.prefs.getBoolPref ("auto"))
+                    PersonaSwitcher.autoOn (true);
+                else
+                    PersonaSwitcher.autoOff();
+                break;
+            }
+            case "autominutes":
+            {
+                PersonaSwitcher.startTimer();
+                break;
+            }
+            case "preview":
+            {
+                return;    // nothing to do as the value is queried elsewhere
+            }
+            case "main-menubar":
+            case "tools-submenu":
+            {
+                if (PersonaSwitcher.prefs.getBoolPref (data))
+                {
+                    PersonaSwitcher.createMenu (data);
+                }
+                else
+                {
+                    PersonaSwitcher.removeMenu (data);
+                }
+
+                break;
+            }
+            /*
+            {
+                PersonaSwitcher.createMenus();
+                PersonaSwitcher.removeMenus();
+            }
+            */
+            case "defshift": case "defalt": case "defcontrol":
+            case "defmeta": case "defkey":
+            case "rotshift": case "rotalt": case "rotcontrol":
+            case "rotmeta": case "rotkey":
+            case "autoshift": case "autoalt": case "autocontrol":
+            case "autometa": case "autokey":
+            {
+                PersonaSwitcher.setKeyset();
+                break;
+            }
+            default:
+            {
+                PersonaSwitcher.log (data);
+            }
         }
     }
 }
@@ -180,6 +215,47 @@ PersonaSwitcher.onMenuItemCommand = function (which)
 
     PersonaSwitcher.switchTo (which);
     PersonaSwitcher.startTimer();
+}
+
+PersonaSwitcher.migratePrefs = function()
+{
+    var oldPrefs =
+        Components.classes["@mozilla.org/preferences-service;1"].
+        getService (Components.interfaces.nsIPrefService).
+        getBranch ("extensions.themeswitcher.");
+
+    var kids = oldPrefs.getChildList ("", {});
+
+    if (kids.length == 0) return;
+
+    for (var i in kids)
+    {
+        var type = oldPrefs.getPrefType (kids[i]);
+        PersonaSwitcher.log (kids[i]);
+
+        switch (type)
+        {
+            case oldPrefs.PREF_STRING:
+            {
+                PersonaSwitcher.prefs.setCharPref (kids[i],
+                    oldPrefs.getCharPref (kids[i]));
+                break;
+            }
+            case oldPrefs.PREF_INT:
+            {
+                PersonaSwitcher.prefs.setIntPref (kids[i],
+                    oldPrefs.getIntPref (kids[i]));
+                break;
+            }
+            case oldPrefs.PREF_BOOL:
+            {
+                PersonaSwitcher.prefs.setBoolPref (kids[i],
+                    oldPrefs.getBoolPref (kids[i]));
+                break;
+            }
+        }
+    }
+    oldPrefs.deleteBranch ("");
 }
 
 PersonaSwitcher.log = function()

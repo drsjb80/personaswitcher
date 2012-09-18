@@ -85,19 +85,18 @@
                 type="bool"/>
 
             <preference
-                id="personaswitcher-toolbar-menu"
-                name="extensions.personaswitcher.toolbar-menu"
+                id="tools-submenu"
+                name="extensions.personaswitcher.tools-submenu"
                 type="bool"/>
 
             <preference
-                id="personaswitcher-addon-menu"
-                name="extensions.personaswitcher.addon-menu"
+                id="main-menubar"
+                name="extensions.personaswitcher.main-menubar"
                 type="bool"/>
 
         </preferences>
 
-        <!-- each one of the preferences below reference an id= from above
-            with a preference= -->
+        <!-- for each of the id= from above, have a preference= below -->
         <vbox>
             <groupbox>
                 <caption label="&options.kbshortcuts.title;"/>
@@ -207,17 +206,18 @@
                 <caption label="&options.menus;"/>
                 <hbox>
                     <checkbox
-                        id="toolbar-menu"
-                        preference="personaswitcher-toolbar-menu"/>
-                    <description>&options.toolbar-menu;</description>
+                        id="tools-submenu"
+                        preference="tools-submenu"/>
+                    <description>&options.tools-submenu;</description>
                 </hbox>
                 <hbox>
                     <checkbox
-                        id="addon-menu"
-                        preference="personaswitcher-addon-menu"/>
-                    <description>&options.addon-menu;</description>
+                        id="main-menubar"
+                        preference="main-menubar"/>
+                    <description>&options.main-menubar;</description>
                 </hbox>
             </groupbox>
+
         </vbox>
     </prefpane>
 </prefwindow>

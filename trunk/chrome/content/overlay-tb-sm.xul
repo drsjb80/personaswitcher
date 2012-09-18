@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE overlay SYSTEM "chrome://personaswitcher/locale/overlay.dtd">
 
 <overlay
     id="personaswitcher-overlay"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <!-- Have to add this into preexisting set?  -->
     <stringbundleset id="stringbundleset">
-	<stringbundle 
-	    id="stringbundle_personaswitcher"
-	    src="chrome://personaswitcher/locale/personaswitcher.properties"/>
+        <stringbundle 
+            id="stringbundle_personaswitcher"
+            src="chrome://personaswitcher/locale/personaswitcher.properties"/>
     </stringbundleset>
 
-    <script src="overlay.js"/>
+    <toolbarpalette id="MailToolbarPalette">
+        <toolbarbutton
+            id="personaswitcher-button"
+            label="&personaswitcher-button.label;"
+            tooltiptext="&personaswitcher-button.tooltip;"
+            type="menu">
+            <menupopup
+                id="personaswitcher-addon"
+                onpopupshowing="PersonaSwitcher.buttonPopup (event);"/>
+        </toolbarbutton>
+    </toolbarpalette>
 
     <keyset>
         <!--
 	    Have to have something here, keyset's can't have unique id's
 	    https://developer.mozilla.org/en/Overlay#Overlays_and_ID_Attributes
-	-->
-	<key id="default-persona-key"/>
+        -->
+        <key id="default-persona-key"/>
     </keyset>
 
-    <menupopup id="taskPopup">
-        <menu id="personaswitcher-menu" label="&personaswitcher.label;">
-	    <menupopup id="personaswitcher-menupopup"/>
-	</menu>
-    </menupopup>
+    <script src="overlay.js"/>
 </overlay>

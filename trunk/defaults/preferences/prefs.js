@@ -24,6 +24,9 @@ pref ("extensions.personaswitcher.autominutes", 30);
 
 pref ("extensions.personaswitcher.preview", false);
 
+pref ("extensions.personaswitcher.tools-submenu", true);
+pref ("extensions.personaswitcher.main-menubar", false);
+
 // https://developer.mozilla.org/en/Localizing_extension_descriptions
 
 pref ("extensions.drsjb80@gmail.com.description", "chrome://personaswitcher/locale/overlay.properties");

@@ -19,6 +19,6 @@
 <!ENTITY options.preview.desc1 "Preview personas on menu mouseover.  Doesn't work on Macs.">
 <!ENTITY options.preview.desc2 "Also removes the Default entry in the menu, but the key combination still works.">
 
-<!ENTITY options.menus "Addition menus">
-<!ENTITY options.toolbar-menu "Add PesonaSwitcher menu to tool bar">
-<!ENTITY options.addon-menu "Add PesonaSwitcher menu to addon bar">
+<!ENTITY options.menus "Persona menu locations">
+<!ENTITY options.tools-submenu "Tools menu">
+<!ENTITY options.main-menubar "Main menu bar">

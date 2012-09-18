@@ -16,42 +16,59 @@ const XUL_NS =
 */
 PersonaSwitcher.createMenuItem = function (which)
 {
-    if (document != null)
+    var item = document.createElementNS (XUL_NS, "menuitem");
+
+    item.setAttribute ("label", which.name);
+    item.addEventListener
+    (
+        "command",
+        function() { PersonaSwitcher.onMenuItemCommand (which); },
+        false
+    );
+
+    if (PersonaSwitcher.prefs.getBoolPref ("preview"))
     {
-        var item = document.createElementNS (XUL_NS, "menuitem");
-        item.setAttribute ("label", which.name);
         item.addEventListener
         (
-            'command',
-            function() { PersonaSwitcher.onMenuItemCommand (which); },
+            "mouseover",
+            function () { LightweightThemeManager.previewTheme (which); },
             false
         );
-
-        if (PersonaSwitcher.prefs.getBoolPref ("preview"))
-        {
-            item.addEventListener
-            (
-                'mouseover',
-                function () { LightweightThemeManager.previewTheme (which); },
-                false
-            );
-        }
     }
-    else
-    {
-        alert ("Persona Switcher: document is null!");
-        PersonaSwitcher.log (which);
-    }
-
     return (item);
 }
 
-
-PersonaSwitcher.createMenuPopup = function ()
+/*
+** dump all the properties of an object
+*/
+PersonaSwitcher.dump = function (object)
 {
-    PersonaSwitcher.log ();
+    for (var property in object)
+    {
+        PersonaSwitcher.log (property + "=" + object[property]);
+    }
+}
 
-    var menupopup = document.createElementNS (XUL_NS, "menupopup");
+/*
+** dynamically create a menu of installed personas
+*/
+PersonaSwitcher.createMenuPopup = function (id)
+{
+    PersonaSwitcher.log (id);
+
+    var menupopup = document.getElementById (id);
+
+    if (menupopup == null)
+    {
+        PersonaSwitcher.log ("menupopup null!");
+        return;
+    }
+
+    while (menupopup.hasChildNodes())
+    {
+        menupopup.removeChild (menupopup.firstChild);
+    }
+
     var arr = LightweightThemeManager.usedThemes;
 
     if (arr.length == 0)
@@ -64,7 +81,8 @@ PersonaSwitcher.createMenuPopup = function ()
         var item = document.createElementNS (XUL_NS, "menuitem");
 
         item.setAttribute ("label",
-            PersonaSwitcher.stringBundle.getString ("noPersonas"));
+            PersonaSwitcher.stringBundle.getString
+                ("personaswitcher.noPersonas"));
 
         menupopup.appendChild (item);
     }
@@ -82,7 +100,7 @@ PersonaSwitcher.createMenuPopup = function ()
 
             item.addEventListener
             (
-                'command',
+                "command",
                 PersonaSwitcher.setDefault,
                 false
             );
@@ -97,10 +115,12 @@ PersonaSwitcher.createMenuPopup = function ()
             menupopup.appendChild (item);
         }
     }
-
-    return (menupopup);
 }
 
+PersonaSwitcher.buttonPopup = function (event)
+{
+    PersonaSwitcher.createMenuPopup (event.target.id);
+}
 
 PersonaSwitcher.hideSubMenu = function ()
 {
@@ -141,17 +161,15 @@ PersonaSwitcher.makeKey = function (id, mods, which, command)
 // http://stackoverflow.com/questions/549650/how-to-dynamically-change-shortcut-key-in-firefox
 PersonaSwitcher.setKeyset = function()
 {
-    var keyset =
-         document.getElementById ("default-persona-key").parentNode;
-    PersonaSwitcher.log (keyset);
+    var keyset = document.getElementById ("default-persona-key").parentNode;
+    PersonaSwitcher.log (keyset.id);
 
     var parent = keyset.parentNode;
-    PersonaSwitcher.log (parent);
+    PersonaSwitcher.log (parent.id);
 
     parent.removeChild (keyset);
 
     keyset = document.createElement ("keyset");
-    PersonaSwitcher.log (keyset);
 
     var keys =
     [
@@ -188,105 +206,189 @@ PersonaSwitcher.setKeyset = function()
     parent.appendChild (keyset);
 }
 
-PersonaSwitcher.createMenu = function()
+PersonaSwitcher.seachForId = function (names, types)
 {
+    for (var i = 0; i < names.length; i++)
+    {
+        PersonaSwitcher.log (names[i]);
+
+        var element = document.getElementById (names[i]);
+
+        if (element != null)
+        {
+            PersonaSwitcher.log (types[i]);
+            return (element);
+        }
+    }
+
+    PersonaSwitcher.log ("couldn't find element");
+    return (null);
+}
+
+PersonaSwitcher.getToolsMenuPopup = function()
+{
+    var names = new Array ("menu_ToolsPopup", "taskPopup");
+    var types = new Array ("firefox", "thunderbird");
+
+    return (PersonaSwitcher.seachForId (names, types));
+}
+
+PersonaSwitcher.getMainMenu = function()
+{
+    var names = new Array ("main-menubar", "mail-menubar");
+    var types = new Array ("firefox", "thunderbird");
+
+    return (PersonaSwitcher.seachForId (names, types));
+}
+
+PersonaSwitcher.getToolsMenu = function()
+{
+    var names = new Array ("tools-menu", "tasksMenu");
+    var types = new Array ("firefox", "thunderbird");
+
+    return (PersonaSwitcher.seachForId (names, types));
+}
+
+/*
+** remove a particular menu, if it exists
+*/
+PersonaSwitcher.removeMenu = function (id)
+{
+    PersonaSwitcher.log (id);
+
+    if (id == "tools-submenu")
+        var main = PersonaSwitcher.getToolsMenuPopup();
+    else if (id == "main-menubar")
+        var main = PersonaSwitcher.getMainMenu();
+    else
+    {
+        PersonaSwitcher.log ("unknown id");
+        return;
+    }
+
+    if (main == null)
+    {
+        PersonaSwitcher.log ("main == null");
+        return;
+    }
+
+    var sub = document.getElementById ("personaswitcher-" + id + "-menu");
+
+    PersonaSwitcher.log (main.id);
+    PersonaSwitcher.log (sub.id);
+
+    if (sub != null)
+        main.removeChild (sub);
+    else
+        PersonaSwitcher.log ("sub == null");
+}
+
+/*
+** remove menus that aren't supposed to be visible
+*/
+PersonaSwitcher.removeMenus = function ()
+{
+    PersonaSwitcher.log();
+
+    if (! PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
+        PersonaSwitcher.removeMenu ("tools-submenu");
+
+    if (! PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
+        PersonaSwitcher.removeMenu ("main-menubar")
+}
+
+/*
+** create a specific menu
+*/
+PersonaSwitcher.createMenuAndPopup = function (id)
+{
+    PersonaSwitcher.log (id);
+
     var menu = document.createElementNS (XUL_NS, "menu");
     menu.setAttribute ("label", "Personas");
+    menu.setAttribute ("id", "personaswitcher-" + id + "-menu");
 
-    var menupopup = PersonaSwitcher.createMenuPopup();
+    var menupopup = document.createElementNS (XUL_NS, "menupopup");
+    menupopup.setAttribute ("id", "personaswitcher-" + id + "-menupopup");
     menu.appendChild (menupopup);
+
+    PersonaSwitcher.log (menu.id);
+    PersonaSwitcher.log (menupopup.id);
+
+    menupopup.addEventListener
+    (
+        "popupshowing",
+        function () { PersonaSwitcher.createMenuPopup
+            ("personaswitcher-" + id + "-menupopup"); },
+        false
+    );
+    menupopup.addEventListener
+    (
+        "popuphidden",
+        PersonaSwitcher.hideSubMenu,
+        false
+    );
 
     return (menu);
 }
 
-var PesonaSwitcherObserver =
+/*
+** menus and menupopups cannot be shared so we must create them for
+** each.
+*/
+PersonaSwitcher.createMenu = function (which)
 {
-    register: function()
+    PersonaSwitcher.log (which);
+
+    if (document.getElementById ("personaswitcher-" + which + "-menu") != null)
     {
-        PersonaSwitcher.log();
-
-        PersonaSwitcher.stringBundle = document.getElementById 
-            ("stringbundle-personaswitcher");
-
-        /*
-        ** menus and menupopups cannot be shared
-        */
-        document.getElementById ("menu_ToolsPopup").appendChild
-            (PersonaSwitcher.createMenu());
-
-        document.getElementById ("main-menubar").insertBefore
-            (PersonaSwitcher.createMenu(), document.getElementById
-                ("windowMenu"));
-
-        PersonaSwitcher.setKeyset();
-
-        var observerService =
-            Components.classes["@mozilla.org/observer-service;1"]
-            .getService(Components.interfaces.nsIObserverService);
-
-        observerService.addObserver(PesonaSwitcherObserver,
-            "lightweight-theme-list-changed", false);
-    },
-
-    observe: function (subject, topic, data)
-    {
-        PersonaSwitcher.log ("in observe\n");
-        switch (topic)
-        {
-            case 'lightweight-theme-list-changed':
-                PersonaSwitcher.subMenu ("personaswitcher-menupopup");
-                break;
-        }
-    },
-
-    unregister: function()
-    {
-        var observerService =
-            Components.classes["@mozilla.org/observer-service;1"]
-            .getService(Components.interfaces.nsIObserverService);
-
-        observerService.removeObserver(PesonaSwitcherObserver,
-            "lightweight-theme-list-changed");
+        PersonaSwitcher.log ("already exists");
+        return;
     }
+
+    if (which == "tools-submenu")
+    {
+        var main = PersonaSwitcher.getToolsMenuPopup()
+        var sub = PersonaSwitcher.createMenuAndPopup (which);
+
+        PersonaSwitcher.log (main.id);
+        PersonaSwitcher.log (sub.id);
+
+        main.appendChild (sub);
+    }
+    else if (which == "main-menubar")
+    {
+        var main = PersonaSwitcher.getMainMenu()
+        var sub = PersonaSwitcher.createMenuAndPopup (which);
+        var where = PersonaSwitcher.getToolsMenu();
+
+        PersonaSwitcher.log (main.id);
+        PersonaSwitcher.log (sub.id);
+        PersonaSwitcher.log (where.id);
+
+        where = where.nextSibling;
+        PersonaSwitcher.log (where.id);
+
+        main.insertBefore (sub, where);
+    }
+    else
+        PersonaSwitcher.log ("unknown menu");
 }
 
-window.addEventListener("load", PesonaSwitcherObserver.register, false);
-window.addEventListener("unload", PesonaSwitcherObserver.unregister, false);
-
-PersonaSwitcher.migratePrefs = function()
+PersonaSwitcher.onWindowLoad = function()
 {
-    var oldPrefs =
-        Components.classes["@mozilla.org/preferences-service;1"].
-        getService (Components.interfaces.nsIPrefService).
-        getBranch ("extensions.themeswitcher.");
+    PersonaSwitcher.stringBundle = document.getElementById 
+        ("stringbundle-personaswitcher");
 
-    var kids = oldPrefs.getChildList ("", {});
+    PersonaSwitcher.setKeyset();
 
-    if (kids.length == 0) return;
-
-    for (var i in kids)
-    {
-        var type = oldPrefs.getPrefType (kids[i]);
-        PersonaSwitcher.log (kids[i]);
-
-        switch (type)
-        {
-            case oldPrefs.PREF_STRING:
-            PersonaSwitcher.prefs.setCharPref (kids[i],
-                oldPrefs.getCharPref (kids[i]));
-            break;
-            case oldPrefs.PREF_INT:
-            PersonaSwitcher.prefs.setIntPref (kids[i],
-                oldPrefs.getIntPref (kids[i]));
-            break;
-            case oldPrefs.PREF_BOOL:
-            PersonaSwitcher.prefs.setBoolPref (kids[i],
-                oldPrefs.getBoolPref (kids[i]));
-            break;
-        }
-    }
-    oldPrefs.deleteBranch ("");
+    if (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
+        PersonaSwitcher.createMenu ("tools-submenu");
+    if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
+        PersonaSwitcher.createMenu ("main-menubar");
 }
+
+window.addEventListener("load", PersonaSwitcher.onWindowLoad, false);
 
 PersonaSwitcher.startTimer();
 PersonaSwitcher.migratePrefs();
