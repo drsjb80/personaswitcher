@@ -1,0 +1,34 @@
+/Applications/Firefox.app/Contents/MacOS/firefox -P dev &
+/Applications/Firefox.app/Contents/MacOS/firefox -chromebug
+/Applications/Firefox.app/Contents/MacOS/firefox
+/Applications/Firefox.app/Contents/MacOS/firefox -CreateProfile dev
+----
+sh -x make
+----
+vi LWTS/PersonaSwitcher.jsm
+vi chrome/content/overlay.js
+vi chrome/content/overlay-tb-sm.xul
+vi chrome/content/overlay-fx.xul
+vi chrome/locale/en-US/overlay.dtd
+----
+vi chrome/locale/en-US/options.dtd
+vi chrome/content/options.xul
+vi chrome/locale/en-US/personaswitcher.properties
+vi defaults/preferences/prefs.js
+----
+vi install.rdf chrome/content/about.xul
+----
+cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
+----
+hg clone http://hg.mozilla.org/mozilla-central/file/b7b6565d12a0/toolkit/mozapps/extensions LightweightThemeManager.jsm
+----
+java -jar compiler-latest/compiler.jar --js=chrome/content/overlay.js --js_output_file=out.js
+----
+vi install.rdf chrome/content/about.xul # version changes
+----
+svn add branches
+svn commit
+svn copy trunk branches/keyset
+svn commit
+svn diff trunk branches/keyset
+svn merge branches/keyset
