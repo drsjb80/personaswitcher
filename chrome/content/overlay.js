@@ -163,7 +163,7 @@ PersonaSwitcher.makeKey = function (id, mods, which, command)
 
 PersonaSwitcher.getKeyset = function()
 {
-    var names = new Array ("mainKeyset", "tasksKeys");
+    var names = new Array ("mainKeyset", "mailKeys");
     var types = new Array ("firefox", "thunderbird");
 
     return (PersonaSwitcher.seachForId (names, types));

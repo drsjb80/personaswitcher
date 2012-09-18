@@ -8,7 +8,7 @@ var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.timerIsRunning = false;
-PersonaSwitcher.debug = true;
+PersonaSwitcher.debug = false;
 PersonaSwitcher.stringBundle;
 
 PersonaSwitcher.prefs =
@@ -260,7 +260,8 @@ PersonaSwitcher.migratePrefs = function()
 
 PersonaSwitcher.log = function()
 {
-    if (! PersonaSwitcher.debug) return;
+    if (! PersonaSwitcher.debug)
+        return;
 
     var message = "";
 
