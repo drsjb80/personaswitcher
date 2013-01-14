@@ -16,7 +16,7 @@ vi chrome/content/options.xul
 vi chrome/locale/en-US/personaswitcher.properties
 vi defaults/preferences/prefs.js
 ----
-vi install.rdf chrome/content/about.xul
+vi install.rdf chrome/content/about.xul # version changes
 ----
 cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
 ----
@@ -24,11 +24,4 @@ hg clone http://hg.mozilla.org/mozilla-central/file/b7b6565d12a0/toolkit/mozapps
 ----
 java -jar compiler-latest/compiler.jar --js=chrome/content/overlay.js --js_output_file=out.js
 ----
-vi install.rdf chrome/content/about.xul # version changes
-----
-svn add branches
 svn commit
-svn copy trunk branches/keyset
-svn commit
-svn diff trunk branches/keyset
-svn merge branches/keyset

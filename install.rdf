@@ -4,38 +4,45 @@
     <em:id>drsjb80@gmail.com</em:id>
     <em:type>2</em:type>
     <em:name>Persona Switcher</em:name>
-    <em:version>1.11</em:version>
+    <em:version>1.12</em:version>
     <em:creator>Steve Beaty</em:creator>
     <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
-    <em:description>Quickly switch between your personas or reset it back to the default</em:description>
+    <em:contributor>鄭茜鴻 (Zheng Xihong)</em:contributor>
+    <em:translator>鄭茜鴻 (Zheng Xihong)</em:translator>
+    <em:localized>
+      <Description>
+        <em:locale>zh-TW</em:locale>
+        <em:description>快速更換面板或切換為預設面板。</em:description>
+      </Description>
+    </em:localized>
+    <em:localized>
+      <Description>
+        <em:locale>en-US</em:locale>
+        <em:description>Quickly switch between your personas or reset it back to the default</em:description>
+      </Description>
+    </em:localized>
     <em:aboutURL>chrome://personaswitcher/content/about.xul</em:aboutURL>
     <em:optionsURL>chrome://personaswitcher/content/options.xul</em:optionsURL>
-
-    <!-- https://addons.mozilla.org/en-US/firefox/pages/appversions/ -->
-
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
-        <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>17.*</em:maxVersion>
+        <em:minVersion>4.0</em:minVersion>
+        <em:maxVersion>20.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-
     <em:targetApplication>
       <Description>
         <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id> <!-- Thunderbird -->
         <em:minVersion>10.0</em:minVersion>
-        <em:maxVersion>17.*</em:maxVersion>
+        <em:maxVersion>14.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-
     <em:targetApplication>
       <Description>
         <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id> <!-- Seamonkey -->
         <em:minVersion>2.0</em:minVersion>
-        <em:maxVersion>2.14.*</em:maxVersion>
+        <em:maxVersion>2.11.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-
   </Description>
 </RDF>

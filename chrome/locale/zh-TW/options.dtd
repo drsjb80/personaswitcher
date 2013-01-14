@@ -1,0 +1,24 @@
+﻿<!ENTITY options.title "Persona Switcher 選項">
+<!ENTITY options.pane1 "Persona Switcher 選項">
+<!ENTITY options.kbshortcuts.title "快捷建">
+<!ENTITY options.kbshortcuts.default "切換至預設面板">
+<!ENTITY options.kbshortcuts.rotate "切換至其他面板">
+<!ENTITY options.kbshortcuts.toggle "切換為自動輪換">
+<!ENTITY options.kbshortcuts.auto "Automatic rotation">
+<!ENTITY options.kbshortcuts.key "按鍵">
+<!ENTITY options.kbshortcuts.shift "Shift">
+<!ENTITY options.kbshortcuts.control "Control">
+<!ENTITY options.kbshortcuts.alt "Alt">
+<!ENTITY options.kbshortcuts.meta "Meta">
+
+<!ENTITY options.autoevery "自動切換">
+<!ENTITY options.autoevery.switch "每當經過">
+<!ENTITY options.autoevery.minutes "分鐘時切換">
+
+<!ENTITY options.preview "滑鼠經過時預覽">
+<!ENTITY options.preview.desc1 "滑鼠滑過選單選項時預覽。Mac 系統無法使用。">
+<!ENTITY options.preview.desc2 "將會從選單中移除「預設面板」選項，但您仍能透過快捷鍵切換至預設面板。">
+
+<!ENTITY options.menus "將 Persona 選單顯示於">
+<!ENTITY options.tools-submenu "選單列→工具">
+<!ENTITY options.main-menubar "選單列">

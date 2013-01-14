@@ -64,11 +64,8 @@ PersonaSwitcher.createMenuPopup = function (id)
         return;
     }
 
-    PersonaSwitcher.log (menupopup.id);
-
     while (menupopup.hasChildNodes())
     {
-        PersonaSwitcher.log ("removing child");
         menupopup.removeChild (menupopup.firstChild);
     }
 
@@ -99,7 +96,9 @@ PersonaSwitcher.createMenuPopup = function (id)
             PersonaSwitcher.log ("adding default");
 
             var item = document.createElementNS (XUL_NS, "menuitem");
-            item.setAttribute ("label", "Default");
+            item.setAttribute ("label",
+                PersonaSwitcher.stringBundle.getString
+                    ("personaswitcher.default"));
 
             item.addEventListener
             (
@@ -148,41 +147,31 @@ PersonaSwitcher.findMods = function (which)
 }
 
 // http://unixpapa.com/js/key.html
+
 PersonaSwitcher.makeKey = function (id, mods, which, command)
 {
     var key = document.createElement ("key");
 
     key.setAttribute ("id", id); 
+    if (mods != "") key.setAttribute ("modifiers", mods);
     key.setAttribute ("key", which);
     key.setAttribute ("oncommand", command);
-    if (mods != "")
-        key.setAttribute ("modifiers", mods);
 
     return (key);
-}
-
-PersonaSwitcher.getKeyset = function()
-{
-    var names = new Array ("mainKeyset", "mailKeys");
-    var types = new Array ("firefox", "thunderbird");
-
-    return (PersonaSwitcher.seachForId (names, types));
 }
 
 // http://stackoverflow.com/questions/549650/how-to-dynamically-change-shortcut-key-in-firefox
 PersonaSwitcher.setKeyset = function()
 {
-    var mainKeyset = PersonaSwitcher.getKeyset();
+    var keyset = document.getElementById ("default-persona-key").parentNode;
+    PersonaSwitcher.log (keyset.id);
 
-    var keyset = document.getElementById ("personswitcher-keyset");
+    var parent = keyset.parentNode;
+    PersonaSwitcher.log (parent.id);
 
-    if (keyset != null)
-    {
-        PersonaSwitcher.log ("removing " + keyset.id + " from " +
-            mainKeyset.id);
+    parent.removeChild (keyset);
 
-        mainKeyset.removeChild (keyset);
-    }
+    keyset = document.createElement ("keyset");
 
     var keys =
     [
@@ -209,17 +198,14 @@ PersonaSwitcher.setKeyset = function()
         ]
     ];
 
-    keyset = document.createElement ("keyset");
-    keyset.setAttribute ("id", "personswitcher-keyset");
-
-    for (var key in keys)
+    for (var i in keys)
     {
+        PersonaSwitcher.log (i);
         keyset.appendChild (PersonaSwitcher.makeKey
-            (keys[key][0], keys[key][1], keys[key][2], keys[key][3]));
+            (keys[i][0], keys[i][1], keys[i][2], keys[i][3]));
     }
 
-    PersonaSwitcher.log ("appending " + keyset.id + " to " + mainKeyset.id);
-    mainKeyset.appendChild (keyset);
+    parent.appendChild (keyset);
 }
 
 PersonaSwitcher.seachForId = function (names, types)
@@ -321,7 +307,8 @@ PersonaSwitcher.createMenuAndPopup = function (id)
     PersonaSwitcher.log (id);
 
     var menu = document.createElementNS (XUL_NS, "menu");
-    menu.setAttribute ("label", "Personas");
+    menu.setAttribute ("label",
+        PersonaSwitcher.stringBundle.getString ("personaswitcher.label"));
     menu.setAttribute ("id", "personaswitcher-" + id + "-menu");
 
     var menupopup = document.createElementNS (XUL_NS, "menupopup");

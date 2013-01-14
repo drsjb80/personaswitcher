@@ -16,6 +16,11 @@ zip personaswitcher.xpi \
     chrome/locale/en-US/options.dtd \
     chrome/locale/en-US/overlay.dtd \
     chrome/locale/en-US/personaswitcher.properties \
+    chrome/locale/zh-TW/ \
+    chrome/locale/zh-TW/about.dtd \
+    chrome/locale/zh-TW/options.dtd \
+    chrome/locale/zh-TW/overlay.dtd \
+    chrome/locale/zh-TW/personaswitcher.properties \
     chrome/skin/PersonaSwitcher16.png \
     chrome/skin/PersonaSwitcher24.png \
     chrome/skin/toolbar-button.css \
