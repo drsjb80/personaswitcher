@@ -7,8 +7,8 @@
     <em:version>1.12</em:version>
     <em:creator>Steve Beaty</em:creator>
     <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
-    <em:contributor>鄭茜鴻 (Zheng Xihong)</em:contributor>
     <em:translator>鄭茜鴻 (Zheng Xihong)</em:translator>
+    <em:iconURL>chrome://personaswitcher/skin/PersonaSwitcher32.png</em:iconURL>
     <em:localized>
       <Description>
         <em:locale>zh-TW</em:locale>

@@ -23,6 +23,9 @@ zip personaswitcher.xpi \
     chrome/locale/zh-TW/personaswitcher.properties \
     chrome/skin/PersonaSwitcher16.png \
     chrome/skin/PersonaSwitcher24.png \
+    chrome/skin/PersonaSwitcher32.png \
+    chrome/skin/PersonaSwitcher48.png \
+    chrome/skin/PersonaSwitcher64.png \
     chrome/skin/toolbar-button.css \
     defaults/preferences/prefs.js \
     LWTS/PersonaSwitcher.jsm
