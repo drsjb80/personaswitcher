@@ -21,7 +21,7 @@ vi install.rdf chrome/content/about.xul # version changes
 ----
 cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
 ----
-hg clone http://hg.mozilla.org/mozilla-central/file/b7b6565d12a0/toolkit/mozapps/extensions LightweightThemeManager.jsm
+hg clone http://hg.mozilla.org/mozilla-central/file/81dd97739fa1/toolkit/mozapps/extensions LightweightThemeManager.jsm
 ----
 java -jar compiler-latest/compiler.jar --js=chrome/content/overlay.js --js_output_file=out.js
 ----

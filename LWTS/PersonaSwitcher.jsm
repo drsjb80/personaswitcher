@@ -8,7 +8,7 @@ var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.timerIsRunning = false;
-PersonaSwitcher.debug = false;
+PersonaSwitcher.debug = true;
 PersonaSwitcher.stringBundle;
 
 PersonaSwitcher.prefs =
@@ -16,16 +16,21 @@ PersonaSwitcher.prefs =
     getService (Components.interfaces.nsIPrefService).
     getBranch ("extensions.personaswitcher.");
 
+PersonaSwitcher.windowMediator =
+    Components.classes["@mozilla.org/appshell/window-mediator;1"]
+    .getService(Components.interfaces.nsIWindowMediator);
+
 // needed for addObserver
 PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 
 /*
 ** an observer for changing perferences.
 */
-var myObserver =
+PersonaSwitcher.myObserver =
 {
     observe: function (subject, topic, data)
     {
+        'use strict';
         PersonaSwitcher.log (subject);
         PersonaSwitcher.log (topic);
         PersonaSwitcher.log (data);
@@ -51,26 +56,19 @@ var myObserver =
             {
                 return;    // nothing to do as the value is queried elsewhere
             }
-            case "main-menubar":
-            case "tools-submenu":
+            case "main-menubar": case "tools-submenu":
             {
                 if (PersonaSwitcher.prefs.getBoolPref (data))
                 {
-                    PersonaSwitcher.createMenu (data);
+                    PersonaSwitcher.createMenus (data);
                 }
                 else
                 {
-                    PersonaSwitcher.removeMenu (data);
+                    PersonaSwitcher.removeMenus (data);
                 }
 
                 break;
             }
-            /*
-            {
-                PersonaSwitcher.createMenus();
-                PersonaSwitcher.removeMenus();
-            }
-            */
             case "defshift": case "defalt": case "defcontrol":
             case "defmeta": case "defkey":
             case "rotshift": case "rotalt": case "rotcontrol":
@@ -89,13 +87,14 @@ var myObserver =
     }
 }
 
-PersonaSwitcher.prefs.addObserver ("", myObserver, false);
+PersonaSwitcher.prefs.addObserver ("", PersonaSwitcher.myObserver, false);
 
 PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"]
     .createInstance(Components.interfaces.nsITimer);
 
 PersonaSwitcher.startTimer = function()
 {
+    'use strict';
     PersonaSwitcher.log();
 
     if (! PersonaSwitcher.prefs.getBoolPref ("auto")) return;
@@ -118,6 +117,7 @@ PersonaSwitcher.startTimer = function()
 
 PersonaSwitcher.autoOff = function()
 {
+    'use strict';
     PersonaSwitcher.log();
 
     if (PersonaSwitcher.timerIsRunning) PersonaSwitcher.timer.cancel();
@@ -127,16 +127,21 @@ PersonaSwitcher.autoOff = function()
 
 PersonaSwitcher.autoOn = function (doRotate)
 {
+    'use strict';
     PersonaSwitcher.log();
 
     PersonaSwitcher.startTimer();
     PersonaSwitcher.prefs.setBoolPref ("auto", 1);
 
-    if (doRotate) PersonaSwitcher.rotate();
+    if (doRotate)
+    {
+        PersonaSwitcher.rotate();
+    }
 }
 
 PersonaSwitcher.toggleAuto = function()
 {
+    'use strict';
     PersonaSwitcher.log();
 
     if (PersonaSwitcher.prefs.getBoolPref ("auto"))
@@ -151,6 +156,9 @@ PersonaSwitcher.toggleAuto = function()
 
 PersonaSwitcher.switchTo = function (toWhich)
 {
+    'use strict';
+    // PersonaSwitcher.dump (toWhich);
+
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html
     */
@@ -167,6 +175,7 @@ PersonaSwitcher.switchTo = function (toWhich)
 
 PersonaSwitcher.rotate = function()
 {
+    'use strict';
     PersonaSwitcher.log();
 
     var arr = LightweightThemeManager.usedThemes;
@@ -178,6 +187,7 @@ PersonaSwitcher.rotate = function()
 
 PersonaSwitcher.previous = function()
 {
+    'use strict';
     PersonaSwitcher.log();
 
     var arr = LightweightThemeManager.usedThemes;
@@ -193,6 +203,7 @@ PersonaSwitcher.previous = function()
 */
 PersonaSwitcher.rotateKey = function()
 {
+    'use strict';
     PersonaSwitcher.log();
 
     PersonaSwitcher.rotate();
@@ -201,6 +212,7 @@ PersonaSwitcher.rotateKey = function()
 
 PersonaSwitcher.setDefault = function()
 {
+    'use strict';
     PersonaSwitcher.log();
 
     if (LightweightThemeManager.currentTheme != null)
@@ -211,6 +223,7 @@ PersonaSwitcher.setDefault = function()
 
 PersonaSwitcher.onMenuItemCommand = function (which)
 {
+    'use strict';
     PersonaSwitcher.log();
 
     PersonaSwitcher.switchTo (which);
@@ -219,6 +232,7 @@ PersonaSwitcher.onMenuItemCommand = function (which)
 
 PersonaSwitcher.migratePrefs = function()
 {
+    'use strict';
     var oldPrefs =
         Components.classes["@mozilla.org/preferences-service;1"].
         getService (Components.interfaces.nsIPrefService).
@@ -258,8 +272,21 @@ PersonaSwitcher.migratePrefs = function()
     oldPrefs.deleteBranch ("");
 }
 
+/*
+** dump all the properties of an object
+*/
+PersonaSwitcher.dump = function (object)
+{
+    'use strict';
+    for (var property in object)
+    {
+        PersonaSwitcher.log (property + "=" + object[property]);
+    }
+}
+
 PersonaSwitcher.log = function()
 {
+    'use strict';
     if (! PersonaSwitcher.debug)
         return;
 
