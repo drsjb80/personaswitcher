@@ -25,4 +25,5 @@ hg clone http://hg.mozilla.org/mozilla-central/file/81dd97739fa1/toolkit/mozapps
 ----
 java -jar compiler-latest/compiler.jar --js=chrome/content/overlay.js --js_output_file=out.js
 ----
-svn commit
+/usr/local/bin/svn diff
+/usr/local/bin/svn commit

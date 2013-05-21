@@ -8,7 +8,7 @@ var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.timerIsRunning = false;
-PersonaSwitcher.debug = true;
+PersonaSwitcher.debug = false;
 PersonaSwitcher.stringBundle;
 
 PersonaSwitcher.prefs =
