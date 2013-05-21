@@ -76,7 +76,7 @@ PersonaSwitcher.myObserver =
             case "autoshift": case "autoalt": case "autocontrol":
             case "autometa": case "autokey":
             {
-                PersonaSwitcher.setKeyset();
+                PersonaSwitcher.setKeysets();
                 break;
             }
             default:

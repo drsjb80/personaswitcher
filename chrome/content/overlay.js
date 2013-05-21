@@ -21,6 +21,7 @@ const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 PersonaSwitcher.findMods = function (which)
 {
     'use strict';
+    PersonaSwitcher.log (which);
     var mods = "";
     var names = ["shift", "control", "alt", "meta"];
 
@@ -32,15 +33,21 @@ PersonaSwitcher.findMods = function (which)
         }
     }
 
+    PersonaSwitcher.log (mods);
     return (mods);
 }
 
 // http://unixpapa.com/js/key.html
 
-PersonaSwitcher.makeKey = function (id, mods, which, command)
+PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 {
     'use strict';
-    var key = document.createElement ("key");
+    PersonaSwitcher.log (id);
+    PersonaSwitcher.log (mods);
+    PersonaSwitcher.log (which);
+    PersonaSwitcher.log (command);
+
+    var key = doc.createElement ("key");
 
     key.setAttribute ("id", id); 
     if (mods != "")
@@ -59,16 +66,20 @@ PersonaSwitcher.getKeyset = function (doc)
     var names = new Array ("mainKeyset", "mailKeys");
     var types = new Array ("firefox", "thunderbird");
 
-    return (PersonaSwitcher.seachForId (doc, names, types));
+    var junk = PersonaSwitcher.searchForId (doc, names, types);
+    PersonaSwitcher.log (junk);
+    return (PersonaSwitcher.searchForId (doc, names, types));
 }
 
 // http://stackoverflow.com/questions/549650/how-to-dynamically-change-shortcut-key-in-firefox
 PersonaSwitcher.setKeyset = function (doc)
 {
     'use strict';
+    PersonaSwitcher.log (doc);
     var mainKeyset = PersonaSwitcher.getKeyset (doc);
-
-    var keyset = document.getElementById ("personswitcher-keyset");
+    PersonaSwitcher.log (mainKeyset);
+    var keyset = doc.getElementById ("personswitcher-keyset");
+    PersonaSwitcher.log (keyset);
 
     if (keyset != null)
     {
@@ -103,17 +114,36 @@ PersonaSwitcher.setKeyset = function (doc)
         ]
     ];
 
-    keyset = document.createElement ("keyset");
+    PersonaSwitcher.log (keys);
+    keyset = doc.createElement ("keyset");
+    PersonaSwitcher.log (keyset);
     keyset.setAttribute ("id", "personswitcher-keyset");
 
     for (var key in keys)
     {
+        PersonaSwitcher.log (key);
         keyset.appendChild (PersonaSwitcher.makeKey
-            (keys[key][0], keys[key][1], keys[key][2], keys[key][3]));
+            (doc, keys[key][0], keys[key][1], keys[key][2], keys[key][3]));
     }
 
     PersonaSwitcher.log ("appending " + keyset.id + " to " + mainKeyset.id);
     mainKeyset.appendChild (keyset);
+}
+
+PersonaSwitcher.setKeysets = function()
+{
+    'use strict';
+    PersonaSwitcher.log();
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator
+        ("navigator:browser");
+
+    while (enumerator.hasMoreElements())
+    {
+        var doc = enumerator.getNext().document;
+        PersonaSwitcher.log();
+        PersonaSwitcher.setKeyset (doc);
+    }
 }
 
 /*
@@ -244,7 +274,7 @@ PersonaSwitcher.hideSubMenu = function ()
 ** in types if found. helps find the differences between firefox and
 ** thunderbird.
 */
-PersonaSwitcher.seachForId = function (doc, names, types)
+PersonaSwitcher.searchForId = function (doc, names, types)
 {
     'use strict';
     PersonaSwitcher.log (doc);
@@ -256,6 +286,8 @@ PersonaSwitcher.seachForId = function (doc, names, types)
         PersonaSwitcher.log (names[i]);
 
         var element = doc.getElementById (names[i]);
+
+        PersonaSwitcher.log (element);
 
         if (element != null)
         {
@@ -278,7 +310,7 @@ PersonaSwitcher.getToolsMenuPopup = function (doc)
     var names = new Array ("menu_ToolsPopup", "taskPopup");
     var types = new Array ("firefox", "thunderbird");
 
-    return (PersonaSwitcher.seachForId (doc, names, types));
+    return (PersonaSwitcher.searchForId (doc, names, types));
 }
 
 PersonaSwitcher.getMainMenu = function (doc)
@@ -287,7 +319,7 @@ PersonaSwitcher.getMainMenu = function (doc)
     var names = new Array ("main-menubar", "mail-menubar");
     var types = new Array ("firefox", "thunderbird");
 
-    return (PersonaSwitcher.seachForId (doc, names, types));
+    return (PersonaSwitcher.searchForId (doc, names, types));
 }
 
 PersonaSwitcher.getToolsMenu = function (doc)
@@ -296,7 +328,7 @@ PersonaSwitcher.getToolsMenu = function (doc)
     var names = new Array ("tools-menu", "tasksMenu");
     var types = new Array ("firefox", "thunderbird");
 
-    return (PersonaSwitcher.seachForId (doc, names, types));
+    return (PersonaSwitcher.searchForId (doc, names, types));
 }
 
 /*
@@ -353,7 +385,7 @@ PersonaSwitcher.removeMenus = function (which)
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator
         ("navigator:browser");
 
-    while(enumerator.hasMoreElements())
+    while (enumerator.hasMoreElements())
     {
         var doc = enumerator.getNext().document;
         PersonaSwitcher.log();
@@ -461,7 +493,7 @@ PersonaSwitcher.createMenus = function (which)
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator
         ("navigator:browser");
 
-    while(enumerator.hasMoreElements())
+    while (enumerator.hasMoreElements())
     {
         var doc = enumerator.getNext().document;
         PersonaSwitcher.log();
