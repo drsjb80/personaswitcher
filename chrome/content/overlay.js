@@ -159,7 +159,7 @@ PersonaSwitcher.setKeysets = function()
 */
 
 /*
-** create a menuitem, possibly creating a preview for mouseover
+** create a menuitem, possibly creating a preview
 */
 PersonaSwitcher.createMenuItem = function (which)
 {
@@ -178,7 +178,7 @@ PersonaSwitcher.createMenuItem = function (which)
     {
         item.addEventListener
         (
-            "mouseover",
+            "DOMMenuItemActive",
             function () { LightweightThemeManager.previewTheme (which); },
             false
         );
@@ -192,16 +192,6 @@ PersonaSwitcher.createMenuItem = function (which)
 PersonaSwitcher.createMenuPopup = function (menupopup)
 {
     'use strict';
-
-    /*
-    var menupopup = document.getElementById (id);
-
-    if (menupopup == null)
-    {
-        PersonaSwitcher.log ("menupopup null!");
-        return;
-    }
-    */
 
     while (menupopup.hasChildNodes())
     {
@@ -229,27 +219,16 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
     }
     else
     {
-        /*
-        ** if we are not previewing, put in the default item.
-        */
-        if (! PersonaSwitcher.prefs.getBoolPref ("preview"))
-        {
-            PersonaSwitcher.log ("adding default");
-
-            var item = document.createElementNS (XUL_NS, "menuitem");
-            PersonaSwitcher.log (item);
-            item.setAttribute ("label",
-                PersonaSwitcher.stringBundle.getString
-                    ("personaswitcher.default"));
-
-            item.addEventListener
-            (
-                "command",
-                PersonaSwitcher.setDefault,
-                false
-            );
-            menupopup.appendChild (item);
-        }
+        var item = document.createElementNS (XUL_NS, "menuitem");
+        item.setAttribute ("label", PersonaSwitcher.stringBundle.getString
+            ("personaswitcher.default"));
+        item.addEventListener
+        (
+            "command",
+            PersonaSwitcher.setDefault,
+            false
+        );
+        menupopup.appendChild (item);
 
         for (var i = 0; i < arr.length; i++)
         {
@@ -480,6 +459,26 @@ PersonaSwitcher.createMenu = function (doc, which)
     {
         PersonaSwitcher.log ("unknown menu");
     }
+}
+
+// used by toolbar palette
+PersonaSwitcher.buttonPopup = function (event)
+{
+    'use strict';
+    PersonaSwitcher.dump (event);
+    PersonaSwitcher.log (event.target.id);
+
+    var menupopup = document.getElementById (event.target.id);
+
+    if (menupopup == null)
+    {
+        PersonaSwitcher.log ("menupopup null!");
+        return;
+    }
+
+    PersonaSwitcher.createMenuPopup (menupopup);
+
+    return (true);
 }
 
 /*

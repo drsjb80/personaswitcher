@@ -31,7 +31,8 @@
             type="menu">
             <menupopup
                 id="personaswitcher-addon"
-                onpopupshowing="PersonaSwitcher.buttonPopup (event);"/>
+                onpopupshowing="PersonaSwitcher.buttonPopup (event);"
+            />
         </toolbarbutton>
     </toolbarpalette>
 

@@ -197,7 +197,6 @@
                         preference="personaswitcher-preview"/>
                     <vbox>
                         <description>&options.preview.desc1;</description>
-                        <description>&options.preview.desc2;</description>
                     </vbox>
                 </hbox>
             </groupbox>

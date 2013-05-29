@@ -15,9 +15,8 @@
 <!ENTITY options.autoevery.switch "Switch every">
 <!ENTITY options.autoevery.minutes "minutes">
 
-<!ENTITY options.preview "Mouseover preview">
-<!ENTITY options.preview.desc1 "Preview personas on menu mouseover.  Doesn't work on Macs.">
-<!ENTITY options.preview.desc2 "Also removes the Default entry in the menu, but the key combination still works.">
+<!ENTITY options.preview "Preview">
+<!ENTITY options.preview.desc1 "Preview personas on menu selection.">
 
 <!ENTITY options.menus "Persona menu locations">
 <!ENTITY options.tools-submenu "Tools menu">

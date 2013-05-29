@@ -1,3 +1,12 @@
-When changing version, two files needed to be changed:
-    install.rdf
-    chrome/content/about.xul
+URL
+    Application and affected window(s)
+    Palette id
+chrome://browser/content/browser.xul
+    Firefox - Main window
+    BrowserToolbarPalette
+chrome://navigator/content/navigator.xul
+    SeaMonkey 2.0 - Browser window
+    BrowserToolbarPalette
+chrome://messenger/content/messenger.xul
+    Thunderbird - Main window
+    MailToolbarPalette

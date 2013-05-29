@@ -4,7 +4,6 @@ zip personaswitcher.xpi \
     make \
     install.rdf \
     chrome.manifest \
-    notes \
     chrome/content/about.xul \
     chrome/content/overlay-fx.xul \
     chrome/content/overlay-tb-sm.xul \
