@@ -244,6 +244,8 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
 PersonaSwitcher.hideSubMenu = function ()
 {
     'use strict';
+    PersonaSwitcher.log();
+
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
         LightweightThemeManager.resetPreview();
 }
@@ -465,7 +467,6 @@ PersonaSwitcher.createMenu = function (doc, which)
 PersonaSwitcher.buttonPopup = function (event)
 {
     'use strict';
-    PersonaSwitcher.dump (event);
     PersonaSwitcher.log (event.target.id);
 
     var menupopup = document.getElementById (event.target.id);
@@ -477,8 +478,6 @@ PersonaSwitcher.buttonPopup = function (event)
     }
 
     PersonaSwitcher.createMenuPopup (menupopup);
-
-    return (true);
 }
 
 /*
@@ -503,9 +502,6 @@ PersonaSwitcher.createMenus = function (which)
 PersonaSwitcher.onWindowLoad = function()
 {
     'use strict';
-
-    // PersonaSwitcher.log (this);
-    // PersonaSwitcher.log (this.document);
 
     PersonaSwitcher.stringBundle = document.getElementById 
         ("stringbundle-personaswitcher");

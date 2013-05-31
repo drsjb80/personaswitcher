@@ -27,3 +27,5 @@ java -jar compiler-latest/compiler.jar --js=chrome/content/overlay.js --js_outpu
 ----
 /usr/local/bin/svn diff
 /usr/local/bin/svn commit
+----
+/Applications/SeaMonkey.app/Contents/MacOS/seamonkey &

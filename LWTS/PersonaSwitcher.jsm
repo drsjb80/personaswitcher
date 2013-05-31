@@ -8,7 +8,7 @@ var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.timerIsRunning = false;
-PersonaSwitcher.debug = false;
+PersonaSwitcher.debug = true;
 PersonaSwitcher.stringBundle;
 
 PersonaSwitcher.prefs =
@@ -35,17 +35,34 @@ PersonaSwitcher.myObserver =
         PersonaSwitcher.log (topic);
         PersonaSwitcher.log (data);
 
-        if (topic != "nsPref:changed") return;
+        if (topic != "nsPref:changed")
+            return;
 
         switch (data)
         {
             case "auto":
             {
-                if (PersonaSwitcher.prefs.getBoolPref ("auto"))
-                    PersonaSwitcher.autoOn (true);
-                else
-                    PersonaSwitcher.autoOff();
+                /*
+                var info = Components.classes["@mozilla.org/xre/app-info;1"]
+                       .getService(Components.interfaces.nsIXULAppInfo);
+
+                PersonaSwitcher.log (info.name);
+
+                if (info.name == "Firefox")
+                {
+                    if (PersonaSwitcher.prefs.getBoolPref ("auto"))
+                    {
+                        PersonaSwitcher.autoOn();
+                    }
+                    else
+                    {
+                        PersonaSwitcher.autoOff();
+                    }
+                }
+                */
+
                 break;
+
             }
             case "autominutes":
             {
@@ -120,23 +137,21 @@ PersonaSwitcher.autoOff = function()
     'use strict';
     PersonaSwitcher.log();
 
-    if (PersonaSwitcher.timerIsRunning) PersonaSwitcher.timer.cancel();
+    if (PersonaSwitcher.timerIsRunning)
+        PersonaSwitcher.timer.cancel();
 
     PersonaSwitcher.prefs.setBoolPref ("auto", 0);
 }
 
-PersonaSwitcher.autoOn = function (doRotate)
+PersonaSwitcher.autoOn = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.log ();
 
     PersonaSwitcher.startTimer();
     PersonaSwitcher.prefs.setBoolPref ("auto", 1);
 
-    if (doRotate)
-    {
-        PersonaSwitcher.rotate();
-    }
+    PersonaSwitcher.rotate();
 }
 
 PersonaSwitcher.toggleAuto = function()
@@ -150,14 +165,14 @@ PersonaSwitcher.toggleAuto = function()
     }
     else
     {
-        PersonaSwitcher.autoOn (true);
+        PersonaSwitcher.autoOn();
     }
 }
 
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
-    // PersonaSwitcher.dump (toWhich);
+    PersonaSwitcher.log (toWhich.name);
 
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html
@@ -180,7 +195,7 @@ PersonaSwitcher.rotate = function()
 
     var arr = LightweightThemeManager.usedThemes;
 
-    if (arr.length < 1) return;
+    if (arr.length <= 1) return;
 
     PersonaSwitcher.switchTo (arr[arr.length-1]);
 }

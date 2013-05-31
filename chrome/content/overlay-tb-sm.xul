@@ -22,7 +22,9 @@
             type="menu">
             <menupopup
                 id="personaswitcher-addon"
-                onpopupshowing="PersonaSwitcher.buttonPopup (event);"/>
+                onpopupshowing="PersonaSwitcher.buttonPopup (event);"
+                onpopuphiding="PersonaSwitcher.hideSubMenu();"
+            />
         </toolbarbutton>
     </toolbarpalette>
 
