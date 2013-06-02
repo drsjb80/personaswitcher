@@ -4,7 +4,7 @@
     <em:id>drsjb80@gmail.com</em:id>
     <em:type>2</em:type>
     <em:name>Persona Switcher</em:name>
-    <em:version>1.14</em:version>
+    <em:version>1.15</em:version>
     <em:creator>Steve Beaty</em:creator>
     <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
     <em:translator>鄭茜鴻 (Zheng Xihong)</em:translator>
@@ -34,14 +34,14 @@
       <Description>
         <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id> <!-- Thunderbird -->
         <em:minVersion>10.0</em:minVersion>
-        <em:maxVersion>14.*</em:maxVersion>
-      </Description>
+        <em:maxVersion>18.*</em:maxVersion>
+  </Description>
     </em:targetApplication>
     <em:targetApplication>
       <Description>
         <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id> <!-- Seamonkey -->
         <em:minVersion>2.0</em:minVersion>
-        <em:maxVersion>2.11.*</em:maxVersion>
+        <em:maxVersion>2.17.*</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>
