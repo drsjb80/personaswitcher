@@ -6,7 +6,7 @@ zip personaswitcher.xpi \
     chrome.manifest \
     chrome/content/about.xul \
     chrome/content/overlay-fx.xul \
-    chrome/content/overlay-tb-sm.xul \
+    chrome/content/overlay-tb.xul \
     chrome/content/overlay.js \
     chrome/content/options.xul \
     chrome/locale/ \

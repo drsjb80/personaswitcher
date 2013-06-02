@@ -8,7 +8,7 @@ var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.timerIsRunning = false;
-PersonaSwitcher.debug = true;
+PersonaSwitcher.debug = false;
 PersonaSwitcher.stringBundle;
 
 PersonaSwitcher.prefs =
@@ -172,7 +172,10 @@ PersonaSwitcher.toggleAuto = function()
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
-    PersonaSwitcher.log (toWhich.name);
+    if (toWhich != null)
+        PersonaSwitcher.log (toWhich.name);
+    else
+        PersonaSwitcher.log (toWhich);
 
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html
@@ -230,7 +233,7 @@ PersonaSwitcher.setDefault = function()
     'use strict';
     PersonaSwitcher.log();
 
-    if (LightweightThemeManager.currentTheme != null)
+    // if (LightweightThemeManager.currentTheme != null)
         PersonaSwitcher.switchTo (null);
 
     PersonaSwitcher.autoOff();
