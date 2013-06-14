@@ -14,6 +14,14 @@
             src="chrome://personaswitcher/locale/personaswitcher.properties"/>
     </stringbundleset>
 
+    <keyset>
+        <!--
+            leave behind a bread crumb to find later. keysets don't have
+            unique ids.
+        -->
+        <key id="PersonaSwitcher.defaultPersonaKey"/>
+    </keyset>
+
     <toolbarpalette id="MailToolbarPalette">
         <toolbarbutton
             id="personaswitcher-button"

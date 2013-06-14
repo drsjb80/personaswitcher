@@ -7,9 +7,8 @@ var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
-PersonaSwitcher.timerIsRunning = false;
 PersonaSwitcher.debug = false;
-PersonaSwitcher.stringBundle;
+PersonaSwitcher.stringBundle;   // set in overlay.js
 
 PersonaSwitcher.prefs =
     Components.classes["@mozilla.org/preferences-service;1"].
@@ -42,27 +41,7 @@ PersonaSwitcher.myObserver =
         {
             case "auto":
             {
-                /*
-                var info = Components.classes["@mozilla.org/xre/app-info;1"]
-                       .getService(Components.interfaces.nsIXULAppInfo);
-
-                PersonaSwitcher.log (info.name);
-
-                if (info.name == "Firefox")
-                {
-                    if (PersonaSwitcher.prefs.getBoolPref ("auto"))
-                    {
-                        PersonaSwitcher.autoOn();
-                    }
-                    else
-                    {
-                        PersonaSwitcher.autoOff();
-                    }
-                }
-                */
-
                 break;
-
             }
             case "autominutes":
             {
@@ -112,17 +91,19 @@ PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"]
 PersonaSwitcher.startTimer = function()
 {
     'use strict';
-    PersonaSwitcher.log();
 
-    if (! PersonaSwitcher.prefs.getBoolPref ("auto")) return;
+    // double check
+    PersonaSwitcher.log (PersonaSwitcher.prefs.getBoolPref ("auto"));
+    if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
+        return;
 
-    if (PersonaSwitcher.timerIsRunning) PersonaSwitcher.timer.cancel();
+    PersonaSwitcher.timer.cancel();
 
     var minutes = PersonaSwitcher.prefs.getIntPref ("autominutes");
+    PersonaSwitcher.log (minutes);
 
     if (minutes > 0)
     {
-        PersonaSwitcher.timerIsRunning = true;
         PersonaSwitcher.timer.init
         (
             PersonaSwitcher.rotate,
@@ -137,9 +118,7 @@ PersonaSwitcher.autoOff = function()
     'use strict';
     PersonaSwitcher.log();
 
-    if (PersonaSwitcher.timerIsRunning)
-        PersonaSwitcher.timer.cancel();
-
+    PersonaSwitcher.timer.cancel();
     PersonaSwitcher.prefs.setBoolPref ("auto", 0);
 }
 
@@ -148,8 +127,8 @@ PersonaSwitcher.autoOn = function()
     'use strict';
     PersonaSwitcher.log ();
 
-    PersonaSwitcher.startTimer();
     PersonaSwitcher.prefs.setBoolPref ("auto", 1);
+    PersonaSwitcher.startTimer();
 
     PersonaSwitcher.rotate();
 }

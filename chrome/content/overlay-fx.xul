@@ -16,10 +16,10 @@
 
     <keyset>
         <!--
-        Have to have something here, keyset's can't have unique id's
-        https://developer.mozilla.org/en/Overlay#Overlays_and_ID_Attributes
+            leave behind a bread crumb to find later. keysets don't have
+            unique ids.
         -->
-        <key id="default-persona-key"/>
+        <key id="PersonaSwitcher.defaultPersonaKey"/>
     </keyset>
 
     <toolbarpalette id="BrowserToolbarPalette">

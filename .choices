@@ -30,3 +30,9 @@ java -jar compiler-latest/compiler.jar --js=chrome/content/overlay.js --js_outpu
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
+----
+chrome://browser/content/browser.xul
+----
+open http://www.mozilla.org/en-US/thunderbird/all-beta.html
+open http://www.mozilla.org/en-US/firefox/all-beta.html
+open http://www.seamonkey-project.org/releases/

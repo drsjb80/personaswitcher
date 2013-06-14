@@ -8,7 +8,7 @@
 Components.utils.import ("resource://gre/modules/LightweightThemeManager.jsm");
 Components.utils.import ("resource://LWTS/PersonaSwitcher.jsm");
 
-const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+PersonaSwitcher.XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
 /*
 ***************************************************************************
@@ -38,7 +38,6 @@ PersonaSwitcher.findMods = function (which)
 }
 
 // http://unixpapa.com/js/key.html
-
 PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 {
     'use strict';
@@ -60,53 +59,40 @@ PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
     return (key);
 }
 
-PersonaSwitcher.getKeyset = function (doc)
-{
-    'use strict';
-    var names = new Array ("mainKeyset", "mailKeys");
-    var types = new Array ("firefox", "thunderbird");
-
-    var junk = PersonaSwitcher.searchForId (doc, names, types);
-    PersonaSwitcher.log (junk);
-    return (PersonaSwitcher.searchForId (doc, names, types));
-}
-
 // http://stackoverflow.com/questions/549650/how-to-dynamically-change-shortcut-key-in-firefox
 PersonaSwitcher.setKeyset = function (doc)
 {
     'use strict';
     PersonaSwitcher.log (doc);
-    var mainKeyset = PersonaSwitcher.getKeyset (doc);
-    PersonaSwitcher.log (mainKeyset);
-    var keyset = doc.getElementById ("personswitcher-keyset");
-    PersonaSwitcher.log (keyset);
 
-    if (keyset != null)
-    {
-        PersonaSwitcher.log ("removing " + keyset.id + " from " +
-            mainKeyset.id);
+    var previous = doc.getElementById ("PersonaSwitcher.defaultPersonaKey");
+    var parent = previous.parentNode;
+    PersonaSwitcher.log (parent.id);
+    var grandParent = parent.parentNode;
+    PersonaSwitcher.log (grandParent.id);
 
-        mainKeyset.removeChild (keyset);
-    }
+    grandParent.removeChild (parent);
+
+    var keyset = doc.createElement ("keyset");
 
     var keys =
     [
         [
-            "default-persona-key",
+            "PersonaSwitcher.defaultPersonaKey",
             PersonaSwitcher.findMods ("def"),
             PersonaSwitcher.prefs.getCharPref ("defkey").
                 toUpperCase().charAt (0),
             "PersonaSwitcher.setDefault();"
         ],
         [
-            "rotate-persona-key",
+            "PersonaSwitcher.rotatePersonaKey",
             PersonaSwitcher.findMods ("rot"),
             PersonaSwitcher.prefs.getCharPref ("rotkey").
                 toUpperCase().charAt (0),
             "PersonaSwitcher.rotateKey();"
         ],
         [
-            "auto-persona-key",
+            "PersonaSwitcher.autoPersonaKey",
             PersonaSwitcher.findMods ("auto"),
             PersonaSwitcher.prefs.getCharPref ("autokey").
                 toUpperCase().charAt (0),
@@ -114,22 +100,18 @@ PersonaSwitcher.setKeyset = function (doc)
         ]
     ];
 
-    PersonaSwitcher.log (keys);
-    keyset = doc.createElement ("keyset");
-    PersonaSwitcher.log (keyset);
-    keyset.setAttribute ("id", "personswitcher-keyset");
-
     for (var key in keys)
     {
-        PersonaSwitcher.log (key);
-        keyset.appendChild (PersonaSwitcher.makeKey
-            (doc, keys[key][0], keys[key][1], keys[key][2], keys[key][3]));
+        var newKey = PersonaSwitcher.makeKey (doc, keys[key][0], keys[key][1],
+            keys[key][2], keys[key][3]);
+
+        keyset.appendChild (newKey);
     }
 
-    PersonaSwitcher.log ("appending " + keyset.id + " to " + mainKeyset.id);
-    mainKeyset.appendChild (keyset);
+    grandParent.appendChild (keyset);
 }
 
+// called from PersonaSwitcher.jsm
 PersonaSwitcher.setKeysets = function()
 {
     'use strict';
@@ -141,7 +123,7 @@ PersonaSwitcher.setKeysets = function()
     while (enumerator.hasMoreElements())
     {
         var doc = enumerator.getNext().document;
-        PersonaSwitcher.log();
+        PersonaSwitcher.log (doc.id);
         PersonaSwitcher.setKeyset (doc);
     }
 }
@@ -164,7 +146,7 @@ PersonaSwitcher.setKeysets = function()
 PersonaSwitcher.createMenuItem = function (which)
 {
     'use strict';
-    var item = document.createElementNS (XUL_NS, "menuitem");
+    var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
 
     item.setAttribute ("label", which.name);
     item.addEventListener
@@ -209,7 +191,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
         /*
         ** get the localized message.
         */
-        var item = document.createElementNS (XUL_NS, "menuitem");
+        var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
 
         item.setAttribute ("label",
             PersonaSwitcher.stringBundle.getString
@@ -219,7 +201,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
     }
     else
     {
-        var item = document.createElementNS (XUL_NS, "menuitem");
+        var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
         item.setAttribute ("label", PersonaSwitcher.stringBundle.getString
             ("personaswitcher.default"));
         item.addEventListener
@@ -398,12 +380,12 @@ PersonaSwitcher.createMenuAndPopup = function (doc, menuId, menupopupId)
         return;
     }
 
-    menu = document.createElementNS (XUL_NS, "menu");
+    menu = document.createElementNS (PersonaSwitcher.XULNS, "menu");
     menu.setAttribute ("label",
         PersonaSwitcher.stringBundle.getString ("personaswitcher.label"));
     menu.setAttribute ("id", menuId);
 
-    menupopup = document.createElementNS (XUL_NS, "menupopup");
+    menupopup = document.createElementNS (PersonaSwitcher.XULNS, "menupopup");
     menupopup.setAttribute ("id", menupopupId);
     menupopup.addEventListener
     (
