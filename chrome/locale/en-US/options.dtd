@@ -11,13 +11,16 @@
 <!ENTITY options.kbshortcuts.alt "Alt">
 <!ENTITY options.kbshortcuts.meta "Meta">
 
-<!ENTITY options.autoevery "Automatic switching">
+<!ENTITY options.autoevery.title "Automatic switching">
 <!ENTITY options.autoevery.switch "Switch every">
 <!ENTITY options.autoevery.minutes "minutes">
 
-<!ENTITY options.preview "Preview">
-<!ENTITY options.preview.desc1 "Preview personas on menu selection.">
+<!ENTITY options.random.title "Random switching">
+<!ENTITY options.random.desc "Switch to a random persona instead of the least recent">
 
-<!ENTITY options.menus "Persona menu locations">
+<!ENTITY options.preview.title "Preview">
+<!ENTITY options.preview.desc "Preview personas on menu selection.">
+
+<!ENTITY options.menus.title "Persona menu locations">
 <!ENTITY options.tools-submenu "Tools menu">
 <!ENTITY options.main-menubar "Main menu bar">

@@ -7,7 +7,6 @@ var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 var PersonaSwitcher = new Object();
 
 PersonaSwitcher.firstTime = true;
-PersonaSwitcher.debug = false;
 PersonaSwitcher.stringBundle;   // set in overlay.js
 
 PersonaSwitcher.prefs =
@@ -179,7 +178,18 @@ PersonaSwitcher.rotate = function()
 
     if (arr.length <= 1) return;
 
-    PersonaSwitcher.switchTo (arr[arr.length-1]);
+    if (PersonaSwitcher.prefs.getBoolPref ("random"))
+    {
+        // pick a number between 1 and the end
+        var number = Math.floor ((Math.random() * (arr.length-1)) + 1);
+        // PersonaSwitcher.log (number);
+        PersonaSwitcher.switchTo (arr[number]);
+    }
+    else
+    {
+        // switch to the last one
+        PersonaSwitcher.switchTo (arr[arr.length-1]);
+    }
 }
 
 PersonaSwitcher.previous = function()
@@ -189,7 +199,7 @@ PersonaSwitcher.previous = function()
 
     var arr = LightweightThemeManager.usedThemes;
 
-    if (arr.length < 1) return;
+    if (arr.length <= 1) return;
 
     PersonaSwitcher.switchTo (arr[1]);
 }
@@ -212,9 +222,7 @@ PersonaSwitcher.setDefault = function()
     'use strict';
     PersonaSwitcher.log();
 
-    // if (LightweightThemeManager.currentTheme != null)
-        PersonaSwitcher.switchTo (null);
-
+    PersonaSwitcher.switchTo (null);
     PersonaSwitcher.autoOff();
 }
 
@@ -284,7 +292,7 @@ PersonaSwitcher.dump = function (object)
 PersonaSwitcher.log = function()
 {
     'use strict';
-    if (! PersonaSwitcher.debug)
+    if (! PersonaSwitcher.prefs.getBoolPref ("debug"))
         return;
 
     var message = "";

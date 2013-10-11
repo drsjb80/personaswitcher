@@ -1,5 +1,4 @@
 /Applications/Firefox.app/Contents/MacOS/firefox -P dev &
-/Applications/FirefoxAurora.app/Contents/MacOS/firefox -P dev &
 /Applications/Firefox.app/Contents/MacOS/firefox -chromebug
 /Applications/Firefox.app/Contents/MacOS/firefox
 /Applications/Firefox.app/Contents/MacOS/firefox -CreateProfile dev

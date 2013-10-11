@@ -80,6 +80,11 @@
                 type="int"/>
 
             <preference
+                id="personaswitcher-random"
+                name="extensions.personaswitcher.random"
+                type="bool"/>
+
+            <preference
                 id="personaswitcher-preview"
                 name="extensions.personaswitcher.preview"
                 type="bool"/>
@@ -123,6 +128,7 @@
                     <label>&options.kbshortcuts.key;</label>
                     <textbox
                         id="default-key"
+                        size="3"
                         preference="personaswitcher-default-key"/>
                 </hbox>
                 <hbox>
@@ -148,6 +154,7 @@
                     <label>&options.kbshortcuts.key;</label>
                     <textbox
                         id="rotate-key"
+                        size="3"
                         preference="personaswitcher-rotate-key"/>
                 </hbox>
                 <hbox>
@@ -173,36 +180,51 @@
                     <label>&options.kbshortcuts.key;</label>
                     <textbox
                         id="auto-key"
+                        size="3"
                         preference="personaswitcher-auto-key"/>
                 </hbox>
             </groupbox>
 
             <groupbox>
-                <caption label="&options.autoevery;"/>
+                <caption label="&options.autoevery.title;"/>
                 <hbox>
                     <checkbox
                         id="auto"
                         preference="personaswitcher-auto"
                         label="&options.autoevery.switch;"/>
-                    <textbox preference="personaswitcher-auto-minutes"/>
+                    <textbox
+                        size="3"
+                        preference="personaswitcher-auto-minutes"/>
                     <label value="&options.autoevery.minutes;"/>
                 </hbox>
             </groupbox>
 
             <groupbox>
-                <caption label="&options.preview;"/>
+                <caption label="&options.random.title;"/>
                 <hbox>
                     <checkbox
-                        id="preview"
-                        preference="personaswitcher-preview"/>
+                        id="random"
+                        preference="personaswitcher-random"/>
                     <vbox>
-                        <description>&options.preview.desc1;</description>
+                        <description>&options.random.desc;</description>
                     </vbox>
                 </hbox>
             </groupbox>
 
             <groupbox>
-                <caption label="&options.menus;"/>
+                <caption label="&options.preview.title;"/>
+                <hbox>
+                    <checkbox
+                        id="preview"
+                        preference="personaswitcher-preview"/>
+                    <vbox>
+                        <description>&options.preview.desc;</description>
+                    </vbox>
+                </hbox>
+            </groupbox>
+
+            <groupbox>
+                <caption label="&options.menus.title;"/>
                 <hbox>
                     <checkbox
                         id="tools-submenu"

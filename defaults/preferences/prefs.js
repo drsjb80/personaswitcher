@@ -22,10 +22,14 @@ pref ("extensions.personaswitcher.autokey", "A");
 pref ("extensions.personaswitcher.auto", false);
 pref ("extensions.personaswitcher.autominutes", 30);
 
+pref ("extensions.personaswitcher.random", false);
+
 pref ("extensions.personaswitcher.preview", false);
 
 pref ("extensions.personaswitcher.tools-submenu", true);
 pref ("extensions.personaswitcher.main-menubar", false);
+
+pref ("extensions.personaswitcher.debug", false);
 
 // https://developer.mozilla.org/en/Localizing_extension_descriptions
 
