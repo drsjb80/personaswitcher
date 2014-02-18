@@ -1,6 +1,5 @@
-[Persona Switcher]
-(https://addons.mozilla.org/en-US/firefox/addon/personaswitcher/)
-================================================================================
+[Persona Switcher](https://addons.mozilla.org/en-US/firefox/addon/personaswitcher/)
+===================================================================================
 
 Easily switch between personas in Mozilla Firefox, Thunderbird, and
 SeaMonkey. This extension allows one to switch between personas via
