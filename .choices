@@ -11,10 +11,8 @@ vi chrome/content/overlay-tb-sm.xul
 vi chrome/content/overlay-fx.xul
 vi chrome/locale/en-US/overlay.dtd
 ----
-vi chrome/locale/en-US/options.dtd
-vi chrome/content/options.xul
+vi chrome/content/options.xul defaults/preferences/prefs.js chrome/locale/en-US/options.dtd chrome/locale/zh-TW/options.dtd
 vi chrome/locale/en-US/personaswitcher.properties
-vi defaults/preferences/prefs.js
 ----
 vi install.rdf chrome/content/about.xul # version changes
 ----

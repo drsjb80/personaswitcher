@@ -99,6 +99,11 @@
                 name="extensions.personaswitcher.main-menubar"
                 type="bool"/>
 
+            <preference
+                id="notification-workaround"
+                name="extensions.personaswitcher.notification-workaround"
+                type="bool"/>
+
         </preferences>
 
         <!-- for each of the id= from above, have a preference= below -->
@@ -236,6 +241,16 @@
                         id="main-menubar"
                         preference="main-menubar"/>
                     <description>&options.main-menubar;</description>
+                </hbox>
+            </groupbox>
+
+            <groupbox>
+                <caption label="&options.notification-workaround.title;"/>
+                <hbox>
+                    <checkbox
+                        id="notification-workaround"
+                        preference="notification-workaround"/>
+                    <description>&options.notification-workaround.desc;</description>
                 </hbox>
             </groupbox>
 

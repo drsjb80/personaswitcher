@@ -24,3 +24,7 @@
 <!ENTITY options.menus.title "將 Persona 選單顯示於">
 <!ENTITY options.tools-submenu "選單列→工具">
 <!ENTITY options.main-menubar "選單列">
+
+<!ENTITY options.notification-workaround.title "Notification workaround">
+<!ENTITY options.notification-workaround.desc "Remove notifications of persona changes">
+~

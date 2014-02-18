@@ -11,12 +11,16 @@ PersonaSwitcher.stringBundle;   // set in overlay.js
 
 PersonaSwitcher.prefs =
     Components.classes["@mozilla.org/preferences-service;1"].
-    getService (Components.interfaces.nsIPrefService).
-    getBranch ("extensions.personaswitcher.");
+        getService (Components.interfaces.nsIPrefService).
+            getBranch ("extensions.personaswitcher.");
 
 PersonaSwitcher.windowMediator =
     Components.classes["@mozilla.org/appshell/window-mediator;1"]
-    .getService(Components.interfaces.nsIWindowMediator);
+        .getService(Components.interfaces.nsIWindowMediator);
+
+PersonaSwitcher.XULAppInfo =
+    Components.classes["@mozilla.org/xre/app-info;1"].
+        getService(Components.interfaces.nsIXULAppInfo); 
 
 // needed for addObserver
 PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
@@ -38,18 +42,14 @@ PersonaSwitcher.myObserver =
 
         switch (data)
         {
-            case "auto":
+            case "auto": case "preview":
             {
-                break;
+                break; // nothing to do as the value is queried elsewhere
             }
             case "autominutes":
             {
                 PersonaSwitcher.startTimer();
                 break;
-            }
-            case "preview":
-            {
-                return;    // nothing to do as the value is queried elsewhere
             }
             case "main-menubar": case "tools-submenu":
             {
@@ -150,6 +150,8 @@ PersonaSwitcher.toggleAuto = function()
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
+    PersonaSwitcher.log();
+
     if (toWhich != null)
         PersonaSwitcher.log (toWhich.name);
     else
@@ -167,6 +169,31 @@ PersonaSwitcher.switchTo = function (toWhich)
         // 3.* compatability
         LightweightThemeManager.themeChanged (toWhich);
     }
+
+    if (PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
+    {
+        PersonaSwitcher.log (PersonaSwitcher.XULAppInfo.name);
+
+        let notificationBox = null;
+        if (PersonaSwitcher.XULAppInfo.name == "Firefox" ||
+            PersonaSwitcher.XULAppInfo.name == "SeaMonkey")
+        {
+            notificationBox = PersonaSwitcher.windowMediator.
+                getMostRecentWindow("navigator:browser").
+                getBrowser().getNotificationBox();
+        }
+        else if (PersonaSwitcher.XULAppInfo.name == "Thunderbird")
+        {
+            notificationBox = PersonaSwitcher.windowMediator.
+                getMostRecentWindow("mail:3pane").
+                document.getElementById("mail-notification-box");
+        }
+
+        if (notificationBox != null)
+        {
+            notificationBox.removeCurrentNotification();
+        }
+    }
 }
 
 PersonaSwitcher.rotate = function()
@@ -175,6 +202,8 @@ PersonaSwitcher.rotate = function()
     PersonaSwitcher.log();
 
     var arr = LightweightThemeManager.usedThemes;
+
+    PersonaSwitcher.log(arr.length);
 
     if (arr.length <= 1) return;
 
@@ -214,7 +243,8 @@ PersonaSwitcher.rotateKey = function()
     PersonaSwitcher.log();
 
     PersonaSwitcher.rotate();
-    PersonaSwitcher.startTimer();
+    // if (PersonaSwitcher.prefs.getBoolPref ("auto"))
+        PersonaSwitcher.startTimer();
 }
 
 PersonaSwitcher.setDefault = function()
@@ -312,9 +342,5 @@ PersonaSwitcher.log = function()
         message += arguments[a];
     }
 
-    dump (message + "\n");
-
-    // var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
-    // .getService(Components.interfaces.nsIConsoleService);
-    // consoleService.logStringMessage(message);
+    dump (message + '\n');
 }

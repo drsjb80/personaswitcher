@@ -496,7 +496,7 @@ PersonaSwitcher.onWindowLoad = function()
         PersonaSwitcher.createMenu (this.document, "main-menubar");
 }
 
-PersonaSwitcher.log ();
+PersonaSwitcher.log (PersonaSwitcher.firstTime);
 window.addEventListener("load", PersonaSwitcher.onWindowLoad, false);
 
 if (PersonaSwitcher.firstTime)
