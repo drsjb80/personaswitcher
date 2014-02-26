@@ -14,3 +14,16 @@ chrome://messenger/content/messenger.xul
 https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/
 http://en.wikipedia.org/wiki/History_of_Mozilla_Thunderbird
 http://www.seamonkey-project.org/releases/
+
+personasplus/modules/service.js
+    _showPersonaChangeNotification
+    https://developer.mozilla.org/en-US/docs/XUL/notificationbox
+
+Preferences
+    chrome/content/options.xul
+    defaults/preferences/prefs.js
+    chrome/locale/en-US/options.dtd
+    chrome/locale/zh-TW/options.dtd
+
+src/browser/base/content/browser.js
+    notificationsHidden

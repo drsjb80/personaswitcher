@@ -6,6 +6,16 @@ var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
 var PersonaSwitcher = new Object();
 
+PersonaSwitcher.PersonasPlusPresent = true;
+try
+{
+    Components.utils.import ("resource://personas/modules/service.js");
+}
+catch (e)
+{
+    PersonaSwitcher.PersonasPlusPresent = false;
+}
+
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.stringBundle;   // set in overlay.js
 
@@ -91,12 +101,11 @@ PersonaSwitcher.startTimer = function()
 {
     'use strict';
 
-    // double check
     PersonaSwitcher.log (PersonaSwitcher.prefs.getBoolPref ("auto"));
     if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
         return;
 
-    PersonaSwitcher.timer.cancel();
+    PersonaSwitcher.stopTimer();
 
     var minutes = PersonaSwitcher.prefs.getIntPref ("autominutes");
     PersonaSwitcher.log (minutes);
@@ -112,12 +121,20 @@ PersonaSwitcher.startTimer = function()
     }
 }
 
-PersonaSwitcher.autoOff = function()
+PersonaSwitcher.stopTimer = function()
 {
     'use strict';
     PersonaSwitcher.log();
 
     PersonaSwitcher.timer.cancel();
+}
+
+PersonaSwitcher.autoOff = function()
+{
+    'use strict';
+    PersonaSwitcher.log();
+
+    PersonaSwitcher.stopTimer();
     PersonaSwitcher.prefs.setBoolPref ("auto", 0);
 }
 
@@ -153,14 +170,28 @@ PersonaSwitcher.switchTo = function (toWhich)
     PersonaSwitcher.log();
 
     if (toWhich != null)
+    {
         PersonaSwitcher.log (toWhich.name);
+        // PersonaSwitcher.dump (toWhich);
+    }
     else
+    {
         PersonaSwitcher.log (toWhich);
+    }
 
+    /*
+    ** if it's there, use it
+    */
+    if (PersonaSwitcher.PersonasPlusPresent)
+    {
+        PersonaSwitcher.log();
+        PersonaService.currentPersona = toWhich;
+        PersonaService._notifyPersonaChanged (PersonaService.currentPersona);
+    }
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html
     */
-    if (typeof LightweightThemeManager.themeChanged != 'function')
+    else if (typeof LightweightThemeManager.themeChanged != 'function')
     {
         LightweightThemeManager.currentTheme = toWhich;
     }
@@ -170,30 +201,84 @@ PersonaSwitcher.switchTo = function (toWhich)
         LightweightThemeManager.themeChanged (toWhich);
     }
 
+    /*
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+    while (enumerator.hasMoreElements())
+    {
+        let win = enumerator.getNext();
+        PersonaSwitcher.dump (win, 1);
+        PersonaSwitcher.log (win.document.title);
+        PersonaSwitcher.log (win.document.hidden);
+        PersonaSwitcher.log (win.windowState);
+    }
+    */
+
+    /*
     if (PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
     {
         PersonaSwitcher.log (PersonaSwitcher.XULAppInfo.name);
 
-        let notificationBox = null;
         if (PersonaSwitcher.XULAppInfo.name == "Firefox" ||
             PersonaSwitcher.XULAppInfo.name == "SeaMonkey")
         {
-            notificationBox = PersonaSwitcher.windowMediator.
+            PersonaSwitcher.windowMediator.
                 getMostRecentWindow("navigator:browser").
-                getBrowser().getNotificationBox();
+                    getBrowser().getNotificationBox().
+                        removeCurrentNotification();
         }
         else if (PersonaSwitcher.XULAppInfo.name == "Thunderbird")
         {
-            notificationBox = PersonaSwitcher.windowMediator.
+            PersonaSwitcher.windowMediator.
                 getMostRecentWindow("mail:3pane").
-                document.getElementById("mail-notification-box");
-        }
-
-        if (notificationBox != null)
-        {
-            notificationBox.removeCurrentNotification();
+                    document.getElementById("mail-notification-box").
+                        removeCurrentNotification();
         }
     }
+    */
+}
+
+// overwrites first array!
+PersonaSwitcher.merge = function (array1, array2)
+{
+    for (var i = 0; i < array2.length; i++)
+    {
+        var same = false;
+
+        for (var j = 0; j < array1.length; j++)
+        {
+            if (array1[j].id == array2[i].theme.id)
+            {
+                same = true;
+            }
+        }
+
+        if (!same)
+        {
+            array1.push (array2[i].theme);
+        }
+    }
+}
+
+PersonaSwitcher.getPersonas = function()
+{
+    'use strict';
+
+    var arr = LightweightThemeManager.usedThemes;
+    PersonaSwitcher.log (arr.length);
+
+    if (PersonaSwitcher.PersonasPlusPresent)
+    {
+        var favs = PersonaService.favorites;
+
+        if (favs != null)
+        {
+            PersonaSwitcher.log (favs.length);
+            PersonaSwitcher.merge (arr, favs);
+        }
+    }
+
+    PersonaSwitcher.log (arr.length);
+    return (arr);
 }
 
 PersonaSwitcher.rotate = function()
@@ -201,9 +286,9 @@ PersonaSwitcher.rotate = function()
     'use strict';
     PersonaSwitcher.log();
 
-    var arr = LightweightThemeManager.usedThemes;
+    var arr = PersonaSwitcher.getPersonas();
 
-    PersonaSwitcher.log(arr.length);
+    PersonaSwitcher.log (arr.length);
 
     if (arr.length <= 1) return;
 
@@ -243,8 +328,7 @@ PersonaSwitcher.rotateKey = function()
     PersonaSwitcher.log();
 
     PersonaSwitcher.rotate();
-    // if (PersonaSwitcher.prefs.getBoolPref ("auto"))
-        PersonaSwitcher.startTimer();
+    PersonaSwitcher.startTimer();
 }
 
 PersonaSwitcher.setDefault = function()
@@ -310,12 +394,29 @@ PersonaSwitcher.migratePrefs = function()
 /*
 ** dump all the properties of an object
 */
-PersonaSwitcher.dump = function (object)
+PersonaSwitcher.dump = function (object, max)
 {
     'use strict';
+
+    PersonaSwitcher.log (max);
+
+    if (max == 0) return
+
     for (var property in object)
     {
-        PersonaSwitcher.log (property + "=" + object[property]);
+        try
+        {
+            PersonaSwitcher.log (property + "=" + object[property]);
+
+            if (object[property] != null && typeof object[property] == "object")
+            {
+                PersonaSwitcher.dump (object[property], max-1);
+            }
+        }
+        catch (e)
+        {
+            PersonaSwitcher.log (e);
+        }
     }
 }
 

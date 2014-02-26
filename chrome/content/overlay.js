@@ -497,7 +497,21 @@ PersonaSwitcher.onWindowLoad = function()
 }
 
 PersonaSwitcher.log (PersonaSwitcher.firstTime);
-window.addEventListener("load", PersonaSwitcher.onWindowLoad, false);
+window.addEventListener ("load", PersonaSwitcher.onWindowLoad, false);
+
+/*
+window.addEventListener ("activate", PersonaSwitcher.startTimer, false);
+window.addEventListener ("deactivate", PersonaSwitcher.stopTimer, false);
+*/
+
+/*
+PersonaSwitcher.log (document.getElementById ("navigator-toolbox").minHeight);
+PersonaSwitcher.dump (document.getElementById ("navigator-toolbox"));
+
+document.getElementById ("navigator-toolbox").minHeight = "100pt";
+document.getElementById ("navigator-toolbox").minHeight = "100px";
+PersonaSwitcher.dump (PersonaService);
+*/
 
 if (PersonaSwitcher.firstTime)
 {

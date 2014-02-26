@@ -22,8 +22,10 @@ hg clone http://hg.mozilla.org/mozilla-central/file/81dd97739fa1/toolkit/mozapps
 ----
 java -jar compiler-latest/compiler.jar --js=chrome/content/overlay.js --js_output_file=out.js
 ----
-/usr/local/bin/svn diff
-/usr/local/bin/svn commit
+git status
+git diff
+git commit -a
+git push
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
@@ -33,3 +35,4 @@ chrome://browser/content/browser.xul
 open http://www.mozilla.org/en-US/thunderbird/all-beta.html
 open http://www.mozilla.org/en-US/firefox/all-beta.html
 open http://www.seamonkey-project.org/releases/
+/Applications/Thunderbird.app/Contents/MacOS/thunderbird
