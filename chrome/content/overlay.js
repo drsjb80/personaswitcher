@@ -181,7 +181,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
         menupopup.removeChild (menupopup.firstChild);
     }
 
-    var arr = LightweightThemeManager.usedThemes;
+    var arr = PersonaSwitcher.getPersonas();
     PersonaSwitcher.log (arr.length);
 
     if (arr.length == 0)
@@ -422,9 +422,6 @@ PersonaSwitcher.createMenu = function (doc, which)
         var sub = PersonaSwitcher.createMenuAndPopup (doc, menuId, menupopupId);
         var main = PersonaSwitcher.getToolsMenuPopup (doc);
 
-        // PersonaSwitcher.log (main.id);
-        // PersonaSwitcher.log (sub.id);
-
         main.appendChild (sub);
     }
     else if (which == "main-menubar")
@@ -432,10 +429,6 @@ PersonaSwitcher.createMenu = function (doc, which)
         var sub = PersonaSwitcher.createMenuAndPopup (doc, menuId, menupopupId);
         var main = PersonaSwitcher.getMainMenu (doc);
         var where = PersonaSwitcher.getToolsMenu (doc).nextSibling;
-
-        // PersonaSwitcher.log (main.id);
-        // PersonaSwitcher.log (sub.id);
-        // PersonaSwitcher.log (where.id);
 
         main.insertBefore (sub, where);
     }
@@ -507,8 +500,11 @@ window.addEventListener ("deactivate", PersonaSwitcher.stopTimer, false);
 /*
 PersonaSwitcher.log (document.getElementById ("navigator-toolbox").minHeight);
 PersonaSwitcher.dump (document.getElementById ("navigator-toolbox"));
+*/
 
-document.getElementById ("navigator-toolbox").minHeight = "100pt";
+document.getElementById ("navigator-toolbox").minHeight = "100";
+
+/*
 document.getElementById ("navigator-toolbox").minHeight = "100px";
 PersonaSwitcher.dump (PersonaService);
 */

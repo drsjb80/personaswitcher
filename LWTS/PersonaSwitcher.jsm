@@ -1,6 +1,7 @@
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 Components.utils.import ("resource://gre/modules/LightweightThemeManager.jsm");
+// Components.utils.import ('chrome://cdumpjsm/content/cDump.jsm');
 
 var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
@@ -186,7 +187,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         PersonaSwitcher.log();
         PersonaService.currentPersona = toWhich;
-        PersonaService._notifyPersonaChanged (PersonaService.currentPersona);
+        PersonaService._notifyPersonaChanged (toWhich);
     }
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html
@@ -206,40 +207,21 @@ PersonaSwitcher.switchTo = function (toWhich)
     while (enumerator.hasMoreElements())
     {
         let win = enumerator.getNext();
-        PersonaSwitcher.dump (win, 1);
+        // PersonaSwitcher.dump (win, 1);
         PersonaSwitcher.log (win.document.title);
         PersonaSwitcher.log (win.document.hidden);
+        PersonaSwitcher.log (win.document.visibilityState);
         PersonaSwitcher.log (win.windowState);
-    }
-    */
-
-    /*
-    if (PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
-    {
-        PersonaSwitcher.log (PersonaSwitcher.XULAppInfo.name);
-
-        if (PersonaSwitcher.XULAppInfo.name == "Firefox" ||
-            PersonaSwitcher.XULAppInfo.name == "SeaMonkey")
-        {
-            PersonaSwitcher.windowMediator.
-                getMostRecentWindow("navigator:browser").
-                    getBrowser().getNotificationBox().
-                        removeCurrentNotification();
-        }
-        else if (PersonaSwitcher.XULAppInfo.name == "Thunderbird")
-        {
-            PersonaSwitcher.windowMediator.
-                getMostRecentWindow("mail:3pane").
-                    document.getElementById("mail-notification-box").
-                        removeCurrentNotification();
-        }
     }
     */
 }
 
-// overwrites first array!
 PersonaSwitcher.merge = function (array1, array2)
 {
+    // clone the first one
+    var ret = array1.slice (0);
+    var length = ret.length;
+
     for (var i = 0; i < array2.length; i++)
     {
         var same = false;
@@ -254,9 +236,11 @@ PersonaSwitcher.merge = function (array1, array2)
 
         if (!same)
         {
-            array1.push (array2[i].theme);
+            ret.push (array2[i].theme);
         }
     }
+
+    return (ret);
 }
 
 PersonaSwitcher.getPersonas = function()
@@ -273,7 +257,7 @@ PersonaSwitcher.getPersonas = function()
         if (favs != null)
         {
             PersonaSwitcher.log (favs.length);
-            PersonaSwitcher.merge (arr, favs);
+            arr = PersonaSwitcher.merge (arr, favs);
         }
     }
 
@@ -290,7 +274,7 @@ PersonaSwitcher.rotate = function()
 
     PersonaSwitcher.log (arr.length);
 
-    if (arr.length <= 1) return;
+    if (arr.length < 1) return;
 
     if (PersonaSwitcher.prefs.getBoolPref ("random"))
     {
@@ -311,7 +295,7 @@ PersonaSwitcher.previous = function()
     'use strict';
     PersonaSwitcher.log();
 
-    var arr = LightweightThemeManager.usedThemes;
+    var arr = PersonaSwitcher.getPersonas();
 
     if (arr.length <= 1) return;
 
