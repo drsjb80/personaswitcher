@@ -99,6 +99,16 @@
                 name="extensions.personaswitcher.main-menubar"
                 type="bool"/>
 
+            <preference
+                id="toolbox-minheight"
+                name="extensions.personaswitcher.toolbox-minheight"
+                type="string"/>
+
+            <preference
+                id="startup-switch"
+                name="extensions.personaswitcher.startup-switch"
+                type="bool"/>
+
         </preferences>
 
         <!-- for each of the id= from above, have a preference= below -->
@@ -186,41 +196,52 @@
             </groupbox>
 
             <groupbox>
-                <caption label="&options.autoevery.title;"/>
                 <hbox>
                     <checkbox
                         id="auto"
                         preference="personaswitcher-auto"
-                        label="&options.autoevery.switch;"/>
+                        label="&options.autoevery.switch;"
+                    />
                     <textbox
                         size="3"
-                        preference="personaswitcher-auto-minutes"/>
+                        preference="personaswitcher-auto-minutes"
+                    />
                     <label value="&options.autoevery.minutes;"/>
                 </hbox>
-            </groupbox>
 
-            <groupbox>
-                <caption label="&options.random.title;"/>
                 <hbox>
                     <checkbox
                         id="random"
-                        preference="personaswitcher-random"/>
-                    <vbox>
-                        <description>&options.random.desc;</description>
-                    </vbox>
+                        preference="personaswitcher-random"
+                        label="&options.random.desc;"
+                    />
                 </hbox>
-            </groupbox>
 
-            <groupbox>
-                <caption label="&options.preview.title;"/>
+                <hbox>
+                    <checkbox
+                        id="startup-switch"
+                        preference="startup-switch"
+                        label="&options.startup-switch.desc;"
+                        />
+                </hbox>
+
+                <hbox>
+                    <label value="&options.toolbox-minheight.desc;"/>
+                    <textbox
+                        size="3"
+                        id="toolbox-minheight"
+                        preference="toolbox-minheight"
+                    />
+                </hbox>
+
                 <hbox>
                     <checkbox
                         id="preview"
-                        preference="personaswitcher-preview"/>
-                    <vbox>
-                        <description>&options.preview.desc;</description>
-                    </vbox>
+                        preference="personaswitcher-preview"
+                        label="&options.preview.desc;"
+                    />
                 </hbox>
+
             </groupbox>
 
             <groupbox>
@@ -228,14 +249,16 @@
                 <hbox>
                     <checkbox
                         id="tools-submenu"
-                        preference="tools-submenu"/>
-                    <description>&options.tools-submenu;</description>
+                        preference="tools-submenu"
+                        label="&options.tools-submenu;"
+                    />
                 </hbox>
                 <hbox>
                     <checkbox
                         id="main-menubar"
-                        preference="main-menubar"/>
-                    <description>&options.main-menubar;</description>
+                        preference="main-menubar"
+                        label="&options.main-menubar;"
+                    />
                 </hbox>
             </groupbox>
 

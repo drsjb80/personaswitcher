@@ -17,7 +17,6 @@ catch (e)
     PersonaSwitcher.PersonasPlusPresent = false;
 }
 
-PersonaSwitcher.firstTime = true;
 PersonaSwitcher.stringBundle;   // set in overlay.js
 
 PersonaSwitcher.prefs =
@@ -44,16 +43,22 @@ PersonaSwitcher.myObserver =
     observe: function (subject, topic, data)
     {
         'use strict';
+        /*
         PersonaSwitcher.log (subject);
         PersonaSwitcher.log (topic);
         PersonaSwitcher.log (data);
+        */
 
         if (topic != "nsPref:changed")
             return;
 
         switch (data)
         {
-            case "auto": case "preview":
+            case "toolbox-minheight":
+            {
+                PersonaSwitcher.setToolboxMinheights();
+            }
+            case "auto": case "preview": case "startup-switch":
             {
                 break; // nothing to do as the value is queried elsewhere
             }

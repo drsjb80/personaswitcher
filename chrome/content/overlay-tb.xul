@@ -30,8 +30,8 @@
             type="menu">
             <menupopup
                 id="personaswitcher-addon"
-                onpopupshowing="PersonaSwitcher.buttonPopup (event);"
-                onpopuphiding="PersonaSwitcher.hideSubMenu();"
+                onpopupshown="PersonaSwitcher.buttonPopup (event);"
+                onpopuphidden="PersonaSwitcher.hideSubMenu();"
             />
         </toolbarbutton>
     </toolbarpalette>

@@ -128,6 +128,32 @@ PersonaSwitcher.setKeysets = function()
     }
 }
 
+PersonaSwitcher.setToolboxMinheight = function (doc)
+{
+    'use strict';
+
+    var minheight = PersonaSwitcher.prefs.getCharPref ("toolbox-minheight");
+
+    if (minheight == "") return;
+
+    doc.getElementById ("navigator-toolbox").minHeight = minheight;
+}
+
+PersonaSwitcher.setToolboxMinheights = function()
+{
+    'use strict';
+    PersonaSwitcher.log();
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator
+        ("navigator:browser");
+
+    while (enumerator.hasMoreElements())
+    {
+        var doc = enumerator.getNext().document;
+        PersonaSwitcher.setToolboxMinheight (doc);
+    }
+}
+
 /*
 ***************************************************************************
 **
@@ -482,6 +508,7 @@ PersonaSwitcher.onWindowLoad = function()
         ("stringbundle-personaswitcher");
 
     PersonaSwitcher.setKeyset (this.document);
+    PersonaSwitcher.setToolboxMinheight (this.document);
 
     if (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
         PersonaSwitcher.createMenu (this.document, "tools-submenu");
@@ -497,20 +524,11 @@ window.addEventListener ("activate", PersonaSwitcher.startTimer, false);
 window.addEventListener ("deactivate", PersonaSwitcher.stopTimer, false);
 */
 
-PersonaSwitcher.log (document.getElementById ("navigator-toolbox").minHeight);
-/*
-PersonaSwitcher.dump (document.getElementById ("navigator-toolbox"));
-document.getElementById ("navigator-toolbox").minHeight = "100";
-*/
+PersonaSwitcher.startTimer();
 
-/*
-document.getElementById ("navigator-toolbox").minHeight = "100px";
-PersonaSwitcher.dump (PersonaService);
-*/
-
-if (PersonaSwitcher.firstTime)
+if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
 {
-    PersonaSwitcher.firstTime = false;
-    PersonaSwitcher.startTimer();
-    PersonaSwitcher.migratePrefs();
+    PersonaSwitcher.rotate();
 }
+
+PersonaSwitcher.migratePrefs();
