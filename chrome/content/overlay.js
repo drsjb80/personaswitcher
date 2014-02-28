@@ -497,12 +497,11 @@ window.addEventListener ("activate", PersonaSwitcher.startTimer, false);
 window.addEventListener ("deactivate", PersonaSwitcher.stopTimer, false);
 */
 
-/*
 PersonaSwitcher.log (document.getElementById ("navigator-toolbox").minHeight);
+/*
 PersonaSwitcher.dump (document.getElementById ("navigator-toolbox"));
-*/
-
 document.getElementById ("navigator-toolbox").minHeight = "100";
+*/
 
 /*
 document.getElementById ("navigator-toolbox").minHeight = "100px";

@@ -1,9 +1,9 @@
 ﻿<!ENTITY options.title "Persona Switcher 選項">
 <!ENTITY options.pane1 "Persona Switcher 選項">
-<!ENTITY options.kbshortcuts.title "快捷建">
+<!ENTITY options.kbshortcuts.title "快捷鍵">
 <!ENTITY options.kbshortcuts.default "切換至預設面板">
 <!ENTITY options.kbshortcuts.rotate "切換至其他面板">
-<!ENTITY options.kbshortcuts.toggle "切換為自動輪換">
+<!ENTITY options.kbshortcuts.toggle "切換成自動輪換">
 <!ENTITY options.kbshortcuts.auto "Automatic rotation">
 <!ENTITY options.kbshortcuts.key "按鍵">
 <!ENTITY options.kbshortcuts.shift "Shift">
@@ -11,20 +11,19 @@
 <!ENTITY options.kbshortcuts.alt "Alt">
 <!ENTITY options.kbshortcuts.meta "Meta">
 
-<!ENTITY options.autoevery.title "自動切換">
+<!ENTITY options.autoevery.title "自動輪換">
 <!ENTITY options.autoevery.switch "每當經過">
-<!ENTITY options.autoevery.minutes "分鐘時切換">
+<!ENTITY options.autoevery.minutes "分鐘時輪換">
 
-<!ENTITY options.random.title "Random switching">
-<!ENTITY options.random.desc "Switch to a random persona instead of the least recent">
+<!ENTITY options.random.title "隨機輪換">
+<!ENTITY options.random.desc "不以固定的順序更換面板。">
 
-<!ENTITY options.preview.title "滑鼠經過時預覽">
-<!ENTITY options.preview.desc "滑鼠滑過選單選項時預覽。">
+<!ENTITY options.preview.title "預覽功能">
+<!ENTITY options.preview.desc "滑鼠經過選單選項時預覽。">
 
-<!ENTITY options.menus.title "將 Persona 選單顯示於">
+<!ENTITY options.menus.title "將「Persona Switcher 選單」顯示於">
 <!ENTITY options.tools-submenu "選單列→工具">
 <!ENTITY options.main-menubar "選單列">
 
 <!ENTITY options.notification-workaround.title "Notification workaround">
 <!ENTITY options.notification-workaround.desc "Remove notifications of persona changes">
-~

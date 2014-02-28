@@ -24,6 +24,3 @@
 <!ENTITY options.menus.title "Persona menu locations">
 <!ENTITY options.tools-submenu "Tools menu">
 <!ENTITY options.main-menubar "Main menu bar">
-
-<!ENTITY options.notification-workaround.title "Notification workaround">
-<!ENTITY options.notification-workaround.desc "Remove notifications of persona changes">
