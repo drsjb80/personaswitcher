@@ -30,6 +30,7 @@ pref ("extensions.personaswitcher.tools-submenu", true);
 pref ("extensions.personaswitcher.main-menubar", false);
 
 pref ("extensions.personaswitcher.debug", false);
+pref ("extensions.personaswitcher.notification-workaround", true);
 
 pref ("extensions.personaswitcher.toolbox-minheight", "");
 pref ("extensions.personaswitcher.startup-switch", false);
