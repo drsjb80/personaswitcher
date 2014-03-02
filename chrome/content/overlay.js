@@ -201,6 +201,8 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
 {
     'use strict';
 
+    PersonaSwitcher.log (menupopup);
+
     while (menupopup.hasChildNodes())
     {
         PersonaSwitcher.log ("removing child");
@@ -228,8 +230,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
     else
     {
         var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
-        item.setAttribute ("label", PersonaSwitcher.stringBundle.getString
-            ("personaswitcher.default"));
+        item.setAttribute ("label", PersonaSwitcher.stringBundle.getString ("personaswitcher.default"));
         item.addEventListener
         (
             "command",
@@ -246,7 +247,6 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
             menupopup.appendChild (item);
         }
     }
-    return (true);
 }
 
 PersonaSwitcher.hideSubMenu = function ()
@@ -464,13 +464,11 @@ PersonaSwitcher.createMenu = function (doc, which)
     }
 }
 
-// used by toolbar palette
-PersonaSwitcher.buttonPopup = function (event)
+PersonaSwitcher.createButtonPopup = function (menupopup)
 {
     'use strict';
-    PersonaSwitcher.log (event.target.id);
-
-    var menupopup = document.getElementById (event.target.id);
+    PersonaSwitcher.log();
+    // PersonaSwitcher.dump (menupopup);
 
     if (menupopup == null)
     {
@@ -479,6 +477,16 @@ PersonaSwitcher.buttonPopup = function (event)
     }
 
     PersonaSwitcher.createMenuPopup (menupopup);
+}
+
+// called by toolbar
+PersonaSwitcher.buttonPopup = function (event)
+{
+    'use strict';
+    PersonaSwitcher.log (event.target.id);
+
+    var menupopup = (document.getElementById (event.target.id));
+    PersonaSwitcher.createButtonPopup (menupopup);
 }
 
 /*
@@ -514,9 +522,24 @@ PersonaSwitcher.onWindowLoad = function()
         PersonaSwitcher.createMenu (this.document, "tools-submenu");
     if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
         PersonaSwitcher.createMenu (this.document, "main-menubar");
+
+    if (PersonaSwitcher.firstTime)
+    {
+        PersonaSwitcher.firstTime = false;
+
+        var menupopup = document.getElementById ("personaswitcher-addon");
+        PersonaSwitcher.createButtonPopup (menupopup);
+
+        PersonaSwitcher.startTimer();
+        // PersonaSwitcher.migratePrefs();
+
+        if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
+        {
+            PersonaSwitcher.rotate();
+        }
+    }
 }
 
-PersonaSwitcher.log (PersonaSwitcher.firstTime);
 window.addEventListener ("load", PersonaSwitcher.onWindowLoad, false);
 
 /*
@@ -524,11 +547,3 @@ window.addEventListener ("activate", PersonaSwitcher.startTimer, false);
 window.addEventListener ("deactivate", PersonaSwitcher.stopTimer, false);
 */
 
-PersonaSwitcher.startTimer();
-
-if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
-{
-    PersonaSwitcher.rotate();
-}
-
-PersonaSwitcher.migratePrefs();

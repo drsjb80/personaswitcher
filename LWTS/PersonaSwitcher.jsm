@@ -7,6 +7,8 @@ var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
 var PersonaSwitcher = new Object();
 
+PersonaSwitcher.firstTime = true;
+
 PersonaSwitcher.PersonasPlusPresent = true;
 try
 {
@@ -207,6 +209,9 @@ PersonaSwitcher.switchTo = function (toWhich)
         LightweightThemeManager.themeChanged (toWhich);
     }
 
+    PersonaSwitcher.log (PersonaSwitcher.PersonasPlusPresent);
+    PersonaSwitcher.log (PersonaSwitcher.prefs.getBoolPref ("notification-workaround"));
+
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
     {
@@ -231,6 +236,8 @@ PersonaSwitcher.switchTo = function (toWhich)
 
         if (notificationBox != null)
         {
+            PersonaSwitcher.log (notificationBox.currentNotification);
+
             if (notificationBox.currentNotification != null)
             {
                 PersonaSwitcher.log (notificatoinBox.currentNotification);
@@ -415,7 +422,7 @@ PersonaSwitcher.migratePrefs = function()
 /*
 ** dump all the properties of an object
 */
-PersonaSwitcher.dump = function (object, max)
+PersonaSwitcher.dump = function (object, max = 1)
 {
     'use strict';
 

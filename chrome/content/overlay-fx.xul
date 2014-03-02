@@ -30,11 +30,12 @@
             type="menu">
             <menupopup
                 id="personaswitcher-addon"
-                onpopupshown="PersonaSwitcher.buttonPopup (event);"
-                onpopuphidden="PersonaSwitcher.hideSubMenu();"
-            />
+                onpopupshowing="PersonaSwitcher.buttonPopup (event);"
+                onpopuphidden="PersonaSwitcher.hideSubMenu();">
+            </menupopup>
         </toolbarbutton>
     </toolbarpalette>
 
     <script src="overlay.js"/>
+
 </overlay>

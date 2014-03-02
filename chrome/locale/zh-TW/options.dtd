@@ -11,19 +11,16 @@
 <!ENTITY options.kbshortcuts.alt "Alt">
 <!ENTITY options.kbshortcuts.meta "Meta">
 
-<!ENTITY options.autoevery.title "自動輪換">
 <!ENTITY options.autoevery.switch "每當經過">
 <!ENTITY options.autoevery.minutes "分鐘時輪換">
-
-<!ENTITY options.random.title "隨機輪換">
 <!ENTITY options.random.desc "不以固定的順序更換面板。">
 
-<!ENTITY options.preview.title "預覽功能">
 <!ENTITY options.preview.desc "滑鼠經過選單選項時預覽。">
 
 <!ENTITY options.menus.title "將「Persona Switcher 選單」顯示於">
 <!ENTITY options.tools-submenu "選單列→工具">
 <!ENTITY options.main-menubar "選單列">
 
-<!ENTITY options.notification-workaround.title "Notification workaround">
-<!ENTITY options.notification-workaround.desc "Remove notifications of persona changes">
+<!ENTITY options.options.title "Options">
+<!ENTITY options.startup-switch.desc "開啟 Firefox 時立即更換一次.">
+<!ENTITY options.toolbox-minheight.desc "瀏覽器上方工具列最低總高度為：">
