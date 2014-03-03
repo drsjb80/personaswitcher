@@ -18,6 +18,7 @@ git status
 git diff
 git commit -a
 git tag -a v1.4 -m 'my version 1.4'
+git push v1.4
 git push
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &

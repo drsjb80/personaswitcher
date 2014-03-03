@@ -523,12 +523,12 @@ PersonaSwitcher.onWindowLoad = function()
     if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
         PersonaSwitcher.createMenu (this.document, "main-menubar");
 
+    var menupopup = document.getElementById ("personaswitcher-addon");
+        PersonaSwitcher.createButtonPopup (menupopup);
+
     if (PersonaSwitcher.firstTime)
     {
         PersonaSwitcher.firstTime = false;
-
-        var menupopup = document.getElementById ("personaswitcher-addon");
-        PersonaSwitcher.createButtonPopup (menupopup);
 
         PersonaSwitcher.startTimer();
         // PersonaSwitcher.migratePrefs();
