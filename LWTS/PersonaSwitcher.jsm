@@ -177,10 +177,11 @@ PersonaSwitcher.switchTo = function (toWhich)
     'use strict';
     PersonaSwitcher.log();
 
+
     if (toWhich != null)
     {
-        PersonaSwitcher.log (toWhich.name);
-        // PersonaSwitcher.dump (toWhich);
+        // PersonaSwitcher.log (toWhich.name);
+        PersonaSwitcher.dump (toWhich);
     }
     else
     {
@@ -193,8 +194,24 @@ PersonaSwitcher.switchTo = function (toWhich)
     if (PersonaSwitcher.PersonasPlusPresent)
     {
         PersonaSwitcher.log();
-        PersonaService.currentPersona = toWhich;
-        PersonaService._notifyPersonaChanged (toWhich);
+
+        if (toWhich == null)
+        {
+            PersonaService.changeToDefaultPersona();
+        }
+
+        if (toWhich.id == 1)
+        {
+            PersonaSwitcher.log();
+            PersonaService.changeToPersona (PersonaService.customPersona);
+        }
+        else
+        {
+            PersonaSwitcher.log();
+            PersonaService.changeToPersona (toWhich);
+        }
+        // PersonaService.currentPersona = toWhich;
+        // PersonaService._notifyPersonaChanged (toWhich);
     }
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html

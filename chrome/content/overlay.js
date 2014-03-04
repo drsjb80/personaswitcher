@@ -464,11 +464,11 @@ PersonaSwitcher.createMenu = function (doc, which)
     }
 }
 
+// called by toolbar and onWindowLoad
 PersonaSwitcher.createButtonPopup = function (menupopup)
 {
     'use strict';
     PersonaSwitcher.log();
-    // PersonaSwitcher.dump (menupopup);
 
     if (menupopup == null)
     {
@@ -485,8 +485,19 @@ PersonaSwitcher.buttonPopup = function (event)
     'use strict';
     PersonaSwitcher.log (event.target.id);
 
-    var menupopup = (document.getElementById (event.target.id));
-    PersonaSwitcher.createButtonPopup (menupopup);
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator
+        ("navigator:browser");
+
+    while (enumerator.hasMoreElements())
+    {
+        PersonaSwitcher.log();
+
+        var doc = enumerator.getNext().document;
+        PersonaSwitcher.createMenu (doc, which);
+
+        var menupopup = (doc.getElementById (event.target.id));
+        PersonaSwitcher.createButtonPopup (menupopup);
+    }
 }
 
 /*
