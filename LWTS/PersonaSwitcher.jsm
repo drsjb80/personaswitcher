@@ -1,7 +1,6 @@
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
-Components.utils.import ("resource://gre/modules/LightweightThemeManager.jsm");
-// Components.utils.import ('chrome://cdumpjsm/content/cDump.jsm');
+Components.utils["import"] ("resource://gre/modules/LightweightThemeManager.jsm");
 
 var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
@@ -27,8 +26,8 @@ PersonaSwitcher.prefs =
             getBranch ("extensions.personaswitcher.");
 
 PersonaSwitcher.windowMediator =
-    Components.classes["@mozilla.org/appshell/window-mediator;1"]
-        .getService(Components.interfaces.nsIWindowMediator);
+    Components.classes["@mozilla.org/appshell/window-mediator;1"].
+        getService(Components.interfaces.nsIWindowMediator);
 
 PersonaSwitcher.XULAppInfo =
     Components.classes["@mozilla.org/xre/app-info;1"].
@@ -59,6 +58,7 @@ PersonaSwitcher.myObserver =
             case "toolbox-minheight":
             {
                 PersonaSwitcher.setToolboxMinheights();
+                break;
             }
             case "auto": case "preview": case "startup-switch":
             {
@@ -95,6 +95,7 @@ PersonaSwitcher.myObserver =
             default:
             {
                 PersonaSwitcher.log (data);
+                break;
             }
         }
     }
@@ -102,8 +103,8 @@ PersonaSwitcher.myObserver =
 
 PersonaSwitcher.prefs.addObserver ("", PersonaSwitcher.myObserver, false);
 
-PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"]
-    .createInstance(Components.interfaces.nsITimer);
+PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"].
+    createInstance(Components.interfaces.nsITimer);
 
 PersonaSwitcher.startTimer = function()
 {
@@ -177,11 +178,10 @@ PersonaSwitcher.switchTo = function (toWhich)
     'use strict';
     PersonaSwitcher.log();
 
-
-    if (toWhich != null)
+    if (toWhich !== null)
     {
-        // PersonaSwitcher.log (toWhich.name);
-        PersonaSwitcher.dump (toWhich);
+        PersonaSwitcher.log (toWhich.name);
+        // PersonaSwitcher.dump (toWhich);
     }
     else
     {
@@ -195,12 +195,11 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         PersonaSwitcher.log();
 
-        if (toWhich == null)
+        if (toWhich === null)
         {
             PersonaService.changeToDefaultPersona();
         }
-
-        if (toWhich.id == 1)
+        else if (toWhich.id == 1)
         {
             PersonaSwitcher.log();
             PersonaService.changeToPersona (PersonaService.customPersona);
@@ -210,8 +209,6 @@ PersonaSwitcher.switchTo = function (toWhich)
             PersonaSwitcher.log();
             PersonaService.changeToPersona (toWhich);
         }
-        // PersonaService.currentPersona = toWhich;
-        // PersonaService._notifyPersonaChanged (toWhich);
     }
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html
@@ -225,9 +222,6 @@ PersonaSwitcher.switchTo = function (toWhich)
         // 3.* compatability
         LightweightThemeManager.themeChanged (toWhich);
     }
-
-    PersonaSwitcher.log (PersonaSwitcher.PersonasPlusPresent);
-    PersonaSwitcher.log (PersonaSwitcher.prefs.getBoolPref ("notification-workaround"));
 
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
@@ -251,11 +245,11 @@ PersonaSwitcher.switchTo = function (toWhich)
 
         PersonaSwitcher.log (notificationBox);
 
-        if (notificationBox != null)
+        if (notificationBox !== null)
         {
             PersonaSwitcher.log (notificationBox.currentNotification);
 
-            if (notificationBox.currentNotification != null)
+            if (notificationBox.currentNotification !== null)
             {
                 PersonaSwitcher.log (notificatoinBox.currentNotification);
                 notificationBox.removeCurrentNotification();
@@ -315,7 +309,7 @@ PersonaSwitcher.getPersonas = function()
     {
         var favs = PersonaService.favorites;
 
-        if (favs != null)
+        if (favs !== null)
         {
             PersonaSwitcher.log (favs.length);
             arr = PersonaSwitcher.merge (arr, favs);
@@ -404,7 +398,7 @@ PersonaSwitcher.migratePrefs = function()
 
     var kids = oldPrefs.getChildList ("", {});
 
-    if (kids.length == 0) return;
+    if (kids.length === 0) return;
 
     for (var i in kids)
     {
@@ -439,13 +433,13 @@ PersonaSwitcher.migratePrefs = function()
 /*
 ** dump all the properties of an object
 */
-PersonaSwitcher.dump = function (object, max = 1)
+PersonaSwitcher.dump = function (object, max)
 {
     'use strict';
 
-    PersonaSwitcher.log (max);
+    if (typeof max === 'undefined') max = 1;
 
-    if (max == 0) return
+    if (max === 0) return;
 
     for (var property in object)
     {
@@ -453,7 +447,7 @@ PersonaSwitcher.dump = function (object, max = 1)
         {
             PersonaSwitcher.log (property + "=" + object[property]);
 
-            if (object[property] != null && typeof object[property] == "object")
+            if (object[property] !== null && typeof object[property] == "object")
             {
                 PersonaSwitcher.dump (object[property], max-1);
             }
