@@ -496,8 +496,6 @@ PersonaSwitcher.buttonPopup = function (event)
         PersonaSwitcher.log();
 
         var doc = enumerator.getNext().document;
-        PersonaSwitcher.createMenu (doc, which);
-
         var menupopup = (doc.getElementById (event.target.id));
         PersonaSwitcher.createButtonPopup (menupopup);
     }
@@ -537,8 +535,8 @@ PersonaSwitcher.onWindowLoad = function()
     if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
         PersonaSwitcher.createMenu (this.document, "main-menubar");
 
-    var menupopup = document.getElementById ("personaswitcher-addon");
-        PersonaSwitcher.createButtonPopup (menupopup);
+    PersonaSwitcher.createButtonPopup
+        (document.getElementById ("personaswitcher-addon"));
 
     if (PersonaSwitcher.firstTime)
     {

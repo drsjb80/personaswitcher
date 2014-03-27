@@ -18,6 +18,7 @@
 <!ENTITY options.startup-switch.desc "Rotate on startup.">
 <!ENTITY options.toolbox-minheight.desc "Minimum height of top toolbox (in Firefox and SeaMonkey):">
 <!ENTITY options.preview.desc "Preview personas on menu selection.">
+<!ENTITY options.notification-workaround.desc "Remove Personas Plus notifications.">
 
 <!ENTITY options.menus.title "Persona menu locations">
 <!ENTITY options.tools-submenu "Tools menu.">

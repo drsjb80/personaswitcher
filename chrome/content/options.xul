@@ -2,91 +2,96 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <!DOCTYPE prefwindow SYSTEM "chrome://personaswitcher/locale/options.dtd">
 <prefwindow
-    id="personaswitcher-preferences"
+    id="preferences"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     title="&options.title;">
     <prefpane id="pane1" label="&options.pane1;">
         <preferences>
             <preference
-                id="personaswitcher-default-key-shift"
+                id="default-key-shift"
                 name="extensions.personaswitcher.defshift"
                 type="bool"/>
             <preference
-                id="personaswitcher-default-key-control"
+                id="default-key-control"
                 name="extensions.personaswitcher.defcontrol"
                 type="bool"/>
             <preference
-                id="personaswitcher-default-key-alt"
+                id="default-key-alt"
                 name="extensions.personaswitcher.defalt"
                 type="bool"/>
             <preference
-                id="personaswitcher-default-key-meta"
+                id="default-key-meta"
                 name="extensions.personaswitcher.defmeta"
                 type="bool"/>
             <preference
-                id="personaswitcher-default-key"
+                id="default-key"
                 name="extensions.personaswitcher.defkey"
                 type="string"/>
 
             <preference
-                id="personaswitcher-rotate-key-shift"
+                id="rotate-key-shift"
                 name="extensions.personaswitcher.rotshift"
                 type="bool"/>
             <preference
-                id="personaswitcher-rotate-key-control"
+                id="rotate-key-control"
                 name="extensions.personaswitcher.rotcontrol"
                 type="bool"/>
             <preference
-                id="personaswitcher-rotate-key-alt"
+                id="rotate-key-alt"
                 name="extensions.personaswitcher.rotalt"
                 type="bool"/>
             <preference
-                id="personaswitcher-rotate-key-meta"
+                id="rotate-key-meta"
                 name="extensions.personaswitcher.rotmeta"
                 type="bool"/>
             <preference
-                id="personaswitcher-rotate-key"
+                id="rotate-key"
                 name="extensions.personaswitcher.rotkey"
                 type="string"/>
 
             <preference
-                id="personaswitcher-auto-key-shift"
+                id="auto-key-shift"
                 name="extensions.personaswitcher.autoshift"
                 type="bool"/>
             <preference
-                id="personaswitcher-auto-key-control"
+                id="auto-key-control"
                 name="extensions.personaswitcher.autocontrol"
                 type="bool"/>
             <preference
-                id="personaswitcher-auto-key-alt"
+                id="auto-key-alt"
                 name="extensions.personaswitcher.autoalt"
                 type="bool"/>
             <preference
-                id="personaswitcher-auto-key-meta"
+                id="auto-key-meta"
                 name="extensions.personaswitcher.autometa"
                 type="bool"/>
             <preference
-                id="personaswitcher-auto-key"
+                id="auto-key"
                 name="extensions.personaswitcher.autokey"
                 type="string"/>
 
             <preference
-                id="personaswitcher-auto"
+                id="auto"
                 name="extensions.personaswitcher.auto"
                 type="bool"/>
             <preference
-                id="personaswitcher-auto-minutes"
+                id="auto-minutes"
                 name="extensions.personaswitcher.autominutes"
                 type="int"/>
 
             <preference
-                id="personaswitcher-random"
+                id="random"
                 name="extensions.personaswitcher.random"
                 type="bool"/>
 
             <preference
-                id="personaswitcher-preview"
+                id="preview"
                 name="extensions.personaswitcher.preview"
+                type="bool"/>
+
+            <preference
+                id="notification-workaround"
+                name="extensions.personaswitcher.notification-workaround"
                 type="bool"/>
 
             <preference
@@ -121,25 +126,25 @@
                     </hbox>
                     <checkbox
                         id="default-key-shift"
-                        preference="personaswitcher-default-key-shift"
+                        preference="default-key-shift"
                         label="&options.kbshortcuts.shift;"/>
                     <checkbox
                         id="default-key-control"
-                        preference="personaswitcher-default-key-control"
+                        preference="default-key-control"
                         label="&options.kbshortcuts.control;"/>
                     <checkbox
                         id="default-key-alt"
-                        preference="personaswitcher-default-key-alt"
+                        preference="default-key-alt"
                         label="&options.kbshortcuts.alt;"/>
                     <checkbox
                         id="default-key-meta"
-                        preference="personaswitcher-default-key-meta"
+                        preference="default-key-meta"
                         label="&options.kbshortcuts.meta;"/>
                     <label>&options.kbshortcuts.key;</label>
                     <textbox
                         id="default-key"
                         size="3"
-                        preference="personaswitcher-default-key"/>
+                        preference="default-key"/>
                 </hbox>
                 <hbox>
                     <hbox flex="1" pack="end">
@@ -147,25 +152,25 @@
                     </hbox>
                     <checkbox
                         id="rotate-key-shift"
-                        preference="personaswitcher-rotate-key-shift"
+                        preference="rotate-key-shift"
                         label="&options.kbshortcuts.shift;"/>
                     <checkbox
                         id="rotate-key-control"
-                        preference="personaswitcher-rotate-key-control"
+                        preference="rotate-key-control"
                         label="&options.kbshortcuts.control;"/>
                     <checkbox
                         id="rotate-key-alt"
-                        preference="personaswitcher-rotate-key-alt"
+                        preference="rotate-key-alt"
                         label="&options.kbshortcuts.alt;"/>
                     <checkbox
                         id="rotate-key-meta"
-                        preference="personaswitcher-rotate-key-meta"
+                        preference="rotate-key-meta"
                         label="&options.kbshortcuts.meta;"/>
                     <label>&options.kbshortcuts.key;</label>
                     <textbox
                         id="rotate-key"
                         size="3"
-                        preference="personaswitcher-rotate-key"/>
+                        preference="rotate-key"/>
                 </hbox>
                 <hbox>
                     <hbox flex="1" pack="end">
@@ -173,25 +178,25 @@
                     </hbox>
                     <checkbox
                         id="auto-key-shift"
-                        preference="personaswitcher-auto-key-shift"
+                        preference="auto-key-shift"
                         label="&options.kbshortcuts.shift;"/>
                     <checkbox
                         id="auto-key-control"
-                        preference="personaswitcher-auto-key-control"
+                        preference="auto-key-control"
                         label="&options.kbshortcuts.control;"/>
                     <checkbox
                         id="auto-key-alt"
-                        preference="personaswitcher-auto-key-alt"
+                        preference="auto-key-alt"
                         label="&options.kbshortcuts.alt;"/>
                     <checkbox
                         id="auto-key-meta"
-                        preference="personaswitcher-auto-key-meta"
+                        preference="auto-key-meta"
                         label="&options.kbshortcuts.meta;"/>
                     <label>&options.kbshortcuts.key;</label>
                     <textbox
                         id="auto-key"
                         size="3"
-                        preference="personaswitcher-auto-key"/>
+                        preference="auto-key"/>
                 </hbox>
             </groupbox>
 
@@ -200,12 +205,12 @@
                 <hbox>
                     <checkbox
                         id="auto"
-                        preference="personaswitcher-auto"
+                        preference="auto"
                         label="&options.autoevery.switch;"
                     />
                     <textbox
                         size="3"
-                        preference="personaswitcher-auto-minutes"
+                        preference="auto-minutes"
                     />
                     <label value="&options.autoevery.minutes;"/>
                 </hbox>
@@ -213,7 +218,7 @@
                 <hbox>
                     <checkbox
                         id="random"
-                        preference="personaswitcher-random"
+                        preference="random"
                         label="&options.random.desc;"
                     />
                 </hbox>
@@ -238,8 +243,16 @@
                 <hbox>
                     <checkbox
                         id="preview"
-                        preference="personaswitcher-preview"
+                        preference="preview"
                         label="&options.preview.desc;"
+                    />
+                </hbox>
+
+                <hbox>
+                    <checkbox
+                        id="notification-workaround"
+                        preference="notification-workaround"
+                        label="&options.notification-workaround.desc;"
                     />
                 </hbox>
 

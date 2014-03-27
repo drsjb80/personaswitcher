@@ -17,8 +17,8 @@ hg clone http://hg.mozilla.org/mozilla-central/file/81dd97739fa1/toolkit/mozapps
 git status
 git diff
 git commit -a
-git tag -a v1.4 -m 'my version 1.4'
-git push v1.4
+git tag -a v2.0 -m 'Version 2.0'
+git push origin v2.0
 git push
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
