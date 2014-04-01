@@ -226,17 +226,17 @@ PersonaSwitcher.switchTo = function (toWhich)
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
     {
-        PersonaSwitcher.log (PersonaSwitcher.XULAppInfo.name);
+        let name = PersonaSwitcher.XULAppInfo.name;
+        PersonaSwitcher.log (name);
 
-        var notificationBox = null;
-        if (PersonaSwitcher.XULAppInfo.name == "Firefox" ||
-            PersonaSwitcher.XULAppInfo.name == "SeaMonkey")
+        let notificationBox = null;
+        if (name == "Firefox" || name == "SeaMonkey")
         {
             notificationBox = PersonaSwitcher.windowMediator.
                 getMostRecentWindow("navigator:browser").
                 getBrowser().getNotificationBox();
         }
-        else if (PersonaSwitcher.XULAppInfo.name == "Thunderbird")
+        else if (name == "Thunderbird")
         {
             notificationBox = PersonaSwitcher.windowMediator.
                 getMostRecentWindow("mail:3pane").
@@ -247,12 +247,14 @@ PersonaSwitcher.switchTo = function (toWhich)
 
         if (notificationBox !== null)
         {
-            PersonaSwitcher.log (notificationBox.currentNotification);
+            let notification = notificationBox.getNotificationWithValue
+                ("lwtheme-install-notification");
 
-            if (notificationBox.currentNotification !== null)
+            PersonaSwitcher.log (notification);
+
+            if (notification !== null)
             {
-                PersonaSwitcher.log (notificatoinBox.currentNotification);
-                notificationBox.removeCurrentNotification();
+                notificationBox.removeNotification (notification);
             }
         }
     }
