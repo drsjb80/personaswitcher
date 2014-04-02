@@ -259,18 +259,18 @@ PersonaSwitcher.switchTo = function (toWhich)
         }
     }
 
-    /*
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
     while (enumerator.hasMoreElements())
     {
         let win = enumerator.getNext();
+        PersonaSwitcher.log (win.gBrowser.browsers.length);
+
         // PersonaSwitcher.dump (win, 1);
-        PersonaSwitcher.log (win.document.title);
-        PersonaSwitcher.log (win.document.hidden);
-        PersonaSwitcher.log (win.document.visibilityState);
-        PersonaSwitcher.log (win.windowState);
+        // PersonaSwitcher.log (win.document.title);
+        // PersonaSwitcher.log (win.document.hidden);
+        // PersonaSwitcher.log (win.document.visibilityState);
+        // PersonaSwitcher.log (win.windowState);
     }
-    */
 }
 
 PersonaSwitcher.merge = function (array1, array2)
