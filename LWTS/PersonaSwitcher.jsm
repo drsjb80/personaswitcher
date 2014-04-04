@@ -60,9 +60,23 @@ PersonaSwitcher.myObserver =
                 PersonaSwitcher.setToolboxMinheights();
                 break;
             }
-            case "auto": case "preview": case "startup-switch":
+            case "preview":
+            case "startup-switch":
+            case "fastswitch":
             {
                 break; // nothing to do as the value is queried elsewhere
+            }
+            case "auto":
+            {
+                if (PersonaSwitcher.prefs.getBoolPref ("auto"))
+                {
+                    PersonaSwitcher.autoOn();
+                }
+                else
+                {
+                    PersonaSwitcher.autoOff();
+                }
+                break;
             }
             case "autominutes":
             {
@@ -124,7 +138,8 @@ PersonaSwitcher.startTimer = function()
         PersonaSwitcher.timer.init
         (
             PersonaSwitcher.rotate,
-            1000 * 60 * minutes,
+            PersonaSwitcher.prefs.getBoolPref ("fastswitch") ? 10000 :
+                1000 * 60 * minutes,
             Components.interfaces.nsITimer.TYPE_REPEATING_SLACK
         );
     }
@@ -143,8 +158,13 @@ PersonaSwitcher.autoOff = function()
     'use strict';
     PersonaSwitcher.log();
 
+    // if we're coming here through the keyboard shortcut...
+    if (PersonaSwitcher.prefs.getBoolPref ("auto"))
+    {
+        PersonaSwitcher.prefs.setBoolPref ("auto", false);
+    }
+
     PersonaSwitcher.stopTimer();
-    PersonaSwitcher.prefs.setBoolPref ("auto", 0);
 }
 
 PersonaSwitcher.autoOn = function()
@@ -152,9 +172,13 @@ PersonaSwitcher.autoOn = function()
     'use strict';
     PersonaSwitcher.log ();
 
-    PersonaSwitcher.prefs.setBoolPref ("auto", 1);
-    PersonaSwitcher.startTimer();
+    // if we're coming here through the keyboard shortcut...
+    if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
+    {
+        PersonaSwitcher.prefs.setBoolPref ("auto", true);
+    }
 
+    PersonaSwitcher.startTimer();
     PersonaSwitcher.rotate();
 }
 
@@ -226,50 +250,41 @@ PersonaSwitcher.switchTo = function (toWhich)
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
     {
-        let name = PersonaSwitcher.XULAppInfo.name;
-        PersonaSwitcher.log (name);
+        // go through all windows looking for P+ notifications
+        let enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
-        let notificationBox = null;
-        if (name == "Firefox" || name == "SeaMonkey")
+        while (enumerator.hasMoreElements())
         {
-            notificationBox = PersonaSwitcher.windowMediator.
-                getMostRecentWindow("navigator:browser").
-                getBrowser().getNotificationBox();
-        }
-        else if (name == "Thunderbird")
-        {
-            notificationBox = PersonaSwitcher.windowMediator.
-                getMostRecentWindow("mail:3pane").
-                document.getElementById("mail-notification-box");
-        }
+            let win = enumerator.getNext();
+            let notificationBox = null;
+            let name = PersonaSwitcher.XULAppInfo.name;
 
-        PersonaSwitcher.log (notificationBox);
+            PersonaSwitcher.log (name);
 
-        if (notificationBox !== null)
-        {
-            let notification = notificationBox.getNotificationWithValue
-                ("lwtheme-install-notification");
-
-            PersonaSwitcher.log (notification);
-
-            if (notification !== null)
+            if (name == "Firefox" || name == "SeaMonkey")
             {
-                notificationBox.removeNotification (notification);
+                    win.getBrowser().getNotificationBox();
+            }
+            else if (name == "Thunderbird")
+            {
+                    win.document.getElementById ("mail-notification-box");
+            }
+
+            PersonaSwitcher.log (notificationBox);
+
+            if (notificationBox !== null)
+            {
+                let notification = notificationBox.getNotificationWithValue
+                    ("lwtheme-install-notification");
+
+                PersonaSwitcher.log (notification);
+
+                if (notification !== null)
+                {
+                    notificationBox.removeNotification (notification);
+                }
             }
         }
-    }
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-    while (enumerator.hasMoreElements())
-    {
-        let win = enumerator.getNext();
-        PersonaSwitcher.log (win.gBrowser.browsers.length);
-
-        // PersonaSwitcher.dump (win, 1);
-        // PersonaSwitcher.log (win.document.title);
-        // PersonaSwitcher.log (win.document.hidden);
-        // PersonaSwitcher.log (win.document.visibilityState);
-        // PersonaSwitcher.log (win.windowState);
     }
 }
 

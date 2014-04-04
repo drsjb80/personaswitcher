@@ -35,6 +35,8 @@ pref ("extensions.personaswitcher.notification-workaround", true);
 pref ("extensions.personaswitcher.toolbox-minheight", "");
 pref ("extensions.personaswitcher.startup-switch", false);
 
+pref ("extensions.personaswitcher.fastswitch", false);
+
 // https://developer.mozilla.org/en/Localizing_extension_descriptions
 
 pref ("extensions.drsjb80@gmail.com.description", "chrome://personaswitcher/locale/overlay.properties");
