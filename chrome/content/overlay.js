@@ -9,6 +9,7 @@
 Components.utils["import"] ("resource://gre/modules/LightweightThemeManager.jsm");
 Components.utils["import"] ("resource://LWTS/PersonaSwitcher.jsm");
 
+
 PersonaSwitcher.XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
 /*
@@ -224,15 +225,17 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
 
         item.setAttribute ("label",
             PersonaSwitcher.stringBundle.
-                getString ("personaswitcher.noPersonas"));
+                GetStringFromName ("personaswitcher.noPersonas"));
 
         menupopup.appendChild (item);
     }
     else
     {
         var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
-        item.setAttribute ("label", PersonaSwitcher.stringBundle.
-            getString ("personaswitcher.default"));
+
+        item.setAttribute ("label",
+            PersonaSwitcher.stringBundle.
+                GetStringFromName ("personaswitcher.default"));
         item.addEventListener
         (
             "command",
@@ -410,7 +413,8 @@ PersonaSwitcher.createMenuAndPopup = function (doc, menuId, menupopupId)
 
     menu = document.createElementNS (PersonaSwitcher.XULNS, "menu");
     menu.setAttribute ("label",
-        PersonaSwitcher.stringBundle.getString ("personaswitcher.label"));
+        PersonaSwitcher.stringBundle.
+            GetStringFromName ("personaswitcher.label"));
     menu.setAttribute ("id", menuId);
 
     menupopup = document.createElementNS (PersonaSwitcher.XULNS, "menupopup");
@@ -523,9 +527,6 @@ PersonaSwitcher.createMenus = function (which)
 PersonaSwitcher.onWindowLoad = function()
 {
     'use strict';
-
-    PersonaSwitcher.stringBundle = document.
-        getElementById ("stringbundle-personaswitcher");
 
     PersonaSwitcher.setKeyset (this.document);
     PersonaSwitcher.setToolboxMinheight (this.document);

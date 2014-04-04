@@ -18,8 +18,6 @@ catch (e)
     PersonaSwitcher.PersonasPlusPresent = false;
 }
 
-PersonaSwitcher.stringBundle;   // set in overlay.js
-
 PersonaSwitcher.prefs =
     Components.classes["@mozilla.org/preferences-service;1"].
         getService (Components.interfaces.nsIPrefService).
@@ -32,6 +30,11 @@ PersonaSwitcher.windowMediator =
 PersonaSwitcher.XULAppInfo =
     Components.classes["@mozilla.org/xre/app-info;1"].
         getService(Components.interfaces.nsIXULAppInfo); 
+
+PersonaSwitcher.stringBundle =
+    Components.classes["@mozilla.org/intl/stringbundle;1"].
+        getService(Components.interfaces.nsIStringBundleService).
+            createBundle("chrome://personaswitcher/locale/personaswitcher.properties");
 
 // needed for addObserver
 PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
