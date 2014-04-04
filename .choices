@@ -18,8 +18,8 @@ git status
 git diff
 git commit -a
 git push
-git tag -a v2.0.1 -m 'Version 2.0.1'
-git push origin v2.0.1
+git tag -a v2.0.1b -m 'Version 2.0.1b'
+git push origin v2.0.1b
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
