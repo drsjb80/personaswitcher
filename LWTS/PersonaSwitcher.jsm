@@ -62,9 +62,12 @@ PersonaSwitcher.myObserver =
             }
             case "preview":
             case "startup-switch":
-            case "fastswitch":
             {
                 break; // nothing to do as the value is queried elsewhere
+            }
+            case "fastswitch":
+            {
+                PersonaSwitcher.startTimer();
             }
             case "auto":
             {
