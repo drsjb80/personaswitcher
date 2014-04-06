@@ -18,9 +18,9 @@ git status
 git diff
 git commit -a
 git push
-git tag -a v2.0.1f -m 'Version 2.0.1f'
+git tag -a v2.0.1g -m 'Version 2.0.1g'
 cp personaswitcher.xpi personaswitcher-2.0.1.xpi
-git push origin v2.0.1f
+git push origin v2.0.1g
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &

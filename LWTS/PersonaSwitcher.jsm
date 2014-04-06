@@ -6,6 +6,13 @@ var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
 var PersonaSwitcher = new Object();
 
+// PersonaSwitcher.logger =
+//    Components.utils["import"]
+//        ("resource://gre/modules/devtools/Console.jsm", {}).console;
+
+PersonaSwitcher.logger = new Object();
+PersonaSwitcher.logger.log = function (s) { return; }
+
 PersonaSwitcher.firstTime = true;
 
 PersonaSwitcher.PersonasPlusPresent = true;
@@ -48,9 +55,9 @@ PersonaSwitcher.myObserver =
     {
         'use strict';
         /*
-        PersonaSwitcher.log (subject);
-        PersonaSwitcher.log (topic);
-        PersonaSwitcher.log (data);
+        PersonaSwitcher.logger.log (subject);
+        PersonaSwitcher.logger.log (topic);
+        PersonaSwitcher.logger.log (data);
         */
 
         if (topic != "nsPref:changed")
@@ -114,7 +121,7 @@ PersonaSwitcher.myObserver =
             }
             default:
             {
-                PersonaSwitcher.log (data);
+                PersonaSwitcher.logger.log (data);
                 break;
             }
         }
@@ -130,14 +137,14 @@ PersonaSwitcher.startTimer = function()
 {
     'use strict';
 
-    PersonaSwitcher.log (PersonaSwitcher.prefs.getBoolPref ("auto"));
+    PersonaSwitcher.logger.log (PersonaSwitcher.prefs.getBoolPref ("auto"));
     if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
         return;
 
     PersonaSwitcher.stopTimer();
 
     var minutes = PersonaSwitcher.prefs.getIntPref ("autominutes");
-    PersonaSwitcher.log (minutes);
+    PersonaSwitcher.logger.log (minutes);
 
     if (minutes > 0)
     {
@@ -154,7 +161,7 @@ PersonaSwitcher.startTimer = function()
 PersonaSwitcher.stopTimer = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     PersonaSwitcher.timer.cancel();
 }
@@ -162,7 +169,7 @@ PersonaSwitcher.stopTimer = function()
 PersonaSwitcher.autoOff = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     // if we're coming here through the keyboard shortcut...
     if (PersonaSwitcher.prefs.getBoolPref ("auto"))
@@ -176,7 +183,7 @@ PersonaSwitcher.autoOff = function()
 PersonaSwitcher.autoOn = function()
 {
     'use strict';
-    PersonaSwitcher.log ();
+    PersonaSwitcher.logger.log ();
 
     // if we're coming here through the keyboard shortcut...
     if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
@@ -191,7 +198,7 @@ PersonaSwitcher.autoOn = function()
 PersonaSwitcher.toggleAuto = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     if (PersonaSwitcher.prefs.getBoolPref ("auto"))
     {
@@ -206,16 +213,16 @@ PersonaSwitcher.toggleAuto = function()
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     if (toWhich !== null)
     {
-        PersonaSwitcher.log (toWhich.name);
+        PersonaSwitcher.logger.log (toWhich.name);
         // PersonaSwitcher.dump (toWhich);
     }
     else
     {
-        PersonaSwitcher.log (toWhich);
+        PersonaSwitcher.logger.log (toWhich);
     }
 
     /*
@@ -223,7 +230,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     */
     if (PersonaSwitcher.PersonasPlusPresent)
     {
-        PersonaSwitcher.log();
+        PersonaSwitcher.logger.log();
 
         if (toWhich === null)
         {
@@ -231,12 +238,12 @@ PersonaSwitcher.switchTo = function (toWhich)
         }
         else if (toWhich.id == 1)
         {
-            PersonaSwitcher.log();
+            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (PersonaService.customPersona);
         }
         else
         {
-            PersonaSwitcher.log();
+            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (toWhich);
         }
     }
@@ -256,34 +263,41 @@ PersonaSwitcher.switchTo = function (toWhich)
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
     {
+        let name = PersonaSwitcher.XULAppInfo.name;
+        PersonaSwitcher.logger.log (name);
+
         // go through all windows looking for P+ notifications
         let enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
         while (enumerator.hasMoreElements())
         {
             let win = enumerator.getNext();
+            PersonaSwitcher.logger.log (win);
+
+// https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
+
             let notificationBox = null;
-            let name = PersonaSwitcher.XULAppInfo.name;
-
-            PersonaSwitcher.log (name);
-
             if (name == "Firefox" || name == "SeaMonkey")
             {
-                    win.getBrowser().getNotificationBox();
+                if (typeof (win.getBrowser) != "function")
+                    continue;
+
+                notificationBox = win.getBrowser().getNotificationBox();
             }
             else if (name == "Thunderbird")
             {
+                notificationBox = 
                     win.document.getElementById ("mail-notification-box");
             }
 
-            PersonaSwitcher.log (notificationBox);
+            PersonaSwitcher.logger.log (notificationBox);
 
             if (notificationBox !== null)
             {
                 let notification = notificationBox.getNotificationWithValue
                     ("lwtheme-install-notification");
 
-                PersonaSwitcher.log (notification);
+                PersonaSwitcher.logger.log (notification);
 
                 if (notification !== null)
                 {
@@ -326,7 +340,7 @@ PersonaSwitcher.getPersonas = function()
     'use strict';
 
     var arr = LightweightThemeManager.usedThemes;
-    PersonaSwitcher.log (arr.length);
+    PersonaSwitcher.logger.log (arr.length);
 
     if (PersonaSwitcher.PersonasPlusPresent)
     {
@@ -334,23 +348,23 @@ PersonaSwitcher.getPersonas = function()
 
         if (favs !== null)
         {
-            PersonaSwitcher.log (favs.length);
+            PersonaSwitcher.logger.log (favs.length);
             arr = PersonaSwitcher.merge (arr, favs);
         }
     }
 
-    PersonaSwitcher.log (arr.length);
+    PersonaSwitcher.logger.log (arr.length);
     return (arr);
 }
 
 PersonaSwitcher.rotate = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     var arr = PersonaSwitcher.getPersonas();
 
-    PersonaSwitcher.log (arr.length);
+    PersonaSwitcher.logger.log (arr.length);
 
     if (arr.length < 1) return;
 
@@ -358,7 +372,7 @@ PersonaSwitcher.rotate = function()
     {
         // pick a number between 1 and the end
         var number = Math.floor ((Math.random() * (arr.length-1)) + 1);
-        // PersonaSwitcher.log (number);
+        // PersonaSwitcher.logger.log (number);
         PersonaSwitcher.switchTo (arr[number]);
     }
     else
@@ -371,7 +385,7 @@ PersonaSwitcher.rotate = function()
 PersonaSwitcher.previous = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     var arr = PersonaSwitcher.getPersonas();
 
@@ -387,7 +401,7 @@ PersonaSwitcher.previous = function()
 PersonaSwitcher.rotateKey = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     PersonaSwitcher.rotate();
     PersonaSwitcher.startTimer();
@@ -396,7 +410,7 @@ PersonaSwitcher.rotateKey = function()
 PersonaSwitcher.setDefault = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     PersonaSwitcher.switchTo (null);
     PersonaSwitcher.autoOff();
@@ -405,7 +419,7 @@ PersonaSwitcher.setDefault = function()
 PersonaSwitcher.onMenuItemCommand = function (which)
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     PersonaSwitcher.switchTo (which);
     PersonaSwitcher.startTimer();
@@ -426,7 +440,7 @@ PersonaSwitcher.migratePrefs = function()
     for (var i in kids)
     {
         var type = oldPrefs.getPrefType (kids[i]);
-        PersonaSwitcher.log (kids[i]);
+        PersonaSwitcher.logger.log (kids[i]);
 
         switch (type)
         {
@@ -468,16 +482,17 @@ PersonaSwitcher.dump = function (object, max)
     {
         try
         {
-            PersonaSwitcher.log (property + "=" + object[property]);
+            PersonaSwitcher.logger.log (property + "=" + object[property]);
 
-            if (object[property] !== null && typeof object[property] == "object")
+            if (object[property] !== null &&
+                typeof object[property] == "object")
             {
                 PersonaSwitcher.dump (object[property], max-1);
             }
         }
         catch (e)
         {
-            PersonaSwitcher.log (e);
+            PersonaSwitcher.logger.log (e);
         }
     }
 }
@@ -505,5 +520,6 @@ PersonaSwitcher.log = function()
         message += arguments[a];
     }
 
-    dump (message + '\n');
+    // dump (message + '\n');
+    PersonaSwitcher.logger.log (message);
 }

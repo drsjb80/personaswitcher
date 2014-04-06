@@ -23,7 +23,7 @@ PersonaSwitcher.XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.on
 PersonaSwitcher.findMods = function (which)
 {
     'use strict';
-    PersonaSwitcher.log (which);
+    PersonaSwitcher.logger.log (which);
     var mods = "";
     var names = ["shift", "control", "alt", "meta"];
 
@@ -35,7 +35,7 @@ PersonaSwitcher.findMods = function (which)
         }
     }
 
-    PersonaSwitcher.log (mods);
+    PersonaSwitcher.logger.log (mods);
     return (mods);
 }
 
@@ -43,10 +43,10 @@ PersonaSwitcher.findMods = function (which)
 PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 {
     'use strict';
-    PersonaSwitcher.log (id);
-    PersonaSwitcher.log (mods);
-    PersonaSwitcher.log (which);
-    PersonaSwitcher.log (command);
+    PersonaSwitcher.logger.log (id);
+    PersonaSwitcher.logger.log (mods);
+    PersonaSwitcher.logger.log (which);
+    PersonaSwitcher.logger.log (command);
 
     var key = doc.createElement ("key");
 
@@ -65,13 +65,13 @@ PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 PersonaSwitcher.setKeyset = function (doc)
 {
     'use strict';
-    PersonaSwitcher.log (doc);
+    PersonaSwitcher.logger.log (doc);
 
     var previous = doc.getElementById ("PersonaSwitcher.defaultPersonaKey");
     var parent = previous.parentNode;
-    PersonaSwitcher.log (parent.id);
+    PersonaSwitcher.logger.log (parent.id);
     var grandParent = parent.parentNode;
-    PersonaSwitcher.log (grandParent.id);
+    PersonaSwitcher.logger.log (grandParent.id);
 
     grandParent.removeChild (parent);
 
@@ -117,7 +117,7 @@ PersonaSwitcher.setKeyset = function (doc)
 PersonaSwitcher.setKeysets = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     var enumerator = PersonaSwitcher.windowMediator.
         getEnumerator ("navigator:browser");
@@ -125,7 +125,7 @@ PersonaSwitcher.setKeysets = function()
     while (enumerator.hasMoreElements())
     {
         var doc = enumerator.getNext().document;
-        PersonaSwitcher.log (doc.id);
+        PersonaSwitcher.logger.log (doc.id);
         PersonaSwitcher.setKeyset (doc);
     }
 }
@@ -144,7 +144,7 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
 PersonaSwitcher.setToolboxMinheights = function()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     var enumerator = PersonaSwitcher.windowMediator.
         getEnumerator ("navigator:browser");
@@ -203,20 +203,20 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
 {
     'use strict';
 
-    PersonaSwitcher.log (menupopup);
+    PersonaSwitcher.logger.log (menupopup);
 
     while (menupopup.hasChildNodes())
     {
-        PersonaSwitcher.log ("removing child");
+        PersonaSwitcher.logger.log ("removing child");
         menupopup.removeChild (menupopup.firstChild);
     }
 
     var arr = PersonaSwitcher.getPersonas();
-    PersonaSwitcher.log (arr.length);
+    PersonaSwitcher.logger.log (arr.length);
 
     if (arr.length === 0)
     {
-        PersonaSwitcher.log ("no themes");
+        PersonaSwitcher.logger.log ("no themes");
 
         /*
         ** get the localized message.
@@ -246,7 +246,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
 
         for (var i = 0; i < arr.length; i++)
         {
-            PersonaSwitcher.log ("adding item number " + i);
+            PersonaSwitcher.logger.log ("adding item number " + i);
 
             item = PersonaSwitcher.createMenuItem (arr[i]);
             menupopup.appendChild (item);
@@ -257,7 +257,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
 PersonaSwitcher.hideSubMenu = function ()
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
         LightweightThemeManager.resetPreview();
@@ -271,26 +271,26 @@ PersonaSwitcher.hideSubMenu = function ()
 PersonaSwitcher.searchForId = function (doc, names, types)
 {
     'use strict';
-    PersonaSwitcher.log (doc);
-    PersonaSwitcher.log (names);
-    PersonaSwitcher.log (types);
+    PersonaSwitcher.logger.log (doc);
+    PersonaSwitcher.logger.log (names);
+    PersonaSwitcher.logger.log (types);
 
     for (var i = 0; i < names.length; i++)
     {
-        PersonaSwitcher.log (names[i]);
+        PersonaSwitcher.logger.log (names[i]);
 
         var element = doc.getElementById (names[i]);
 
-        PersonaSwitcher.log (element);
+        PersonaSwitcher.logger.log (element);
 
         if (element !== null)
         {
-            PersonaSwitcher.log (types[i]);
+            PersonaSwitcher.logger.log (types[i]);
             return (element);
         }
     }
 
-    PersonaSwitcher.log ("couldn't find element");
+    PersonaSwitcher.logger.log ("couldn't find element");
     return (null);
 }
 
@@ -332,8 +332,8 @@ PersonaSwitcher.getToolsMenu = function (doc)
 PersonaSwitcher.removeMenu = function (doc, id)
 {
     'use strict';
-    PersonaSwitcher.log (doc);
-    PersonaSwitcher.log (id);
+    PersonaSwitcher.logger.log (doc);
+    PersonaSwitcher.logger.log (id);
 
     var main;
 
@@ -347,25 +347,25 @@ PersonaSwitcher.removeMenu = function (doc, id)
     }
     else
     {
-        PersonaSwitcher.log ("unknown id");
+        PersonaSwitcher.logger.log ("unknown id");
         return;
     }
 
     if (main === null)
     {
-        PersonaSwitcher.log ("main === null");
+        PersonaSwitcher.logger.log ("main === null");
         return;
     }
 
     var sub = doc.getElementById ("personaswitcher-" + id);
 
-    PersonaSwitcher.log (main.id);
-    PersonaSwitcher.log (sub.id);
+    PersonaSwitcher.logger.log (main.id);
+    PersonaSwitcher.logger.log (sub.id);
 
     if (sub !== null)
         main.removeChild (sub);
     else
-        PersonaSwitcher.log ("sub === null");
+        PersonaSwitcher.logger.log ("sub === null");
 }
 
 /*
@@ -374,7 +374,7 @@ PersonaSwitcher.removeMenu = function (doc, id)
 PersonaSwitcher.removeMenus = function (which)
 {
     'use strict';
-    PersonaSwitcher.log (which);
+    PersonaSwitcher.logger.log (which);
 
     var enumerator = PersonaSwitcher.windowMediator.
         getEnumerator ("navigator:browser");
@@ -382,7 +382,7 @@ PersonaSwitcher.removeMenus = function (which)
     while (enumerator.hasMoreElements())
     {
         var doc = enumerator.getNext().document;
-        PersonaSwitcher.log();
+        PersonaSwitcher.logger.log();
         PersonaSwitcher.removeMenu (doc, which);
     }
 }
@@ -393,21 +393,21 @@ PersonaSwitcher.removeMenus = function (which)
 PersonaSwitcher.createMenuAndPopup = function (doc, menuId, menupopupId)
 {
     'use strict';
-    PersonaSwitcher.log (doc);
-    PersonaSwitcher.log (menuId);
-    PersonaSwitcher.log (menupopupId);
+    PersonaSwitcher.logger.log (doc);
+    PersonaSwitcher.logger.log (menuId);
+    PersonaSwitcher.logger.log (menupopupId);
 
     var menu = doc.getElementById (menuId);
     if (menu)
     {
-        PersonaSwitcher.log ("menu already exists!");
+        PersonaSwitcher.logger.log ("menu already exists!");
         return (null);
     }
 
     var menupopup = doc.getElementById (menupopupId);
     if (menupopup)
     {
-        PersonaSwitcher.log ("menupopup already exists!");
+        PersonaSwitcher.logger.log ("menupopup already exists!");
         return (null);
     }
 
@@ -443,8 +443,8 @@ PersonaSwitcher.createMenuAndPopup = function (doc, menuId, menupopupId)
 PersonaSwitcher.createMenu = function (doc, which)
 {
     'use strict';
-    PersonaSwitcher.log (doc);
-    PersonaSwitcher.log (which);
+    PersonaSwitcher.logger.log (doc);
+    PersonaSwitcher.logger.log (which);
 
     var menuId = "personaswitcher-" + which;
     var menupopupId = "personaswitcher-" + which + "-popup";
@@ -467,7 +467,7 @@ PersonaSwitcher.createMenu = function (doc, which)
     }
     else
     {
-        PersonaSwitcher.log ("unknown menu");
+        PersonaSwitcher.logger.log ("unknown menu");
     }
 }
 
@@ -475,11 +475,11 @@ PersonaSwitcher.createMenu = function (doc, which)
 PersonaSwitcher.createButtonPopup = function (menupopup)
 {
     'use strict';
-    PersonaSwitcher.log();
+    PersonaSwitcher.logger.log();
 
     if (menupopup === null)
     {
-        PersonaSwitcher.log ("menupopup null!");
+        PersonaSwitcher.logger.log ("menupopup null!");
         return;
     }
 
@@ -490,14 +490,14 @@ PersonaSwitcher.createButtonPopup = function (menupopup)
 PersonaSwitcher.buttonPopup = function (event)
 {
     'use strict';
-    PersonaSwitcher.log (event.target.id);
+    PersonaSwitcher.logger.log (event.target.id);
 
     var enumerator = PersonaSwitcher.windowMediator.
         getEnumerator ("navigator:browser");
 
     while (enumerator.hasMoreElements())
     {
-        PersonaSwitcher.log();
+        PersonaSwitcher.logger.log();
 
         var doc = enumerator.getNext().document;
         var menupopup = (doc.getElementById (event.target.id));
@@ -511,7 +511,7 @@ PersonaSwitcher.buttonPopup = function (event)
 PersonaSwitcher.createMenus = function (which)
 {
     'use strict';
-    PersonaSwitcher.log (which);
+    PersonaSwitcher.logger.log (which);
 
     var enumerator = PersonaSwitcher.windowMediator.
         getEnumerator ("navigator:browser");
@@ -519,7 +519,7 @@ PersonaSwitcher.createMenus = function (which)
     while (enumerator.hasMoreElements())
     {
         var doc = enumerator.getNext().document;
-        PersonaSwitcher.log();
+        PersonaSwitcher.logger.log();
         PersonaSwitcher.createMenu (doc, which);
     }
 }
