@@ -6,12 +6,14 @@ var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
 var PersonaSwitcher = new Object();
 
-// PersonaSwitcher.logger =
-//    Components.utils["import"]
-//        ("resource://gre/modules/devtools/Console.jsm", {}).console;
+PersonaSwitcher.consoleLogger =
+    Components.utils["import"]
+        ("resource://gre/modules/devtools/Console.jsm", {}).console;
 
-PersonaSwitcher.logger = new Object();
-PersonaSwitcher.logger.log = function (s) { return; }
+PersonaSwitcher.nullLogger = new Object();
+PersonaSwitcher.nullLogger.log = function (s) { return; }
+
+PersonaSwitcher.logger = null;
 
 PersonaSwitcher.firstTime = true;
 
@@ -65,6 +67,19 @@ PersonaSwitcher.myObserver =
 
         switch (data)
         {
+            case "debug":
+            {
+                if (PersonaSwitcher.prefs.getBoolPref ("debug"))
+                {
+                    PersonaSwitcher.logger = PersonaSwitcher.consoleLogger;
+                }
+                else
+                {
+                    PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
+                }
+
+                PersonaSwitcher.logger.log (PersonaSwitcher.logger);
+            }
             case "toolbox-minheight":
             {
                 PersonaSwitcher.setToolboxMinheights();

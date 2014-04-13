@@ -134,10 +134,19 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
 {
     'use strict';
 
-    var minheight = PersonaSwitcher.prefs.getCharPref ("toolbox-minheight");
+    var minheight =
+        parseInt (PersonaSwitcher.prefs.getCharPref ("toolbox-minheight"));
+    var maxheight =
+        parseInt (PersonaSwitcher.prefs.getCharPref ("toolbox-maxheight"));
 
-    if (minheight === "") return;
+    PersonaSwitcher.logger.log (minheight);
+    PersonaSwitcher.logger.log (maxheight);
 
+    if (isNaN (minheight)) minheight = 0;
+    else if (minheight < 0) minheight = 0;
+    else if (minheight > maxheight) minheight = maxheight;
+
+    // PersonaSwitcher.dump (doc.getElementById ("navigator-toolbox"));
     doc.getElementById ("navigator-toolbox").minHeight = minheight;
 }
 
@@ -528,6 +537,27 @@ PersonaSwitcher.onWindowLoad = function()
 {
     'use strict';
 
+    if (PersonaSwitcher.firstTime)
+    {
+        PersonaSwitcher.firstTime = false;
+
+        if (PersonaSwitcher.prefs.getBoolPref ("debug"))
+        {
+            PersonaSwitcher.logger = PersonaSwitcher.consoleLogger;
+        }
+        else
+        {
+            PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
+        }
+
+        PersonaSwitcher.startTimer();
+
+        if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
+        {
+            PersonaSwitcher.rotate();
+        }
+    }
+
     PersonaSwitcher.setKeyset (this.document);
     PersonaSwitcher.setToolboxMinheight (this.document);
 
@@ -538,19 +568,6 @@ PersonaSwitcher.onWindowLoad = function()
 
     PersonaSwitcher.createButtonPopup
         (document.getElementById ("personaswitcher-addon"));
-
-    if (PersonaSwitcher.firstTime)
-    {
-        PersonaSwitcher.firstTime = false;
-
-        PersonaSwitcher.startTimer();
-        // PersonaSwitcher.migratePrefs();
-
-        if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
-        {
-            PersonaSwitcher.rotate();
-        }
-    }
 }
 
 window.addEventListener ("load", PersonaSwitcher.onWindowLoad, false);

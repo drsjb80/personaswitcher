@@ -4,7 +4,7 @@
     <em:id>drsjb80@gmail.com</em:id>
     <em:type>2</em:type>
     <em:name>Persona Switcher</em:name>
-    <em:version>2.0.1</em:version>
+    <em:version>2.0.2</em:version>
     <em:creator>Steve Beaty</em:creator>
     <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
     <em:contributor>鄭筑云 (Zheng Zhu-Yun)</em:contributor>
@@ -13,7 +13,7 @@
     <em:localized>
       <Description>
         <em:locale>zh-TW</em:locale>
-        <em:description>快速更換面板或切換為預設面板。</em:description>
+        <em:description>讓您以「定時更換、重啟更換、隨機更換、自行切換、瞬間預覽」的方式享受火狐面板，也能瞬間切回預設面板，並有方便的「快捷鍵、附加元件列圖示選單、主功能表選單、工具功能表選單」供快速操作，外加清楚易懂的中文化介面供您使用！！</em:description>
       </Description>
     </em:localized>
     <em:localized>
