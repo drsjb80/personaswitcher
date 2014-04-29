@@ -19,6 +19,12 @@ pref ("extensions.personaswitcher.autoalt", true);
 pref ("extensions.personaswitcher.autometa", false);
 pref ("extensions.personaswitcher.autokey", "A");
 
+pref ("extensions.personaswitcher.activateshift", false);
+pref ("extensions.personaswitcher.activatecontrol", true);
+pref ("extensions.personaswitcher.activatealt", true);
+pref ("extensions.personaswitcher.activatemeta", false);
+pref ("extensions.personaswitcher.activatekey", "P");
+
 pref ("extensions.personaswitcher.auto", false);
 pref ("extensions.personaswitcher.autominutes", 30);
 

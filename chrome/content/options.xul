@@ -71,6 +71,27 @@
                 type="string"/>
 
             <preference
+                id="activate-key-shift"
+                name="extensions.personaswitcher.activateshift"
+                type="bool"/>
+            <preference
+                id="activate-key-control"
+                name="extensions.personaswitcher.activatecontrol"
+                type="bool"/>
+            <preference
+                id="activate-key-alt"
+                name="extensions.personaswitcher.activatealt"
+                type="bool"/>
+            <preference
+                id="activate-key-meta"
+                name="extensions.personaswitcher.activatemeta"
+                type="bool"/>
+            <preference
+                id="activate-key"
+                name="extensions.personaswitcher.activatekey"
+                type="string"/>
+
+            <preference
                 id="auto"
                 name="extensions.personaswitcher.auto"
                 type="bool"/>
@@ -197,6 +218,32 @@
                         id="auto-key"
                         size="3"
                         preference="auto-key"/>
+                </hbox>
+                <hbox>
+                    <hbox flex="1" pack="end">
+                        <label value="&options.kbshortcuts.activate;"/>
+                    </hbox>
+                    <checkbox
+                        id="activate-key-shift"
+                        preference="activate-key-shift"
+                        label="&options.kbshortcuts.shift;"/>
+                    <checkbox
+                        id="activate-key-control"
+                        preference="activate-key-control"
+                        label="&options.kbshortcuts.control;"/>
+                    <checkbox
+                        id="activate-key-alt"
+                        preference="activate-key-alt"
+                        label="&options.kbshortcuts.alt;"/>
+                    <checkbox
+                        id="activate-key-meta"
+                        preference="activate-key-meta"
+                        label="&options.kbshortcuts.meta;"/>
+                    <label>&options.kbshortcuts.key;</label>
+                    <textbox
+                        id="activate-key"
+                        size="3"
+                        preference="activate-key"/>
                 </hbox>
             </groupbox>
 

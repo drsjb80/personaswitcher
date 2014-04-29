@@ -130,6 +130,8 @@ PersonaSwitcher.myObserver =
             case "rotmeta": case "rotkey":
             case "autoshift": case "autoalt": case "autocontrol":
             case "autometa": case "autokey":
+            case "activateshift": case "activatealt": case "activatecontrol":
+            case "activatemeta": case "activatekey":
             {
                 PersonaSwitcher.setKeysets();
                 break;

@@ -39,6 +39,7 @@ PersonaSwitcher.findMods = function (which)
     return (mods);
 }
 
+//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts
 // http://unixpapa.com/js/key.html
 PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 {
@@ -67,14 +68,18 @@ PersonaSwitcher.setKeyset = function (doc)
     'use strict';
     PersonaSwitcher.logger.log (doc);
 
-    var previous = doc.getElementById ("PersonaSwitcher.defaultPersonaKey");
-    var parent = previous.parentNode;
+    var existing = doc.getElementById ("PersonaSwitcher.defaultPersonaKey");
+
+    var parent = existing.parentNode;
+    // parent == keyset
     PersonaSwitcher.logger.log (parent.id);
+
     var grandParent = parent.parentNode;
+    // grandParent == overlay
     PersonaSwitcher.logger.log (grandParent.id);
 
+    // remove the existing keyset and make a brand new one
     grandParent.removeChild (parent);
-
     var keyset = doc.createElement ("keyset");
 
     var keys =
@@ -99,6 +104,13 @@ PersonaSwitcher.setKeyset = function (doc)
             PersonaSwitcher.prefs.getCharPref ("autokey").
                 toUpperCase().charAt (0),
             "PersonaSwitcher.toggleAuto();"
+        ],
+        [
+            "PersonaSwitcher.activatePersonaKey",
+            PersonaSwitcher.findMods ("activate"),
+            PersonaSwitcher.prefs.getCharPref ("activatekey").
+                toUpperCase().charAt (0),
+            "PersonaSwitcher.activateMenu();"
         ]
     ];
 
@@ -111,6 +123,33 @@ PersonaSwitcher.setKeyset = function (doc)
     }
 
     grandParent.appendChild (keyset);
+}
+
+PersonaSwitcher.activateMenu = function()
+{
+    'use strict';
+    PersonaSwitcher.logger.log();
+
+    if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
+    {
+        var menu = document.getElementById ("personaswitcher-main-menubar");
+        PersonaSwitcher.logger.log (menu);
+
+        if (menu) menu.open = true;
+    }
+    else if (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
+    {
+        var toolsMenu = PersonaSwitcher.getToolsMenu (document);
+        PersonaSwitcher.logger.log (toolsMenu);
+        var subMenu = document.getElementById ("personaswitcher-tools-submenu");
+        PersonaSwitcher.logger.log (subMenu);
+
+        if (toolsMenu && subMenu)
+        {
+            toolsMenu.open = true;
+            subMenu.open = true;
+        }
+    }
 }
 
 // called from PersonaSwitcher.jsm
@@ -397,7 +436,9 @@ PersonaSwitcher.removeMenus = function (which)
 }
 
 /*
-** create a specific menu
+** create a specific menu in a doc, called with either
+**  "personaswitcher-tools-submenu" and "personaswitcher-tools-submenu-popup" or
+**  "personaswitcher-main-menubar" and "personaswitcher-main-menubar-popup"
 */
 PersonaSwitcher.createMenuAndPopup = function (doc, menuId, menupopupId)
 {

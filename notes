@@ -33,3 +33,7 @@ function myDump(aMessage) {
      .getService(Components.interfaces.nsIConsoleService);
   consoleService.logStringMessage("My extension: " + aMessage);
 }
+
+http://www.thethinkingatheist.com/forum/Thread-Which-Internet-Browser-Do-You-Mostly-Use?pid=94252#pid94252
+http://techsalsa.com/change-firefox-themes-without-restarting-browser/
+http://browser.iyogi.com/news/mozilla-firefox-persona-switcher.html

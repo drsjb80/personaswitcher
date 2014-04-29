@@ -5,6 +5,7 @@
 <!ENTITY options.kbshortcuts.rotate "Rotate persona key combination:">
 <!ENTITY options.kbshortcuts.toggle "Toggle auto-switch key combination:">
 <!ENTITY options.kbshortcuts.auto "Automatic rotation">
+<!ENTITY options.kbshortcuts.activate "Activate menu (doesn't work on Macs):">
 <!ENTITY options.kbshortcuts.key "Key">
 <!ENTITY options.kbshortcuts.shift "Shift">
 <!ENTITY options.kbshortcuts.control "Control">
