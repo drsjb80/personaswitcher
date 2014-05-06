@@ -1,0 +1,30 @@
+<!ENTITY options.title "Persona Switcher Einstellungen">
+<!ENTITY options.pane1 "Persona Switcher Einstellungen">
+<!ENTITY options.kbshortcuts.title "Tastenkürzel">
+<!ENTITY options.kbshortcuts.default "Standard Persona Tastenkombination:">
+<!ENTITY options.kbshortcuts.rotate "Wechselnde Persona Tastenkombination:">
+<!ENTITY options.kbshortcuts.toggle "Zum Umschalten auf automatischen Wechsel:">
+<!ENTITY options.kbshortcuts.auto "automatischer Wechsel">
+
+<!ENTITY options.kbshortcuts.menushortcuts "Menu shortcut keys (Not on OS X)">
+<!ENTITY options.kbshortcuts.access "Main menu shortcut key:">
+<!ENTITY options.kbshortcuts.activate "PSwitcher menu shortcut key:">
+
+<!ENTITY options.kbshortcuts.key "Taste">
+<!ENTITY options.kbshortcuts.shift "Shift">
+<!ENTITY options.kbshortcuts.control "Control">
+<!ENTITY options.kbshortcuts.alt "Alt">
+<!ENTITY options.kbshortcuts.meta "Meta">
+
+<!ENTITY options.options.title "Optionen">
+<!ENTITY options.autoevery.switch "Wechsel alle">
+<!ENTITY options.autoevery.minutes "Minuten.">
+<!ENTITY options.random.desc "Wechsel zu einer zufälligen Persona anstelle des Letzten verwendeten.">
+<!ENTITY options.startup-switch.desc "Wechsel beim Start.">
+<!ENTITY options.toolbox-minheight.desc "Minimale Höhe der oberen Toolbox (in Firefox und SeaMonkey):">
+<!ENTITY options.preview.desc "Personavorschau bei Menüauswahl.">
+<!ENTITY options.notification-workaround.desc "Entferne Personas Plus Benachrichtigungen.">
+
+<!ENTITY options.menus.title "Persona Menü Orte">
+<!ENTITY options.tools-submenu "Tools.">
+<!ENTITY options.main-menubar "(Haupt)menüleiste.">

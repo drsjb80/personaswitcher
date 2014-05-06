@@ -14,8 +14,8 @@ PersonaSwitcher.nullLogger = new Object();
 PersonaSwitcher.nullLogger.log = function (s) { return; }
 
 PersonaSwitcher.logger = null;
-
 PersonaSwitcher.firstTime = true;
+PersonaSwitcher.activeWindow = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -154,7 +154,6 @@ PersonaSwitcher.startTimer = function()
 {
     'use strict';
 
-    PersonaSwitcher.logger.log (PersonaSwitcher.prefs.getBoolPref ("auto"));
     if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
         return;
 
@@ -227,6 +226,44 @@ PersonaSwitcher.toggleAuto = function()
     }
 }
 
+// https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
+PersonaSwitcher.removeNotifications = function()
+{
+    let enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+
+    while (enumerator.hasMoreElements())
+    {
+        let win = enumerator.getNext();
+
+        let notificationBox = null;
+
+        let name = PersonaSwitcher.XULAppInfo.name;
+        if (name == "Firefox" || name == "SeaMonkey")
+        {
+            if (typeof (win.getBrowser) != "function")
+                continue;
+
+            notificationBox = win.getBrowser().getNotificationBox();
+        }
+        else if (name == "Thunderbird")
+        {
+            notificationBox = 
+                win.document.getElementById ("mail-notification-box");
+        }
+
+        if (notificationBox !== null)
+        {
+            let notification = notificationBox.getNotificationWithValue
+                ("lwtheme-install-notification");
+
+            if (notification !== null)
+            {
+                notificationBox.removeNotification (notification);
+            }
+        }
+    }
+}
+
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
@@ -280,48 +317,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
     {
-        let name = PersonaSwitcher.XULAppInfo.name;
-        PersonaSwitcher.logger.log (name);
-
-        // go through all windows looking for P+ notifications
-        let enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-        while (enumerator.hasMoreElements())
-        {
-            let win = enumerator.getNext();
-            PersonaSwitcher.logger.log (win);
-
-// https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
-
-            let notificationBox = null;
-            if (name == "Firefox" || name == "SeaMonkey")
-            {
-                if (typeof (win.getBrowser) != "function")
-                    continue;
-
-                notificationBox = win.getBrowser().getNotificationBox();
-            }
-            else if (name == "Thunderbird")
-            {
-                notificationBox = 
-                    win.document.getElementById ("mail-notification-box");
-            }
-
-            PersonaSwitcher.logger.log (notificationBox);
-
-            if (notificationBox !== null)
-            {
-                let notification = notificationBox.getNotificationWithValue
-                    ("lwtheme-install-notification");
-
-                PersonaSwitcher.logger.log (notification);
-
-                if (notification !== null)
-                {
-                    notificationBox.removeNotification (notification);
-                }
-            }
-        }
+        PersonaSwitcher.removeNotifications();
     }
 }
 

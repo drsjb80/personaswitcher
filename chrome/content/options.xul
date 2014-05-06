@@ -92,6 +92,11 @@
                 type="string"/>
 
             <preference
+                id="access-key"
+                name="extensions.personaswitcher.accesskey"
+                type="string"/>
+
+            <preference
                 id="auto"
                 name="extensions.personaswitcher.auto"
                 type="bool"/>
@@ -138,191 +143,204 @@
         </preferences>
 
         <!-- for each of the id= from above, have a preference= below -->
-        <vbox>
-            <groupbox>
-                <caption label="&options.kbshortcuts.title;"/>
-                <hbox>
-                    <hbox flex="1" pack="end">
-                        <label value="&options.kbshortcuts.default;"/>
-                    </hbox>
-                    <checkbox
-                        id="default-key-shift"
-                        preference="default-key-shift"
-                        label="&options.kbshortcuts.shift;"/>
-                    <checkbox
-                        id="default-key-control"
-                        preference="default-key-control"
-                        label="&options.kbshortcuts.control;"/>
-                    <checkbox
-                        id="default-key-alt"
-                        preference="default-key-alt"
-                        label="&options.kbshortcuts.alt;"/>
-                    <checkbox
-                        id="default-key-meta"
-                        preference="default-key-meta"
-                        label="&options.kbshortcuts.meta;"/>
-                    <label>&options.kbshortcuts.key;</label>
-                    <textbox
-                        id="default-key"
-                        size="3"
-                        preference="default-key"/>
+        <groupbox>
+            <caption label="&options.kbshortcuts.title;"/>
+            <hbox align="center">
+                <hbox flex="1" pack="end">
+                    <label value="&options.kbshortcuts.default;"/>
                 </hbox>
-                <hbox>
-                    <hbox flex="1" pack="end">
-                        <label value="&options.kbshortcuts.rotate;"/>
-                    </hbox>
-                    <checkbox
-                        id="rotate-key-shift"
-                        preference="rotate-key-shift"
-                        label="&options.kbshortcuts.shift;"/>
-                    <checkbox
-                        id="rotate-key-control"
-                        preference="rotate-key-control"
-                        label="&options.kbshortcuts.control;"/>
-                    <checkbox
-                        id="rotate-key-alt"
-                        preference="rotate-key-alt"
-                        label="&options.kbshortcuts.alt;"/>
-                    <checkbox
-                        id="rotate-key-meta"
-                        preference="rotate-key-meta"
-                        label="&options.kbshortcuts.meta;"/>
-                    <label>&options.kbshortcuts.key;</label>
-                    <textbox
-                        id="rotate-key"
-                        size="3"
-                        preference="rotate-key"/>
-                </hbox>
-                <hbox>
-                    <hbox flex="1" pack="end">
-                        <label value="&options.kbshortcuts.toggle;"/>
-                    </hbox>
-                    <checkbox
-                        id="auto-key-shift"
-                        preference="auto-key-shift"
-                        label="&options.kbshortcuts.shift;"/>
-                    <checkbox
-                        id="auto-key-control"
-                        preference="auto-key-control"
-                        label="&options.kbshortcuts.control;"/>
-                    <checkbox
-                        id="auto-key-alt"
-                        preference="auto-key-alt"
-                        label="&options.kbshortcuts.alt;"/>
-                    <checkbox
-                        id="auto-key-meta"
-                        preference="auto-key-meta"
-                        label="&options.kbshortcuts.meta;"/>
-                    <label>&options.kbshortcuts.key;</label>
-                    <textbox
-                        id="auto-key"
-                        size="3"
-                        preference="auto-key"/>
-                </hbox>
-                <hbox>
-                    <hbox flex="1" pack="end">
-                        <label value="&options.kbshortcuts.activate;"/>
-                    </hbox>
-                    <checkbox
-                        id="activate-key-shift"
-                        preference="activate-key-shift"
-                        label="&options.kbshortcuts.shift;"/>
-                    <checkbox
-                        id="activate-key-control"
-                        preference="activate-key-control"
-                        label="&options.kbshortcuts.control;"/>
-                    <checkbox
-                        id="activate-key-alt"
-                        preference="activate-key-alt"
-                        label="&options.kbshortcuts.alt;"/>
-                    <checkbox
-                        id="activate-key-meta"
-                        preference="activate-key-meta"
-                        label="&options.kbshortcuts.meta;"/>
-                    <label>&options.kbshortcuts.key;</label>
-                    <textbox
-                        id="activate-key"
-                        size="3"
-                        preference="activate-key"/>
-                </hbox>
-            </groupbox>
+                <checkbox
+                    id="default-key-shift"
+                    preference="default-key-shift"
+                    label="&options.kbshortcuts.shift;"/>
+                <checkbox
+                    id="default-key-control"
+                    preference="default-key-control"
+                    label="&options.kbshortcuts.control;"/>
+                <checkbox
+                    id="default-key-alt"
+                    preference="default-key-alt"
+                    label="&options.kbshortcuts.alt;"/>
+                <checkbox
+                    id="default-key-meta"
+                    preference="default-key-meta"
+                    label="&options.kbshortcuts.meta;"/>
+                <label>&options.kbshortcuts.key;</label>
+                <textbox
+                    id="default-key"
+                    size="1"
+                    preference="default-key"/>
+            </hbox>
 
-            <groupbox>
-                <caption label="&options.options.title;"/>
-                <hbox>
-                    <checkbox
-                        id="auto"
-                        preference="auto"
-                        label="&options.autoevery.switch;"
+            <hbox align="center">
+                <hbox flex="1" pack="end">
+                    <label value="&options.kbshortcuts.rotate;"/>
+                </hbox>
+                <checkbox
+                    id="rotate-key-shift"
+                    preference="rotate-key-shift"
+                    label="&options.kbshortcuts.shift;"/>
+                <checkbox
+                    id="rotate-key-control"
+                    preference="rotate-key-control"
+                    label="&options.kbshortcuts.control;"/>
+                <checkbox
+                    id="rotate-key-alt"
+                    preference="rotate-key-alt"
+                    label="&options.kbshortcuts.alt;"/>
+                <checkbox
+                    id="rotate-key-meta"
+                    preference="rotate-key-meta"
+                    label="&options.kbshortcuts.meta;"/>
+                <label>&options.kbshortcuts.key;</label>
+                <textbox
+                    id="rotate-key"
+                    size="1"
+                    preference="rotate-key"/>
+            </hbox>
+
+            <hbox align="center">
+                <hbox flex="1" pack="end">
+                    <label value="&options.kbshortcuts.toggle;"/>
+                </hbox>
+                <checkbox
+                    id="auto-key-shift"
+                    preference="auto-key-shift"
+                    label="&options.kbshortcuts.shift;"/>
+                <checkbox
+                    id="auto-key-control"
+                    preference="auto-key-control"
+                    label="&options.kbshortcuts.control;"/>
+                <checkbox
+                    id="auto-key-alt"
+                    preference="auto-key-alt"
+                    label="&options.kbshortcuts.alt;"/>
+                <checkbox
+                    id="auto-key-meta"
+                    preference="auto-key-meta"
+                    label="&options.kbshortcuts.meta;"/>
+                <label>&options.kbshortcuts.key;</label>
+                <textbox
+                    id="auto-key"
+                    size="1"
+                    preference="auto-key"/>
+            </hbox>
+
+        </groupbox>
+
+        <groupbox>
+            <caption label="&options.kbshortcuts.menushortcuts;"/>
+            <hbox align="center">
+                <label value="&options.kbshortcuts.access;"/>
+                <textbox
+                    id="access-key"
+                    size="1"
+                    preference="access-key"/>
+            </hbox>
+
+            <hbox align="center">
+                <label value="&options.kbshortcuts.activate;"/>
+                <checkbox
+                    id="activate-key-shift"
+                    preference="activate-key-shift"
+                    label="&options.kbshortcuts.shift;"/>
+                <checkbox
+                    id="activate-key-control"
+                    preference="activate-key-control"
+                    label="&options.kbshortcuts.control;"/>
+                <checkbox
+                    id="activate-key-alt"
+                    preference="activate-key-alt"
+                    label="&options.kbshortcuts.alt;"/>
+                <checkbox
+                    id="activate-key-meta"
+                    preference="activate-key-meta"
+                    label="&options.kbshortcuts.meta;"/>
+                <label>&options.kbshortcuts.key;</label>
+                <textbox
+                    id="activate-key"
+                    size="1"
+                    preference="activate-key"/>
+            </hbox>
+
+        </groupbox>
+
+        <groupbox>
+            <caption label="&options.options.title;"/>
+            <hbox align="center">
+                <checkbox
+                    id="auto"
+                    preference="auto"
+                    label="&options.autoevery.switch;"
+                />
+                <textbox
+                    size="3"
+                    preference="auto-minutes"
+                />
+                <label value="&options.autoevery.minutes;"/>
+            </hbox>
+
+            <hbox>
+                <checkbox
+                    id="random"
+                    preference="random"
+                    label="&options.random.desc;"
+                />
+            </hbox>
+
+            <hbox>
+                <checkbox
+                    id="startup-switch"
+                    preference="startup-switch"
+                    label="&options.startup-switch.desc;"
                     />
-                    <textbox
-                        size="3"
-                        preference="auto-minutes"
-                    />
-                    <label value="&options.autoevery.minutes;"/>
-                </hbox>
+            </hbox>
 
-                <hbox>
-                    <checkbox
-                        id="random"
-                        preference="random"
-                        label="&options.random.desc;"
-                    />
-                </hbox>
+            <hbox align="center">
+                <label value="&options.toolbox-minheight.desc;"/>
+                <textbox
+                    size="3"
+                    id="toolbox-minheight"
+                    preference="toolbox-minheight"
+                />
+            </hbox>
 
-                <hbox>
-                    <checkbox
-                        id="startup-switch"
-                        preference="startup-switch"
-                        label="&options.startup-switch.desc;"
-                        />
-                </hbox>
+            <hbox>
+                <checkbox
+                    id="preview"
+                    preference="preview"
+                    label="&options.preview.desc;"
+                />
+            </hbox>
 
-                <hbox>
-                    <label value="&options.toolbox-minheight.desc;"/>
-                    <textbox
-                        size="3"
-                        id="toolbox-minheight"
-                        preference="toolbox-minheight"
-                    />
-                </hbox>
+            <hbox>
+                <checkbox
+                    id="notification-workaround"
+                    preference="notification-workaround"
+                    label="&options.notification-workaround.desc;"
+                />
+            </hbox>
 
-                <hbox>
-                    <checkbox
-                        id="preview"
-                        preference="preview"
-                        label="&options.preview.desc;"
-                    />
-                </hbox>
+        </groupbox>
 
-                <hbox>
-                    <checkbox
-                        id="notification-workaround"
-                        preference="notification-workaround"
-                        label="&options.notification-workaround.desc;"
-                    />
-                </hbox>
+        <groupbox>
+            <caption label="&options.menus.title;"/>
+            <hbox>
+                <checkbox
+                    id="tools-submenu"
+                    preference="tools-submenu"
+                    label="&options.tools-submenu;"
+                />
+            </hbox>
 
-            </groupbox>
+            <hbox>
+                <checkbox
+                    id="main-menubar"
+                    preference="main-menubar"
+                    label="&options.main-menubar;"
+                />
+            </hbox>
 
-            <groupbox>
-                <caption label="&options.menus.title;"/>
-                <hbox>
-                    <checkbox
-                        id="tools-submenu"
-                        preference="tools-submenu"
-                        label="&options.tools-submenu;"
-                    />
-                </hbox>
-                <hbox>
-                    <checkbox
-                        id="main-menubar"
-                        preference="main-menubar"
-                        label="&options.main-menubar;"
-                    />
-                </hbox>
-            </groupbox>
-
-        </vbox>
+        </groupbox>
     </prefpane>
 </prefwindow>

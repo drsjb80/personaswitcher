@@ -16,11 +16,14 @@ hg clone http://hg.mozilla.org/mozilla-central/file/81dd97739fa1/toolkit/mozapps
 ----
 git status
 git diff
+git diff -a v2.0.1
 git commit -a
 git push
 ----
 cp personaswitcher.xpi personaswitcher-$PSVERSION.xpi
 git add personaswitcher-$PSVERSION.xpi
+git push
+----
 git tag -a v$PSVERSION -m 'Version $PSVERSION'
 git commit -a
 git push origin v$PSVERSION
