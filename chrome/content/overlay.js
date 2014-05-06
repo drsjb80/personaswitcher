@@ -150,7 +150,7 @@ PersonaSwitcher.activateMenu = function()
 
     if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
     {
-        let menu = PersonaSwitcher.getMainMenu (doc);
+        let menu = doc.getElementById ("personaswitcher-main-menubar");
 
         menu.open = true;
     }
