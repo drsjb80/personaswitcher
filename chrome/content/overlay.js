@@ -386,25 +386,25 @@ PersonaSwitcher.getToolsMenu = function (doc)
 ** remove a particular menu, if it exists, from either the main menubar or
 ** the tools submenu
 */
-PersonaSwitcher.removeMenu = function (doc, id)
+PersonaSwitcher.removeMenu = function (doc, which)
 {
     'use strict';
     PersonaSwitcher.logger.log (doc);
-    PersonaSwitcher.logger.log (id);
+    PersonaSwitcher.logger.log (which);
 
     var main;
 
-    if (id == "tools-submenu")
+    if (which == "tools-submenu")
     {
         main = PersonaSwitcher.getToolsMenuPopup (doc);
     }
-    else if (id == "main-menubar")
+    else if (which == "main-menubar")
     {
         main = PersonaSwitcher.getMainMenu (doc);
     }
     else
     {
-        PersonaSwitcher.logger.log ("unknown id");
+        PersonaSwitcher.logger.log ("unknown menu");
         return;
     }
 
@@ -414,15 +414,19 @@ PersonaSwitcher.removeMenu = function (doc, id)
         return;
     }
 
-    var sub = doc.getElementById ("personaswitcher-" + id);
+    var sub = doc.getElementById ("personaswitcher-" + which);
 
     PersonaSwitcher.logger.log (main.id);
     PersonaSwitcher.logger.log (sub.id);
 
     if (sub !== null)
+    {
         main.removeChild (sub);
+    }
     else
+    {
         PersonaSwitcher.logger.log ("sub === null");
+    }
 }
 
 /*
@@ -478,7 +482,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
     menu.setAttribute ("id", menuId);
 
     let accesskey = PersonaSwitcher.prefs.getCharPref ("accesskey");
-    if (accesskey != "")
+    if (which == "main-menubar" && accesskey != "")
     {
         menu.setAttribute ("accesskey", accesskey.toUpperCase().charAt (0));
     }

@@ -136,6 +136,11 @@ PersonaSwitcher.myObserver =
                 PersonaSwitcher.setKeysets();
                 break;
             }
+            case "accesskey":
+            {
+                PersonaSwitcher.removeMenus ("main-menubar");
+                PersonaSwitcher.createMenus ("main-menubar");
+            }
             default:
             {
                 PersonaSwitcher.logger.log (data);
