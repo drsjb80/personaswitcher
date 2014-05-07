@@ -5,6 +5,11 @@
 <!ENTITY options.kbshortcuts.rotate "切換至其他面板">
 <!ENTITY options.kbshortcuts.toggle "切換成自動輪換">
 <!ENTITY options.kbshortcuts.auto "Automatic rotation">
+
+<!ENTITY options.kbshortcuts.menushortcuts "「面板」選單快捷鍵（於 OS X 無效）">
+<!ENTITY options.kbshortcuts.access "第一種快捷鍵：　Alt +">
+<!ENTITY options.kbshortcuts.activate "第二種快捷鍵：">
+
 <!ENTITY options.kbshortcuts.key "按鍵">
 <!ENTITY options.kbshortcuts.shift "Shift">
 <!ENTITY options.kbshortcuts.control "Control">
@@ -20,6 +25,6 @@
 <!ENTITY options.preview.desc "滑鼠經過選單選項時預覽。">
 <!ENTITY options.notification-workaround.desc "隱藏 Personas Plus 在面板變更時顯示的提示。">
 
-<!ENTITY options.menus.title "將「Persona Switcher 選單」顯示於">
-<!ENTITY options.tools-submenu "選單列→工具">
-<!ENTITY options.main-menubar "選單列">
+<!ENTITY options.menus.title "將「面板」選單顯示於（至少勾一項才能以快捷鍵呼叫「面板」選單）">
+<!ENTITY options.tools-submenu "選單列→工具　（僅適用第二種快捷鍵）">
+<!ENTITY options.main-menubar "選單列　　　　（適用一、二種快捷鍵）">

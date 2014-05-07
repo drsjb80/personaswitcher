@@ -71,14 +71,12 @@ PersonaSwitcher.myObserver =
             {
                 if (PersonaSwitcher.prefs.getBoolPref ("debug"))
                 {
-                    PersonaSwitcher.logger = PersonaSwitcher.consoleLogger;
+                    PersonaSwitcher.logger.log = PersonaSwitcher.consoleLogger;
                 }
                 else
                 {
-                    PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
+                    PersonaSwitcher.logger.log = PersonaSwitcher.nullLogger;
                 }
-
-                PersonaSwitcher.logger.log (PersonaSwitcher.logger);
             }
             case "toolbox-minheight":
             {
@@ -98,11 +96,12 @@ PersonaSwitcher.myObserver =
             {
                 if (PersonaSwitcher.prefs.getBoolPref ("auto"))
                 {
-                    PersonaSwitcher.autoOn();
+                    PersonaSwitcher.startTimer();
+                    PersonaSwitcher.rotate();
                 }
                 else
                 {
-                    PersonaSwitcher.autoOff();
+                    PersonaSwitcher.stopTimer();
                 }
                 break;
             }
@@ -138,8 +137,11 @@ PersonaSwitcher.myObserver =
             }
             case "accesskey":
             {
-                PersonaSwitcher.removeMenus ("main-menubar");
-                PersonaSwitcher.createMenus ("main-menubar");
+                if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
+                {
+                    PersonaSwitcher.removeMenus ("main-menubar");
+                    PersonaSwitcher.createMenus ("main-menubar");
+                }
             }
             default:
             {
@@ -187,62 +189,35 @@ PersonaSwitcher.stopTimer = function()
     PersonaSwitcher.timer.cancel();
 }
 
-PersonaSwitcher.autoOff = function()
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    // if we're coming here through the keyboard shortcut...
-    if (PersonaSwitcher.prefs.getBoolPref ("auto"))
-    {
-        PersonaSwitcher.prefs.setBoolPref ("auto", false);
-    }
-
-    PersonaSwitcher.stopTimer();
-}
-
-PersonaSwitcher.autoOn = function()
-{
-    'use strict';
-    PersonaSwitcher.logger.log ();
-
-    // if we're coming here through the keyboard shortcut...
-    if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
-    {
-        PersonaSwitcher.prefs.setBoolPref ("auto", true);
-    }
-
-    PersonaSwitcher.startTimer();
-    PersonaSwitcher.rotate();
-}
-
 PersonaSwitcher.toggleAuto = function()
 {
     'use strict';
     PersonaSwitcher.logger.log();
 
+    /*
+    ** just set the pref, the prefs observer does the work.
+    */
     if (PersonaSwitcher.prefs.getBoolPref ("auto"))
     {
-        PersonaSwitcher.autoOff();
+        PersonaSwitcher.prefs.setBoolPref ("auto", false);
     }
     else
     {
-        PersonaSwitcher.autoOn();
+        PersonaSwitcher.prefs.setBoolPref ("auto", true);
     }
 }
 
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
 PersonaSwitcher.removeNotifications = function()
 {
-    let enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
     while (enumerator.hasMoreElements())
     {
-        let win = enumerator.getNext();
+        var win = enumerator.getNext();
+        var notificationBox = null;
+        var name = PersonaSwitcher.XULAppInfo.name;
 
-        let notificationBox = null;
-
-        let name = PersonaSwitcher.XULAppInfo.name;
         if (name == "Firefox" || name == "SeaMonkey")
         {
             if (typeof (win.getBrowser) != "function")
@@ -258,7 +233,7 @@ PersonaSwitcher.removeNotifications = function()
 
         if (notificationBox !== null)
         {
-            let notification = notificationBox.getNotificationWithValue
+            var notification = notificationBox.getNotificationWithValue
                 ("lwtheme-install-notification");
 
             if (notification !== null)
@@ -431,7 +406,7 @@ PersonaSwitcher.setDefault = function()
     PersonaSwitcher.logger.log();
 
     PersonaSwitcher.switchTo (null);
-    PersonaSwitcher.autoOff();
+    PersonaSwitcher.stopTimer();
 }
 
 PersonaSwitcher.onMenuItemCommand = function (which)

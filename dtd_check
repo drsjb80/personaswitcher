@@ -1,0 +1,19 @@
+#! /bin/bash
+
+for i in en-US de zh-TW
+do
+    for j in chrome/locale/$i/*.dtd
+    do
+        cut -d ' ' -f 2 < $j > /tmp/$i${j##*/}
+    done
+done
+
+for i in de zh-TW
+do
+    for j in /tmp/$i*.dtd
+    do
+        echo "---- $j ----"
+        diff ${j/$i/en-US} $j
+    done
+done
+    

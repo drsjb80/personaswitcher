@@ -5,9 +5,6 @@
 ----
 sh -x make
 ----
-vi chrome/content/options.xul defaults/preferences/prefs.js chrome/locale/en-US/options.dtd chrome/locale/zh-TW/options.dtd
-vi chrome/locale/en-US/personaswitcher.properties
-----
 vi install.rdf chrome/content/about.xul # version changes
 ----
 cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
