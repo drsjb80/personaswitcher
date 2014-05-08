@@ -1,7 +1,6 @@
 rm personaswitcher.xpi
 
 zip personaswitcher.xpi \
-    make \
     install.rdf \
     chrome.manifest \
     chrome/content/about.xul \

@@ -177,8 +177,7 @@ PersonaSwitcher.setKeysets = function()
     'use strict';
     PersonaSwitcher.logger.log();
 
-    var enumerator = PersonaSwitcher.windowMediator.
-        getEnumerator ("navigator:browser");
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
     while (enumerator.hasMoreElements())
     {
@@ -190,6 +189,9 @@ PersonaSwitcher.setKeysets = function()
 PersonaSwitcher.setToolboxMinheight = function (doc)
 {
     'use strict';
+    PersonaSwitcher.logger.log();
+
+    if (PersonaSwitcher.applicationName() == "Thunderbird") return;
 
     var minheight =
         parseInt (PersonaSwitcher.prefs.getCharPref ("toolbox-minheight"));
@@ -211,8 +213,9 @@ PersonaSwitcher.setToolboxMinheights = function()
     'use strict';
     PersonaSwitcher.logger.log();
 
-    var enumerator = PersonaSwitcher.windowMediator.
-        getEnumerator ("navigator:browser");
+    if (PersonaSwitcher.applicationName() == "Thunderbird") return;
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
     while (enumerator.hasMoreElements())
     {
@@ -321,58 +324,55 @@ PersonaSwitcher.hideSubMenu = function ()
 }
 
 /*
-** search for the IDs in names in the document, return the related member
-** in types if found. helps find the differences between firefox and
-** thunderbird.
-*/
-PersonaSwitcher.searchForId = function (doc, names, types)
-{
-    'use strict';
-
-    for (var i = 0; i < names.length; i++)
-    {
-        var element = doc.getElementById (names[i]);
-
-        if (element !== null)
-        {
-            PersonaSwitcher.logger.log (types[i]);
-            return (element);
-        }
-    }
-
-    PersonaSwitcher.logger.log ("couldn't find element");
-    return (null);
-}
-
-/*
 ** the next three functions find the correct name for various elements in
 ** firefox and thunderbird.
 */
 PersonaSwitcher.getToolsMenuPopup = function (doc)
 {
     'use strict';
-    var names = new Array ("menu_ToolsPopup", "taskPopup");
-    var types = new Array ("firefox", "thunderbird");
 
-    return (PersonaSwitcher.searchForId (doc, names, types));
+    var mapping =
+    {
+        Firefox: "menu_ToolsPopup",
+        SeaMonkey: "taskPopup",
+        Thunderbird: "taskPopup"
+    };
+
+    PersonaSwitcher.logger.log (PersonaSwitcher.applicationName());
+    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.applicationName()]);
+    return (doc.getElementById (mapping[PersonaSwitcher.applicationName()]));
 }
 
 PersonaSwitcher.getMainMenu = function (doc)
 {
     'use strict';
-    var names = new Array ("main-menubar", "mail-menubar");
-    var types = new Array ("firefox", "thunderbird");
 
-    return (PersonaSwitcher.searchForId (doc, names, types));
+    var mapping = 
+    {
+        Firefox: "main-menubar",
+        SeaMonkey: "main-menubar",
+        Thunderbird: "mail-menubar"
+    };
+
+    PersonaSwitcher.logger.log (PersonaSwitcher.applicationName());
+    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.applicationName()]);
+    return (doc.getElementById (mapping[PersonaSwitcher.applicationName()]));
 }
 
 PersonaSwitcher.getToolsMenu = function (doc)
 {
     'use strict';
-    var names = new Array ("tools-menu", "tasksMenu");
-    var types = new Array ("firefox", "thunderbird");
 
-    return (PersonaSwitcher.searchForId (doc, names, types));
+    var mapping = 
+    {
+        Firefox: "tools-menu",
+        SeaMonkey: "tasksMenu",
+        Thunderbird: "tasksMenu"
+    };
+
+    PersonaSwitcher.logger.log (PersonaSwitcher.applicationName());
+    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.applicationName()]);
+    return (doc.getElementById (mapping[PersonaSwitcher.applicationName()]));
 }
 
 /*
@@ -430,8 +430,7 @@ PersonaSwitcher.removeMenus = function (which)
     'use strict';
     PersonaSwitcher.logger.log (which);
 
-    var enumerator = PersonaSwitcher.windowMediator.
-        getEnumerator ("navigator:browser");
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
     while (enumerator.hasMoreElements())
     {
@@ -522,6 +521,10 @@ PersonaSwitcher.createMenu = function (doc, which)
         main = PersonaSwitcher.getMainMenu (doc);
         var where = PersonaSwitcher.getToolsMenu (doc).nextSibling;
 
+        PersonaSwitcher.logger.log (sub);
+        PersonaSwitcher.logger.log (main);
+        PersonaSwitcher.logger.log (where);
+
         main.insertBefore (sub, where);
     }
     else
@@ -554,8 +557,7 @@ PersonaSwitcher.createMenus = function (which)
     'use strict';
     PersonaSwitcher.logger.log (which);
 
-    var enumerator = PersonaSwitcher.windowMediator.
-        getEnumerator ("navigator:browser");
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
     while (enumerator.hasMoreElements())
     {
@@ -569,8 +571,7 @@ PersonaSwitcher.buttonPopup = function (event)
     'use strict';
     PersonaSwitcher.logger.log (event.target.id);
 
-    var enumerator = PersonaSwitcher.windowMediator.
-        getEnumerator ("navigator:browser");
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
     while (enumerator.hasMoreElements())
     {
@@ -592,7 +593,8 @@ PersonaSwitcher.onWindowLoad = function()
 
         if (PersonaSwitcher.prefs.getBoolPref ("debug"))
         {
-            PersonaSwitcher.logger = PersonaSwitcher.consoleLogger;
+            PersonaSwitcher.logger = new Object();
+            PersonaSwitcher.logger.log = PersonaSwitcher.log;
         }
         else
         {
@@ -607,8 +609,15 @@ PersonaSwitcher.onWindowLoad = function()
         }
     }
 
+    PersonaSwitcher.logger.log();
+
     PersonaSwitcher.setKeyset (this.document);
     PersonaSwitcher.setToolboxMinheight (this.document);
+
+    PersonaSwitcher.logger.log
+        (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"));
+    PersonaSwitcher.logger.log
+        (PersonaSwitcher.prefs.getBoolPref ("main-menubar"));
 
     if (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
         PersonaSwitcher.createMenu (this.document, "tools-submenu");

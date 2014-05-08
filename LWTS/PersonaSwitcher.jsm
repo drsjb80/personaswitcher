@@ -56,11 +56,9 @@ PersonaSwitcher.myObserver =
     observe: function (subject, topic, data)
     {
         'use strict';
-        /*
         PersonaSwitcher.logger.log (subject);
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
-        */
 
         if (topic != "nsPref:changed")
             return;
@@ -71,11 +69,12 @@ PersonaSwitcher.myObserver =
             {
                 if (PersonaSwitcher.prefs.getBoolPref ("debug"))
                 {
-                    PersonaSwitcher.logger.log = PersonaSwitcher.consoleLogger;
+                    PersonaSwitcher.logger = new Object();
+                    PersonaSwitcher.logger.log = PersonaSwitcher.log;
                 }
                 else
                 {
-                    PersonaSwitcher.logger.log = PersonaSwitcher.nullLogger;
+                    PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
                 }
             }
             case "toolbox-minheight":
@@ -112,9 +111,13 @@ PersonaSwitcher.myObserver =
             }
             case "main-menubar": case "tools-submenu":
             {
+                PersonaSwitcher.logger.log
+                    (PersonaSwitcher.prefs.getBoolPref (data));
+
                 if (PersonaSwitcher.prefs.getBoolPref (data))
                 {
                     PersonaSwitcher.createMenus (data);
+                    PersonaSwitcher.logger.log ("after call");
                 }
                 else
                 {
@@ -207,6 +210,11 @@ PersonaSwitcher.toggleAuto = function()
     }
 }
 
+PersonaSwitcher.applicationName = function()
+{
+    return (PersonaSwitcher.XULAppInfo.name);
+}
+
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
 PersonaSwitcher.removeNotifications = function()
 {
@@ -216,7 +224,7 @@ PersonaSwitcher.removeNotifications = function()
     {
         var win = enumerator.getNext();
         var notificationBox = null;
-        var name = PersonaSwitcher.XULAppInfo.name;
+        var name = PersonaSwitcher.applicationName();
 
         if (name == "Firefox" || name == "SeaMonkey")
         {
@@ -513,6 +521,6 @@ PersonaSwitcher.log = function()
         message += arguments[a];
     }
 
-    // dump (message + '\n');
-    PersonaSwitcher.logger.log (message);
+    dump (message + '\n');
+    // PersonaSwitcher.logger.log (message);
 }
