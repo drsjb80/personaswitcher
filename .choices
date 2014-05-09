@@ -19,6 +19,7 @@ git push
 ----
 cp personaswitcher.xpi personaswitcher-$PSVERSION.xpi
 git add personaswitcher-$PSVERSION.xpi
+git commit personaswitcher-$PSVERSION.xpi
 git push
 ----
 git tag -a v$PSVERSION -m 'Version $PSVERSION'

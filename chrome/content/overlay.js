@@ -334,6 +334,7 @@ PersonaSwitcher.getToolsMenuPopup = function (doc)
     var mapping =
     {
         Firefox: "menu_ToolsPopup",
+        Iceweasel: "menu_ToolsPopup",
         SeaMonkey: "taskPopup",
         Thunderbird: "taskPopup"
     };
@@ -350,6 +351,7 @@ PersonaSwitcher.getMainMenu = function (doc)
     var mapping = 
     {
         Firefox: "main-menubar",
+        Iceweasel: "main-menubar",
         SeaMonkey: "main-menubar",
         Thunderbird: "mail-menubar"
     };
@@ -366,6 +368,7 @@ PersonaSwitcher.getToolsMenu = function (doc)
     var mapping = 
     {
         Firefox: "tools-menu",
+        Iceweasel: "tools-menu",
         SeaMonkey: "tasksMenu",
         Thunderbird: "tasksMenu"
     };
