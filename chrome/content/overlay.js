@@ -231,9 +231,12 @@ PersonaSwitcher.setToolboxMinheights = function()
 /*
 ** create a menuitem, possibly creating a preview
 */
-PersonaSwitcher.createMenuItem = function (which)
+PersonaSwitcher.createMenuItem = function (which, toolbar)
 {
     'use strict';
+    PersonaSwitcher.logger.log (which);
+    PersonaSwitcher.logger.log (toolbar);
+
     var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
 
     item.setAttribute ("label", which.name);
@@ -243,6 +246,12 @@ PersonaSwitcher.createMenuItem = function (which)
         function() { PersonaSwitcher.onMenuItemCommand (which); },
         false
     );
+
+    /*
+    ** persona previews don't work in Thunderbird from the toolbar
+    */
+    if (toolbar && PersonaSwitcher.applicationName() == "Thunderbird")
+        return (item);
 
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
     {
@@ -260,10 +269,11 @@ PersonaSwitcher.createMenuItem = function (which)
 ** create a menu of installed personas, called in response to a
 ** "popupshowing" event.
 */
-PersonaSwitcher.createMenuPopup = function (menupopup)
+PersonaSwitcher.createMenuPopup = function (menupopup, toolbar)
 {
     'use strict';
-    PersonaSwitcher.logger.log();
+    PersonaSwitcher.logger.log (menupopup);
+    PersonaSwitcher.logger.log (toolbar);
 
     while (menupopup.hasChildNodes())
     {
@@ -281,7 +291,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
         /*
         ** get the localized message.
         */
-        var no = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
+        var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
 
         item.setAttribute ("label",
             PersonaSwitcher.stringBundle.
@@ -308,7 +318,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup)
         {
             PersonaSwitcher.logger.log ("adding item number " + i);
 
-            item = PersonaSwitcher.createMenuItem (arr[i]);
+            item = PersonaSwitcher.createMenuItem (arr[i], toolbar);
             menupopup.appendChild (item);
         }
     }
@@ -487,7 +497,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
     menupopup.addEventListener
     (
         "popupshowing",
-        function () { PersonaSwitcher.createMenuPopup (menupopup); },
+        function () { PersonaSwitcher.createMenuPopup (menupopup, false); },
         false
     );
     menupopup.addEventListener
@@ -538,18 +548,6 @@ PersonaSwitcher.createMenu = function (doc, which)
     return (sub);
 }
 
-PersonaSwitcher.createButtonPopup = function (menupopup)
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    /*
-    ** if the user hasn't created the button...
-    */
-    if (!menupopup) return;
-
-    PersonaSwitcher.createMenuPopup (menupopup);
-}
 
 /*
 ** create a particular menu in all windows, called only when a preference
@@ -578,11 +576,12 @@ PersonaSwitcher.buttonPopup = function (event)
 
     while (enumerator.hasMoreElements())
     {
-        PersonaSwitcher.logger.log();
-
         var doc = enumerator.getNext().document;
         var menupopup = (doc.getElementById (event.target.id));
-        PersonaSwitcher.createButtonPopup (menupopup);
+        if (menupopup)
+        {
+            PersonaSwitcher.createMenuPopup (menupopup, true);
+        }
     }
 }
 
