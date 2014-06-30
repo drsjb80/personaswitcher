@@ -23,12 +23,14 @@ window.addEventListener('DOMAttrModified', function(e)
 
 // https://addons.mozilla.org/en-US/firefox/pages/appversions/
 
-// for jslint
-Components.utils["import"] ("resource://gre/modules/LightweightThemeManager.jsm");
-Components.utils["import"] ("resource://LWTS/PersonaSwitcher.jsm");
+// "import" for jslint
+Components.utils["import"]
+    ("resource://gre/modules/LightweightThemeManager.jsm");
+Components.utils["import"]
+    ("resource://LWTS/PersonaSwitcher.jsm");
 
-
-PersonaSwitcher.XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+PersonaSwitcher.XULNS =
+    "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
 /*
 ***************************************************************************
@@ -191,7 +193,7 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     'use strict';
     PersonaSwitcher.logger.log();
 
-    if (PersonaSwitcher.applicationName() == "Thunderbird") return;
+    if (PersonaSwitcher.XULAppInfo.name == "Thunderbird") return;
 
     var minheight =
         parseInt (PersonaSwitcher.prefs.getCharPref ("toolbox-minheight"));
@@ -205,7 +207,10 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     else if (minheight < 0) minheight = 0;
     else if (minheight > maxheight) minheight = maxheight;
 
-    doc.getElementById ("navigator-toolbox").minHeight = minheight;
+    var nt = doc.getElementById ("navigator-toolbox");
+
+    if (nt !== null)
+        doc.getElementById ("navigator-toolbox").minHeight = minheight;
 }
 
 PersonaSwitcher.setToolboxMinheights = function()
@@ -213,7 +218,7 @@ PersonaSwitcher.setToolboxMinheights = function()
     'use strict';
     PersonaSwitcher.logger.log();
 
-    if (PersonaSwitcher.applicationName() == "Thunderbird") return;
+    if (PersonaSwitcher.XULAppInfo.name == "Thunderbird") return;
 
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
@@ -250,7 +255,7 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
     /*
     ** persona previews don't work in Thunderbird from the toolbar
     */
-    if (toolbar && PersonaSwitcher.applicationName() == "Thunderbird")
+    if (toolbar && PersonaSwitcher.XULAppInfo.name == "Thunderbird")
         return (item);
 
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
@@ -265,21 +270,38 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
     return (item);
 }
 
-/*
-** create a menu of installed personas, called in response to a
-** "popupshowing" event.
-*/
-PersonaSwitcher.createMenuPopup = function (menupopup, toolbar)
+PersonaSwitcher.createAllMenuPopups = function (menupopup, toolbar, arr)
 {
-    'use strict';
     PersonaSwitcher.logger.log (menupopup);
     PersonaSwitcher.logger.log (toolbar);
 
-    while (menupopup.hasChildNodes())
+    var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
+
+    item.setAttribute ("label",
+        PersonaSwitcher.stringBundle.
+            GetStringFromName ("personaswitcher.default"));
+    item.addEventListener
+    (
+        "command",
+        PersonaSwitcher.setDefault,
+        false
+    );
+    menupopup.appendChild (item);
+
+    // sort here
+    for (var i = 0; i < arr.length; i++)
     {
-        PersonaSwitcher.logger.log ("removing child");
-        menupopup.removeChild (menupopup.firstChild);
+        PersonaSwitcher.logger.log ("adding item number " + i);
+
+        item = PersonaSwitcher.createMenuItem (arr[i], toolbar);
+        menupopup.appendChild (item);
     }
+}
+
+PersonaSwitcher.createMenuPopup = function (menupopup, toolbar)
+{
+    'use strict';
+    PersonaSwitcher.logger.log (menupopup.id);
 
     var arr = PersonaSwitcher.getPersonas();
     PersonaSwitcher.logger.log (arr.length);
@@ -298,29 +320,31 @@ PersonaSwitcher.createMenuPopup = function (menupopup, toolbar)
                 GetStringFromName ("personaswitcher.noPersonas"));
 
         menupopup.appendChild (item);
+        return;
+    }
+
+    var previousMenupopup =
+        PersonaSwitcher.previousMenupopup[menupopup.id];
+    var previousMenupopupArray =
+        PersonaSwitcher.previousMenupopupArray[menupopup.id];
+
+    if (previousMenupopup !== null &&
+        PersonaSwitcher.arrayEquals (previousMenupopupArray, arr))
+    {
+        PersonaSwitcher.logger.log ("arrays identical");
+        menupopup = previousMenupopup;
     }
     else
     {
-        var item = document.createElementNS (PersonaSwitcher.XULNS, "menuitem");
-
-        item.setAttribute ("label",
-            PersonaSwitcher.stringBundle.
-                GetStringFromName ("personaswitcher.default"));
-        item.addEventListener
-        (
-            "command",
-            PersonaSwitcher.setDefault,
-            false
-        );
-        menupopup.appendChild (item);
-
-        for (var i = 0; i < arr.length; i++)
+        while (menupopup.hasChildNodes())
         {
-            PersonaSwitcher.logger.log ("adding item number " + i);
-
-            item = PersonaSwitcher.createMenuItem (arr[i], toolbar);
-            menupopup.appendChild (item);
+            PersonaSwitcher.logger.log ("removing child");
+            menupopup.removeChild (menupopup.firstChild);
         }
+
+        PersonaSwitcher.createAllMenuPopups (menupopup, toolbar, arr);
+        PersonaSwitcher.previousMenupopup[menupopup.id] = menupopup;
+        PersonaSwitcher.previousMenupopupArray[menupopup.id] = arr;
     }
 }
 
@@ -343,15 +367,16 @@ PersonaSwitcher.getToolsMenuPopup = function (doc)
 
     var mapping =
     {
-        Firefox: "menu_ToolsPopup",
-        Iceweasel: "menu_ToolsPopup",
-        SeaMonkey: "taskPopup",
-        Thunderbird: "taskPopup"
+        "Firefox":      "menu_ToolsPopup",
+        "Iceweasel":    "menu_ToolsPopup",
+        "Pale Moon":    "menu_ToolsPopup",
+        "SeaMonkey":    "taskPopup",
+        "Thunderbird":  "taskPopup"
     };
 
-    PersonaSwitcher.logger.log (PersonaSwitcher.applicationName());
-    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.applicationName()]);
-    return (doc.getElementById (mapping[PersonaSwitcher.applicationName()]));
+    PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
+    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
+    return (doc.getElementById (mapping[PersonaSwitcher.XULAppInfo.name]));
 }
 
 PersonaSwitcher.getMainMenu = function (doc)
@@ -360,15 +385,16 @@ PersonaSwitcher.getMainMenu = function (doc)
 
     var mapping = 
     {
-        Firefox: "main-menubar",
-        Iceweasel: "main-menubar",
-        SeaMonkey: "main-menubar",
-        Thunderbird: "mail-menubar"
+        "Firefox":      "main-menubar",
+        "Iceweasel":    "main-menubar",
+        "Pale Moon":    "main-menubar",
+        "SeaMonkey":    "main-menubar",
+        "Thunderbird":  "mail-menubar"
     };
 
-    PersonaSwitcher.logger.log (PersonaSwitcher.applicationName());
-    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.applicationName()]);
-    return (doc.getElementById (mapping[PersonaSwitcher.applicationName()]));
+    PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
+    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
+    return (doc.getElementById (mapping[PersonaSwitcher.XULAppInfo.name]));
 }
 
 PersonaSwitcher.getToolsMenu = function (doc)
@@ -377,15 +403,16 @@ PersonaSwitcher.getToolsMenu = function (doc)
 
     var mapping = 
     {
-        Firefox: "tools-menu",
-        Iceweasel: "tools-menu",
-        SeaMonkey: "tasksMenu",
-        Thunderbird: "tasksMenu"
+        "Firefox":      "tools-menu",
+        "Iceweasel":    "tools-menu",
+        "Pale Moon":    "tools-menu",
+        "SeaMonkey":    "tasksMenu",
+        "Thunderbird":  "tasksMenu"
     };
 
-    PersonaSwitcher.logger.log (PersonaSwitcher.applicationName());
-    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.applicationName()]);
-    return (doc.getElementById (mapping[PersonaSwitcher.applicationName()]));
+    PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
+    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
+    return (doc.getElementById (mapping[PersonaSwitcher.XULAppInfo.name]));
 }
 
 /*
@@ -477,7 +504,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
     if (menupopup)
     {
         PersonaSwitcher.logger.log ("menupopup already exists!");
-        return (null);
+        rteMenuPopupteMenuPopupteMenuPopupteMenuPopupteMenuPopupeturn (null);
     }
 
     menu = document.createElementNS (PersonaSwitcher.XULNS, "menu");
@@ -592,17 +619,7 @@ PersonaSwitcher.onWindowLoad = function()
     if (PersonaSwitcher.firstTime)
     {
         PersonaSwitcher.firstTime = false;
-
-        if (PersonaSwitcher.prefs.getBoolPref ("debug"))
-        {
-            PersonaSwitcher.logger = new Object();
-            PersonaSwitcher.logger.log = PersonaSwitcher.log;
-        }
-        else
-        {
-            PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
-        }
-
+        PersonaSwitcher.setLogger();
         PersonaSwitcher.startTimer();
 
         if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
@@ -616,15 +633,14 @@ PersonaSwitcher.onWindowLoad = function()
     PersonaSwitcher.setKeyset (this.document);
     PersonaSwitcher.setToolboxMinheight (this.document);
 
-    PersonaSwitcher.logger.log
-        (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"));
-    PersonaSwitcher.logger.log
-        (PersonaSwitcher.prefs.getBoolPref ("main-menubar"));
-
     if (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
+    {
         PersonaSwitcher.createMenu (this.document, "tools-submenu");
+    }
     if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
+    {
         PersonaSwitcher.createMenu (this.document, "main-menubar");
+    }
 }
 
 // getMostRecentWindow returns the newest one created, not the one on top

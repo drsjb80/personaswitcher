@@ -1,31 +1,13 @@
+//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
+
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
-Components.utils["import"] ("resource://gre/modules/LightweightThemeManager.jsm");
+Components.utils["import"]
+    ("resource://gre/modules/LightweightThemeManager.jsm");
 
 var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
 var PersonaSwitcher = new Object();
-
-PersonaSwitcher.consoleLogger =
-    Components.utils["import"]
-        ("resource://gre/modules/devtools/Console.jsm", {}).console;
-
-PersonaSwitcher.nullLogger = new Object();
-PersonaSwitcher.nullLogger.log = function (s) { return; }
-
-PersonaSwitcher.logger = null;
-PersonaSwitcher.firstTime = true;
-PersonaSwitcher.activeWindow = null;
-
-PersonaSwitcher.PersonasPlusPresent = true;
-try
-{
-    Components.utils.import ("resource://personas/modules/service.js");
-}
-catch (e)
-{
-    PersonaSwitcher.PersonasPlusPresent = false;
-}
 
 PersonaSwitcher.prefs =
     Components.classes["@mozilla.org/preferences-service;1"].
@@ -48,10 +30,92 @@ PersonaSwitcher.stringBundle =
 // needed for addObserver
 PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 
+// ---------------------------------------------------------------------------
+
+PersonaSwitcher.log = function()
+{
+    'use strict';
+    if (! PersonaSwitcher.prefs.getBoolPref ("debug"))
+        return;
+
+    var message = "";
+
+    try
+    {
+        this.undef();
+    }
+    catch (e)
+    {
+        var frames = e.stack.split ("\n");
+        message += frames[1].replace ('()@resource://', '') + ": ";
+    }
+
+    for (var i = 0; i < arguments.length; i++)
+    {
+        message += arguments[i];
+    }
+
+    dump (message + '\n');
+}
+
+PersonaSwitcher.setLogger = function()
+{
+    if (PersonaSwitcher.prefs.getBoolPref ("debug"))
+    {
+        PersonaSwitcher.logger = PersonaSwitcher.consoleLogger;
+    }
+    else
+    {
+        PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
+    }
+}
+
+// https://developer.mozilla.org/en-US/docs/Debugging_JavaScript
+PersonaSwitcher.consoleLogger = null
+
+try          // check to see if there is console logging available
+{
+    PersonaSwitcher.consoleLogger = Components.utils["import"]
+        ("resource://gre/modules/devtools/Console.jsm", {}).console;
+}
+catch (e)   // nope, log to terminal
+{
+    PersonaSwitcher.consoleLogger = new Object();
+    PersonaSwitcher.consoleLogger.log = PersonaSwitcher.log;
+}
+
+PersonaSwitcher.nullLogger = new Object();
+PersonaSwitcher.nullLogger.log = function (s) { return; }
+PersonaSwitcher.logger = null;
+
+// ---------------------------------------------------------------------------
+
+PersonaSwitcher.firstTime = true;
+PersonaSwitcher.activeWindow = null;
+
+PersonaSwitcher.previousMenupopup = [];
+PersonaSwitcher.previousMenupopupArray = [];
+
 /*
-** an observer for changing perferences.
+PersonaSwitcher.previousMainMenubarMenupopup = null;
+PersonaSwitcher.previousMainMenubarMenupopuparr = null;
+PersonaSwitcher.previousToolsSubmenuMenupopup = null;
+PersonaSwitcher.previousToolsSubmenuMenupopuparr = null;
 */
-PersonaSwitcher.myObserver =
+
+PersonaSwitcher.PersonasPlusPresent = true;
+try
+{
+    Components.utils.import ("resource://personas/modules/service.js");
+}
+catch (e)
+{
+    PersonaSwitcher.PersonasPlusPresent = false;
+}
+
+// ---------------------------------------------------------------------------
+
+PersonaSwitcher.prefsObserver =
 {
     observe: function (subject, topic, data)
     {
@@ -61,21 +125,15 @@ PersonaSwitcher.myObserver =
         PersonaSwitcher.logger.log (data);
 
         if (topic != "nsPref:changed")
+        {
             return;
+        }
 
         switch (data)
         {
             case "debug":
             {
-                if (PersonaSwitcher.prefs.getBoolPref ("debug"))
-                {
-                    PersonaSwitcher.logger = new Object();
-                    PersonaSwitcher.logger.log = PersonaSwitcher.log;
-                }
-                else
-                {
-                    PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
-                }
+                PersonaSwitcher.setLogger();
             }
             case "toolbox-minheight":
             {
@@ -155,10 +213,53 @@ PersonaSwitcher.myObserver =
     }
 }
 
-PersonaSwitcher.prefs.addObserver ("", PersonaSwitcher.myObserver, false);
+PersonaSwitcher.prefs.addObserver ("", PersonaSwitcher.prefsObserver, false);
+
+// ---------------------------------------------------------------------------
+
+/*
+** must be defined before referenced in the timer function in older
+** versions of JavaScript
+*/
+PersonaSwitcher.rotate = function()
+{
+    'use strict';
+    PersonaSwitcher.logger.log();
+
+    var arr = PersonaSwitcher.getPersonas();
+
+    PersonaSwitcher.logger.log (arr.length);
+
+    if (arr.length < 1) return;
+
+    if (PersonaSwitcher.prefs.getBoolPref ("random"))
+    {
+        // pick a number between 1 and the end
+        var number = Math.floor ((Math.random() * (arr.length-1)) + 1);
+        // PersonaSwitcher.logger.log (number);
+        PersonaSwitcher.switchTo (arr[number]);
+    }
+    else
+    {
+        // switch to the last one
+        PersonaSwitcher.switchTo (arr[arr.length-1]);
+    }
+}
+
+// ---------------------------------------------------------------------------
 
 PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"].
     createInstance(Components.interfaces.nsITimer);
+
+PersonaSwitcher.timerObserver =
+{
+    observe: function (subject, topic, data)
+    {
+        'use strict';
+
+        PersonaSwitcher.rotate();
+    }
+}
 
 PersonaSwitcher.startTimer = function()
 {
@@ -176,7 +277,7 @@ PersonaSwitcher.startTimer = function()
     {
         PersonaSwitcher.timer.init
         (
-            PersonaSwitcher.rotate,
+            PersonaSwitcher.timerObserver,
             PersonaSwitcher.prefs.getBoolPref ("fastswitch") ? 10000 :
                 1000 * 60 * minutes,
             Components.interfaces.nsITimer.TYPE_REPEATING_SLACK
@@ -191,6 +292,8 @@ PersonaSwitcher.stopTimer = function()
 
     PersonaSwitcher.timer.cancel();
 }
+
+// ---------------------------------------------------------------------------
 
 PersonaSwitcher.toggleAuto = function()
 {
@@ -210,11 +313,6 @@ PersonaSwitcher.toggleAuto = function()
     }
 }
 
-PersonaSwitcher.applicationName = function()
-{
-    return (PersonaSwitcher.XULAppInfo.name);
-}
-
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
 PersonaSwitcher.removeNotifications = function()
 {
@@ -224,9 +322,9 @@ PersonaSwitcher.removeNotifications = function()
     {
         var win = enumerator.getNext();
         var notificationBox = null;
-        var name = PersonaSwitcher.applicationName();
+        var name = PersonaSwitcher.XULAppInfo.name;
 
-        if (name == "Firefox" || name == "SeaMonkey")
+        if (name == "Firefox" || name == "SeaMonkey" || name == "Pale Moon")
         {
             if (typeof (win.getBrowser) != "function")
                 continue;
@@ -260,7 +358,6 @@ PersonaSwitcher.switchTo = function (toWhich)
     if (toWhich !== null)
     {
         PersonaSwitcher.logger.log (toWhich.name);
-        // PersonaSwitcher.dump (toWhich);
     }
     else
     {
@@ -358,30 +455,6 @@ PersonaSwitcher.getPersonas = function()
     return (arr);
 }
 
-PersonaSwitcher.rotate = function()
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    var arr = PersonaSwitcher.getPersonas();
-
-    PersonaSwitcher.logger.log (arr.length);
-
-    if (arr.length < 1) return;
-
-    if (PersonaSwitcher.prefs.getBoolPref ("random"))
-    {
-        // pick a number between 1 and the end
-        var number = Math.floor ((Math.random() * (arr.length-1)) + 1);
-        // PersonaSwitcher.logger.log (number);
-        PersonaSwitcher.switchTo (arr[number]);
-    }
-    else
-    {
-        // switch to the last one
-        PersonaSwitcher.switchTo (arr[arr.length-1]);
-    }
-}
 
 PersonaSwitcher.previous = function()
 {
@@ -498,29 +571,42 @@ PersonaSwitcher.dump = function (object, max)
     }
 }
 
-PersonaSwitcher.log = function()
-{
-    'use strict';
-    if (! PersonaSwitcher.prefs.getBoolPref ("debug"))
-        return;
+PersonaSwitcher.arrayEquals = function (array1, array2) {
+    PersonaSwitcher.logger.log (array1);
+    PersonaSwitcher.logger.log (array2);
 
-    var message = "";
-
-    try
+    if (array1 === null)
     {
-        this.undef();
-    }
-    catch (e)
-    {
-        var frames = e.stack.split ("\n");
-        message += frames[1].replace ('()@resource://', '') + ": ";
+        PersonaSwitcher.logger.log ("array1 is null");
+        return false;
     }
 
-    for (var a in arguments)
+    if (array2 === null)
     {
-        message += arguments[a];
+        PersonaSwitcher.logger.log ("array2 is null");
+        return false;
     }
 
-    dump (message + '\n');
-    // PersonaSwitcher.logger.log (message);
+    if (!array1 || !array2)
+    {
+        PersonaSwitcher.logger.log ("one isn't an array");
+        return false;
+    }
+
+    if (array1.length != array2.length)
+    {
+        PersonaSwitcher.logger.log ("both aren't the same length");
+        return false;
+    }
+
+    for (var i = 0; i < array1.length; i++)
+    {
+        // Q&D comparison because we know they're in JSON format
+        PersonaSwitcher.logger.log (JSON.stringify(array1));
+        PersonaSwitcher.logger.log (JSON.stringify(array2));
+
+        if (JSON.stringify(array1) !== JSON.stringify(array2))
+            return (false);
+    }       
+    return true;
 }

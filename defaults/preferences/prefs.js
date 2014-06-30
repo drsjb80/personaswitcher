@@ -37,7 +37,7 @@ pref ("extensions.personaswitcher.preview", false);
 pref ("extensions.personaswitcher.tools-submenu", true);
 pref ("extensions.personaswitcher.main-menubar", false);
 
-pref ("extensions.personaswitcher.debug", true);
+pref ("extensions.personaswitcher.debug", false);
 pref ("extensions.personaswitcher.notification-workaround", true);
 
 pref ("extensions.personaswitcher.toolbox-minheight", "");
@@ -46,7 +46,6 @@ pref ("extensions.personaswitcher.toolbox-maxheight", "200");
 pref ("extensions.personaswitcher.startup-switch", false);
 
 pref ("extensions.personaswitcher.fastswitch", false);
-
 
 // https://developer.mozilla.org/en/Localizing_extension_descriptions
 

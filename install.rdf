@@ -4,12 +4,13 @@
     <em:id>drsjb80@gmail.com</em:id>
     <em:type>2</em:type>
     <em:name>Persona Switcher</em:name>
-    <em:version>2.0.3</em:version>
+    <em:version>2.0.4</em:version>
     <em:creator>Steve Beaty</em:creator>
     <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
     <em:contributor>鄭筑云 (Zheng Zhu-Yun)</em:contributor>
     <em:translator>鄭筑云 (Zheng Zhu-Yun)</em:translator>
     <em:translator>Christian Peters</em:translator>
+    <em:translator>Andrea Manini></em:translator>
     <em:iconURL>chrome://personaswitcher/skin/PersonaSwitcher32.png</em:iconURL>
 
     <em:localized>
@@ -28,6 +29,13 @@
 
     <em:localized>
       <Description>
+        <em:locale>it</em:locale>
+        <em:description>Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facoltà di ritorno al tema Predefinito. Possibilità di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox/Thunderbird/Seamonkey</em:description>
+      </Description>
+    </em:localized>
+
+    <em:localized>
+      <Description>
         <em:locale>de</em:locale>
         <em:description> Schneller Wechsel zwischen ihren Personas oder zurück zu den Standardeinstellungen über das Menü oder der Tastatur. Sie können auch automatisch durch alle Themen in einem Intervall ihrer Wahl wechseln. Arbeitet mit Firefox, Thunderbird und Seamonkey.</em:description>
       </Description>
@@ -38,7 +46,7 @@
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
-        <em:minVersion>4.0</em:minVersion>
+        <em:minVersion>3.0.*</em:minVersion>
         <em:maxVersion>30.*</em:maxVersion>
       </Description>
     </em:targetApplication>

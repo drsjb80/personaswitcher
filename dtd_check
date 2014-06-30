@@ -1,6 +1,6 @@
 #! /bin/bash
 
-for i in en-US de zh-TW
+for i in en-US de zh-TW it
 do
     for j in chrome/locale/$i/*.dtd
     do
@@ -8,7 +8,7 @@ do
     done
 done
 
-for i in de zh-TW
+for i in de zh-TW it
 do
     for j in /tmp/$i*.dtd
     do

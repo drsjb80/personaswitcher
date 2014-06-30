@@ -18,14 +18,14 @@ git diff -a v2.0.1
 git commit -a
 git push
 ----
-cp personaswitcher.xpi personaswitcher-$PSVERSION.xpi
-git add personaswitcher-$PSVERSION.xpi
-git commit personaswitcher-$PSVERSION.xpi
+cp personaswitcher.xpi personaswitcher-`cat VERSION`.xpi
+git add personaswitcher-`cat VERSION`.xpi
+git commit personaswitcher-`cat VERSION`.xpi
 git push
 ----
-git tag -a v$PSVERSION -m 'Version $PSVERSION'
+echo git tag -a v$PSVERSION -m "Version `cat VERSION`"
 git commit -a
-git push origin v$PSVERSION
+git push origin v`cat VERSION`
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
