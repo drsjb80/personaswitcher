@@ -1,0 +1,30 @@
+<!ENTITY options.title "Persona Switcher Preferenze">
+<!ENTITY options.pane1 "Persona Switcher Preferenze">
+<!ENTITY options.kbshortcuts.title "Scorciatoie da Tastiera">
+<!ENTITY options.kbshortcuts.default "Persona Predefinita - Combinazione Tasti:">
+<!ENTITY options.kbshortcuts.rotate "Ruota Tema persona - Combinazione Tasti:">
+<!ENTITY options.kbshortcuts.toggle "Attiva/Disattiva Cambio Automatico -  Combinazione Tasti:">
+<!ENTITY options.kbshortcuts.auto "Cambio automatico del Tema di Persona">
+
+<!ENTITY options.kbshortcuts.menushortcuts "Tasti scorciatoia del Menu (Non su OS X)">
+<!ENTITY options.kbshortcuts.access "Menu Principale Tasto scorciatoia:">
+<!ENTITY options.kbshortcuts.activate "PSwitcher Menu - Tasto Scorciatoia:">
+
+<!ENTITY options.kbshortcuts.key "Tasto">
+<!ENTITY options.kbshortcuts.shift "Shift">
+<!ENTITY options.kbshortcuts.control "Control">
+<!ENTITY options.kbshortcuts.alt "Alt">
+<!ENTITY options.kbshortcuts.meta "Meta">
+
+<!ENTITY options.options.title "Opzioni">
+<!ENTITY options.autoevery.switch "Cambia ogni">
+<!ENTITY options.autoevery.minutes "Minuti.">
+<!ENTITY options.random.desc "Cambia in maniera casuale anziché dal meno recente.">
+<!ENTITY options.startup-switch.desc "Cambia ad ogni avvio.">
+<!ENTITY options.toolbox-minheight.desc "Altezza minima della toolbox superiore (in Firefox e SeaMonkey):">
+<!ENTITY options.preview.desc "Anteprima del Tema-Persona durante la selezione da menu.">
+<!ENTITY options.notification-workaround.desc "Rimuovi notifiche di Personas Plus.">
+
+<!ENTITY options.menus.title "Posizioni del Menu Persona">
+<!ENTITY options.tools-submenu "Nel Menu Strumenti.">
+<!ENTITY options.main-menubar "Nella Menu-Bar Principale.">
