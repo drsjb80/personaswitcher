@@ -33,6 +33,7 @@ pref ("extensions.personaswitcher.autominutes", 30);
 pref ("extensions.personaswitcher.random", false);
 
 pref ("extensions.personaswitcher.preview", false);
+pref ("extensions.personaswitcher.preview-delay", 0);
 
 pref ("extensions.personaswitcher.tools-submenu", true);
 pref ("extensions.personaswitcher.main-menubar", false);

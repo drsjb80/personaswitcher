@@ -233,6 +233,27 @@ PersonaSwitcher.setToolboxMinheights = function()
 ** menus have menupopups which have menuitems.
 */
 
+PersonaSwitcher.previewTimer = Components.classes["@mozilla.org/timer;1"].
+    createInstance(Components.interfaces.nsITimer);
+
+PersonaSwitcher.previewObserver =
+{
+    observe: function (subject, topic, data)
+    {
+        'use strict';
+
+        PersonaSwitcher.logger.log();
+        LightweightThemeManager.previewTheme (PersonaSwitcher.previewWhich);
+    }
+}
+
+PersonaSwitcher.dealWithDOMMenuItemInactive =
+{
+    handleEvent: function(e) {
+        PersonaSwitcher.logger.log(e);
+    }
+}
+
 /*
 ** create a menuitem, possibly creating a preview
 */
@@ -258,14 +279,68 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
     if (toolbar && PersonaSwitcher.XULAppInfo.name == "Thunderbird")
         return (item);
 
+    // create method and pass in item and which
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
     {
-        item.addEventListener
-        (
-            "DOMMenuItemActive",
-            function () { LightweightThemeManager.previewTheme (which); },
-            false
-        );
+// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime
+        var darwin = PersonaSwitcher.XULRuntime.OS == "Darwin";
+        var delay =
+            parseInt (PersonaSwitcher.prefs.getIntPref ("preview-delay"));
+
+        delay = delay < 0 ? 0 : delay > 10000 ? 10000 : delay;
+
+        if (darwin || delay == 0)
+        {
+            item.addEventListener
+            (
+                "DOMMenuItemActive",
+                function () { LightweightThemeManager.previewTheme (which); },
+                false
+            );
+
+// https://developer.mozilla.org/en-US/docs/Web/Events/DOMMenuItemInactive
+// https://bugzilla.mozilla.org/show_bug.cgi?id=420033
+            if (!darwin)
+            {
+                item.addEventListener
+                (
+                    "DOMMenuItemInactive",
+                    function () { LightweightThemeManager.resetPreview(); },
+                    false
+                );
+            }
+        }
+        else
+        {
+            // https://developer.mozilla.org/en-US/docs/Web/API/Event
+            item.addEventListener
+            (
+                "DOMMenuItemActive",
+                function ()
+                {
+                    PersonaSwitcher.previewWhich = which;
+                    PersonaSwitcher.logger.log ("starting timer");
+                    PersonaSwitcher.previewTimer.init
+                    (
+                        PersonaSwitcher.previewObserver,
+                        delay,
+                        Components.interfaces.nsITimer.TYPE_ONE_SHOT
+                    );
+                },
+                false
+            );
+            item.addEventListener
+            (
+                "DOMMenuItemInactive",
+                function ()
+                {
+                    PersonaSwitcher.logger.log ("canceling timer");
+                    PersonaSwitcher.previewTimer.cancel();
+                    LightweightThemeManager.resetPreview();
+                },
+                false
+            );
+        }
     }
     return (item);
 }
@@ -303,6 +378,12 @@ PersonaSwitcher.createMenuPopup = function (menupopup, toolbar)
     'use strict';
     PersonaSwitcher.logger.log (menupopup.id);
 
+    while (menupopup.hasChildNodes())
+    {
+        PersonaSwitcher.logger.log ("removing child");
+        menupopup.removeChild (menupopup.firstChild);
+    }
+
     var arr = PersonaSwitcher.getPersonas();
     PersonaSwitcher.logger.log (arr.length);
 
@@ -323,38 +404,7 @@ PersonaSwitcher.createMenuPopup = function (menupopup, toolbar)
         return;
     }
 
-    var previousMenupopup =
-        PersonaSwitcher.previousMenupopup[menupopup.id];
-    var previousMenupopupArray =
-        PersonaSwitcher.previousMenupopupArray[menupopup.id];
-
-    if (previousMenupopup !== null &&
-        PersonaSwitcher.arrayEquals (previousMenupopupArray, arr))
-    {
-        PersonaSwitcher.logger.log ("arrays identical");
-        menupopup = previousMenupopup;
-    }
-    else
-    {
-        while (menupopup.hasChildNodes())
-        {
-            PersonaSwitcher.logger.log ("removing child");
-            menupopup.removeChild (menupopup.firstChild);
-        }
-
-        PersonaSwitcher.createAllMenuPopups (menupopup, toolbar, arr);
-        PersonaSwitcher.previousMenupopup[menupopup.id] = menupopup;
-        PersonaSwitcher.previousMenupopupArray[menupopup.id] = arr;
-    }
-}
-
-PersonaSwitcher.hideSubMenu = function ()
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    if (PersonaSwitcher.prefs.getBoolPref ("preview"))
-        LightweightThemeManager.resetPreview();
+    PersonaSwitcher.createAllMenuPopups (menupopup, toolbar, arr);
 }
 
 /*
@@ -504,7 +554,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
     if (menupopup)
     {
         PersonaSwitcher.logger.log ("menupopup already exists!");
-        rteMenuPopupteMenuPopupteMenuPopupteMenuPopupteMenuPopupeturn (null);
+        return (null);
     }
 
     menu = document.createElementNS (PersonaSwitcher.XULNS, "menu");
@@ -530,10 +580,15 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
     menupopup.addEventListener
     (
         "popuphidden",
-        PersonaSwitcher.hideSubMenu,
+        function()
+        {
+            if (PersonaSwitcher.prefs.getBoolPref ("preview"))
+                LightweightThemeManager.resetPreview();
+        },
         false
     );
 
+    PersonaSwitcher.createMenuPopup (menupopup, false);
     menu.appendChild (menupopup);
     return (menu);
 }

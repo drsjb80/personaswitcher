@@ -3,7 +3,7 @@
 <!ENTITY options.kbshortcuts.title "Scorciatoie da Tastiera">
 <!ENTITY options.kbshortcuts.default "Persona Predefinita - Combinazione Tasti:">
 <!ENTITY options.kbshortcuts.rotate "Ruota Tema persona - Combinazione Tasti:">
-<!ENTITY options.kbshortcuts.toggle "Attiva/Disattiva Cambio Automatico -  Combinazione Tasti:">
+<!ENTITY options.kbshortcuts.toggle "Cambia Manualmente il Tema di Persona - Combinazione Tasti:">
 <!ENTITY options.kbshortcuts.auto "Cambio automatico del Tema di Persona">
 
 <!ENTITY options.kbshortcuts.menushortcuts "Tasti scorciatoia del Menu (Non su OS X)">

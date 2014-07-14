@@ -22,6 +22,10 @@ PersonaSwitcher.XULAppInfo =
     Components.classes["@mozilla.org/xre/app-info;1"].
         getService(Components.interfaces.nsIXULAppInfo); 
 
+PersonaSwitcher.XULRuntime =
+    Components.classes["@mozilla.org/xre/app-info;1"].
+        getService(Components.interfaces.nsIXULRuntime);
+
 PersonaSwitcher.stringBundle =
     Components.classes["@mozilla.org/intl/stringbundle;1"].
         getService(Components.interfaces.nsIStringBundleService).
@@ -95,6 +99,8 @@ PersonaSwitcher.activeWindow = null;
 
 PersonaSwitcher.previousMenupopup = [];
 PersonaSwitcher.previousMenupopupArray = [];
+
+PersonaSwitcher.previewWhich = null;
 
 /*
 PersonaSwitcher.previousMainMenubarMenupopup = null;
@@ -247,6 +253,32 @@ PersonaSwitcher.rotate = function()
 }
 
 // ---------------------------------------------------------------------------
+
+/*
+PersonaSwitcher.previewTimer = Components.classes["@mozilla.org/timer;1"].
+    createInstance(Components.interfaces.nsITimer);
+
+PersonaSwitcher.previewObserver =
+{
+    which: null,
+
+    setWhich: function (which)
+    {
+        'use strict';
+
+        PersonaSwitcher.logger.log (which);
+        this.which = which;
+    },
+
+    observe: function (subject, topic, data)
+    {
+        'use strict';
+
+        PersonaSwitcher.logger.log();
+        LightweightThemeManager.previewTheme (which);
+    }
+}
+*/
 
 PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"].
     createInstance(Components.interfaces.nsITimer);
