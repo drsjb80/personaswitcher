@@ -210,6 +210,14 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.createMenus ("main-menubar");
                 }
             }
+            case "preview-delay":
+            {
+                var delay  = parseInt (PersonaSwitcher.prefs.getIntPref
+                    ("preview-delay"));
+
+                delay = delay < 0 ? 0 : delay > 10000 ? 10000 : delay;
+                PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
+            }
             default:
             {
                 PersonaSwitcher.logger.log (data);
@@ -430,6 +438,8 @@ PersonaSwitcher.switchTo = function (toWhich)
         // 3.* compatability
         LightweightThemeManager.themeChanged (toWhich);
     }
+
+    PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);
 
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))

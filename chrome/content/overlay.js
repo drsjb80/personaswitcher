@@ -269,7 +269,11 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
     item.addEventListener
     (
         "command",
-        function() { PersonaSwitcher.onMenuItemCommand (which); },
+        function()
+        {
+            PersonaSwitcher.popupHidden();
+            PersonaSwitcher.onMenuItemCommand (which);
+        },
         false
     );
 
@@ -284,22 +288,23 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
     {
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime
         var darwin = PersonaSwitcher.XULRuntime.OS == "Darwin";
-        var delay =
-            parseInt (PersonaSwitcher.prefs.getIntPref ("preview-delay"));
-
-        delay = delay < 0 ? 0 : delay > 10000 ? 10000 : delay;
+        var delay = PersonaSwitcher.prefs.getIntPref ("preview-delay");
 
         if (darwin || delay == 0)
         {
             item.addEventListener
             (
                 "DOMMenuItemActive",
-                function () { LightweightThemeManager.previewTheme (which); },
+                function ()
+                {
+                    LightweightThemeManager.previewTheme (which);
+                },
                 false
             );
 
 // https://developer.mozilla.org/en-US/docs/Web/Events/DOMMenuItemInactive
 // https://bugzilla.mozilla.org/show_bug.cgi?id=420033
+/*
             if (!darwin)
             {
                 item.addEventListener
@@ -309,6 +314,7 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
                     false
                 );
             }
+*/
         }
         else
         {
@@ -318,8 +324,9 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
                 "DOMMenuItemActive",
                 function ()
                 {
+                    PersonaSwitcher.logger.log ("DOMMenuItemActive");
+                    PersonaSwitcher.previewTimer.cancel();
                     PersonaSwitcher.previewWhich = which;
-                    PersonaSwitcher.logger.log ("starting timer");
                     PersonaSwitcher.previewTimer.init
                     (
                         PersonaSwitcher.previewObserver,
@@ -329,6 +336,7 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
                 },
                 false
             );
+            /*
             item.addEventListener
             (
                 "DOMMenuItemInactive",
@@ -340,6 +348,7 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
                 },
                 false
             );
+            */
         }
     }
     return (item);
@@ -358,9 +367,36 @@ PersonaSwitcher.createAllMenuPopups = function (menupopup, toolbar, arr)
     item.addEventListener
     (
         "command",
-        PersonaSwitcher.setDefault,
+        function ()
+        {
+            if (PersonaSwitcher.prefs.getIntPref ("preview-delay") > 0)
+            {
+                PersonaSwitcher.previewTimer.cancel();
+            }
+
+            PersonaSwitcher.setDefault();
+        },
         false
     );
+    /*
+    item.addEventListener
+    (
+        "DOMMenuItemActive",
+        function ()
+        {
+            PersonaSwitcher.logger.log ("i'm here");
+            LightweightThemeManager.previewTheme (null);
+        },
+        false
+    );
+    item.addEventListener
+    (
+        "DOMMenuItemInactive",
+        function () { LightweightThemeManager.resetPreview(); },
+        false
+    );
+    */
+
     menupopup.appendChild (item);
 
     // sort here
@@ -557,7 +593,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
         return (null);
     }
 
-    menu = document.createElementNS (PersonaSwitcher.XULNS, "menu");
+    var menu = document.createElementNS (PersonaSwitcher.XULNS, "menu");
     menu.setAttribute ("label",
         PersonaSwitcher.stringBundle.
             GetStringFromName ("personaswitcher.label"));
@@ -580,11 +616,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
     menupopup.addEventListener
     (
         "popuphidden",
-        function()
-        {
-            if (PersonaSwitcher.prefs.getBoolPref ("preview"))
-                LightweightThemeManager.resetPreview();
-        },
+        function () { PersonaSwitcher.popupHidden(); },
         false
     );
 
@@ -649,7 +681,14 @@ PersonaSwitcher.createMenus = function (which)
     }
 }
 
-PersonaSwitcher.buttonPopup = function (event)
+/*
+***************************************************************************
+**
+** Tool bar buttons.
+**
+***************************************************************************
+*/
+PersonaSwitcher.popupShowing = function (event)
 {
     'use strict';
     PersonaSwitcher.logger.log (event.target.id);
@@ -664,6 +703,19 @@ PersonaSwitcher.buttonPopup = function (event)
         {
             PersonaSwitcher.createMenuPopup (menupopup, true);
         }
+    }
+}
+
+PersonaSwitcher.popupHidden = function ()
+{
+    if (PersonaSwitcher.prefs.getBoolPref ("preview"))
+    {
+        if (PersonaSwitcher.prefs.getIntPref ("preview-delay") > 0)
+        {
+            PersonaSwitcher.previewTimer.cancel();
+        }
+
+        LightweightThemeManager.resetPreview();
     }
 }
 
@@ -700,6 +752,7 @@ PersonaSwitcher.onWindowLoad = function()
 
 // getMostRecentWindow returns the newest one created, not the one on top
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Events#Window_events
+// Gecko 1.9.2 => FF3.6 and TB3.1
 PersonaSwitcher.onWindowActivate = function()
 {
     'use strict';
