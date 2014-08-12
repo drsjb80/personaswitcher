@@ -41,12 +41,13 @@
       </Description>
     </em:localized>
 
+<!-- https://developer.mozilla.org/en-US/docs/Toolkit_version_format -->
     <em:aboutURL>chrome://personaswitcher/content/about.xul</em:aboutURL>
     <em:optionsURL>chrome://personaswitcher/content/options.xul</em:optionsURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
-        <em:minVersion>3.6.*</em:minVersion>
+        <em:minVersion>3.6</em:minVersion>
         <em:maxVersion>31.*</em:maxVersion>
       </Description>
     </em:targetApplication>

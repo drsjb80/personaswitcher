@@ -148,18 +148,16 @@ PersonaSwitcher.activateMenu = function()
     'use strict';
     PersonaSwitcher.logger.log();
 
-    var doc = PersonaSwitcher.activeWindow.document;
-
     if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
     {
-        var menu = doc.getElementById ("personaswitcher-main-menubar");
+        var menu = document.getElementById ("personaswitcher-main-menubar");
 
         menu.open = true;
     }
     else if (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
     {
-        var toolsMenu = PersonaSwitcher.getToolsMenu (doc);
-        var subMenu = doc.getElementById ("personaswitcher-tools-submenu");
+        var toolsMenu = PersonaSwitcher.getToolsMenu (document);
+        var subMenu = document.getElementById ("personaswitcher-tools-submenu");
 
         if (toolsMenu && subMenu)
         {
@@ -287,10 +285,10 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
     {
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime
-        var darwin = PersonaSwitcher.XULRuntime.OS == "Darwin";
+        // var darwin = PersonaSwitcher.XULRuntime.OS == "Darwin";
         var delay = PersonaSwitcher.prefs.getIntPref ("preview-delay");
 
-        if (darwin || delay == 0)
+        if (delay == 0)
         {
             item.addEventListener
             (
@@ -304,17 +302,6 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
 
 // https://developer.mozilla.org/en-US/docs/Web/Events/DOMMenuItemInactive
 // https://bugzilla.mozilla.org/show_bug.cgi?id=420033
-/*
-            if (!darwin)
-            {
-                item.addEventListener
-                (
-                    "DOMMenuItemInactive",
-                    function () { LightweightThemeManager.resetPreview(); },
-                    false
-                );
-            }
-*/
         }
         else
         {
@@ -324,31 +311,16 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
                 "DOMMenuItemActive",
                 function ()
                 {
-                    PersonaSwitcher.logger.log ("DOMMenuItemActive");
                     PersonaSwitcher.previewTimer.cancel();
                     PersonaSwitcher.previewWhich = which;
                     PersonaSwitcher.previewTimer.init
                     (
-                        PersonaSwitcher.previewObserver,
-                        delay,
+                        PersonaSwitcher.previewObserver, delay,
                         Components.interfaces.nsITimer.TYPE_ONE_SHOT
                     );
                 },
                 false
             );
-            /*
-            item.addEventListener
-            (
-                "DOMMenuItemInactive",
-                function ()
-                {
-                    PersonaSwitcher.logger.log ("canceling timer");
-                    PersonaSwitcher.previewTimer.cancel();
-                    LightweightThemeManager.resetPreview();
-                },
-                false
-            );
-            */
         }
     }
     return (item);
@@ -378,25 +350,6 @@ PersonaSwitcher.createAllMenuPopups = function (menupopup, toolbar, arr)
         },
         false
     );
-    /*
-    item.addEventListener
-    (
-        "DOMMenuItemActive",
-        function ()
-        {
-            PersonaSwitcher.logger.log ("i'm here");
-            LightweightThemeManager.previewTheme (null);
-        },
-        false
-    );
-    item.addEventListener
-    (
-        "DOMMenuItemInactive",
-        function () { LightweightThemeManager.resetPreview(); },
-        false
-    );
-    */
-
     menupopup.appendChild (item);
 
     // sort here
@@ -593,7 +546,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
         return (null);
     }
 
-    var menu = document.createElementNS (PersonaSwitcher.XULNS, "menu");
+    var menu = doc.createElementNS (PersonaSwitcher.XULNS, "menu");
     menu.setAttribute ("label",
         PersonaSwitcher.stringBundle.
             GetStringFromName ("personaswitcher.label"));
@@ -605,7 +558,7 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
         menu.setAttribute ("accesskey", accesskey.toUpperCase().charAt (0));
     }
 
-    menupopup = document.createElementNS (PersonaSwitcher.XULNS, "menupopup");
+    menupopup = doc.createElementNS (PersonaSwitcher.XULNS, "menupopup");
     menupopup.setAttribute ("id", menupopupId);
     menupopup.addEventListener
     (
@@ -620,7 +573,6 @@ PersonaSwitcher.createMenuAndPopup = function (doc, which)
         false
     );
 
-    PersonaSwitcher.createMenuPopup (menupopup, false);
     menu.appendChild (menupopup);
     return (menu);
 }
@@ -665,7 +617,7 @@ PersonaSwitcher.createMenu = function (doc, which)
 
 /*
 ** create a particular menu in all windows, called only when a preference
-** changes.
+** changes
 */
 PersonaSwitcher.createMenus = function (which)
 {
@@ -708,6 +660,9 @@ PersonaSwitcher.popupShowing = function (event)
 
 PersonaSwitcher.popupHidden = function ()
 {
+    'use strict';
+    PersonaSwitcher.logger.log();
+
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
     {
         if (PersonaSwitcher.prefs.getIntPref ("preview-delay") > 0)
@@ -728,14 +683,13 @@ PersonaSwitcher.onWindowLoad = function()
         PersonaSwitcher.firstTime = false;
         PersonaSwitcher.setLogger();
         PersonaSwitcher.startTimer();
+        PersonaSwitcher.activeWindow = this;
 
         if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
         {
             PersonaSwitcher.rotate();
         }
     }
-
-    PersonaSwitcher.logger.log();
 
     PersonaSwitcher.setKeyset (this.document);
     PersonaSwitcher.setToolboxMinheight (this.document);
@@ -773,5 +727,7 @@ window.addEventListener ("load", PersonaSwitcher.onWindowLoad, false);
 
 window.addEventListener
     ("activate", PersonaSwitcher.onWindowActivate, false);
+/*
 window.addEventListener
     ("deactivate", PersonaSwitcher.onWindowDeactivate, false);
+*/
