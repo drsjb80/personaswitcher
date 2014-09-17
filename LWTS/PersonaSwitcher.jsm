@@ -126,7 +126,7 @@ PersonaSwitcher.prefsObserver =
     observe: function (subject, topic, data)
     {
         'use strict';
-        PersonaSwitcher.logger.log (subject);
+        // PersonaSwitcher.logger.log (subject);
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
 
@@ -438,6 +438,8 @@ PersonaSwitcher.switchTo = function (toWhich)
         // 3.* compatability
         LightweightThemeManager.themeChanged (toWhich);
     }
+
+    LightweightThemeManager.updateCurrentTheme();
 
     PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);
 

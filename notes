@@ -1,3 +1,6 @@
+GET https://addons.cdn.mozilla.net/en-US/firefox/_files/123713/titled-1copy.jpg [HTTP/1.1 404 Not Found 220ms]
+GET https://addons.cdn.mozilla.net/en-US/firefox/_files/123713/titled-2copy.jpg [HTTP/1.1 404 Not Found 278ms]
+
 https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/3.6/mac/en-US/
 https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/4.0/mac/en-US/
 
@@ -43,3 +46,9 @@ function myDump(aMessage) {
 http://www.thethinkingatheist.com/forum/Thread-Which-Internet-Browser-Do-You-Mostly-Use?pid=94252#pid94252
 http://techsalsa.com/change-firefox-themes-without-restarting-browser/
 http://browser.iyogi.com/news/mozilla-firefox-persona-switcher.html
+
+AddonManagerPrivate
+/Users/beaty-admin/src/mozilla/src/toolkit/mozapps/extensions/AddonManager.jsm
+
+JavaScript error: chrome://personaswitcher/content/overlay.js, line 283:
+AddonManagerPrivate.addAddonListener is not a function

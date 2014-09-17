@@ -19,6 +19,11 @@ zip personaswitcher.xpi \
     chrome/locale/zh-TW/options.dtd \
     chrome/locale/zh-TW/overlay.dtd \
     chrome/locale/zh-TW/personaswitcher.properties \
+    chrome/locale/zh-CN/ \
+    chrome/locale/zh-CN/about.dtd \
+    chrome/locale/zh-CN/options.dtd \
+    chrome/locale/zh-CN/overlay.dtd \
+    chrome/locale/zh-CN/personaswitcher.properties \
     chrome/locale/de/ \
     chrome/locale/de/about.dtd \
     chrome/locale/de/options.dtd \

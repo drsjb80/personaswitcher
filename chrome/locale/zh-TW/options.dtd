@@ -23,6 +23,7 @@
 <!ENTITY options.startup-switch.desc "開啟 Firefox 時立即更換一次面板。">
 <!ENTITY options.toolbox-minheight.desc "限制 Firefox 與 SeaMonkey 上方工具列最低總高度至：">
 <!ENTITY options.preview.desc "滑鼠經過選單選項時預覽。">
+<!ENTITY options.preview-delay.desc "(ms) delay.">
 <!ENTITY options.notification-workaround.desc "隱藏 Personas Plus 在面板變更時顯示的提示。">
 
 <!ENTITY options.menus.title "將「面板」選單顯示於（至少勾一項才能以快捷鍵呼叫「面板」選單）">

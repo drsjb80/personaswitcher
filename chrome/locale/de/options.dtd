@@ -23,6 +23,7 @@
 <!ENTITY options.startup-switch.desc "Wechsel beim Start.">
 <!ENTITY options.toolbox-minheight.desc "Minimale Höhe der oberen Toolbox (in Firefox und SeaMonkey):">
 <!ENTITY options.preview.desc "Personavorschau bei Menüauswahl.">
+<!ENTITY options.preview-delay.desc "(ms) delay.">
 <!ENTITY options.notification-workaround.desc "Entferne Personas Plus Benachrichtigungen.">
 
 <!ENTITY options.menus.title "Persona Menü Orte">

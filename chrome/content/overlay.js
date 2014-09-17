@@ -64,10 +64,6 @@ PersonaSwitcher.findMods = function (which)
 PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 {
     'use strict';
-    PersonaSwitcher.logger.log (id);
-    PersonaSwitcher.logger.log (mods);
-    PersonaSwitcher.logger.log (which);
-    PersonaSwitcher.logger.log (command);
 
     var key = doc.createElement ("key");
 
@@ -89,6 +85,10 @@ PersonaSwitcher.setKeyset = function (doc)
     PersonaSwitcher.logger.log();
 
     var existing = doc.getElementById ("PersonaSwitcher.defaultPersonaKey");
+
+    // there are windows/documents that don't have keyset -- e.g.: prefs
+    if (existing === null) return;
+
     var parent = existing.parentNode;
     var grandParent = parent.parentNode;
 
@@ -96,6 +96,8 @@ PersonaSwitcher.setKeyset = function (doc)
     grandParent.removeChild (parent);
     var keyset = doc.createElement ("keyset");
 
+            // "PersonaSwitcher.logger.log(); gFindBar.open();"
+            // "PersonaSwitcher.logger.log(); gFindBar.close();"
     var keys =
     [
         [
@@ -132,13 +134,15 @@ PersonaSwitcher.setKeyset = function (doc)
     {
         if (keys[key][2] == '') continue;
 
-        var newKey = PersonaSwitcher.makeKey (doc, keys[key][0], keys[key][1],
-            keys[key][2], keys[key][3]);
+        var newKey = PersonaSwitcher.makeKey (doc,
+            keys[key][0], keys[key][1], keys[key][2], keys[key][3]);
 
         keyset.appendChild (newKey);
     }
 
     grandParent.appendChild (keyset);
+    PersonaSwitcher.logger.log 
+        (doc.getElementById ("PersonaSwitcher.defaultPersonaKey"));
 }
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts#Assigning_a_keyboard_shortcut_on_a_menu
@@ -227,8 +231,26 @@ PersonaSwitcher.setToolboxMinheights = function()
     }
 }
 
+// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager
+// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonListener
+PersonaSwitcher.AddonListener =
+{
+    onInstalled: function (addon)
+    {
+        PersonaSwitcher.logger.log (addon.type);
+    }
+}
+
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
+AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
+
 /*
-** menus have menupopups which have menuitems.
+let tmp = {};
+Components.utils.import("resource://gre/modules/AddonManager.jsm", tmp);
+let AddonManager = tmp.AddonManager;
+AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
+let AddonManagerPrivate = tmp.AddonManagerPrivate;
+AddonManagerPrivate.addAddonListener (PersonaSwitcher.AddonListener);
 */
 
 PersonaSwitcher.previewTimer = Components.classes["@mozilla.org/timer;1"].
@@ -245,12 +267,9 @@ PersonaSwitcher.previewObserver =
     }
 }
 
-PersonaSwitcher.dealWithDOMMenuItemInactive =
-{
-    handleEvent: function(e) {
-        PersonaSwitcher.logger.log(e);
-    }
-}
+/*
+** menus have menupopups which have menuitems.
+*/
 
 /*
 ** create a menuitem, possibly creating a preview
@@ -305,7 +324,7 @@ PersonaSwitcher.createMenuItem = function (which, toolbar)
         }
         else
         {
-            // https://developer.mozilla.org/en-US/docs/Web/API/Event
+            // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Events
             item.addEventListener
             (
                 "DOMMenuItemActive",
@@ -339,15 +358,7 @@ PersonaSwitcher.createAllMenuPopups = function (menupopup, toolbar, arr)
     item.addEventListener
     (
         "command",
-        function ()
-        {
-            if (PersonaSwitcher.prefs.getIntPref ("preview-delay") > 0)
-            {
-                PersonaSwitcher.previewTimer.cancel();
-            }
-
-            PersonaSwitcher.setDefault();
-        },
+        function () { PersonaSwitcher.setDefault(); },
         false
     );
     menupopup.appendChild (item);
@@ -362,6 +373,7 @@ PersonaSwitcher.createAllMenuPopups = function (menupopup, toolbar, arr)
     }
 }
 
+// get the global, don't worry about blowing off the items
 PersonaSwitcher.createMenuPopup = function (menupopup, toolbar)
 {
     'use strict';
@@ -413,8 +425,8 @@ PersonaSwitcher.getToolsMenuPopup = function (doc)
         "Thunderbird":  "taskPopup"
     };
 
-    PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
-    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
+    // PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
+    // PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
     return (doc.getElementById (mapping[PersonaSwitcher.XULAppInfo.name]));
 }
 
@@ -431,8 +443,8 @@ PersonaSwitcher.getMainMenu = function (doc)
         "Thunderbird":  "mail-menubar"
     };
 
-    PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
-    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
+    // PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
+    // PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
     return (doc.getElementById (mapping[PersonaSwitcher.XULAppInfo.name]));
 }
 
@@ -449,8 +461,8 @@ PersonaSwitcher.getToolsMenu = function (doc)
         "Thunderbird":  "tasksMenu"
     };
 
-    PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
-    PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
+    // PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
+    // PersonaSwitcher.logger.log (mapping[PersonaSwitcher.XULAppInfo.name]);
     return (doc.getElementById (mapping[PersonaSwitcher.XULAppInfo.name]));
 }
 
@@ -523,6 +535,7 @@ PersonaSwitcher.removeMenus = function (which)
 ** create a specific menu in a doc, called with either "tools-submenu" or
 ** "main-menubar". n.b.: this does not populate the popup as that is done
 ** dynamically.
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/PopupGuide/MenuModification
 */
 PersonaSwitcher.createMenuAndPopup = function (doc, which)
 {
@@ -674,7 +687,8 @@ PersonaSwitcher.popupHidden = function ()
     }
 }
 
-PersonaSwitcher.onWindowLoad = function()
+// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/window
+PersonaSwitcher.onWindowLoad = function (event)
 {
     'use strict';
 
@@ -683,7 +697,7 @@ PersonaSwitcher.onWindowLoad = function()
         PersonaSwitcher.firstTime = false;
         PersonaSwitcher.setLogger();
         PersonaSwitcher.startTimer();
-        PersonaSwitcher.activeWindow = this;
+        // PersonaSwitcher.activeWindow = this;
 
         if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
         {
@@ -692,6 +706,14 @@ PersonaSwitcher.onWindowLoad = function()
     }
 
     PersonaSwitcher.setKeyset (this.document);
+
+    PersonaSwitcher.logger.log (gFindBar);
+    PersonaSwitcher.logger.log (gFindBar.hidden);
+    gFindBar.open();
+    PersonaSwitcher.logger.log (gFindBar.hidden);
+    gFindBar.close();
+    PersonaSwitcher.logger.log (gFindBar.hidden);
+
     PersonaSwitcher.setToolboxMinheight (this.document);
 
     if (PersonaSwitcher.prefs.getBoolPref ("tools-submenu"))
@@ -704,9 +726,12 @@ PersonaSwitcher.onWindowLoad = function()
     }
 }
 
+window.addEventListener ("load", PersonaSwitcher.onWindowLoad, false);
+
 // getMostRecentWindow returns the newest one created, not the one on top
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Events#Window_events
 // Gecko 1.9.2 => FF3.6 and TB3.1
+/*
 PersonaSwitcher.onWindowActivate = function()
 {
     'use strict';
@@ -723,11 +748,8 @@ PersonaSwitcher.onWindowDeactivate = function()
     PersonaSwitcher.activeWindow = null;
 }
 
-window.addEventListener ("load", PersonaSwitcher.onWindowLoad, false);
-
 window.addEventListener
     ("activate", PersonaSwitcher.onWindowActivate, false);
-/*
 window.addEventListener
     ("deactivate", PersonaSwitcher.onWindowDeactivate, false);
 */

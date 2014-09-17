@@ -1,6 +1,7 @@
 #! /bin/bash
 
-for i in en-US de zh-TW it
+languages="en-US de zh-TW zh-CN it"
+for i in $languages
 do
     for j in chrome/locale/$i/*.dtd
     do
@@ -8,7 +9,7 @@ do
     done
 done
 
-for i in de zh-TW it
+for i in $languages
 do
     for j in /tmp/$i*.dtd
     do

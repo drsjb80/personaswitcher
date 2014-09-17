@@ -1,69 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
-  <Description about="urn:mozilla:install-manifest">
-    <em:id>drsjb80@gmail.com</em:id>
-    <em:type>2</em:type>
-    <em:name>Persona Switcher</em:name>
-    <em:version>2.0.4</em:version>
-    <em:creator>Steve Beaty</em:creator>
-    <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
-    <em:contributor>鄭筑云 (Zheng Zhu-Yun)</em:contributor>
-    <em:translator>鄭筑云 (Zheng Zhu-Yun)</em:translator>
-    <em:translator>Christian Peters</em:translator>
-    <em:translator>Andrea Manini></em:translator>
-    <em:iconURL>chrome://personaswitcher/skin/PersonaSwitcher32.png</em:iconURL>
+<RDF
+    xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+    <Description about="urn:mozilla:install-manifest">
+        <em:id>drsjb80@gmail.com</em:id>
+        <em:name>Persona Switcher</em:name>
+        <em:type>2</em:type>
+        <em:version>2.0.4</em:version>
+        <em:creator>Steve Beaty</em:creator>
+        <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
+        <em:contributor>鄭筑云 (Zheng Zhu-Yun)</em:contributor>
+        <em:translator>鄭筑云 (Zheng Zhu-Yun)</em:translator>
+        <em:translator>汪洋 (Yang Wang)</em:translator>
+        <em:translator>Christian Peters</em:translator>
+        <em:translator>Andrea Manini></em:translator>
+        <em:iconURL>chrome://personaswitcher/skin/PersonaSwitcher32.png</em:iconURL>
 
-    <em:localized>
-      <Description>
-        <em:locale>zh-TW</em:locale>
-        <em:description>讓您以「定時更換、重啟更換、隨機更換、自行切換、瞬間預覽」的方式享受火狐面板，也能瞬間切回預設面板，並有方便的「快捷鍵、附加元件列圖示選單、主功能表選單、工具功能表選單」供快速操作，外加清楚易懂的中文化介面供您使用！！</em:description>
-      </Description>
-    </em:localized>
+        <em:localized>
+          <Description>
+            <em:locale>zh-TW</em:locale>
+            <em:name>Persona Switcher</em:name>
+            <em:description>讓您以「定時更換、重啟更換、隨機更換、自行切換、瞬間預覽」的方式享受火狐面板，也能瞬間切回預設面板，並有方便的「快捷鍵、附加元件列圖示選單、主功能表選單、工具功能表選單」供快速操作，外加清楚易懂的中文化介面供您使用！！</em:description>
+          </Description>
+        </em:localized>
 
-    <em:localized>
-      <Description>
-        <em:locale>en-US</em:locale>
-        <em:description>Quickly switch between your personas or reset it back to the default</em:description>
-      </Description>
-    </em:localized>
+        <em:localized>
+          <Description>
+            <em:locale>zh-CN</em:locale>
+            <em:name>选项</em:name>
+            <em:description>讓您以「定時更換、重啟更換、隨機更換、自行切換、瞬間預覽」的方式享受火狐面板，也能瞬間切回預設面板，並有方便的「快捷鍵、附加元件列圖示選單、主功能表選單、工具功能表選單」供快速操作，外加清楚易懂的中文化介面供您使用！！</em:description>
+          </Description>
+        </em:localized>
 
-    <em:localized>
-      <Description>
-        <em:locale>it</em:locale>
-        <em:description>Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facoltà di ritorno al tema Predefinito. Possibilità di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox/Thunderbird/Seamonkey</em:description>
-      </Description>
-    </em:localized>
+        <em:localized>
+          <Description>
+            <em:locale>en</em:locale>
+            <em:name>Persona Switcher</em:name>
+            <em:description>Quickly switch between your personas or reset it back to the default</em:description>
+          </Description>
+        </em:localized>
 
-    <em:localized>
-      <Description>
-        <em:locale>de</em:locale>
-        <em:description> Schneller Wechsel zwischen ihren Personas oder zurück zu den Standardeinstellungen über das Menü oder der Tastatur. Sie können auch automatisch durch alle Themen in einem Intervall ihrer Wahl wechseln. Arbeitet mit Firefox, Thunderbird und Seamonkey.</em:description>
-      </Description>
-    </em:localized>
+        <em:localized>
+          <Description>
+            <em:locale>it</em:locale>
+            <em:name>Persona Switcher</em:name>
+            <em:description>Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facoltà di ritorno al tema Predefinito. Possibilità di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox/Thunderbird/Seamonkey</em:description>
+          </Description>
+        </em:localized>
 
-<!-- https://developer.mozilla.org/en-US/docs/Toolkit_version_format -->
-    <em:aboutURL>chrome://personaswitcher/content/about.xul</em:aboutURL>
-    <em:optionsURL>chrome://personaswitcher/content/options.xul</em:optionsURL>
-    <em:targetApplication>
-      <Description>
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
-        <em:minVersion>3.6</em:minVersion>
-        <em:maxVersion>31.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-    <em:targetApplication>
-      <Description>
-        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id> <!-- Thunderbird -->
-        <em:minVersion>10.0</em:minVersion>
-        <em:maxVersion>26.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-    <em:targetApplication>
-      <Description>
-        <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id> <!-- Seamonkey -->
-        <em:minVersion>2.0</em:minVersion>
-        <em:maxVersion>2.26.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-  </Description>
-</RDF>
+        <em:localized>
+          <Description>
+            <em:locale>de</em:locale>
+            <em:name>Persona Switcher</em:name>
+            <em:description> Schneller Wechsel zwischen ihren Personas oder zurück zu den Standardeinstellungen über das Menü oder der Tastatur. Sie können auch automatisch durch alle Themen in einem Intervall ihrer Wahl wechseln. Arbeitet mit Firefox, Thunderbird und Seamonkey.</em:description>
+          </Description>
+        </em:localized>
+
+        <em:aboutURL>chrome://personaswitcher/content/about.xul</em:aboutURL>
+        <em:optionsURL>chrome://personaswitcher/content/options.xul</em:optionsURL>
+
+        <!-- https://developer.mozilla.org/en-US/docs/Toolkit_version_format -->
+        <em:targetApplication>
+          <Description>
+            <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
+            <em:minVersion>3.6</em:minVersion>
+            <em:maxVersion>31.*</em:maxVersion>
+          </Description>
+        </em:targetApplication>
+
+        <em:targetApplication>
+          <Description>
+            <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id> <!-- Thunderbird -->
+            <em:minVersion>10.0</em:minVersion>
+            <em:maxVersion>26.*</em:maxVersion>
+          </Description>
+        </em:targetApplication>
+
+        <em:targetApplication>
+          <Description>
+            <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id> <!-- Seamonkey -->
+            <em:minVersion>2.0</em:minVersion>
+            <em:maxVersion>2.26.*</em:maxVersion>
+          </Description>
+        </em:targetApplication>
+    </Description>
+    </RDF>
