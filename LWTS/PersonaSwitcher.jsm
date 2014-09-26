@@ -96,18 +96,9 @@ PersonaSwitcher.logger = null;
 
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
-
-PersonaSwitcher.previousMenupopup = [];
-PersonaSwitcher.previousMenupopupArray = [];
-
 PersonaSwitcher.previewWhich = null;
-
-/*
-PersonaSwitcher.previousMainMenubarMenupopup = null;
-PersonaSwitcher.previousMainMenubarMenupopuparr = null;
-PersonaSwitcher.previousToolsSubmenuMenupopup = null;
-PersonaSwitcher.previousToolsSubmenuMenupopuparr = null;
-*/
+PersonaSwitcher.extensionManager = null;
+PersonaSwitcher.defaultTheme = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -147,6 +138,11 @@ PersonaSwitcher.prefsObserver =
                 break;
             }
             case "preview":
+            {
+                // regenerate menus based on new setting
+                PersonaSwitcher.changePersonaMenus();
+                break;
+            }
             case "startup-switch":
             {
                 break; // nothing to do as the value is queried elsewhere
@@ -393,16 +389,7 @@ PersonaSwitcher.removeNotifications = function()
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
-    PersonaSwitcher.logger.log();
-
-    if (toWhich !== null)
-    {
-        PersonaSwitcher.logger.log (toWhich.name);
-    }
-    else
-    {
-        PersonaSwitcher.logger.log (toWhich);
-    }
+    PersonaSwitcher.logger.log (toWhich);
 
     /*
     ** if it's there, use it
@@ -411,7 +398,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         PersonaSwitcher.logger.log();
 
-        if (toWhich === null)
+        if (toWhich.name === "Default")
         {
             PersonaService.changeToDefaultPersona();
         }
@@ -438,8 +425,6 @@ PersonaSwitcher.switchTo = function (toWhich)
         // 3.* compatability
         LightweightThemeManager.themeChanged (toWhich);
     }
-
-    LightweightThemeManager.updateCurrentTheme();
 
     PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);
 
@@ -499,7 +484,6 @@ PersonaSwitcher.getPersonas = function()
     return (arr);
 }
 
-
 PersonaSwitcher.previous = function()
 {
     'use strict';
@@ -530,7 +514,7 @@ PersonaSwitcher.setDefault = function()
     'use strict';
     PersonaSwitcher.logger.log();
 
-    PersonaSwitcher.switchTo (null);
+    PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme);
     PersonaSwitcher.stopTimer();
 }
 

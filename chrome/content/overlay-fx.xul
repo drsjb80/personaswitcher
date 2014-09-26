@@ -22,6 +22,8 @@
         <key id="PersonaSwitcher.defaultPersonaKey"/>
     </keyset>
 
+<!-- onpopupshowing="PersonaSwitcher.popupShowing (event);" -->
+<!-- onpopuphidden="PersonaSwitcher.popupHidden();" -->
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton
             id="personaswitcher-button"
@@ -30,11 +32,11 @@
             type="menu">
             <menupopup
                 id="personaswitcher-addon"
-                onpopupshowing="PersonaSwitcher.popupShowing (event);"
-                onpopuphidden="PersonaSwitcher.popupHidden();">
-            </menupopup>
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
         </toolbarbutton>
     </toolbarpalette>
+
 
     <script src="overlay.js"/>
 

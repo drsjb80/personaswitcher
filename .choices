@@ -10,6 +10,8 @@ vi install.rdf chrome/content/about.xul # version changes
 ----
 cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
 ----
+../Firefox-3.6.app/Contents/MacOS/firefox-bin -P 36 &
+----
 hg clone http://hg.mozilla.org/mozilla-central/file/81dd97739fa1/toolkit/mozapps/extensions LightweightThemeManager.jsm
 ----
 git status
@@ -35,3 +37,5 @@ chrome://browser/content/browser.xul
 open http://www.mozilla.org/en-US/thunderbird/all-beta.html
 open http://www.mozilla.org/en-US/firefox/all-beta.html
 open http://www.seamonkey-project.org/releases/
+----
+plato -r -d report chrome/content

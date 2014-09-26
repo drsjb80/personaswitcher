@@ -52,3 +52,13 @@ AddonManagerPrivate
 
 JavaScript error: chrome://personaswitcher/content/overlay.js, line 283:
 AddonManagerPrivate.addAddonListener is not a function
+
+add menupopup rebuild on keypresses, auto, and selections
+
+https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/3.6.28/mac/en-US/Firefox%203.6.28.dmg
+
+fix preview rebuilding menu
+
+if (event) {
+          event.stopPropagation();
+btPersonas.js
