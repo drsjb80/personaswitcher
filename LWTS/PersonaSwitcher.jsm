@@ -97,6 +97,7 @@ PersonaSwitcher.logger = null;
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
+PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
 PersonaSwitcher.defaultTheme = null;
 

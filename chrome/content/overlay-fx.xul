@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?xml-stylesheet href="chrome://personaswitcher/skin/toolbar-button.css"
     type="text/css"?>
 
@@ -6,12 +7,14 @@
 
 <overlay
     id="personaswitcher-overlay"
-    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+>
 
     <stringbundleset id="stringbundleset">
         <stringbundle
             id="stringbundle-personaswitcher"
-            src="chrome://personaswitcher/locale/personaswitcher.properties"/>
+            src="chrome://personaswitcher/locale/personaswitcher.properties"
+        />
     </stringbundleset>
 
     <keyset>
@@ -21,6 +24,30 @@
         -->
         <key id="PersonaSwitcher.defaultPersonaKey"/>
     </keyset>
+
+    <menubar id="main-menubar">
+        <menu
+            id="personaswitcher-main-menubar"
+            label="&personaswitcher-button.label;"
+            insertafter="tools-menu">
+            <menupopup
+                id="personaswitcher-main-menubar-popup"
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
+        </menu>
+    </menubar>
+
+    <menupopup id="menu_ToolsPopup">
+        <menu
+            id="personaswitcher-tools-submenu"
+            label="&personaswitcher.label;">
+            <menupopup
+                id="personaswitcher-tools-submenu-popup"
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
+        </menu>
+    </menupopup>
+
 
 <!-- onpopupshowing="PersonaSwitcher.popupShowing (event);" -->
 <!-- onpopuphidden="PersonaSwitcher.popupHidden();" -->
