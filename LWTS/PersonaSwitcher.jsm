@@ -177,12 +177,11 @@ PersonaSwitcher.prefsObserver =
 
                 if (PersonaSwitcher.prefs.getBoolPref (data))
                 {
-                    PersonaSwitcher.createMenus (data);
-                    PersonaSwitcher.logger.log ("after call");
+                    PersonaSwitcher.showMenus (data);
                 }
                 else
                 {
-                    PersonaSwitcher.removeMenus (data);
+                    PersonaSwitcher.hideMenus (data);
                 }
 
                 break;
@@ -203,7 +202,8 @@ PersonaSwitcher.prefsObserver =
             {
                 if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
                 {
-                    PersonaSwitcher.removeMenus ("main-menubar");
+                    // FIXME
+                    PersonaSwitcher.hideMenus ("main-menubar");
                     PersonaSwitcher.createMenus ("main-menubar");
                 }
             }

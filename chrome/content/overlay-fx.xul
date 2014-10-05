@@ -32,8 +32,9 @@
             insertafter="tools-menu">
             <menupopup
                 id="personaswitcher-main-menubar-popup"
-                onpopuphidden="PersonaSwitcher.popupHidden();"
-            />
+                onpopuphidden="PersonaSwitcher.popupHidden();">
+                <menuitem label="remove me"/>
+            </menupopup>
         </menu>
     </menubar>
 
@@ -43,8 +44,9 @@
             label="&personaswitcher.label;">
             <menupopup
                 id="personaswitcher-tools-submenu-popup"
-                onpopuphidden="PersonaSwitcher.popupHidden();"
-            />
+                onpopuphidden="PersonaSwitcher.popupHidden();">
+                <menuitem label="remove me"/>
+            </menupopup>
         </menu>
     </menupopup>
 
@@ -59,8 +61,9 @@
             type="menu">
             <menupopup
                 id="personaswitcher-addon"
-                onpopuphidden="PersonaSwitcher.popupHidden();"
-            />
+                onpopuphidden="PersonaSwitcher.popupHidden();">
+                <menuitem label="remove me"/>
+            </menupopup>
         </toolbarbutton>
     </toolbarpalette>
 
