@@ -57,6 +57,8 @@ add menupopup rebuild on keypresses, auto, and selections
 
 https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/3.6.28/mac/en-US/Firefox%203.6.28.dmg
 
-fix preview rebuilding menu
+Default theme not listed in 3.6
+
+browser.dom.window.dump.enabled
 
 /Users/beaty-admin/src/mozilla/src/browser/base/content/browser-addons.js 

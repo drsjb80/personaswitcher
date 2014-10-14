@@ -10,7 +10,7 @@ vi install.rdf chrome/content/about.xul # version changes
 ----
 cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
 ----
-../Firefox-3.6.app/Contents/MacOS/firefox-bin -P 36 &
+~/src/Firefox-3.6.app/Contents/MacOS/firefox-bin -P 36 &
 ----
 hg clone http://hg.mozilla.org/mozilla-central/file/81dd97739fa1/toolkit/mozapps/extensions LightweightThemeManager.jsm
 ----

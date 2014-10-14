@@ -388,12 +388,13 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, toolbar, arr)
     }
 };
 
-PersonaSwitcher.createMenuPopup = function (doc, which, toolbar)
+PersonaSwitcher.createMenuPopup = function (event)
 {
     'use strict';
 
-    PersonaSwitcher.logger.log (doc);
+    PersonaSwitcher.logger.log();
 
+    /*
     var menuId = "personaswitcher-" + which;
     var menupopupId = "personaswitcher-" + which + "-popup";
 
@@ -411,9 +412,20 @@ PersonaSwitcher.createMenuPopup = function (doc, which, toolbar)
     {
         menu.setAttribute ("accesskey", accesskey.toUpperCase().charAt (0));
     }
+    */
 
-    var menupopup = doc.getElementById (menupopupId);
+    var menupopup = event.target;
+    var doc = event.target.ownerDocument;
 
+    PersonaSwitcher.logger.log (menupopup);
+    PersonaSwitcher.logger.log (doc);
+
+    while (menupopup.hasChildNodes())
+    {
+        menupopup.removeChild (menupopup.firstChild);
+    }
+
+    /*
     if (menupopup)
     {
         PersonaSwitcher.logger.log ("removing menupopup");
@@ -423,7 +435,9 @@ PersonaSwitcher.createMenuPopup = function (doc, which, toolbar)
     {
         PersonaSwitcher.logger.log ("menupopup not found");
     }
+    */
 
+    /*
     menupopup = doc.createElementNS (PersonaSwitcher.XULNS, "menupopup");
     menupopup.setAttribute ("id", menupopupId);
 
@@ -446,8 +460,10 @@ PersonaSwitcher.createMenuPopup = function (doc, which, toolbar)
         function () { PersonaSwitcher.popupHidden(); },
         false
     );
+    */
 
     var arr = PersonaSwitcher.getPersonas();
+    var toolbar = "personaswitcher-toolbarbutton-popup" === event.target.id;
 
     /*
     if (arr.length === 0 && ! PersonaSwitcher.defaultTheme && toolbar &&
@@ -472,8 +488,8 @@ PersonaSwitcher.createMenuPopup = function (doc, which, toolbar)
         PersonaSwitcher.createMenuItems (doc, menupopup, toolbar, arr);
     }
 
-    menu.appendChild (menupopup);
-    PersonaSwitcher.logger.log (menu);
+    // menu.appendChild (menupopup);
+    // PersonaSwitcher.logger.log (menu);
 };
 
 PersonaSwitcher.createMenuPopups = function (which)
@@ -652,39 +668,9 @@ PersonaSwitcher.onWindowLoad = function (event)
             AddonManager.getAddonsByTypes
             (
                 ["theme"],
-                function (themes)
-                {
-                    /*
-                    for (var theme in themes)
-                    {
-                        PersonaSwitcher.logger.log (themes[theme].name);
-                    }
-                    PersonaSwitcher.personas = themes;
-                    */
-
-                    PersonaSwitcher.defaultTheme = themes[0];
-                    PersonaSwitcher.createAllMenuPopups();
-                }
+                function (themes) { PersonaSwitcher.defaultTheme = themes[0]; }
             );
         }
-        else if (PersonaSwitcher.extensionManager)
-        {
-            var count = {};
-            var items = {};
-            var shit = PersonaSwitcher.extensionManager.getItemList (4, count, items);
-            PersonaSwitcher.dump (count);
-            PersonaSwitcher.dump (items);
-            PersonaSwitcher.dump (shit);
-            PersonaSwitcher.createAllMenuPopups();
-        }
-        else
-        {
-            PersonaSwitcher.logger.log ("No extension manager");
-        }
-    }
-    else
-    {
-        PersonaSwitcher.createAllMenuPopups (this.document);
     }
 
     PersonaSwitcher.setKeyset (this.document);

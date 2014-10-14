@@ -30,8 +30,11 @@
             id="personaswitcher-main-menubar"
             label="&personaswitcher-button.label;"
             insertafter="tools-menu">
-            <!-- have to put an initial one in for some reason -->
-            <menupopup id="personaswitcher-main-menubar-popup"/>
+            <menupopup
+                id="personaswitcher-main-menubar-popup"
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
         </menu>
     </menubar>
 
@@ -39,22 +42,25 @@
         <menu
             id="personaswitcher-tools-submenu"
             label="&personaswitcher.label;">
-            <!-- have to put an initial one in for some reason -->
-            <menupopup id="personaswitcher-tools-submenu-popup"/>
+            <menupopup
+                id="personaswitcher-tools-submenu-popup"
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
         </menu>
     </menupopup>
 
-<!--
-                onpopuphidden="PersonaSwitcher.popupHidden();"/>
--->
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton
-            id="personaswitcher-button"
+            id="personaswitcher-toolbarbutton"
             label="&personaswitcher-button.label;"
             tooltiptext="&personaswitcher-button.tooltip;"
             type="menu">
-            <!-- have to put an initial one in for some reason -->
-            <menupopup id="personaswitcher-button-popup"/>
+            <menupopup
+                id="personaswitcher-toolbarbutton-popup"
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
         </toolbarbutton>
     </toolbarpalette>
 
