@@ -36,5 +36,29 @@
         </toolbarbutton>
     </toolbarpalette>
 
+    <menubar id="mail-menubar">
+        <menu
+            id="personaswitcher-main-menubar"
+            label="&personaswitcher-button.label;"
+            insertafter="tools-menu">
+            <menupopup
+                id="personaswitcher-main-menubar-popup"
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
+        </menu>
+    </menubar>
+
+    <menupopup id="taskPopup">
+        <menu
+            id="personaswitcher-tools-submenu"
+            label="&personaswitcher.label;">
+            <menupopup
+                id="personaswitcher-tools-submenu-popup"
+                onpopuphidden="PersonaSwitcher.popupHidden();"
+            />
+        </menu>
+    </menupopup>
+
+
     <script src="overlay.js"/>
 </overlay>

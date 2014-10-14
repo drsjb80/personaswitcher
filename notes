@@ -59,6 +59,4 @@ https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/3.6.28/mac/en-US/Firefo
 
 fix preview rebuilding menu
 
-if (event) {
-          event.stopPropagation();
-btPersonas.js
+/Users/beaty-admin/src/mozilla/src/browser/base/content/browser-addons.js 

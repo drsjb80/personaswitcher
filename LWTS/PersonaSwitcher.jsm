@@ -60,7 +60,7 @@ PersonaSwitcher.log = function()
     }
 
     dump (message + '\n');
-}
+};
 
 PersonaSwitcher.setLogger = function()
 {
@@ -72,7 +72,7 @@ PersonaSwitcher.setLogger = function()
     {
         PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
     }
-}
+};
 
 // https://developer.mozilla.org/en-US/docs/Debugging_JavaScript
 PersonaSwitcher.consoleLogger = null
@@ -100,6 +100,7 @@ PersonaSwitcher.previewWhich = null;
 PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
 PersonaSwitcher.defaultTheme = null;
+PersonaSwitcher.dynamicPopups = true;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -140,8 +141,10 @@ PersonaSwitcher.prefsObserver =
             }
             case "preview":
             {
-                // regenerate menus based on new setting
-                PersonaSwitcher.changePersonaMenus();
+                // regenerate all the popups
+                PersonaSwitcher.createMenuPopups ("tools-submenu");
+                PersonaSwitcher.createMenuPopups ("main-menubar");
+                PersonaSwitcher.toolbarPopups();
                 break;
             }
             case "startup-switch":
@@ -222,7 +225,7 @@ PersonaSwitcher.prefsObserver =
             }
         }
     }
-}
+};
 
 PersonaSwitcher.prefs.addObserver ("", PersonaSwitcher.prefsObserver, false);
 
@@ -255,7 +258,7 @@ PersonaSwitcher.rotate = function()
         // switch to the last one
         PersonaSwitcher.switchTo (arr[arr.length-1]);
     }
-}
+};
 
 // ---------------------------------------------------------------------------
 
@@ -282,7 +285,7 @@ PersonaSwitcher.previewObserver =
         PersonaSwitcher.logger.log();
         LightweightThemeManager.previewTheme (which);
     }
-}
+};
 */
 
 PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"].
@@ -296,7 +299,7 @@ PersonaSwitcher.timerObserver =
 
         PersonaSwitcher.rotate();
     }
-}
+};
 
 PersonaSwitcher.startTimer = function()
 {
@@ -320,7 +323,7 @@ PersonaSwitcher.startTimer = function()
             Components.interfaces.nsITimer.TYPE_REPEATING_SLACK
         );
     }
-}
+};
 
 PersonaSwitcher.stopTimer = function()
 {
@@ -328,7 +331,7 @@ PersonaSwitcher.stopTimer = function()
     PersonaSwitcher.logger.log();
 
     PersonaSwitcher.timer.cancel();
-}
+};
 
 // ---------------------------------------------------------------------------
 
@@ -348,7 +351,7 @@ PersonaSwitcher.toggleAuto = function()
     {
         PersonaSwitcher.prefs.setBoolPref ("auto", true);
     }
-}
+};
 
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
 PersonaSwitcher.removeNotifications = function()
@@ -385,7 +388,7 @@ PersonaSwitcher.removeNotifications = function()
             }
         }
     }
-}
+};
 
 PersonaSwitcher.switchTo = function (toWhich)
 {
@@ -434,7 +437,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         PersonaSwitcher.removeNotifications();
     }
-}
+};
 
 PersonaSwitcher.merge = function (array1, array2)
 {
@@ -461,12 +464,12 @@ PersonaSwitcher.merge = function (array1, array2)
     }
 
     return (ret);
-}
+};
 
 PersonaSwitcher.getPersonas = function()
 {
     'use strict';
-
+    
     var arr = LightweightThemeManager.usedThemes;
     PersonaSwitcher.logger.log (arr.length);
 
@@ -483,7 +486,7 @@ PersonaSwitcher.getPersonas = function()
 
     PersonaSwitcher.logger.log (arr.length);
     return (arr);
-}
+};
 
 PersonaSwitcher.previous = function()
 {
@@ -495,7 +498,7 @@ PersonaSwitcher.previous = function()
     if (arr.length <= 1) return;
 
     PersonaSwitcher.switchTo (arr[1]);
-}
+};
 
 /*
 ** if the user pressed the rotate keyboard command, rotate and
@@ -508,7 +511,7 @@ PersonaSwitcher.rotateKey = function()
 
     PersonaSwitcher.rotate();
     PersonaSwitcher.startTimer();
-}
+};
 
 PersonaSwitcher.setDefault = function()
 {
@@ -517,7 +520,7 @@ PersonaSwitcher.setDefault = function()
 
     PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme);
     PersonaSwitcher.stopTimer();
-}
+};
 
 PersonaSwitcher.onMenuItemCommand = function (which)
 {
@@ -526,7 +529,7 @@ PersonaSwitcher.onMenuItemCommand = function (which)
 
     PersonaSwitcher.switchTo (which);
     PersonaSwitcher.startTimer();
-}
+};
 
 PersonaSwitcher.migratePrefs = function()
 {
@@ -568,7 +571,7 @@ PersonaSwitcher.migratePrefs = function()
         }
     }
     oldPrefs.deleteBranch ("");
-}
+};
 
 /*
 ** dump all the properties of an object
@@ -598,7 +601,7 @@ PersonaSwitcher.dump = function (object, max)
             PersonaSwitcher.logger.log (e);
         }
     }
-}
+};
 
 PersonaSwitcher.arrayEquals = function (array1, array2) {
     PersonaSwitcher.logger.log (array1);
@@ -638,4 +641,4 @@ PersonaSwitcher.arrayEquals = function (array1, array2) {
             return (false);
     }       
     return true;
-}
+};
