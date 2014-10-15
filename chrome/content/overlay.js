@@ -210,6 +210,7 @@ PersonaSwitcher.AddonListener =
         }
     }
 };
+*/
 
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonListener
@@ -224,7 +225,6 @@ try
     PersonaSwitcher.addonManager = true;
 }
 catch (e) {}; 
-*/
 
 // extension manager doesn't track personas, so no need for it...
 // http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
@@ -251,7 +251,8 @@ PersonaSwitcher.createMenuItem = function (doc, which)
 {
     'use strict';
 
-    if (null === which || "undefined" === typeof which.name) return (null);
+    if (null === which || "undefined" === typeof which.name)
+        return (null);
 
     var item = doc.createElementNS (PersonaSwitcher.XULNS, "menuitem");
 
@@ -311,18 +312,33 @@ PersonaSwitcher.createMenuItem = function (doc, which)
 
 PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 {
-    PersonaSwitcher.logger.log();
+    PersonaSwitcher.logger.log (menupopup.id);
+    PersonaSwitcher.logger.log (PersonaSwitcher.multipleDefaults);
 
-    var item = PersonaSwitcher.createMenuItem
-        (doc, PersonaSwitcher.defaultTheme);
-    if (item)
+    var item = null;
+
+    // Some versions of palemoon have multiple Defaults, which confuses
+    // toolbar popups, but not the menus for some reason.
+    if (! ("personaswitcher-button-popup" === menupopup.id &&
+        PersonaSwitcher.multipleDefaults))
     {
-        menupopup.appendChild (item);
+        item = PersonaSwitcher.createMenuItem
+            (doc, PersonaSwitcher.defaultTheme);
+        if (item)
+        {
+            menupopup.appendChild (item);
+        }
     }
 
     for (var i = 0; i < arr.length; i++)
     {
-        PersonaSwitcher.logger.log ("adding item number " + i);
+        PersonaSwitcher.logger.log (arr[i].name);
+
+        // should already have this, or shouldn't use it...
+        if ("Default" === arr[i].name)
+        {
+            continue;
+        }
 
         item = PersonaSwitcher.createMenuItem (doc, arr[i])
         if (item)
@@ -545,6 +561,25 @@ PersonaSwitcher.onWindowLoad = function (event)
     {
         PersonaSwitcher.logger.log ("hiding tools-submenu");
         PersonaSwitcher.hideMenu (this.document, "tools-submenu");
+    }
+
+    if (PersonaSwitcher.addonManager)
+    {
+        AddonManager.getAddonsByTypes
+        (
+            ["theme"],
+            function (themes)
+            {
+                var defaultCount = 0;
+                for (var theme in themes)
+                {
+                    if ("Default" === themes[theme].name)
+                        defaultCount++;
+                }
+
+                PersonaSwitcher.multipleDefaults = defaultCount > 1;
+            }
+        );
     }
 
     // if we need static

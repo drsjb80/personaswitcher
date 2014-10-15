@@ -100,6 +100,7 @@ PersonaSwitcher.previewWhich = null;
 PersonaSwitcher.defaultTheme = {};
 PersonaSwitcher.defaultTheme.name = "Default";
 PersonaSwitcher.dynamicPopups = true;
+PersonaSwitcher.multipleDefaults = false;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
