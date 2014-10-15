@@ -30,7 +30,7 @@
             type="menu">
             <menupopup
                 id="personaswitcher-addon"
-                onpopupshowing="PersonaSwitcher.popupShowing (event);"
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </toolbarbutton>
@@ -43,7 +43,7 @@
             insertafter="tasksMenu">
             <menupopup
                 id="personaswitcher-main-menubar-popup"
-                onpopupshowing="PersonaSwitcher.popupShowing (event);"
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
@@ -55,12 +55,11 @@
             label="&personaswitcher.label;">
             <menupopup
                 id="personaswitcher-tools-submenu-popup"
-                onpopupshowing="PersonaSwitcher.popupShowing (event);"
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
     </menupopup>
-
 
     <script src="overlay.js"/>
 </overlay>

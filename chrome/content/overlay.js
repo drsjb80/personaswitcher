@@ -178,7 +178,6 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
 
     if (PersonaSwitcher.XULAppInfo.name === "Thunderbird") return;
 
-// FIXME: remove
     var minheight =
         parseInt (PersonaSwitcher.prefs.getCharPref ("toolbox-minheight"));
     var maxheight =
@@ -196,25 +195,6 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     if (nt !== null)
         doc.getElementById ("navigator-toolbox").minHeight = minheight;
 };
-
-// when the pref changes
-/* FIXME: remove
-PersonaSwitcher.setToolboxMinheights = function()
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    if (PersonaSwitcher.XULAppInfo.name === "Thunderbird") return;
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        var doc = enumerator.getNext().document;
-        PersonaSwitcher.setToolboxMinheight (doc);
-    }
-};
-*/
 
 /*
 // put back in place for static and FF 4+
@@ -267,7 +247,7 @@ PersonaSwitcher.previewObserver =
 /*
 ** create a menuitem, possibly creating a preview
 */
-PersonaSwitcher.createMenuItem = function (doc, which, toolbar)
+PersonaSwitcher.createMenuItem = function (doc, which)
 {
     'use strict';
 
@@ -282,13 +262,6 @@ PersonaSwitcher.createMenuItem = function (doc, which, toolbar)
         function() { PersonaSwitcher.onMenuItemCommand (which); },
         false
     );
-
-    /*
-    ** persona previews don't work in Thunderbird from the toolbar
-    ** FIXME: retest
-    */
-    if (toolbar && PersonaSwitcher.XULAppInfo.name === "Thunderbird")
-        return (item);
 
     // create method and pass in item and which
     if (PersonaSwitcher.prefs.getBoolPref ("preview"))
@@ -336,12 +309,12 @@ PersonaSwitcher.createMenuItem = function (doc, which, toolbar)
     return (item);
 };
 
-PersonaSwitcher.createMenuItems = function (doc, menupopup, toolbar, arr)
+PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 {
     PersonaSwitcher.logger.log();
 
     var item = PersonaSwitcher.createMenuItem
-        (doc, PersonaSwitcher.defaultTheme, toolbar);
+        (doc, PersonaSwitcher.defaultTheme);
     if (item)
     {
         menupopup.appendChild (item);
@@ -351,7 +324,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, toolbar, arr)
     {
         PersonaSwitcher.logger.log ("adding item number " + i);
 
-        item = PersonaSwitcher.createMenuItem (doc, arr[i], toolbar)
+        item = PersonaSwitcher.createMenuItem (doc, arr[i])
         if (item)
         {
             menupopup.appendChild (item);
@@ -359,26 +332,14 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, toolbar, arr)
     }
 };
 
-PersonaSwitcher.createMenuPopup = function (event)
+PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
 {
-    'use strict';
-
-    PersonaSwitcher.logger.log();
-
-    var menupopup = event.target;
-    var doc = event.target.ownerDocument;
-
-    PersonaSwitcher.logger.log (menupopup);
-    PersonaSwitcher.logger.log (doc);
-
     while (menupopup.hasChildNodes())
     {
         menupopup.removeChild (menupopup.firstChild);
     }
 
     var arr = PersonaSwitcher.getPersonas();
-    // var toolbar = "personaswitcher-button-popup" === event.target.id;
-
     if (0 === arr.length)
     {
         PersonaSwitcher.logger.log ("no themes");
@@ -395,8 +356,20 @@ PersonaSwitcher.createMenuPopup = function (event)
     }
     else
     {
-        PersonaSwitcher.createMenuItems (doc, menupopup, toolbar, arr);
+        PersonaSwitcher.createMenuItems (doc, menupopup, arr);
     }
+};
+
+PersonaSwitcher.createMenuPopup = function (event)
+{
+    'use strict';
+
+    PersonaSwitcher.logger.log();
+
+    var menupopup = event.target;
+    var doc = event.target.ownerDocument;
+
+    PersonaSwitcher.createMenuPopupWithDoc (doc, menupopup);
 };
 
 // FIXME: remove
@@ -573,6 +546,21 @@ PersonaSwitcher.onWindowLoad = function (event)
         PersonaSwitcher.logger.log ("hiding tools-submenu");
         PersonaSwitcher.hideMenu (this.document, "tools-submenu");
     }
+
+    // if we need static
+    /*
+    {
+        PersonaSwitcher.createMenuPopupWithDoc (this.document,
+            this.document.getElementById
+                ("personaswitcher-main-menubar-popup"));
+        PersonaSwitcher.createMenuPopupWithDoc (this.document,
+            this.document.getElementById
+                ("personaswitcher-tools-submenu-popup"));
+        PersonaSwitcher.createMenuPopupWithDoc (this.document,
+            this.document.getElementById
+                ("personaswitcher-addon"));
+    }
+    */
 
     /*
     PersonaSwitcher.logger.log (gFindBar);
