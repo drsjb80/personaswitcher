@@ -99,7 +99,8 @@ PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
 PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
-PersonaSwitcher.defaultTheme = null;
+PersonaSwitcher.defaultTheme = {};
+PersonaSwitcher.defaultTheme.name = "Default";
 PersonaSwitcher.dynamicPopups = true;
 
 PersonaSwitcher.PersonasPlusPresent = true;
@@ -430,7 +431,7 @@ PersonaSwitcher.switchTo = function (toWhich)
         LightweightThemeManager.themeChanged (toWhich);
     }
 
-    PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);
+    // PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);
 
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))

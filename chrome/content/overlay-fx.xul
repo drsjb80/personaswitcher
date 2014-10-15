@@ -52,12 +52,12 @@
 
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton
-            id="personaswitcher-toolbarbutton"
+            id="personaswitcher-button"
             label="&personaswitcher-button.label;"
             tooltiptext="&personaswitcher-button.tooltip;"
             type="menu">
             <menupopup
-                id="personaswitcher-toolbarbutton-popup"
+                id="personaswitcher-button-popup"
                 onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
