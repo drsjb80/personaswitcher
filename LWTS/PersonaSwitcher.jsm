@@ -97,8 +97,6 @@ PersonaSwitcher.logger = null;
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
-PersonaSwitcher.addonManager = false;
-PersonaSwitcher.extensionManager = null;
 PersonaSwitcher.defaultTheme = {};
 PersonaSwitcher.defaultTheme.name = "Default";
 PersonaSwitcher.dynamicPopups = true;
@@ -137,15 +135,18 @@ PersonaSwitcher.prefsObserver =
             }
             case "toolbox-minheight":
             {
-                PersonaSwitcher.setToolboxMinheights();
+                PersonaSwitcher.allDocuments
+                    (PersonaSwitcher.setToolboxMinheight);
                 break;
             }
             case "preview":
             {
                 // regenerate all the popups
+                /*
                 PersonaSwitcher.createMenuPopups ("tools-submenu");
                 PersonaSwitcher.createMenuPopups ("main-menubar");
                 PersonaSwitcher.toolbarPopups();
+                */
                 break;
             }
             case "startup-switch":
@@ -176,9 +177,6 @@ PersonaSwitcher.prefsObserver =
             }
             case "main-menubar": case "tools-submenu":
             {
-                PersonaSwitcher.logger.log
-                    (PersonaSwitcher.prefs.getBoolPref (data));
-
                 if (PersonaSwitcher.prefs.getBoolPref (data))
                 {
                     PersonaSwitcher.showMenus (data);
@@ -199,17 +197,12 @@ PersonaSwitcher.prefsObserver =
             case "activateshift": case "activatealt": case "activatecontrol":
             case "activatemeta": case "activatekey":
             {
-                PersonaSwitcher.setKeysets();
+                PersonaSwitcher.allDocuments (PersonaSwitcher.setKeyset);
                 break;
             }
             case "accesskey":
             {
-                if (PersonaSwitcher.prefs.getBoolPref ("main-menubar"))
-                {
-                    // FIXME
-                    PersonaSwitcher.hideMenus ("main-menubar");
-                    PersonaSwitcher.createMenus ("main-menubar");
-                }
+                PersonaSwitcher.allDocuments (PersonaSwitcher.setAccessKey);
             }
             case "preview-delay":
             {

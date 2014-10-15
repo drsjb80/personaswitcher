@@ -40,9 +40,10 @@
         <menu
             id="personaswitcher-main-menubar"
             label="&personaswitcher-button.label;"
-            insertafter="tools-menu">
+            insertafter="tasksMenu">
             <menupopup
                 id="personaswitcher-main-menubar-popup"
+                onpopupshowing="PersonaSwitcher.popupShowing (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
@@ -54,6 +55,7 @@
             label="&personaswitcher.label;">
             <menupopup
                 id="personaswitcher-tools-submenu-popup"
+                onpopupshowing="PersonaSwitcher.popupShowing (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
