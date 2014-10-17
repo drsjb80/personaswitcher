@@ -97,10 +97,15 @@ PersonaSwitcher.logger = null;
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
-PersonaSwitcher.defaultTheme = {};
-PersonaSwitcher.defaultTheme.name = "Default";
 PersonaSwitcher.dynamicPopups = true;
 PersonaSwitcher.multipleDefaults = false;
+
+PersonaSwitcher.defaultTheme = null;
+/*
+PersonaSwitcher.defaultTheme.name = "Default";
+*/
+PersonaSwitcher.addonManager = false;
+PersonaSwitcher.extensionManager = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -388,14 +393,16 @@ PersonaSwitcher.removeNotifications = function()
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
-    PersonaSwitcher.logger.log (toWhich);
+    PersonaSwitcher.logger.log (toWhich.name);
+    PersonaSwitcher.logger.log
+        (typeof LightweightThemeManager.themeChanged);
 
     /*
     ** if it's there, use it
     */
     if (PersonaSwitcher.PersonasPlusPresent)
     {
-        PersonaSwitcher.logger.log();
+        PersonaSwitcher.logger.log ("using PP");
 
         if (toWhich.name === "Default")
         {
@@ -417,11 +424,21 @@ PersonaSwitcher.switchTo = function (toWhich)
     */
     else if (typeof LightweightThemeManager.themeChanged != 'function')
     {
-        LightweightThemeManager.currentTheme = toWhich;
+        // 3.* compatability
+        PersonaSwitcher.logger.log ("using currentTheme");
+        if (toWhich.name === "Default")
+        {
+            LightweightThemeManager.currentTheme = null;
+        }
+        else
+        {
+            LightweightThemeManager.currentTheme = toWhich;
+        }
     }
     else
     {
-        // 3.* compatability
+        // FF 4+
+        PersonaSwitcher.logger.log ("using themeChanged");
         LightweightThemeManager.themeChanged (toWhich);
     }
 

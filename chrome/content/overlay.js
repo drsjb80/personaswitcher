@@ -218,13 +218,22 @@ PersonaSwitcher.AddonListener =
 try
 {
     Components.utils.import("resource://gre/modules/AddonManager.jsm");
-    // add back in for static
+    // add back in for static:
     // AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
     // is there a way to get this???
     // AddonManagerPrivate.addAddonListener (PersonaSwitcher.AddonListener);
     PersonaSwitcher.addonManager = true;
 }
-catch (e) {}; 
+catch (e)
+{
+    try
+    {
+        PersonaSwitcher.extensionManager =
+            Components.classes['@mozilla.org/extensions/manager;1']
+                .getService(Components.interfaces.nsIExtensionManager);
+    }
+    catch (e) {};
+}; 
 
 // extension manager doesn't track personas, so no need for it...
 // http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
@@ -565,6 +574,7 @@ PersonaSwitcher.onWindowLoad = function (event)
 
     if (PersonaSwitcher.addonManager)
     {
+        /*
         AddonManager.getAddonsByTypes
         (
             ["theme"],
@@ -580,6 +590,28 @@ PersonaSwitcher.onWindowLoad = function (event)
                 PersonaSwitcher.multipleDefaults = defaultCount > 1;
             }
         );
+        */
+        AddonManager.getAddonByID
+        (
+            '{972ce4c6-7e08-4474-a285-3208198ce6fd}',
+            function (theme)
+            {
+                PersonaSwitcher.logger.log ("found default via addons");
+                PersonaSwitcher.logger.log (theme);
+                PersonaSwitcher.defaultTheme = theme;
+            }
+        );
+    }
+    else if (PersonaSwitcher.extensionManager)
+    {
+        PersonaSwitcher.logger.log ("found default via extensions");
+        PersonaSwitcher.defaultTheme =
+            PersonaSwitcher.extensionManager.getItemForID
+                ('{972ce4c6-7e08-4474-a285-3208198ce6fd}');
+    }
+    else
+    {
+        PersonaSwitcher.logger.log ("no default theme found");
     }
 
     // if we need static
