@@ -98,12 +98,8 @@ PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
 PersonaSwitcher.dynamicPopups = true;
-PersonaSwitcher.multipleDefaults = false;
 
 PersonaSwitcher.defaultTheme = null;
-/*
-PersonaSwitcher.defaultTheme.name = "Default";
-*/
 PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
 

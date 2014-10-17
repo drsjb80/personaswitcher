@@ -322,21 +322,12 @@ PersonaSwitcher.createMenuItem = function (doc, which)
 PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 {
     PersonaSwitcher.logger.log (menupopup.id);
-    PersonaSwitcher.logger.log (PersonaSwitcher.multipleDefaults);
 
-    var item = null;
-
-    // Some versions of palemoon have multiple Defaults, which confuses
-    // toolbar popups, but not the menus for some reason.
-    if (! ("personaswitcher-button-popup" === menupopup.id &&
-        PersonaSwitcher.multipleDefaults))
-    {
-        item = PersonaSwitcher.createMenuItem
+    var item = PersonaSwitcher.createMenuItem
             (doc, PersonaSwitcher.defaultTheme);
-        if (item)
-        {
-            menupopup.appendChild (item);
-        }
+    if (item)
+    {
+        menupopup.appendChild (item);
     }
 
     for (var i = 0; i < arr.length; i++)
@@ -574,23 +565,6 @@ PersonaSwitcher.onWindowLoad = function (event)
 
     if (PersonaSwitcher.addonManager)
     {
-        /*
-        AddonManager.getAddonsByTypes
-        (
-            ["theme"],
-            function (themes)
-            {
-                var defaultCount = 0;
-                for (var theme in themes)
-                {
-                    if ("Default" === themes[theme].name)
-                        defaultCount++;
-                }
-
-                PersonaSwitcher.multipleDefaults = defaultCount > 1;
-            }
-        );
-        */
         AddonManager.getAddonByID
         (
             '{972ce4c6-7e08-4474-a285-3208198ce6fd}',
