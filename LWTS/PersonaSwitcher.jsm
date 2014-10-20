@@ -7,7 +7,7 @@ Components.utils["import"]
 
 var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
-var PersonaSwitcher = new Object();
+var PersonaSwitcher = {};
 
 PersonaSwitcher.prefs =
     Components.classes["@mozilla.org/preferences-service;1"].
@@ -75,7 +75,7 @@ PersonaSwitcher.setLogger = function()
 };
 
 // https://developer.mozilla.org/en-US/docs/Debugging_JavaScript
-PersonaSwitcher.consoleLogger = null
+PersonaSwitcher.consoleLogger = null;
 
 try          // check to see if there is console logging available
 {
@@ -84,12 +84,12 @@ try          // check to see if there is console logging available
 }
 catch (e)   // nope, log to terminal
 {
-    PersonaSwitcher.consoleLogger = new Object();
+    PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = PersonaSwitcher.log;
 }
 
-PersonaSwitcher.nullLogger = new Object();
-PersonaSwitcher.nullLogger.log = function (s) { return; }
+PersonaSwitcher.nullLogger = {};
+PersonaSwitcher.nullLogger.log = function (s) { return; };
 PersonaSwitcher.logger = null;
 
 // ---------------------------------------------------------------------------
@@ -135,6 +135,7 @@ PersonaSwitcher.prefsObserver =
             case "debug":
             {
                 PersonaSwitcher.setLogger();
+                break;
             }
             case "toolbox-minheight":
             {
@@ -154,6 +155,7 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.allDocuments
                         (PersonaSwitcher.removeStaticPopups);
                 }
+                break;
             }
             case "preview":
             {
@@ -172,6 +174,7 @@ PersonaSwitcher.prefsObserver =
             case "fastswitch":
             {
                 PersonaSwitcher.startTimer();
+                break;
             }
             case "auto":
             {
@@ -219,6 +222,7 @@ PersonaSwitcher.prefsObserver =
             case "accesskey":
             {
                 PersonaSwitcher.allDocuments (PersonaSwitcher.setAccessKey);
+                break;
             }
             case "preview-delay":
             {
@@ -227,6 +231,7 @@ PersonaSwitcher.prefsObserver =
 
                 delay = delay < 0 ? 0 : delay > 10000 ? 10000 : delay;
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
+                break;
             }
             default:
             {

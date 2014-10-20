@@ -196,8 +196,6 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
         doc.getElementById ("navigator-toolbox").minHeight = minheight;
 };
 
-/*
-// put back in place for static and FF 4+
 PersonaSwitcher.AddonListener =
 {
     onInstalled: function (addon)
@@ -206,11 +204,14 @@ PersonaSwitcher.AddonListener =
         
         if (addon.type === "theme")
         {
-            PersonaSwitcher.createAllMenuPopups();
+            if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+            {
+                PersonaSwitcher.allDocuments 
+                    (PersonaSwitcher.createStaticPopups);
+            }
         }
     }
 };
-*/
 
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonListener
@@ -218,13 +219,13 @@ PersonaSwitcher.AddonListener =
 try
 {
     Components.utils.import("resource://gre/modules/AddonManager.jsm");
-    // add back in for static:
-    // AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
+    PersonaSwitcher.addonManager = true;
+    AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
+
     // is there a way to get this???
     // AddonManagerPrivate.addAddonListener (PersonaSwitcher.AddonListener);
-    PersonaSwitcher.addonManager = true;
 }
-catch (e)
+catch (e1)
 {
     try
     {
@@ -232,8 +233,8 @@ catch (e)
             Components.classes['@mozilla.org/extensions/manager;1']
                 .getService(Components.interfaces.nsIExtensionManager);
     }
-    catch (e) {};
-}; 
+    catch (e2) {}
+}
 
 // http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
 // http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
@@ -321,6 +322,7 @@ PersonaSwitcher.createMenuItem = function (doc, which)
 PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 {
     PersonaSwitcher.logger.log (menupopup.id);
+    var item = null;
 
     // PM bug
     if ('personaswitcher-button-popup' == menupopup.id &&
@@ -331,7 +333,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     }
     else
     {
-        var item = PersonaSwitcher.createMenuItem
+        item = PersonaSwitcher.createMenuItem
                 (doc, PersonaSwitcher.defaultTheme);
         if (item)
         {
@@ -350,7 +352,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
             continue;
         }
 
-        item = PersonaSwitcher.createMenuItem (doc, arr[i])
+        item = PersonaSwitcher.createMenuItem (doc, arr[i]);
         if (item)
         {
             menupopup.appendChild (item);
@@ -460,7 +462,7 @@ PersonaSwitcher.popupHidden = function()
 PersonaSwitcher.setAccessKey = function (doc)
 {
     var accesskey = PersonaSwitcher.prefs.getCharPref ("accesskey");
-    if (accesskey != "")
+    if (accesskey !== '')
     {
         var menu = doc.getElementById ("personaswitcher-main-menubar");
         menu.setAttribute ("accesskey", accesskey.toUpperCase().charAt (0));
@@ -492,16 +494,16 @@ PersonaSwitcher.createStaticPopups = function (doc)
 
     for (var popup in popups)
     {
-        var popup = doc.getElementById (popups[popup]);
+        var item = doc.getElementById (popups[popup]);
 
         // not all windows have this popup
-        if (popup)
+        if (item)
         {
-            PersonaSwitcher.createMenuPopupWithDoc (doc, popup);
-            popup.removeAttribute ("onpopupshowing");
+            PersonaSwitcher.createMenuPopupWithDoc (doc, item);
+            item.removeAttribute ("onpopupshowing");
         }
     }
-}
+};
 
 PersonaSwitcher.removeStaticPopups = function (doc)
 {
@@ -513,17 +515,16 @@ PersonaSwitcher.removeStaticPopups = function (doc)
 
     for (var popup in popups)
     {
-        var popup = doc.getElementById (popups[popup]);
+        var item = doc.getElementById (popups[popup]);
 
         // not all windows have this popup
-        if (popup)
+        if (item)
         {
-            popup.setAttribute ("onpopupshowing",
+            item.setAttribute ("onpopupshowing",
                 "PersonaSwitcher.createMenuPopup (event);");
         }
     }
-}
-
+};
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/window
 PersonaSwitcher.onWindowLoad = function (event)
