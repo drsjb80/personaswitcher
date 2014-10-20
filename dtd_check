@@ -1,20 +1,23 @@
 #! /bin/bash
 
-languages="en-US de zh-TW zh-CN it"
-for i in $languages
+languages="de zh-TW zh-CN it"
+for i in "en-US" $languages
 do
+    mkdir /tmp/$i
     for j in chrome/locale/$i/*.dtd
     do
-        cut -d ' ' -f 2 < $j > /tmp/$i${j##*/}
+        cut -d ' ' -f 2 < $j > /tmp/$i/${j##*/}
     done
 done
 
 for i in $languages
 do
-    for j in /tmp/$i*.dtd
+    for j in /tmp/$i/*.dtd
     do
         echo "---- $j ----"
-        diff ${j/$i/en-US} $j
+        diff /tmp/en-US/${j##*/} $j
     done
+    rm -rf /tmp/$i
 done
-    
+
+rm -rf /tmp/en-US
