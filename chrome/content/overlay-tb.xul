@@ -29,7 +29,7 @@
             tooltiptext="&personaswitcher-button.tooltip;"
             type="menu">
             <menupopup
-                id="personaswitcher-addon"
+                id="personaswitcher-button-popup"
                 onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />

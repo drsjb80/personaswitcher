@@ -235,7 +235,6 @@ catch (e)
     catch (e) {};
 }; 
 
-// extension manager doesn't track personas, so no need for it...
 // http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
 // http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
 
@@ -323,11 +322,21 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 {
     PersonaSwitcher.logger.log (menupopup.id);
 
-    var item = PersonaSwitcher.createMenuItem
-            (doc, PersonaSwitcher.defaultTheme);
-    if (item)
+    // PM bug
+    if ('personaswitcher-button-popup' == menupopup.id &&
+        PersonaSwitcher.multipleDefaults)
     {
-        menupopup.appendChild (item);
+        PersonaSwitcher.logger.log
+            ("skipping default for multiple defaults and the toolbar");
+    }
+    else
+    {
+        var item = PersonaSwitcher.createMenuItem
+                (doc, PersonaSwitcher.defaultTheme);
+        if (item)
+        {
+            menupopup.appendChild (item);
+        }
     }
 
     for (var i = 0; i < arr.length; i++)
@@ -337,6 +346,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
         // should already have this, or shouldn't use it...
         if ("Default" === arr[i].name)
         {
+            PersonaSwitcher.logger.log ("skipping default");
             continue;
         }
 
@@ -388,42 +398,6 @@ PersonaSwitcher.createMenuPopup = function (event)
     PersonaSwitcher.createMenuPopupWithDoc (doc, menupopup);
 };
 
-// FIXME: remove
-PersonaSwitcher.createMenuPopups = function (which)
-{
-    'use strict';
-    PersonaSwitcher.logger.log (which);
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        var doc = enumerator.getNext().document;
-        PersonaSwitcher.createMenuPopup (doc, which, false)
-    }
-};
-
-// FIXME: remove
-PersonaSwitcher.createAllMenuPopups = function (doc)
-{
-    PersonaSwitcher.logger.log();
-
-    // if we don't have a doc, create them all. called thusly on preference
-    // changes and additions.
-    if ('undefined' === typeof doc)
-    {
-        PersonaSwitcher.createMenuPopups ("tools-submenu");
-        PersonaSwitcher.createMenuPopups ("main-menubar");
-        PersonaSwitcher.toolbarPopups();
-    }
-    else
-    {
-        PersonaSwitcher.createMenuPopup (doc, "tools-submenu", false);
-        PersonaSwitcher.createMenuPopup (doc, "main-menubar", false);
-        PersonaSwitcher.toolbarPopup (doc);
-    }
-};
-
 PersonaSwitcher.hideMenu = function (doc, which)
 {
     var d = doc.getElementById ("personaswitcher-" + which);
@@ -467,29 +441,6 @@ PersonaSwitcher.showMenus = function (which)
     }
 };
 
-// FIXME: remove
-PersonaSwitcher.toolbarPopup = function (doc)
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    PersonaSwitcher.createMenuPopup (doc, "button", true);
-};
-
-// FIXME: remove
-PersonaSwitcher.toolbarPopups = function()
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        PersonaSwitcher.toolbarPopup (enumerator.getNext().document);
-    }
-};
-
 PersonaSwitcher.popupHidden = function()
 {
     'use strict';
@@ -530,6 +481,50 @@ PersonaSwitcher.allDocuments = function (func)
     }
 };
 
+
+PersonaSwitcher.createStaticPopups = function (doc)
+{
+    PersonaSwitcher.logger.log();
+
+    var popups = ["personaswitcher-main-menubar-popup",
+        "personaswitcher-tools-submenu-popup",
+        "personaswitcher-button-popup"];
+
+    for (var popup in popups)
+    {
+        var popup = doc.getElementById (popups[popup]);
+
+        // not all windows have this popup
+        if (popup)
+        {
+            PersonaSwitcher.createMenuPopupWithDoc (doc, popup);
+            popup.removeAttribute ("onpopupshowing");
+        }
+    }
+}
+
+PersonaSwitcher.removeStaticPopups = function (doc)
+{
+    PersonaSwitcher.logger.log();
+
+    var popups = ["personaswitcher-main-menubar-popup",
+        "personaswitcher-tools-submenu-popup",
+        "personaswitcher-button-popup"];
+
+    for (var popup in popups)
+    {
+        var popup = doc.getElementById (popups[popup]);
+
+        // not all windows have this popup
+        if (popup)
+        {
+            popup.setAttribute ("onpopupshowing",
+                "PersonaSwitcher.createMenuPopup (event);");
+        }
+    }
+}
+
+
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/window
 PersonaSwitcher.onWindowLoad = function (event)
 {
@@ -545,6 +540,25 @@ PersonaSwitcher.onWindowLoad = function (event)
         if (PersonaSwitcher.prefs.getBoolPref ("startup-switch"))
         {
             PersonaSwitcher.rotate();
+        }
+
+        if (PersonaSwitcher.addonManager)
+        {
+            AddonManager.getAddonsByTypes
+            (
+                ["theme"],
+                function (themes)
+                {
+                    var defaultCount = 0;
+                    for (var theme in themes)
+                    {
+                        if ("Default" === themes[theme].name)
+                            defaultCount++;
+                    }
+
+                    PersonaSwitcher.multipleDefaults = defaultCount > 1;
+                }
+            );
         }
     }
 
@@ -567,41 +581,47 @@ PersonaSwitcher.onWindowLoad = function (event)
     {
         AddonManager.getAddonByID
         (
-            '{972ce4c6-7e08-4474-a285-3208198ce6fd}',
+            PersonaSwitcher.defaultThemeID,
             function (theme)
             {
+                // wait for it...
                 PersonaSwitcher.logger.log ("found default via addons");
-                PersonaSwitcher.logger.log (theme);
                 PersonaSwitcher.defaultTheme = theme;
+
+                PersonaSwitcher.logger.log (PersonaSwitcher.staticPopups);
+
+                // don't have this.document as async
+                if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+                {
+                    PersonaSwitcher.allDocuments 
+                        (PersonaSwitcher.createStaticPopups);
+                }
             }
         );
+
     }
     else if (PersonaSwitcher.extensionManager)
     {
         PersonaSwitcher.logger.log ("found default via extensions");
         PersonaSwitcher.defaultTheme =
             PersonaSwitcher.extensionManager.getItemForID
-                ('{972ce4c6-7e08-4474-a285-3208198ce6fd}');
+                (PersonaSwitcher.defaultThemeID);
+
+        if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+        {
+            PersonaSwitcher.createStaticPopups (this.document);
+        }
     }
     else
     {
         PersonaSwitcher.logger.log ("no default theme found");
+
+        if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+        {
+            PersonaSwitcher.createStaticPopups (this.document);
+        }
     }
 
-    // if we need static
-    /*
-    {
-        PersonaSwitcher.createMenuPopupWithDoc (this.document,
-            this.document.getElementById
-                ("personaswitcher-main-menubar-popup"));
-        PersonaSwitcher.createMenuPopupWithDoc (this.document,
-            this.document.getElementById
-                ("personaswitcher-tools-submenu-popup"));
-        PersonaSwitcher.createMenuPopupWithDoc (this.document,
-            this.document.getElementById
-                ("personaswitcher-addon"));
-    }
-    */
 
     /*
     PersonaSwitcher.logger.log (gFindBar);

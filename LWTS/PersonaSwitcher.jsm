@@ -97,9 +97,10 @@ PersonaSwitcher.logger = null;
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
-PersonaSwitcher.dynamicPopups = true;
+PersonaSwitcher.staticPopups = false;
 
 PersonaSwitcher.defaultTheme = null;
+PersonaSwitcher.defaultThemeID = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
 PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
 
@@ -141,14 +142,27 @@ PersonaSwitcher.prefsObserver =
                     (PersonaSwitcher.setToolboxMinheight);
                 break;
             }
+            case "static-popups":
+            {
+                if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+                {
+                    PersonaSwitcher.allDocuments
+                        (PersonaSwitcher.createStaticPopups);
+                }
+                else
+                {
+                    PersonaSwitcher.allDocuments
+                        (PersonaSwitcher.removeStaticPopups);
+                }
+            }
             case "preview":
             {
                 // regenerate all the popups
-                /*
-                PersonaSwitcher.createMenuPopups ("tools-submenu");
-                PersonaSwitcher.createMenuPopups ("main-menubar");
-                PersonaSwitcher.toolbarPopups();
-                */
+                if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+                {
+                    PersonaSwitcher.allDocuments
+                        (PersonaSwitcher.createStaticPopups);
+                }
                 break;
             }
             case "startup-switch":
@@ -258,32 +272,6 @@ PersonaSwitcher.rotate = function()
 
 // ---------------------------------------------------------------------------
 
-/*
-PersonaSwitcher.previewTimer = Components.classes["@mozilla.org/timer;1"].
-    createInstance(Components.interfaces.nsITimer);
-
-PersonaSwitcher.previewObserver =
-{
-    which: null,
-
-    setWhich: function (which)
-    {
-        'use strict';
-
-        PersonaSwitcher.logger.log (which);
-        this.which = which;
-    },
-
-    observe: function (subject, topic, data)
-    {
-        'use strict';
-
-        PersonaSwitcher.logger.log();
-        LightweightThemeManager.previewTheme (which);
-    }
-};
-*/
-
 PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"].
     createInstance(Components.interfaces.nsITimer);
 
@@ -390,8 +378,6 @@ PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
     PersonaSwitcher.logger.log (toWhich.name);
-    PersonaSwitcher.logger.log
-        (typeof LightweightThemeManager.themeChanged);
 
     /*
     ** if it's there, use it
@@ -422,6 +408,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         // 3.* compatability
         PersonaSwitcher.logger.log ("using currentTheme");
+
         if (toWhich.name === "Default")
         {
             LightweightThemeManager.currentTheme = null;
@@ -493,6 +480,19 @@ PersonaSwitcher.getPersonas = function()
     }
 
     PersonaSwitcher.logger.log (arr.length);
+
+    for (var i = 0; i < arr.length; i++)
+    {
+        PersonaSwitcher.logger.log (i);
+        PersonaSwitcher.logger.log (arr.length);
+
+        if (arr[i].id === PersonaSwitcher.defaultThemeID)
+        {
+            PersonaSwitcher.logger.log ("removing a default, item: " + i);
+            arr.splice (i, 1);
+        }
+    }
+
     return (arr);
 };
 

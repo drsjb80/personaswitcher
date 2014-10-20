@@ -66,3 +66,6 @@ Default theme not listed in 3.6
 browser.dom.window.dump.enabled
 
 /Users/beaty-admin/src/mozilla/src/browser/base/content/browser-addons.js 
+
+Static popups do not reset the preview under OS X, except the toolbar
+PM does not like default preview in toolbar
