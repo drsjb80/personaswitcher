@@ -2,6 +2,10 @@
 
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
+// no space between comment delimiters. really.
+/*global Components*/
+/*jslint vars: false*/
+
 Components.utils["import"]
     ("resource://gre/modules/LightweightThemeManager.jsm");
 
@@ -11,7 +15,7 @@ var PersonaSwitcher = {};
 
 PersonaSwitcher.prefs =
     Components.classes["@mozilla.org/preferences-service;1"].
-        getService (Components.interfaces.nsIPrefService).
+        getService(Components.interfaces.nsIPrefService).
             getBranch ("extensions.personaswitcher.");
 
 PersonaSwitcher.windowMediator =
@@ -39,19 +43,16 @@ PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 PersonaSwitcher.log = function()
 {
     'use strict';
-    if (! PersonaSwitcher.prefs.getBoolPref ("debug"))
-        return;
+    if (! PersonaSwitcher.prefs.getBoolPref ('debug')) { return; }
 
     var message = "";
 
-    try
-    {
-        this.undef();
-    }
+    // create a stack frame via an exception
+    try { this.undef(); }
     catch (e)
     {
-        var frames = e.stack.split ("\n");
-        message += frames[1].replace ('()@resource://', '') + ": ";
+        var frames = e.stack.split ('\n');
+        message += frames[1].replace ('()@resource://', '') + ': ';
     }
 
     for (var i = 0; i < arguments.length; i++)
@@ -64,6 +65,8 @@ PersonaSwitcher.log = function()
 
 PersonaSwitcher.setLogger = function()
 {
+    'use strict';
+
     if (PersonaSwitcher.prefs.getBoolPref ("debug"))
     {
         PersonaSwitcher.logger = PersonaSwitcher.consoleLogger;
@@ -77,19 +80,21 @@ PersonaSwitcher.setLogger = function()
 // https://developer.mozilla.org/en-US/docs/Debugging_JavaScript
 PersonaSwitcher.consoleLogger = null;
 
-try          // check to see if there is console logging available
+try
 {
+    // check to see if there is console logging available
     PersonaSwitcher.consoleLogger = Components.utils["import"]
         ("resource://gre/modules/devtools/Console.jsm", {}).console;
 }
-catch (e)   // nope, log to terminal
+catch (e)
 {
+    // nope, log to terminal
     PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = PersonaSwitcher.log;
 }
 
 PersonaSwitcher.nullLogger = {};
-PersonaSwitcher.nullLogger.log = function (s) { return; };
+PersonaSwitcher.nullLogger.log = function (s) { 'use strict'; return; };
 PersonaSwitcher.logger = null;
 
 // ---------------------------------------------------------------------------
@@ -107,7 +112,7 @@ PersonaSwitcher.extensionManager = null;
 PersonaSwitcher.PersonasPlusPresent = true;
 try
 {
-    Components.utils.import ("resource://personas/modules/service.js");
+    Components.utils.import ('resource://personas/modules/service.js');
 }
 catch (e)
 {
@@ -125,27 +130,19 @@ PersonaSwitcher.prefsObserver =
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
 
-        if (topic != "nsPref:changed")
-        {
-            return;
-        }
+        if ('nsPref:changed' !== topic) { return; }
 
         switch (data)
         {
-            case "debug":
-            {
+            case 'debug':
                 PersonaSwitcher.setLogger();
                 break;
-            }
-            case "toolbox-minheight":
-            {
+            case 'toolbox-minheight':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.setToolboxMinheight);
                 break;
-            }
-            case "static-popups":
-            {
-                if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+            case 'static-popups':
+                if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
                 {
                     PersonaSwitcher.allDocuments
                         (PersonaSwitcher.createStaticPopups);
@@ -156,29 +153,21 @@ PersonaSwitcher.prefsObserver =
                         (PersonaSwitcher.removeStaticPopups);
                 }
                 break;
-            }
-            case "preview":
-            {
+            case 'preview':
                 // regenerate all the popups
-                if (PersonaSwitcher.prefs.getBoolPref ("static-popups"))
+                if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
                 {
                     PersonaSwitcher.allDocuments
                         (PersonaSwitcher.createStaticPopups);
                 }
                 break;
-            }
-            case "startup-switch":
-            {
+            case 'startup-switch':
                 break; // nothing to do as the value is queried elsewhere
-            }
-            case "fastswitch":
-            {
+            case 'fastswitch':
                 PersonaSwitcher.startTimer();
                 break;
-            }
-            case "auto":
-            {
-                if (PersonaSwitcher.prefs.getBoolPref ("auto"))
+            case 'auto':
+                if (PersonaSwitcher.prefs.getBoolPref ('auto'))
                 {
                     PersonaSwitcher.startTimer();
                     PersonaSwitcher.rotate();
@@ -188,14 +177,10 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.stopTimer();
                 }
                 break;
-            }
-            case "autominutes":
-            {
+            case 'autominutes':
                 PersonaSwitcher.startTimer();
                 break;
-            }
-            case "main-menubar": case "tools-submenu":
-            {
+            case 'main-menubar': case 'tools-submenu':
                 if (PersonaSwitcher.prefs.getBoolPref (data))
                 {
                     PersonaSwitcher.showMenus (data);
@@ -206,43 +191,34 @@ PersonaSwitcher.prefsObserver =
                 }
 
                 break;
-            }
-            case "defshift": case "defalt": case "defcontrol":
-            case "defmeta": case "defkey":
-            case "rotshift": case "rotalt": case "rotcontrol":
-            case "rotmeta": case "rotkey":
-            case "autoshift": case "autoalt": case "autocontrol":
-            case "autometa": case "autokey":
-            case "activateshift": case "activatealt": case "activatecontrol":
-            case "activatemeta": case "activatekey":
-            {
+            case 'defshift': case 'defalt': case 'defcontrol':
+            case 'defmeta': case 'defkey':
+            case 'rotshift': case 'rotalt': case 'rotcontrol':
+            case 'rotmeta': case 'rotkey':
+            case 'autoshift': case 'autoalt': case 'autocontrol':
+            case 'autometa': case 'autokey':
+            case 'activateshift': case 'activatealt': case 'activatecontrol':
+            case 'activatemeta': case 'activatekey':
                 PersonaSwitcher.allDocuments (PersonaSwitcher.setKeyset);
                 break;
-            }
-            case "accesskey":
-            {
+            case 'accesskey':
                 PersonaSwitcher.allDocuments (PersonaSwitcher.setAccessKey);
                 break;
-            }
-            case "preview-delay":
-            {
-                var delay  = parseInt (PersonaSwitcher.prefs.getIntPref
-                    ("preview-delay"));
+            case 'preview-delay':
+                var delay  = parseInt
+                    (PersonaSwitcher.prefs.getIntPref ("preview-delay"));
 
                 delay = delay < 0 ? 0 : delay > 10000 ? 10000 : delay;
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
                 break;
-            }
             default:
-            {
                 PersonaSwitcher.logger.log (data);
                 break;
-            }
         }
     }
 };
 
-PersonaSwitcher.prefs.addObserver ("", PersonaSwitcher.prefsObserver, false);
+PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 
 // ---------------------------------------------------------------------------
 
@@ -259,9 +235,9 @@ PersonaSwitcher.rotate = function()
 
     PersonaSwitcher.logger.log (arr.length);
 
-    if (arr.length < 1) return;
+    if (arr.length < 1) { return; }
 
-    if (PersonaSwitcher.prefs.getBoolPref ("random"))
+    if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
         // pick a number between 1 and the end
         var number = Math.floor ((Math.random() * (arr.length-1)) + 1);
@@ -277,7 +253,7 @@ PersonaSwitcher.rotate = function()
 
 // ---------------------------------------------------------------------------
 
-PersonaSwitcher.timer = Components.classes["@mozilla.org/timer;1"].
+PersonaSwitcher.timer = Components.classes['@mozilla.org/timer;1'].
     createInstance(Components.interfaces.nsITimer);
 
 PersonaSwitcher.timerObserver =
@@ -294,12 +270,11 @@ PersonaSwitcher.startTimer = function()
 {
     'use strict';
 
-    if (! PersonaSwitcher.prefs.getBoolPref ("auto"))
-        return;
+    if (! PersonaSwitcher.prefs.getBoolPref ('auto')) { return; }
 
     PersonaSwitcher.stopTimer();
 
-    var minutes = PersonaSwitcher.prefs.getIntPref ("autominutes");
+    var minutes = PersonaSwitcher.prefs.getIntPref ('autominutes');
     PersonaSwitcher.logger.log (minutes);
 
     if (minutes > 0)
@@ -307,7 +282,7 @@ PersonaSwitcher.startTimer = function()
         PersonaSwitcher.timer.init
         (
             PersonaSwitcher.timerObserver,
-            PersonaSwitcher.prefs.getBoolPref ("fastswitch") ? 10000 :
+            PersonaSwitcher.prefs.getBoolPref ('fastswitch') ? 10000 :
                 1000 * 60 * minutes,
             Components.interfaces.nsITimer.TYPE_REPEATING_SLACK
         );
@@ -332,19 +307,21 @@ PersonaSwitcher.toggleAuto = function()
     /*
     ** just set the pref, the prefs observer does the work.
     */
-    if (PersonaSwitcher.prefs.getBoolPref ("auto"))
+    if (PersonaSwitcher.prefs.getBoolPref ('auto'))
     {
-        PersonaSwitcher.prefs.setBoolPref ("auto", false);
+        PersonaSwitcher.prefs.setBoolPref ('auto', false);
     }
     else
     {
-        PersonaSwitcher.prefs.setBoolPref ("auto", true);
+        PersonaSwitcher.prefs.setBoolPref ('auto', true);
     }
 };
 
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
 PersonaSwitcher.removeNotifications = function()
 {
+    'use strict';
+
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
     while (enumerator.hasMoreElements())
@@ -353,25 +330,25 @@ PersonaSwitcher.removeNotifications = function()
         var notificationBox = null;
         var name = PersonaSwitcher.XULAppInfo.name;
 
-        if (name == "Firefox" || name == "SeaMonkey" || name == "Pale Moon")
+        if ('Firefox' === name || 'SeaMonkey' === name || 'Pale Moon' === name)
         {
-            if (typeof (win.getBrowser) != "function")
+            if ('function' !== typeof (win.getBrowser))
                 continue;
 
             notificationBox = win.getBrowser().getNotificationBox();
         }
-        else if (name == "Thunderbird")
+        else if ('Thunderbird' === name)
         {
             notificationBox = 
-                win.document.getElementById ("mail-notification-box");
+                win.document.getElementById ('mail-notification-box');
         }
 
-        if (notificationBox !== null)
+        if (null !== notificationBox)
         {
             var notification = notificationBox.getNotificationWithValue
-                ("lwtheme-install-notification");
+                ('lwtheme-install-notification');
 
-            if (notification !== null)
+            if (null !== notification)
             {
                 notificationBox.removeNotification (notification);
             }
@@ -389,13 +366,13 @@ PersonaSwitcher.switchTo = function (toWhich)
     */
     if (PersonaSwitcher.PersonasPlusPresent)
     {
-        PersonaSwitcher.logger.log ("using PP");
+        PersonaSwitcher.logger.log ('using PP');
 
-        if (toWhich.name === "Default")
+        if ('Default' === toWhich.name)
         {
             PersonaService.changeToDefaultPersona();
         }
-        else if (toWhich.id == 1)
+        else if (1 === toWhich.id)
         {
             PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (PersonaService.customPersona);
@@ -409,12 +386,12 @@ PersonaSwitcher.switchTo = function (toWhich)
     /*
     ** http://www.idealog.us/2007/02/check_if_a_java.html
     */
-    else if (typeof LightweightThemeManager.themeChanged != 'function')
+    else if ('function' !== typeof LightweightThemeManager.themeChanged)
     {
         // 3.* compatability
-        PersonaSwitcher.logger.log ("using currentTheme");
+        PersonaSwitcher.logger.log ('using currentTheme');
 
-        if (toWhich.name === "Default")
+        if ('Default' === toWhich.name)
         {
             LightweightThemeManager.currentTheme = null;
         }
@@ -426,14 +403,14 @@ PersonaSwitcher.switchTo = function (toWhich)
     else
     {
         // FF 4+
-        PersonaSwitcher.logger.log ("using themeChanged");
+        PersonaSwitcher.logger.log ('using themeChanged');
         LightweightThemeManager.themeChanged (toWhich);
     }
 
     // PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);
 
     if (PersonaSwitcher.PersonasPlusPresent && 
-        PersonaSwitcher.prefs.getBoolPref ("notification-workaround"))
+        PersonaSwitcher.prefs.getBoolPref ('notification-workaround'))
     {
         PersonaSwitcher.removeNotifications();
     }
@@ -451,7 +428,7 @@ PersonaSwitcher.merge = function (array1, array2)
 
         for (var j = 0; j < array1.length; j++)
         {
-            if (array1[j].id == array2[i].theme.id)
+            if (array1[j].id === array2[i].theme.id)
             {
                 same = true;
             }
@@ -477,7 +454,7 @@ PersonaSwitcher.getPersonas = function()
     {
         var favs = PersonaService.favorites;
 
-        if (favs !== null)
+        if (null !== favs)
         {
             PersonaSwitcher.logger.log (favs.length);
             arr = PersonaSwitcher.merge (arr, favs);
@@ -491,9 +468,9 @@ PersonaSwitcher.getPersonas = function()
         PersonaSwitcher.logger.log (i);
         PersonaSwitcher.logger.log (arr.length);
 
-        if (arr[i].id === PersonaSwitcher.defaultThemeID)
+        if (PersonaSwitcher.defaultThemeID === arr[i].id)
         {
-            PersonaSwitcher.logger.log ("removing a default, item: " + i);
+            PersonaSwitcher.logger.log ('removing a default, item: ' + i);
             arr.splice (i, 1);
         }
     }
@@ -548,13 +525,13 @@ PersonaSwitcher.migratePrefs = function()
 {
     'use strict';
     var oldPrefs =
-        Components.classes["@mozilla.org/preferences-service;1"].
+        Components.classes['@mozilla.org/preferences-service;1'].
         getService (Components.interfaces.nsIPrefService).
-        getBranch ("extensions.themeswitcher.");
+            getBranch ('extensions.themeswitcher.');
 
-    var kids = oldPrefs.getChildList ("", {});
+    var kids = oldPrefs.getChildList ('', {});
 
-    if (kids.length === 0) return;
+    if (0 === kids.length) return;
 
     for (var i in kids)
     {
@@ -583,7 +560,7 @@ PersonaSwitcher.migratePrefs = function()
             }
         }
     }
-    oldPrefs.deleteBranch ("");
+    oldPrefs.deleteBranch ('');
 };
 
 /*
@@ -593,18 +570,18 @@ PersonaSwitcher.dump = function (object, max)
 {
     'use strict';
 
-    if (typeof max === 'undefined') max = 1;
+    if ('undefined' === typeof max) max = 1;
 
-    if (max === 0) return;
+    if (0 === max) return;
 
     for (var property in object)
     {
         try
         {
-            PersonaSwitcher.logger.log (property + "=" + object[property]);
+            PersonaSwitcher.logger.log (property + '=' + object[property]);
 
-            if (object[property] !== null &&
-                typeof object[property] == "object")
+            if (null !== object[property] &&
+                'object' === typeof object[property])
             {
                 PersonaSwitcher.dump (object[property], max-1);
             }
@@ -620,35 +597,35 @@ PersonaSwitcher.arrayEquals = function (array1, array2) {
     PersonaSwitcher.logger.log (array1);
     PersonaSwitcher.logger.log (array2);
 
-    if (array1 === null)
+    if (null === array1)
     {
-        PersonaSwitcher.logger.log ("array1 is null");
+        PersonaSwitcher.logger.log ('array1 is null');
         return false;
     }
 
-    if (array2 === null)
+    if (null === array2)
     {
-        PersonaSwitcher.logger.log ("array2 is null");
+        PersonaSwitcher.logger.log ('array2 is null');
         return false;
     }
 
     if (!array1 || !array2)
     {
-        PersonaSwitcher.logger.log ("one isn't an array");
+        PersonaSwitcher.logger.log ('one is not an array');
         return false;
     }
 
-    if (array1.length != array2.length)
+    if (array1.length !== array2.length)
     {
-        PersonaSwitcher.logger.log ("both aren't the same length");
+        PersonaSwitcher.logger.log ('both are not the same length');
         return false;
     }
 
     for (var i = 0; i < array1.length; i++)
     {
         // Q&D comparison because we know they're in JSON format
-        PersonaSwitcher.logger.log (JSON.stringify(array1));
-        PersonaSwitcher.logger.log (JSON.stringify(array2));
+        // PersonaSwitcher.logger.log (JSON.stringify(array1));
+        // PersonaSwitcher.logger.log (JSON.stringify(array2));
 
         if (JSON.stringify(array1) !== JSON.stringify(array2))
             return (false);
