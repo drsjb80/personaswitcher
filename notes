@@ -1,3 +1,6 @@
+If PM and version > 3
+    menu dropdown doesn't work first time if default being displayed
+
 GET https://addons.cdn.mozilla.net/en-US/firefox/_files/123713/titled-1copy.jpg [HTTP/1.1 404 Not Found 220ms]
 GET https://addons.cdn.mozilla.net/en-US/firefox/_files/123713/titled-2copy.jpg [HTTP/1.1 404 Not Found 278ms]
 
@@ -69,3 +72,7 @@ browser.dom.window.dump.enabled
 
 Static popups do not reset the preview under OS X, except the toolbar
 PM does not like default preview in toolbar
+
+Actually, the values of insertbefore and insertafter can be comma-separated
+lists, in which case the first id in the list that is found in the window
+is used to determine the position.

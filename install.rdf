@@ -28,7 +28,7 @@
           <Description>
             <em:locale>zh-CN</em:locale>
             <em:name>选项</em:name>
-            <em:description>讓您以「定時更換、重啟更換、隨機更換、自行切換、瞬間預覽」的方式享受火狐面板，也能瞬間切回預設面板，並有方便的「快捷鍵、附加元件列圖示選單、主功能表選單、工具功能表選單」供快速操作，外加清楚易懂的中文化介面供您使用！！</em:description>
+            <em:description>本软件为您提供通过菜单或是敲键形式，快速切换浏览器的个人设定和原始设定背景图案的功能。 还可以定时自动播放所有背景图案， 本软件可在Firefox, Thunderbird, and Seamonkey浏览器上安装使用。</em:description>
           </Description>
         </em:localized>
 

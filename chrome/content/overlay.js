@@ -323,18 +323,16 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 {
     PersonaSwitcher.logger.log (menupopup.id);
     var item = null;
+    var PMBug = 'personaswitcher-button-popup' ===  menupopup.id &&
+        'Pale Moon' === PersonaSwitcher.XULAppInfo.name &&
+        0 !== PersonaSwitcher.XULAppInfo.version.indexOf ("3.") &&
+        PersonaSwitcher.prefs.getBoolPref ('preview');
+    PersonaSwitcher.logger.log (PMBug);
 
-    // PM bug
-    if (menupopup.id === 'personaswitcher-button-popup' &&
-        PersonaSwitcher.XULAppInfo.name === 'Pale Moon' &&
-        PersonaSwitcher.XULAppInfo.version.indexOf ("3.") !== 0)
-    {
-        PersonaSwitcher.logger.log ('skipping default for PM and the toolbar');
-    }
-    else
+    if (!PMBug)
     {
         item = PersonaSwitcher.createMenuItem
-                (doc, PersonaSwitcher.defaultTheme);
+            (doc, PersonaSwitcher.defaultTheme);
         if (item)
         {
             menupopup.appendChild (item);
@@ -433,6 +431,24 @@ PersonaSwitcher.showMenus = function (which)
         PersonaSwitcher.showMenu (doc, which);
     }
 };
+
+// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+/*
+PersonaSwitcher.mutationObserver = new MutationObserver
+(
+    function (mutations)
+    {
+        mutations.forEach
+        (
+            function(mutation)
+            {
+                console.log (mutation.type);
+                console.log (mutation.target.hidden);
+            }
+        );    
+    }
+);
+*/
 
 PersonaSwitcher.popupHidden = function()
 {
@@ -533,30 +549,19 @@ PersonaSwitcher.onWindowLoad = function (event)
         {
             PersonaSwitcher.rotate();
         }
-
-        if (PersonaSwitcher.addonManager)
-        {
-            AddonManager.getAddonsByTypes
-            (
-                ['theme'],
-                function (themes)
-                {
-                    var defaultCount = 0;
-                    for (var theme in themes)
-                    {
-                        if ('Default' === themes[theme].name)
-                            defaultCount++;
-                    }
-
-                    PersonaSwitcher.multipleDefaults = defaultCount > 1;
-                }
-            );
-        }
     }
 
     PersonaSwitcher.setKeyset (this.document);
     PersonaSwitcher.setAccessKey (this.document);
     PersonaSwitcher.setToolboxMinheight (this.document);
+
+    /*
+    PersonaSwitcher.mutationObserver.observe
+    (
+        this.document.getElementById ('personaswitcher-main-menubar'),
+        { attributes: true }
+    );
+    */
 
     if (! PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {
@@ -579,8 +584,6 @@ PersonaSwitcher.onWindowLoad = function (event)
                 // wait for it...
                 PersonaSwitcher.logger.log ('found default via addons');
                 PersonaSwitcher.defaultTheme = theme;
-
-                PersonaSwitcher.logger.log (PersonaSwitcher.staticPopups);
 
                 // don't have this.document as async
                 if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
@@ -613,7 +616,6 @@ PersonaSwitcher.onWindowLoad = function (event)
             PersonaSwitcher.createStaticPopups (this.document);
         }
     }
-
 
     /*
     PersonaSwitcher.logger.log (gFindBar);

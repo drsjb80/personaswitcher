@@ -360,6 +360,7 @@ PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
     PersonaSwitcher.logger.log (toWhich.name);
+    PersonaSwitcher.logger.log (toWhich.id);
 
     /*
     ** if it's there, use it
@@ -368,7 +369,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         PersonaSwitcher.logger.log ('using PP');
 
-        if ('Default' === toWhich.name)
+        if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
         {
             PersonaService.changeToDefaultPersona();
         }
@@ -391,7 +392,7 @@ PersonaSwitcher.switchTo = function (toWhich)
         // 3.* compatability
         PersonaSwitcher.logger.log ('using currentTheme');
 
-        if ('Default' === toWhich.name)
+        if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
         {
             LightweightThemeManager.currentTheme = null;
         }
@@ -463,6 +464,7 @@ PersonaSwitcher.getPersonas = function()
 
     PersonaSwitcher.logger.log (arr.length);
 
+    // PM
     for (var i = 0; i < arr.length; i++)
     {
         PersonaSwitcher.logger.log (i);
