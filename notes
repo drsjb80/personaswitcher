@@ -1,8 +1,11 @@
 If PM and version > 3
     menu dropdown doesn't work first time if default being displayed
 
-GET https://addons.cdn.mozilla.net/en-US/firefox/_files/123713/titled-1copy.jpg [HTTP/1.1 404 Not Found 220ms]
-GET https://addons.cdn.mozilla.net/en-US/firefox/_files/123713/titled-2copy.jpg [HTTP/1.1 404 Not Found 278ms]
+Thunderbird height
+    http://forums.mozillazine.org/viewtopic.php?f=39&t=2436557
+    http://www.kennettm.free-online.co.uk/Tipsandtweaks.html
+    https://bug776349.bugzilla.mozilla.org/attachment.cgi?id=644756
+    https://wiki.archlinux.org/index.php/firefox_tweaks
 
 https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/3.6/mac/en-US/
 https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/4.0/mac/en-US/
@@ -21,7 +24,6 @@ chrome://browser/content/browser.xul
 chrome://navigator/content/navigator.xul
     SeaMonkey 2.0 - Browser window
     BrowserToolbarPalette
-
 
 chrome://messenger/content/messenger.xul
     Thunderbird - Main window

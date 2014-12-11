@@ -176,24 +176,25 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     'use strict';
     PersonaSwitcher.logger.log();
 
-    if (PersonaSwitcher.XULAppInfo.name === 'Thunderbird') return;
+    // if (PersonaSwitcher.XULAppInfo.name === 'Thunderbird') return;
 
     var minheight =
         parseInt (PersonaSwitcher.prefs.getCharPref ('toolbox-minheight'));
     var maxheight =
         parseInt (PersonaSwitcher.prefs.getCharPref ('toolbox-maxheight'));
 
-    PersonaSwitcher.logger.log (minheight);
-    PersonaSwitcher.logger.log (maxheight);
-
     if (isNaN (minheight)) minheight = 0;
     else if (minheight < 0) minheight = 0;
     else if (minheight > maxheight) minheight = maxheight;
 
-    var nt = doc.getElementById ('navigator-toolbox');
+    var nt = null;
+    if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
+        nt = doc.getElementById ('titlebar');
+    else
+        nt = doc.getElementById ('navigator-toolbox');
 
     if (nt !== null)
-        doc.getElementById ('navigator-toolbox').minHeight = minheight;
+        nt.minHeight = minheight;
 };
 
 PersonaSwitcher.AddonListener =

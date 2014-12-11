@@ -24,6 +24,8 @@ git push
 echo git tag -a v$PSVERSION -m "Version `cat VERSION`"
 git commit -a
 git push origin v`cat VERSION`
+echo '2.0.4a'`date "+%Y-%m-%d"` > VERSIONA
+cp personaswitcher.xpi personaswitcher-`cat VERSIONA`.xpi
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
