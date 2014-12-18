@@ -21,7 +21,7 @@
 <!ENTITY options.autoevery.minutes "分钟时轮换">
 <!ENTITY options.random.desc "不以固定的順序更換面板。">
 <!ENTITY options.startup-switch.desc "开启　firefox 时立即更换一次面板">
-<!ENTITY options.toolbox-minheight.desc "限制 Firefox 与 Seamonkey 上方工具列最低高度至 低總高度至：">
+<!ENTITY options.toolbox-minheight.desc "限制上方工具列最低高度至 低總高度至：">
 <!ENTITY options.preview.desc "滑鼠经过选单选项时预览">
 <!ENTITY options.preview-delay.desc "(ms) delay.">
 <!ENTITY options.notification-workaround.desc "隐藏 Personas Plus 在版面变更时显示的提示">        

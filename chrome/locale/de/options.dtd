@@ -21,7 +21,7 @@
 <!ENTITY options.autoevery.minutes "Minuten.">
 <!ENTITY options.random.desc "Wechsel zu einer zufälligen Persona anstelle des Letzten verwendeten.">
 <!ENTITY options.startup-switch.desc "Wechsel beim Start.">
-<!ENTITY options.toolbox-minheight.desc "Minimale Höhe der oberen Toolbox (in Firefox und SeaMonkey):">
+<!ENTITY options.toolbox-minheight.desc "Minimale Höhe der oberen Toolbox:">
 <!ENTITY options.preview.desc "Personavorschau bei Menüauswahl.">
 <!ENTITY options.preview-delay.desc "(ms) delay.">
 <!ENTITY options.notification-workaround.desc "Entferne Personas Plus Benachrichtigungen.">
