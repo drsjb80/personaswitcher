@@ -188,11 +188,19 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     else if (minheight > maxheight) minheight = maxheight;
 
     var nt = null;
-    if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
-        nt = doc.getElementById ('titlebar');
+    PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
+    if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name ||
+        'Icedove' === PersonaSwitcher.XULAppInfo.name)
+    {
+        // nt = doc.getElementById ('titlebar');
+        nt = doc.getElementById ('navigation-toolbox');
+    }
     else
+    {
         nt = doc.getElementById ('navigator-toolbox');
+    }
 
+    PersonaSwitcher.logger.log (nt);
     if (nt !== null)
         nt.minHeight = minheight;
 };

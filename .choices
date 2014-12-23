@@ -12,7 +12,8 @@ cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
 ----
 git status
 git diff
-git diff -a v2.0.1
+git diff origin/master
+git diff -a v2.0.3
 git commit -a
 git push
 ----
@@ -21,7 +22,7 @@ git add personaswitcher-`cat VERSION`.xpi
 git commit personaswitcher-`cat VERSION`.xpi
 git push
 ----
-echo git tag -a v$PSVERSION -m "Version `cat VERSION`"
+git tag -a v$PSVERSION -m "Version `cat VERSION`"
 git commit -a
 git push origin v`cat VERSION`
 echo '2.0.4a'`date "+%Y-%m-%d"` > VERSIONA
