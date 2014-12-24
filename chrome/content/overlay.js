@@ -176,8 +176,6 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     'use strict';
     PersonaSwitcher.logger.log();
 
-    // if (PersonaSwitcher.XULAppInfo.name === 'Thunderbird') return;
-
     var minheight =
         parseInt (PersonaSwitcher.prefs.getCharPref ('toolbox-minheight'));
     var maxheight =
@@ -187,21 +185,25 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     else if (minheight < 0) minheight = 0;
     else if (minheight > maxheight) minheight = maxheight;
 
-    var nt = null;
     PersonaSwitcher.logger.log (PersonaSwitcher.XULAppInfo.name);
-    if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name ||
-        'Icedove' === PersonaSwitcher.XULAppInfo.name)
+    PersonaSwitcher.logger.log (PersonaSwitcher.XULRuntime.OS);
+
+    var nt = null;
+    switch (PersonaSwitcher.XULAppInfo.name)
     {
-        // nt = doc.getElementById ('titlebar');
-        nt = doc.getElementById ('navigation-toolbox');
-    }
-    else
-    {
-        nt = doc.getElementById ('navigator-toolbox');
+        case 'Thunderbird':
+        case 'Icedove':
+            nt = 'Linux' === PersonaSwitcher.XULRuntime.OS ?
+                doc.getElementById ('navigation-toolbox') :
+                doc.getElementById ('titlebar');
+            break;
+        default:
+            nt = doc.getElementById ('navigator-toolbox');
+            break;
     }
 
     PersonaSwitcher.logger.log (nt);
-    if (nt !== null)
+    if (null !== nt)
         nt.minHeight = minheight;
 };
 
@@ -281,6 +283,13 @@ PersonaSwitcher.createMenuItem = function (doc, which)
         function() { PersonaSwitcher.onMenuItemCommand (which); },
         false
     );
+
+    PersonaSwitcher.logger.log (which.iconURL);
+    if (null !== which.iconURL)
+    {
+        item.setAttribute ('class', 'menuitem-iconic');
+        item.setAttribute ('image', which.iconURL);
+    }
 
     // create method and pass in item and which
     if (PersonaSwitcher.prefs.getBoolPref ('preview'))
