@@ -22,8 +22,11 @@
 <!ENTITY options.random.desc "Switch to a random persona instead of the least recent.">
 <!ENTITY options.startup-switch.desc "Rotate on startup.">
 <!ENTITY options.toolbox-minheight.desc "Minimum height of top toolbox:">
+
 <!ENTITY options.preview.desc "Preview personas on menu selection with">
 <!ENTITY options.preview-delay.desc "(ms) delay.">
+<!ENTITY options.icon-preview.desc "Add icon preview to menuitems.">
+
 <!ENTITY options.notification-workaround.desc "Remove Personas Plus notifications.">
 
 <!ENTITY options.menus.title "Persona menu locations">

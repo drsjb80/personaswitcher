@@ -121,6 +121,11 @@
                 type="int"/>
 
             <preference
+                id="icon-preview"
+                name="extensions.personaswitcher.icon-preview"
+                type="bool"/>
+
+            <preference
                 id="notification-workaround"
                 name="extensions.personaswitcher.notification-workaround"
                 type="bool"/>
@@ -322,6 +327,14 @@
                     preference="preview-delay"
                 />
                 <label value="&options.preview-delay.desc;"/>
+            </hbox>
+
+            <hbox>
+                <checkbox
+                    id="icon-preview"
+                    preference="icon-preview"
+                    label="&options.icon-preview.desc;"
+                />
             </hbox>
 
             <hbox>

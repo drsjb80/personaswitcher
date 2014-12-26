@@ -284,11 +284,14 @@ PersonaSwitcher.createMenuItem = function (doc, which)
         false
     );
 
-    PersonaSwitcher.logger.log (which.iconURL);
-    if (null !== which.iconURL)
+    if (PersonaSwitcher.prefs.getBoolPref ('icon-preview'))
     {
-        item.setAttribute ('class', 'menuitem-iconic');
-        item.setAttribute ('image', which.iconURL);
+        PersonaSwitcher.logger.log (which.iconURL);
+        if (null !== which.iconURL)
+        {
+            item.setAttribute ('class', 'menuitem-iconic');
+            item.setAttribute ('image', which.iconURL);
+        }
     }
 
     // create method and pass in item and which
