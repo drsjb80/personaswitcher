@@ -191,6 +191,7 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     var nt = null;
     switch (PersonaSwitcher.XULAppInfo.name)
     {
+        // can't figure out how to use 'browser-panel'
         case 'Thunderbird':
         case 'Icedove':
             nt = 'Linux' === PersonaSwitcher.XULRuntime.OS ?
@@ -204,7 +205,12 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
 
     PersonaSwitcher.logger.log (nt);
     if (null !== nt)
+    {
         nt.minHeight = minheight;
+        // PersonaSwitcher.logger.log ("height = " + nt.height);
+        // PersonaSwitcher.logger.log ("minHeight = " + nt.minHeight);
+        // PersonaSwitcher.logger.log ("maxHeight = " + nt.maxHeight);
+    }
 };
 
 PersonaSwitcher.AddonListener =
