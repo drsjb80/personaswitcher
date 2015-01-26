@@ -104,8 +104,10 @@ PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
 PersonaSwitcher.staticPopups = false;
 
-PersonaSwitcher.defaultTheme = null;
-PersonaSwitcher.defaultThemeID = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
+PersonaSwitcher.defaultTheme = {};
+PersonaSwitcher.defaultTheme.name = '';
+PersonaSwitcher.defaultTheme.id = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
+
 PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
 
@@ -359,8 +361,7 @@ PersonaSwitcher.removeNotifications = function()
 PersonaSwitcher.switchTo = function (toWhich)
 {
     'use strict';
-    PersonaSwitcher.logger.log (toWhich.name);
-    PersonaSwitcher.logger.log (toWhich.id);
+    PersonaSwitcher.logger.log (toWhich);
 
     /*
     ** if it's there, use it
@@ -465,6 +466,7 @@ PersonaSwitcher.getPersonas = function()
     PersonaSwitcher.logger.log (arr.length);
 
     // PM
+    /*
     for (var i = 0; i < arr.length; i++)
     {
         PersonaSwitcher.logger.log (i);
@@ -476,6 +478,7 @@ PersonaSwitcher.getPersonas = function()
             arr.splice (i, 1);
         }
     }
+    */
 
     return (arr);
 };

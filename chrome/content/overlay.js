@@ -233,28 +233,37 @@ PersonaSwitcher.AddonListener =
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonListener
 
+dump ('trying AddonManager\n');
 try
 {
-    Components.utils.import('resource://gre/modules/AddonManager.jsm');
+    Components.utils.import ('resource://gre/modules/AddonManager.jsm');
     PersonaSwitcher.addonManager = true;
-    AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
+    dump ('using AddonManager\n');
+
+    // AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
 
     // is there a way to get this???
     // AddonManagerPrivate.addAddonListener (PersonaSwitcher.AddonListener);
 }
 catch (e1)
 {
+// http://mxr.mozilla.org/firefox/source/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
+// http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
+// http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
+
+    dump ('trying ExtensionManager\n');
     try
     {
         PersonaSwitcher.extensionManager =
             Components.classes['@mozilla.org/extensions/manager;1']
                 .getService(Components.interfaces.nsIExtensionManager);
+        dump ('using ExtensionManager\n');
     }
-    catch (e2) {}
+    catch (e2)
+    {
+        dump ('completely failed\n');
+    }
 }
-
-// http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
-// http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
 
 PersonaSwitcher.previewTimer = Components.classes['@mozilla.org/timer;1'].
     createInstance(Components.interfaces.nsITimer);
@@ -349,14 +358,29 @@ PersonaSwitcher.createMenuItem = function (doc, which)
 PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 {
     PersonaSwitcher.logger.log (menupopup.id);
-    var item = null;
-    var PMBug = 'personaswitcher-button-popup' ===  menupopup.id &&
-        'Pale Moon' === PersonaSwitcher.XULAppInfo.name &&
-        0 !== PersonaSwitcher.XULAppInfo.version.indexOf ("3.") &&
-        PersonaSwitcher.prefs.getBoolPref ('preview');
-    PersonaSwitcher.logger.log (PMBug);
 
-    if (!PMBug)
+    var popup = 'personaswitcher-button-popup' ===  menupopup.id;
+    PersonaSwitcher.logger.log (popup);
+
+    // the bad two cases
+    // if it's thunderbird and we streched the top
+    var TBird = 'Thunderbird' === PersonaSwitcher.XULAppInfo.name;
+    var chars = PersonaSwitcher.prefs.getCharPref ('toolbox-minheight');
+    var height = parseInt (chars);
+    height = isNaN (height) ? 0 : height;
+    var stretched = 0 !== height;
+
+    var TB = TBird && stretched && popup;
+    PersonaSwitcher.logger.log (TB);
+
+    // it's pale moon, a menubar, and preview is set
+    var PM = 'personaswitcher-button-popup' ===  menupopup.id &&
+        'Pale Moon' === PersonaSwitcher.XULAppInfo.name &&
+        PersonaSwitcher.prefs.getBoolPref ('preview');
+    PersonaSwitcher.logger.log (PM);
+
+    var item = null;
+    if (!PM && !TB)
     {
         item = PersonaSwitcher.createMenuItem
             (doc, PersonaSwitcher.defaultTheme);
@@ -368,6 +392,8 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 
     for (var i = 0; i < arr.length; i++)
     {
+        // PersonaSwitcher.logger.log (i);
+        // PersonaSwitcher.logger.log (arr[i]);
         item = PersonaSwitcher.createMenuItem (doc, arr[i]);
         if (item)
         {
@@ -378,12 +404,17 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 
 PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
 {
+    PersonaSwitcher.logger.log (doc);
+    PersonaSwitcher.logger.log (menupopup);
+
     while (menupopup.hasChildNodes())
     {
         menupopup.removeChild (menupopup.firstChild);
     }
 
     var arr = PersonaSwitcher.getPersonas();
+    PersonaSwitcher.logger.log (arr);
+
     if (0 === arr.length)
     {
         PersonaSwitcher.logger.log ('no themes');
@@ -412,6 +443,9 @@ PersonaSwitcher.createMenuPopup = function (event)
 
     var menupopup = event.target;
     var doc = event.target.ownerDocument;
+
+    PersonaSwitcher.logger.log (menupopup);
+    PersonaSwitcher.logger.log (doc);
 
     PersonaSwitcher.createMenuPopupWithDoc (doc, menupopup);
 };
@@ -601,48 +635,46 @@ PersonaSwitcher.onWindowLoad = function (event)
         PersonaSwitcher.hideMenu (this.document, 'tools-submenu');
     }
 
+    /*
     if (PersonaSwitcher.addonManager)
     {
-        AddonManager.getAddonByID
+        AddonManager.getAddonsByTypes
         (
-            PersonaSwitcher.defaultThemeID,
-            function (theme)
+            [ "theme" ],
+            function (themes)
             {
-                // wait for it...
-                PersonaSwitcher.logger.log ('found default via addons');
-                PersonaSwitcher.defaultTheme = theme;
+                PersonaSwitcher.themes = themes;
 
-                // don't have this.document as async
-                if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
+                for (var i in themes)
                 {
-                    PersonaSwitcher.allDocuments 
-                        (PersonaSwitcher.createStaticPopups);
+                    PersonaSwitcher.logger.log (themes[i]);
                 }
             }
         );
-
     }
-    else if (PersonaSwitcher.extensionManager)
+    else if (null !== PersonaSwitcher.extensionManager)
     {
-        PersonaSwitcher.logger.log ('found default via extensions');
-        PersonaSwitcher.defaultTheme =
-            PersonaSwitcher.extensionManager.getItemForID
-                (PersonaSwitcher.defaultThemeID);
+        var count = {};
+        var themes = PersonaSwitcher.extensionManager.getItemList
+            (Components.interfaces.nsIUpdateItem.TYPE_THEME, count);
 
+        PersonaSwitcher.logger.log (themes.length);
+
+        for (var theme in themes)
+        {
+            PersonaSwitcher.logger.log (theme);
+            PersonaSwitcher.dump (themes[theme], 1);
+        }
+        PersonaSwitcher.logger.log ("fuck");
+    }
+    */
+
+    /*
         if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
         {
             PersonaSwitcher.createStaticPopups (this.document);
         }
-    }
-    else
-    {
-        PersonaSwitcher.logger.log ('no default theme found');
-
-        if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
-        {
-            PersonaSwitcher.createStaticPopups (this.document);
-        }
-    }
+    */
 
     /*
     PersonaSwitcher.logger.log (gFindBar);
