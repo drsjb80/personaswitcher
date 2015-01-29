@@ -1,14 +1,16 @@
-<!ENTITY options.title "Persona Switcher Preferenze">
-<!ENTITY options.pane1 "Persona Switcher Preferenze">
-<!ENTITY options.kbshortcuts.title "Scorciatoie da Tastiera">
-<!ENTITY options.kbshortcuts.default "Persona Predefinita - Combinazione Tasti:">
-<!ENTITY options.kbshortcuts.rotate "Ruota Tema persona - Combinazione Tasti:">
-<!ENTITY options.kbshortcuts.toggle "Cambia Manualmente il Tema di Persona - Combinazione Tasti:">
-<!ENTITY options.kbshortcuts.auto "Cambio automatico del Tema di Persona">
+<!-- Traduzione Aggiornata a: PSwitcher Ver. 2.0.4 b2  2015-01-27 -->
+
+<!ENTITY options.title "Persona Switcher: Settaggi di Configurazione">
+<!ENTITY options.pane1 "Persona Switcher: Settaggi di Configurazione">
+<!ENTITY options.kbshortcuts.title "Scorciatoie da Tastiera - Combinazione Tasti">
+<!ENTITY options.kbshortcuts.default "Tema Predefinito:">
+<!ENTITY options.kbshortcuts.rotate "Cambio Tema:">
+<!ENTITY options.kbshortcuts.toggle "Attiva/Disattiva Cambio Automatico:">
+<!ENTITY options.kbshortcuts.auto "Cambio Automatico del Tema">
 
 <!ENTITY options.kbshortcuts.menushortcuts "Tasti scorciatoia del Menu (Non su OS X)">
-<!ENTITY options.kbshortcuts.access "Menu Principale Tasto scorciatoia:">
-<!ENTITY options.kbshortcuts.activate "PSwitcher Menu - Tasto Scorciatoia:">
+<!ENTITY options.kbshortcuts.access "Menu Principale:">
+<!ENTITY options.kbshortcuts.activate "PSwitcher Menu:">
 
 <!ENTITY options.kbshortcuts.key "Tasto">
 <!ENTITY options.kbshortcuts.shift "Shift">
@@ -17,15 +19,15 @@
 <!ENTITY options.kbshortcuts.meta "Meta">
 
 <!ENTITY options.options.title "Opzioni">
-<!ENTITY options.autoevery.switch "Cambia ogni">
-<!ENTITY options.autoevery.minutes "Minuti.">
-<!ENTITY options.random.desc "Cambia in maniera casuale anziché dal meno recente.">
-<!ENTITY options.startup-switch.desc "Cambia ad ogni avvio.">
-<!ENTITY options.toolbox-minheight.desc "Altezza minima della toolbox superiore:">
+<!ENTITY options.autoevery.switch "Cambia Tema ogni">
+<!ENTITY options.autoevery.minutes "Minuti/o.">
+<!ENTITY options.random.desc "Cambia Tema a caso anziché dal meno recente.">
+<!ENTITY options.startup-switch.desc "Cambia Tema ad ogni avvio.">
+<!ENTITY options.toolbox-minheight.desc "Altezza minima della Toolbox superiore (in Firefox e SeaMonkey):">
 
-<!ENTITY options.preview.desc "Anteprima del Tema-Persona durante la selezione da menu.">
-<!ENTITY options.preview-delay.desc "(ms) delay.">
-<!ENTITY options.icon-preview.desc "Add icon preview to menuitems.">
+<!ENTITY options.preview.desc "Anteprima del Tema selezionato nella lista          Ritardata di:">
+<!ENTITY options.preview-delay.desc "(ms)">
+<!ENTITY options.icon-preview.desc "Aggiungi icona di Anteprima nel listato.">
 
 <!ENTITY options.notification-workaround.desc "Rimuovi notifiche di Personas Plus.">
 
