@@ -1,32 +1,30 @@
-<!ENTITY options.title "選項">
-<!ENTITY options.pane1 "選項">
-<!ENTITY options.kbshortcuts.title "快捷鍵">
-<!ENTITY options.kbshortcuts.default "切換至預設面板">
-<!ENTITY options.kbshortcuts.rotate "切換至其他面板">
-<!ENTITY options.kbshortcuts.toggle "切換成自動輪換">
+﻿<!ENTITY options.title "选项">
+<!ENTITY options.pane1 "选项">
+<!ENTITY options.kbshortcuts.title "快捷键">
+<!ENTITY options.kbshortcuts.default "切换至默认面板">
+<!ENTITY options.kbshortcuts.rotate "切换至其他面板">
+<!ENTITY options.kbshortcuts.toggle "切换为自动轮换">
 <!ENTITY options.kbshortcuts.auto "Automatic rotation">
 
-<!ENTITY options.kbshortcuts.menushortcuts "「面板」選單快捷鍵 (於 OS X 無效)">
-<!ENTITY options.kbshortcuts.access "第一種快捷鍵：　Alt +">
-<!ENTITY options.kbshortcuts.activate "第二種快捷鍵：">
+<!ENTITY options.kbshortcuts.menushortcuts "「面板」选单快捷键 (于 OS X 无效)">
+<!ENTITY options.kbshortcuts.access "第一种快捷键：　Alt +">
+<!ENTITY options.kbshortcuts.activate "第二种快捷键：">
 
-<!ENTITY options.kbshortcuts.key "按鍵">
+<!ENTITY options.kbshortcuts.key "按键">
 <!ENTITY options.kbshortcuts.shift "Shift">
 <!ENTITY options.kbshortcuts.control "Control">
 <!ENTITY options.kbshortcuts.alt "Alt">
 <!ENTITY options.kbshortcuts.meta "Meta">
 
-<!ENTITY options.options.title "选項">
+<!ENTITY options.options.title "选项">
 <!ENTITY options.autoevery.switch "每当经过">   
 <!ENTITY options.autoevery.minutes "分钟时轮换">
-<!ENTITY options.random.desc "不以固定的順序更換面板。">
-<!ENTITY options.startup-switch.desc "开启　firefox 时立即更换一次面板">
-<!ENTITY options.toolbox-minheight.desc "限制上方工具列最低高度至 低總高度至：">
-
-<!ENTITY options.preview.desc "滑鼠经过选单选项时预览">
-<!ENTITY options.preview-delay.desc "(ms) delay.">
+<!ENTITY options.random.desc "不以固定的顺序更换面板。">
+<!ENTITY options.startup-switch.desc "开启 Firefox 时立即更换一次面板">
+<!ENTITY options.toolbox-minheight.desc "　   限制上方工具列最低高度至：">
+<!ENTITY options.preview.desc "光标停留于选单选项​​经过一千分之">
+<!ENTITY options.preview-delay.desc "秒后预览">
 <!ENTITY options.icon-preview.desc "Add icon preview to menuitems.">
-
 <!ENTITY options.notification-workaround.desc "隐藏 Personas Plus 在版面变更时显示的提示">        
 
 <!ENTITY options.menus.title "将［面板］选单预示显示於 (至少勾一项才能以快捷键呼叫［面板］选单)">

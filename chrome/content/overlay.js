@@ -64,19 +64,27 @@ PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 PersonaSwitcher.setKeyset = function (doc)
 {
     'use strict';
-    PersonaSwitcher.logger.log();
+    PersonaSwitcher.logger.log (doc);
 
-    var existing = doc.getElementById ('PersonaSwitcher.defaultPersonaKey');
+    var existing = doc.getElementById ('PersonaSwitcher.keyBreadCrumb');
+    PersonaSwitcher.logger.log (existing);
 
     // there are windows/documents that don't have keyset -- e.g.: prefs
-    if (existing === null) return;
+    if (null === existing) return;
 
     var parent = existing.parentNode;
+    PersonaSwitcher.logger.log (parent);
     var grandParent = parent.parentNode;
+    PersonaSwitcher.logger.log (grandParent);
 
     // remove the existing keyset and make a brand new one
     grandParent.removeChild (parent);
     var keyset = doc.createElement ('keyset');
+
+    // a way to find the keyset no matter what.
+    var breadCrumb = doc.createElement ('key');
+    breadCrumb.setAttribute ('id', 'PersonaSwitcher.keyBreadCrumb'); 
+    keyset.appendChild (breadCrumb);
 
     var keys =
     [
@@ -112,7 +120,7 @@ PersonaSwitcher.setKeyset = function (doc)
 
     for (var key in keys)
     {
-        if (keys[key][2] === '') continue;
+        if (key[2] == '') continue;
 
         var newKey = PersonaSwitcher.makeKey (doc,
             keys[key][0], keys[key][1], keys[key][2], keys[key][3]);
@@ -390,6 +398,8 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
         }
     }
 
+    // arr.sort (function (a, b) { return a.name.localeCompare (b.name); });
+
     for (var i = 0; i < arr.length; i++)
     {
         // PersonaSwitcher.logger.log (i);
@@ -551,6 +561,19 @@ PersonaSwitcher.allDocuments = function (func)
     }
 };
 
+PersonaSwitcher.allWindows = function (func)
+{
+    'use strict';
+    PersonaSwitcher.logger.log();
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+
+    while (enumerator.hasMoreElements())
+    {
+        func (enumerator.getNext());
+    }
+};
+
 
 PersonaSwitcher.createStaticPopups = function (doc)
 {
@@ -635,54 +658,40 @@ PersonaSwitcher.onWindowLoad = function (event)
         PersonaSwitcher.hideMenu (this.document, 'tools-submenu');
     }
 
-    /*
     if (PersonaSwitcher.addonManager)
     {
-        AddonManager.getAddonsByTypes
+        AddonManager.getAddonByID
         (
-            [ "theme" ],
-            function (themes)
+            PersonaSwitcher.defaultTheme.id,
+            function (theme)
             {
-                PersonaSwitcher.themes = themes;
+                // PersonaSwitcher.logger.log (theme);
 
-                for (var i in themes)
+                if (null !== theme && null !== theme.name)
                 {
-                    PersonaSwitcher.logger.log (themes[i]);
+                    PersonaSwitcher.defaultTheme.name = theme.name;
                 }
             }
         );
     }
     else if (null !== PersonaSwitcher.extensionManager)
     {
-        var count = {};
-        var themes = PersonaSwitcher.extensionManager.getItemList
-            (Components.interfaces.nsIUpdateItem.TYPE_THEME, count);
+        var theme = PersonaSwitcher.extensionManager.getItemForID
+            (PersonaSwitcher.defaultTheme.id);
 
-        PersonaSwitcher.logger.log (themes.length);
+        PersonaSwitcher.logger.log (theme);
 
-        for (var theme in themes)
+        if (null !== theme && null !== theme.name)
         {
-            PersonaSwitcher.logger.log (theme);
-            PersonaSwitcher.dump (themes[theme], 1);
+            PersonaSwitcher.defaultTheme.name = theme.name;
         }
-        PersonaSwitcher.logger.log ("fuck");
     }
-    */
 
     /*
         if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
         {
             PersonaSwitcher.createStaticPopups (this.document);
         }
-    */
-
-    /*
-    PersonaSwitcher.logger.log (gFindBar);
-    PersonaSwitcher.logger.log (gFindBar.hidden);
-    gFindBar.open();
-    PersonaSwitcher.logger.log (gFindBar.hidden);
-    gFindBar.close();
-    PersonaSwitcher.logger.log (gFindBar.hidden);
     */
 };
 

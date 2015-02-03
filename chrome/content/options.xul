@@ -272,7 +272,6 @@
                     size="1"
                     preference="activate-key"/>
             </hbox>
-
         </groupbox>
 
         <groupbox>
@@ -290,7 +289,7 @@
                 <label value="&options.autoevery.minutes;"/>
             </hbox>
 
-            <hbox>
+            <hbox align="center">
                 <checkbox
                     id="random"
                     preference="random"
@@ -298,21 +297,12 @@
                 />
             </hbox>
 
-            <hbox>
+            <hbox align="center">
                 <checkbox
                     id="startup-switch"
                     preference="startup-switch"
                     label="&options.startup-switch.desc;"
                     />
-            </hbox>
-
-            <hbox align="center">
-                <label value="&options.toolbox-minheight.desc;"/>
-                <textbox
-                    size="3"
-                    id="toolbox-minheight"
-                    preference="toolbox-minheight"
-                />
             </hbox>
 
             <hbox align="center">
@@ -329,7 +319,7 @@
                 <label value="&options.preview-delay.desc;"/>
             </hbox>
 
-            <hbox>
+            <hbox align="center">
                 <checkbox
                     id="icon-preview"
                     preference="icon-preview"
@@ -337,7 +327,7 @@
                 />
             </hbox>
 
-            <hbox>
+            <hbox align="center">
                 <checkbox
                     id="notification-workaround"
                     preference="notification-workaround"
@@ -345,11 +335,20 @@
                 />
             </hbox>
 
+            <hbox align="center">
+                <label value="&options.toolbox-minheight.desc;"/>
+                <textbox
+                    size="3"
+                    id="toolbox-minheight"
+                    preference="toolbox-minheight"
+                />
+            </hbox>
+
         </groupbox>
 
         <groupbox>
             <caption label="&options.menus.title;"/>
-            <hbox>
+            <hbox align="center">
                 <checkbox
                     id="tools-submenu"
                     preference="tools-submenu"
@@ -357,7 +356,7 @@
                 />
             </hbox>
 
-            <hbox>
+            <hbox align="center">
                 <checkbox
                     id="main-menubar"
                     preference="main-menubar"

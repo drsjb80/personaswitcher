@@ -22,7 +22,7 @@
             leave behind a bread crumb to find later. keysets don't have
             unique ids.
         -->
-        <key id="PersonaSwitcher.defaultPersonaKey"/>
+        <key id="PersonaSwitcher.keyBreadCrumb"/>
     </keyset>
 
     <menubar id="main-menubar">

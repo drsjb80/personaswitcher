@@ -24,11 +24,9 @@
 <!ENTITY options.random.desc "Cambia Tema a caso anziché dal meno recente.">
 <!ENTITY options.startup-switch.desc "Cambia Tema ad ogni avvio.">
 <!ENTITY options.toolbox-minheight.desc "Altezza minima della Toolbox superiore (in Firefox e SeaMonkey):">
-
 <!ENTITY options.preview.desc "Anteprima del Tema selezionato nella lista          Ritardata di:">
 <!ENTITY options.preview-delay.desc "(ms)">
 <!ENTITY options.icon-preview.desc "Aggiungi icona di Anteprima nel listato.">
-
 <!ENTITY options.notification-workaround.desc "Rimuovi notifiche di Personas Plus.">
 
 <!ENTITY options.menus.title "Posizioni del Menu Persona">

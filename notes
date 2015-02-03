@@ -1,5 +1,9 @@
-If PM and version > 3
-    menu dropdown doesn't work first time if default being displayed
+test
+    default theme on 3.6
+
+P+ does not merge with usedThemes
+
+https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Progress_Meters
 
 Thunderbird height
     http://forums.mozillazine.org/viewtopic.php?f=39&t=2436557

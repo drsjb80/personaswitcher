@@ -320,40 +320,38 @@ PersonaSwitcher.toggleAuto = function()
 };
 
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
-PersonaSwitcher.removeNotifications = function()
+PersonaSwitcher.removeNotification = function (win)
 {
     'use strict';
 
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+    var notificationBox = null;
+    var name = PersonaSwitcher.XULAppInfo.name;
 
-    while (enumerator.hasMoreElements())
+    if ('Firefox' === name || 'SeaMonkey' === name || 'Pale Moon' === name)
     {
-        var win = enumerator.getNext();
-        var notificationBox = null;
-        var name = PersonaSwitcher.XULAppInfo.name;
-
-        if ('Firefox' === name || 'SeaMonkey' === name || 'Pale Moon' === name)
+        if ('function' === typeof (win.getBrowser))
         {
-            if ('function' !== typeof (win.getBrowser))
-                continue;
-
-            notificationBox = win.getBrowser().getNotificationBox();
-        }
-        else if ('Thunderbird' === name)
-        {
-            notificationBox = 
-                win.document.getElementById ('mail-notification-box');
-        }
-
-        if (null !== notificationBox)
-        {
-            var notification = notificationBox.getNotificationWithValue
-                ('lwtheme-install-notification');
-
-            if (null !== notification)
+            var browser = win.getBrowser();
+            if (browser)
             {
-                notificationBox.removeNotification (notification);
+                notificationBox = browser.getNotificationBox();
             }
+        }
+    }
+    else if ('Thunderbird' === name)
+    {
+        notificationBox = 
+            win.document.getElementById ('mail-notification-box');
+    }
+
+    if (null !== notificationBox)
+    {
+        var notification = notificationBox.getNotificationWithValue
+            ('lwtheme-install-notification');
+
+        if (null !== notification)
+        {
+            notificationBox.removeNotification (notification);
         }
     }
 };
@@ -414,7 +412,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ('notification-workaround'))
     {
-        PersonaSwitcher.removeNotifications();
+        PersonaSwitcher.allWindows (PersonaSwitcher.removeNotification);
     }
 };
 
@@ -464,21 +462,6 @@ PersonaSwitcher.getPersonas = function()
     }
 
     PersonaSwitcher.logger.log (arr.length);
-
-    // PM
-    /*
-    for (var i = 0; i < arr.length; i++)
-    {
-        PersonaSwitcher.logger.log (i);
-        PersonaSwitcher.logger.log (arr.length);
-
-        if (PersonaSwitcher.defaultThemeID === arr[i].id)
-        {
-            PersonaSwitcher.logger.log ('removing a default, item: ' + i);
-            arr.splice (i, 1);
-        }
-    }
-    */
 
     return (arr);
 };
