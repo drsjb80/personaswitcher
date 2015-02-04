@@ -161,24 +161,6 @@ PersonaSwitcher.activateMenu = function()
     }
 };
 
-// called from PersonaSwitcher.jsm when a perference changes. FIXME: test
-// and remove
-/*
-PersonaSwitcher.setKeysets = function()
-{
-    'use strict';
-    PersonaSwitcher.logger.log();
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        var doc = enumerator.getNext().document;
-        PersonaSwitcher.setKeyset (doc);
-    }
-};
-*/
-
 PersonaSwitcher.setToolboxMinheight = function (doc)
 {
     'use strict';
@@ -561,6 +543,7 @@ PersonaSwitcher.allDocuments = function (func)
     }
 };
 
+// call a function passed as a parameter for each window
 PersonaSwitcher.allWindows = function (func)
 {
     'use strict';
