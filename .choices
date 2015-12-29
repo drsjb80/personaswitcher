@@ -3,6 +3,7 @@
 /Applications/Firefox.app/Contents/MacOS/firefox -P devzero &
 /Applications/Firefox.app/Contents/MacOS/firefox -chromebug
 /Applications/Firefox.app/Contents/MacOS/firefox -CreateProfile dev
+/Applications/Firefox.app/Contents/MacOS/firefox-bin --ProfileManager
 ----
 sh -x make
 ----
@@ -22,10 +23,11 @@ git add personaswitcher-`cat VERSION`.xpi
 git commit personaswitcher-`cat VERSION`.xpi
 git push
 ----
-git tag -a v$PSVERSION -m "Version `cat VERSION`"
+git tag -a v`cat VERSION` -m "Version `cat VERSION`"
 git commit -a
 git push origin v`cat VERSION`
-echo '2.0.4a'`date "+%Y-%m-%d"` > VERSIONA
+----
+echo `cat VERSION`'a'`date "+%Y-%m-%d"` > VERSIONA
 cp personaswitcher.xpi personaswitcher-`cat VERSIONA`.xpi
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &

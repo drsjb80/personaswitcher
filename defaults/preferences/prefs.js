@@ -1,28 +1,38 @@
 // used to test the migration code:
 // pref ("extensions.themeswitcher.defshift", false);
 
+// pref ("extensions.personaswitcher.personas", "");
+
 pref ("extensions.personaswitcher.defshift", false);
 pref ("extensions.personaswitcher.defcontrol", true);
 pref ("extensions.personaswitcher.defalt", true);
 pref ("extensions.personaswitcher.defmeta", false);
+pref ("extensions.personaswitcher.defaccel", false);
+pref ("extensions.personaswitcher.defos", false);
 pref ("extensions.personaswitcher.defkey", "D");
 
 pref ("extensions.personaswitcher.rotshift", false);
 pref ("extensions.personaswitcher.rotcontrol", true);
 pref ("extensions.personaswitcher.rotalt", true);
 pref ("extensions.personaswitcher.rotmeta", false);
+pref ("extensions.personaswitcher.rotaccel", false);
+pref ("extensions.personaswitcher.rotos", false);
 pref ("extensions.personaswitcher.rotkey", "R");
 
 pref ("extensions.personaswitcher.autoshift", false);
 pref ("extensions.personaswitcher.autocontrol", true);
 pref ("extensions.personaswitcher.autoalt", true);
 pref ("extensions.personaswitcher.autometa", false);
+pref ("extensions.personaswitcher.autoaccel", false);
+pref ("extensions.personaswitcher.autoos", false);
 pref ("extensions.personaswitcher.autokey", "A");
 
 pref ("extensions.personaswitcher.activateshift", false);
 pref ("extensions.personaswitcher.activatecontrol", true);
 pref ("extensions.personaswitcher.activatealt", true);
 pref ("extensions.personaswitcher.activatemeta", false);
+pref ("extensions.personaswitcher.activateaccel", false);
+pref ("extensions.personaswitcher.activateos", false);
 pref ("extensions.personaswitcher.activatekey", "P");
 
 pref ("extensions.personaswitcher.accesskey", "P");

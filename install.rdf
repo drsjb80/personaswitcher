@@ -8,6 +8,7 @@
         <em:type>2</em:type>
         <em:version>2.0.4</em:version>
         <em:creator>Steve Beaty</em:creator>
+        <em:multiprocessCompatible>true</em:multiprocessCompatible>
         <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
         <em:contributor>鄭筑云 (Zheng Zhu-Yun)</em:contributor>
         <em:translator>鄭筑云 (Zheng Zhu-Yun)</em:translator>

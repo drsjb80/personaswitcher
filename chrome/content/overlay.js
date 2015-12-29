@@ -22,12 +22,13 @@ PersonaSwitcher.XULNS =
 ***************************************************************************
 */
 
+// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Attribute/modifiers
 PersonaSwitcher.findMods = function (which)
 {
     'use strict';
     PersonaSwitcher.logger.log (which);
     var mods = '';
-    var names = ['shift', 'control', 'alt', 'meta'];
+    var names = ['shift', 'control', 'alt', 'meta', 'accel', 'os'];
 
     for (var i in names)
     {
@@ -73,9 +74,9 @@ PersonaSwitcher.setKeyset = function (doc)
     if (null === existing) return;
 
     var parent = existing.parentNode;
-    PersonaSwitcher.logger.log (parent);
+    // PersonaSwitcher.logger.log (parent);
     var grandParent = parent.parentNode;
-    PersonaSwitcher.logger.log (grandParent);
+    // PersonaSwitcher.logger.log (grandParent);
 
     // remove the existing keyset and make a brand new one
     grandParent.removeChild (parent);
@@ -120,7 +121,8 @@ PersonaSwitcher.setKeyset = function (doc)
 
     for (var key in keys)
     {
-        if (key[2] == '') continue;
+        // if no character set
+        if ('' === keys[key][2]) continue;
 
         var newKey = PersonaSwitcher.makeKey (doc,
             keys[key][0], keys[key][1], keys[key][2], keys[key][3]);
@@ -193,7 +195,7 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
             break;
     }
 
-    PersonaSwitcher.logger.log (nt);
+    // PersonaSwitcher.logger.log (nt);
     if (null !== nt)
     {
         nt.minHeight = minheight;
@@ -203,55 +205,88 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     }
 };
 
+// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager
+// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonManager
+// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonListener
 PersonaSwitcher.AddonListener =
 {
+    // onEnabled and onDisabled are called when interacting with add on
+    // pane and don't need to be monitored
     onInstalled: function (addon)
     {
         PersonaSwitcher.logger.log (addon.type);
+        PersonaSwitcher.logger.log (addon.name);
         
-        if (addon.type === 'theme')
+        if ('theme' === addon.type)
         {
-            if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
-            {
-                PersonaSwitcher.allDocuments 
-                    (PersonaSwitcher.createStaticPopups);
-            }
+            // build menu
+        }
+    },
+    onUninstalled: function (addon)
+    {
+        PersonaSwitcher.logger.log (addon.type);
+        PersonaSwitcher.logger.log (addon.name);
+        
+        if ('theme' === addon.type)
+        {
+            // build menu
         }
     }
 };
 
-// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager
-// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonListener
-
-dump ('trying AddonManager\n');
-try
+PersonaSwitcher.ExtensionListener =
 {
-    Components.utils.import ('resource://gre/modules/AddonManager.jsm');
-    PersonaSwitcher.addonManager = true;
-    dump ('using AddonManager\n');
+    // onEnabled and onDisabled are called when interacting with add on
+    // pane and don't need to be monitored
+    onInstallEnded: function (addon, status)
+    {
+        PersonaSwitcher.logger.log (addon.type);
+        PersonaSwitcher.logger.log (addon.name);
+        
+        if (TYPE_THEME === addon.type)
+        {
+            // build menu
+        }
+    }
+};
 
-    // AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
-
-    // is there a way to get this???
-    // AddonManagerPrivate.addAddonListener (PersonaSwitcher.AddonListener);
-}
-catch (e1)
+PersonaSwitcher.themeMonitor = function()
 {
-// http://mxr.mozilla.org/firefox/source/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
-// http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
-// http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
-
-    dump ('trying ExtensionManager\n');
+    PersonaSwitcher.logger.log ("trying addonManager");
     try
     {
-        PersonaSwitcher.extensionManager =
-            Components.classes['@mozilla.org/extensions/manager;1']
-                .getService(Components.interfaces.nsIExtensionManager);
-        dump ('using ExtensionManager\n');
+        Components.utils.import ('resource://gre/modules/AddonManager.jsm');
+        PersonaSwitcher.addonManager = true;
+        PersonaSwitcher.logger.log ('using AddonManager');
+
+        AddonManager.addAddonListener (PersonaSwitcher.AddonListener);
     }
-    catch (e2)
+    catch (e1)
     {
-        dump ('completely failed\n');
+    // http://mxr.mozilla.org/firefox/source/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
+    // http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
+    // http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
+    // https://github.com/ehsan/mozilla-cvs-history/blob/master/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
+
+// 550   const unsigned long TYPE_THEME       = 0x04;
+// 559   readonly attribute long type;
+
+// can we pretend add-ons aren't removed until reboot because there is no
+// listener?
+        PersonaSwitcher.logger.log ('trying ExtensionManager');
+        try
+        {
+            PersonaSwitcher.extensionManager =
+                Components.classes['@mozilla.org/extensions/manager;1']
+                    .getService(Components.interfaces.nsIExtensionManager);
+            PersonaSwitcher.logger.log ('using ExtensionManager');
+            PersonaSwitcher.extensionManager.addInstallListener
+                (PersonaSwitcher.ExtensionListener);
+        }
+        catch (e2)
+        {
+            PersonaSwitcher.logger.log ('completely failed');
+        }
     }
 }
 
@@ -291,7 +326,7 @@ PersonaSwitcher.createMenuItem = function (doc, which)
 
     if (PersonaSwitcher.prefs.getBoolPref ('icon-preview'))
     {
-        PersonaSwitcher.logger.log (which.iconURL);
+        // PersonaSwitcher.logger.log (which.iconURL);
         if (null !== which.iconURL)
         {
             item.setAttribute ('class', 'menuitem-iconic');
@@ -341,6 +376,15 @@ PersonaSwitcher.createMenuItem = function (doc, which)
                 false   // 3.6 compatibility
             );
         }
+        // 'DOMMenuItemInactive' doesn't work, who knew?
+        /*
+        item.addEventListener
+        (
+            'mouseout',
+            function (event) { PersonaSwitcher.popupHidden(); },
+            false   // 3.6 compatibility
+        );
+        */
     }
     return (item);
 };
@@ -350,10 +394,10 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     PersonaSwitcher.logger.log (menupopup.id);
 
     var popup = 'personaswitcher-button-popup' ===  menupopup.id;
-    PersonaSwitcher.logger.log (popup);
+    // PersonaSwitcher.logger.log (popup);
 
-    // the bad two cases
-    // if it's thunderbird and we streched the top
+    // the bad two cases when having a default messes with the menu
+    // if it's thunderbird and we stretched the top
     var TBird = 'Thunderbird' === PersonaSwitcher.XULAppInfo.name;
     var chars = PersonaSwitcher.prefs.getCharPref ('toolbox-minheight');
     var height = parseInt (chars);
@@ -370,7 +414,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     PersonaSwitcher.logger.log (PM);
 
     var item = null;
-    if (!PM && !TB)
+    if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
     {
         item = PersonaSwitcher.createMenuItem
             (doc, PersonaSwitcher.defaultTheme);
@@ -404,8 +448,7 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
         menupopup.removeChild (menupopup.firstChild);
     }
 
-    var arr = PersonaSwitcher.getPersonas();
-    PersonaSwitcher.logger.log (arr);
+    var arr = PersonaSwitcher.currentThemes;
 
     if (0 === arr.length)
     {
@@ -425,6 +468,8 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
     {
         PersonaSwitcher.createMenuItems (doc, menupopup, arr);
     }
+
+    PersonaSwitcher.savedMenuPopup = menupopup;
 };
 
 PersonaSwitcher.createMenuPopup = function (event)
@@ -439,6 +484,8 @@ PersonaSwitcher.createMenuPopup = function (event)
     PersonaSwitcher.logger.log (menupopup);
     PersonaSwitcher.logger.log (doc);
 
+    var menupopup = event.target;
+    
     PersonaSwitcher.createMenuPopupWithDoc (doc, menupopup);
 };
 
@@ -485,28 +532,27 @@ PersonaSwitcher.showMenus = function (which)
     }
 };
 
-// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
-/*
-PersonaSwitcher.mutationObserver = new MutationObserver
-(
-    function (mutations)
-    {
-        mutations.forEach
-        (
-            function(mutation)
-            {
-                console.log (mutation.type);
-                console.log (mutation.target.hidden);
-            }
-        );    
-    }
-);
-*/
-
-PersonaSwitcher.popupHidden = function()
+PersonaSwitcher.popupShowing = function (event)
 {
     'use strict';
-    PersonaSwitcher.logger.log();
+    PersonaSwitcher.logger.log ("in popupShowing");
+    PersonaSwitcher.logger.log (event);
+    PersonaSwitcher.logger.log (event.target);
+
+    var menupopup = event.target;
+    var doc = event.target.ownerDocument;
+
+    // have to something to the menu in order for the onpopuphiding to
+    // work. don't ask me why.
+    var item = doc.createElementNS (PersonaSwitcher.XULNS, 'menuitem');
+    menupopup.appendChild (item);
+    menupopup.removeChild (item);
+}
+
+PersonaSwitcher.popupHiding = function()
+{
+    'use strict';
+    PersonaSwitcher.logger.log ("in popupHiding");
 
     if (PersonaSwitcher.prefs.getBoolPref ('preview'))
     {
@@ -557,10 +603,10 @@ PersonaSwitcher.allWindows = function (func)
     }
 };
 
-
 PersonaSwitcher.createStaticPopups = function (doc)
 {
-    PersonaSwitcher.logger.log();
+    'use strict';
+    PersonaSwitcher.logger.log ('in createStaticPopups');
 
     var popups = ['personaswitcher-main-menubar-popup',
         'personaswitcher-tools-submenu-popup',
@@ -574,14 +620,15 @@ PersonaSwitcher.createStaticPopups = function (doc)
         if (item)
         {
             PersonaSwitcher.createMenuPopupWithDoc (doc, item);
-            item.removeAttribute ('onpopupshowing');
+            // item.removeAttribute ('onpopupshowing');
         }
     }
 };
 
 PersonaSwitcher.removeStaticPopups = function (doc)
 {
-    PersonaSwitcher.logger.log();
+    'use strict';
+    PersonaSwitcher.logger.log ('in removeStaticPopups');
 
     var popups = ['personaswitcher-main-menubar-popup',
         'personaswitcher-tools-submenu-popup',
@@ -600,6 +647,41 @@ PersonaSwitcher.removeStaticPopups = function (doc)
     }
 };
 
+PersonaSwitcher.setDefaultTheme = function (doc)
+{
+    'use strict';
+    PersonaSwitcher.logger.log ('in setDefaultTheme');
+
+    if (PersonaSwitcher.addonManager)
+    {
+        PersonaSwitcher.logger.log (PersonaSwitcher.defaultThemeId);
+        AddonManager.getAddonByID
+        (
+            PersonaSwitcher.defaultThemeId,
+            function (theme)
+            {
+                PersonaSwitcher.logger.log (theme);
+                if (null !== theme)
+                {
+                    PersonaSwitcher.defaultTheme = theme;
+                    PersonaSwitcher.createStaticPopups (doc);
+                }
+            }
+        );
+    }
+    else if (null !== PersonaSwitcher.extensionManager)
+    {
+        var theme = PersonaSwitcher.extensionManager.getItemForID
+            (PersonaSwitcher.defaultThemeId);
+
+        if (null !== theme)
+        {
+            PersonaSwitcher.defaultTheme = theme;
+            PersonaSwitcher.createStaticPopups (doc);
+        }
+    }
+}
+
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/window
 PersonaSwitcher.onWindowLoad = function (event)
 {
@@ -609,26 +691,30 @@ PersonaSwitcher.onWindowLoad = function (event)
     {
         PersonaSwitcher.firstTime = false;
         PersonaSwitcher.setLogger();
+        PersonaSwitcher.logger.log ('first time');
         PersonaSwitcher.startTimer();
         // PersonaSwitcher.activeWindow = this;
+        PersonaSwitcher.getPersonas();
+        PersonaSwitcher.themeMonitor();
+        // this also sets up the menus as there is an asynchronous call to
+        // addon manager. bleah.
+        PersonaSwitcher.setDefaultTheme (this.document);
 
         if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
         {
             PersonaSwitcher.rotate();
         }
     }
+    else
+    {
+        // we already should have the default theme at this point, crosses
+        // fingers
+        PersonaSwitcher.createStaticPopups (this.document);
+    }
 
     PersonaSwitcher.setKeyset (this.document);
     PersonaSwitcher.setAccessKey (this.document);
     PersonaSwitcher.setToolboxMinheight (this.document);
-
-    /*
-    PersonaSwitcher.mutationObserver.observe
-    (
-        this.document.getElementById ('personaswitcher-main-menubar'),
-        { attributes: true }
-    );
-    */
 
     if (! PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {
@@ -640,42 +726,6 @@ PersonaSwitcher.onWindowLoad = function (event)
         PersonaSwitcher.logger.log ('hiding tools-submenu');
         PersonaSwitcher.hideMenu (this.document, 'tools-submenu');
     }
-
-    if (PersonaSwitcher.addonManager)
-    {
-        AddonManager.getAddonByID
-        (
-            PersonaSwitcher.defaultTheme.id,
-            function (theme)
-            {
-                // PersonaSwitcher.logger.log (theme);
-
-                if (null !== theme && null !== theme.name)
-                {
-                    PersonaSwitcher.defaultTheme.name = theme.name;
-                }
-            }
-        );
-    }
-    else if (null !== PersonaSwitcher.extensionManager)
-    {
-        var theme = PersonaSwitcher.extensionManager.getItemForID
-            (PersonaSwitcher.defaultTheme.id);
-
-        PersonaSwitcher.logger.log (theme);
-
-        if (null !== theme && null !== theme.name)
-        {
-            PersonaSwitcher.defaultTheme.name = theme.name;
-        }
-    }
-
-    /*
-        if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
-        {
-            PersonaSwitcher.createStaticPopups (this.document);
-        }
-    */
 };
 
 // leave the false for 3.6 compatibility

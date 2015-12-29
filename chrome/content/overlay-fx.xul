@@ -32,8 +32,8 @@
             insertafter="tools-menu">
             <menupopup
                 id="personaswitcher-main-menubar-popup"
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
-                onpopuphidden="PersonaSwitcher.popupHidden();"
+                onpopupshowing="PersonaSwitcher.popupShowing();"
+                onpopuphiding="PersonaSwitcher.popupHiding();"
             />
         </menu>
     </menubar>
@@ -44,8 +44,8 @@
             label="&personaswitcher.label;">
             <menupopup
                 id="personaswitcher-tools-submenu-popup"
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
-                onpopuphidden="PersonaSwitcher.popupHidden();"
+                onpopupshowing="PersonaSwitcher.popupShowing (event);"
+                onpopuphiding="PersonaSwitcher.popupHiding();"
             />
         </menu>
     </menupopup>
@@ -53,13 +53,14 @@
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton
             id="personaswitcher-button"
+            class="toolbarbutton-1"
             label="&personaswitcher-button.label;"
             tooltiptext="&personaswitcher-button.tooltip;"
             type="menu">
             <menupopup
                 id="personaswitcher-button-popup"
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
-                onpopuphidden="PersonaSwitcher.popupHidden();"
+                onpopupshowing="PersonaSwitcher.popupShowing();"
+                onpopuphiding="PersonaSwitcher.popupHiding();"
             />
         </toolbarbutton>
     </toolbarpalette>

@@ -1,7 +1,29 @@
+http://jsfiddle.net/NBefc/2/
+    wrap function
+
+personas/cache
+    personas.json
+    favorites.json
+
+Components.utils.import("resource://btpersonas/BTPIDatabase.jsm");
+
+modules/BTPIDatabase.jsm
+getAllPersonas
+
+modules/BTPI.jsm
+modules/BTPIFF4.jsm
+getUsedThemes
+
+  if (lwtm.themeChanged) {
+    Components.utils.import("resource://btpersonas/BTPIFF4.jsm", tempBTPI);
+    FF4 = true;
+  } else {
+    Components.utils.import("resource://btpersonas/BTPI.jsm", tempBTPI);
+  }
+
+
 test
     default theme on 3.6
-
-P+ does not merge with usedThemes
 
 https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Progress_Meters
 

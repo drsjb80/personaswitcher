@@ -25,16 +25,19 @@
     <toolbarpalette id="MailToolbarPalette">
         <toolbarbutton
             id="personaswitcher-button"
+            class="toolbarbutton-1"
             label="&personaswitcher-button.label;"
             tooltiptext="&personaswitcher-button.tooltip;"
             type="menu">
             <menupopup
                 id="personaswitcher-button-popup"
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </toolbarbutton>
     </toolbarpalette>
+                <!--
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
+                -->
 
     <!-- https://developer.mozilla.org/en-US/Add-ons/SeaMonkey_2 -->
     <menubar id="main-menubar">
@@ -44,11 +47,13 @@
             insertafter="tasksMenu">
             <menupopup
                 id="personaswitcher-main-menubar-popup"
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
     </menubar>
+                <!--
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
+                -->
 
     <menupopup id="taskPopup">
         <menu
@@ -56,11 +61,13 @@
             label="&personaswitcher.label;">
             <menupopup
                 id="personaswitcher-tools-submenu-popup"
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
     </menupopup>
+                <!--
+                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
+                -->
 
 
     <script src="overlay.js"/>

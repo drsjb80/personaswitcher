@@ -15,6 +15,8 @@
 <!ENTITY options.kbshortcuts.control "Control">
 <!ENTITY options.kbshortcuts.alt "Alt">
 <!ENTITY options.kbshortcuts.meta "Meta">
+<!ENTITY options.kbshortcuts.accel "Accel">
+<!ENTITY options.kbshortcuts.os "OS">
 
 <!ENTITY options.options.title "Options">
 <!ENTITY options.autoevery.switch "Switch every">
