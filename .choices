@@ -9,7 +9,7 @@ sh -x make
 ----
 vi install.rdf chrome/content/about.xul # version changes
 ----
-cp -f personaswitcher.xpi ~/Desktop/VirtualBox/
+cp -f personaswitcher.xpi ~/VirtualBox\ Shared/
 ----
 git status
 git diff

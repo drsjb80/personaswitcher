@@ -205,6 +205,7 @@ PersonaSwitcher.setToolboxMinheight = function (doc)
     }
 };
 
+// getAddonsByTypes (["theme"]
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonManager
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonListener
@@ -219,7 +220,7 @@ PersonaSwitcher.AddonListener =
         
         if ('theme' === addon.type)
         {
-            // build menu
+            PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
         }
     },
     onUninstalled: function (addon)
@@ -229,7 +230,7 @@ PersonaSwitcher.AddonListener =
         
         if ('theme' === addon.type)
         {
-            // build menu
+            PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
         }
     }
 };
@@ -245,7 +246,7 @@ PersonaSwitcher.ExtensionListener =
         
         if (TYPE_THEME === addon.type)
         {
-            // build menu
+            PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
         }
     }
 };
@@ -377,14 +378,16 @@ PersonaSwitcher.createMenuItem = function (doc, which)
             );
         }
         // 'DOMMenuItemInactive' doesn't work, who knew?
-        /*
         item.addEventListener
         (
-            'mouseout',
-            function (event) { PersonaSwitcher.popupHidden(); },
+            'DOMMenuItemInactive',
+            function (event)
+            {
+                PersonaSwitcher.logger.log (which.name + ' Inactive');
+                LightweightThemeManager.resetPreview();
+            },
             false   // 3.6 compatibility
         );
-        */
     }
     return (item);
 };
@@ -396,6 +399,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     var popup = 'personaswitcher-button-popup' ===  menupopup.id;
     // PersonaSwitcher.logger.log (popup);
 
+    /*
     // the bad two cases when having a default messes with the menu
     // if it's thunderbird and we stretched the top
     var TBird = 'Thunderbird' === PersonaSwitcher.XULAppInfo.name;
@@ -412,24 +416,25 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
         'Pale Moon' === PersonaSwitcher.XULAppInfo.name &&
         PersonaSwitcher.prefs.getBoolPref ('preview');
     PersonaSwitcher.logger.log (PM);
+    */
 
     var item = null;
-    if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
-    {
+    // if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
+    // {
         item = PersonaSwitcher.createMenuItem
             (doc, PersonaSwitcher.defaultTheme);
         if (item)
         {
             menupopup.appendChild (item);
         }
-    }
+    // }
 
     // arr.sort (function (a, b) { return a.name.localeCompare (b.name); });
 
     for (var i = 0; i < arr.length; i++)
     {
-        // PersonaSwitcher.logger.log (i);
-        // PersonaSwitcher.logger.log (arr[i]);
+        PersonaSwitcher.logger.log (i);
+        PersonaSwitcher.logger.log (arr[i]);
         item = PersonaSwitcher.createMenuItem (doc, arr[i]);
         if (item)
         {
@@ -454,12 +459,11 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
     {
         PersonaSwitcher.logger.log ('no themes');
 
-        // get the localized message.
         var item = doc.createElementNS (PersonaSwitcher.XULNS, 'menuitem');
 
-        item.setAttribute ('label',
-            PersonaSwitcher.stringBundle.
-                GetStringFromName ('personaswitcher.noPersonas'));
+        // get the localized message.
+        item.setAttribute ('label', PersonaSwitcher.stringBundle.
+            GetStringFromName ('personaswitcher.noPersonas'));
 
         PersonaSwitcher.logger.log (item);
         menupopup.appendChild (item);
@@ -468,8 +472,6 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
     {
         PersonaSwitcher.createMenuItems (doc, menupopup, arr);
     }
-
-    PersonaSwitcher.savedMenuPopup = menupopup;
 };
 
 PersonaSwitcher.createMenuPopup = function (event)
@@ -542,17 +544,17 @@ PersonaSwitcher.popupShowing = function (event)
     var menupopup = event.target;
     var doc = event.target.ownerDocument;
 
-    // have to something to the menu in order for the onpopuphiding to
+    // have to something to the menu in order for the onpopuphidden to
     // work. don't ask me why.
     var item = doc.createElementNS (PersonaSwitcher.XULNS, 'menuitem');
     menupopup.appendChild (item);
     menupopup.removeChild (item);
 }
 
-PersonaSwitcher.popupHiding = function()
+PersonaSwitcher.popupHidden = function()
 {
     'use strict';
-    PersonaSwitcher.logger.log ("in popupHiding");
+    PersonaSwitcher.logger.log ("in popuphidden");
 
     if (PersonaSwitcher.prefs.getBoolPref ('preview'))
     {
@@ -575,7 +577,7 @@ PersonaSwitcher.setAccessKey = function (doc)
     }
 };
 
-// call a function passed as a parameter with each window's document
+// call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func)
 {
     'use strict';
@@ -607,6 +609,8 @@ PersonaSwitcher.createStaticPopups = function (doc)
 {
     'use strict';
     PersonaSwitcher.logger.log ('in createStaticPopups');
+
+    PersonaSwitcher.getPersonas();
 
     var popups = ['personaswitcher-main-menubar-popup',
         'personaswitcher-tools-submenu-popup',
@@ -690,15 +694,22 @@ PersonaSwitcher.onWindowLoad = function (event)
     if (PersonaSwitcher.firstTime)
     {
         PersonaSwitcher.firstTime = false;
+
+        // PersonaSwitcher.activeWindow = this;
         PersonaSwitcher.setLogger();
         PersonaSwitcher.logger.log ('first time');
         PersonaSwitcher.startTimer();
-        // PersonaSwitcher.activeWindow = this;
         PersonaSwitcher.getPersonas();
         PersonaSwitcher.themeMonitor();
+
         // this also sets up the menus as there is an asynchronous call to
         // addon manager. bleah.
         PersonaSwitcher.setDefaultTheme (this.document);
+
+        PersonaSwitcher.currentIndex =
+            PersonaSwitcher.prefs.getIntPref ("current");
+        PersonaSwitcher.switchTo 
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex]);
 
         if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
         {

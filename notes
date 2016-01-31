@@ -1,3 +1,13 @@
+xpinstall.signatures.required
+
+refreshFavorites
+addFavoritePersona
+removeFavoritePersona
+
+document.addEventListener("CheckPersonas", this, false, true);
+document.addEventListener("AddFavoritePersona", this, false, true);
+document.addEventListener("RemoveFavoritePersona", this, false, true);
+
 http://jsfiddle.net/NBefc/2/
     wrap function
 

@@ -57,7 +57,7 @@ PersonaSwitcher.log = function()
     catch (e)
     {
         var frames = e.stack.split ('\n');
-        message += frames[1].replace ('()@resource://', '') + ': ';
+        message += frames[1].replace (/^.*()@chrome:\/\//, '') + ' ';
     }
 
     for (var i = 0; i < arguments.length; i++)
@@ -87,11 +87,27 @@ PersonaSwitcher.consoleLogger = null;
 
 try
 {
-    // check to see if there is console logging available
+    PersonaSwitcher.consoleLogger = Components.utils["import"]
+        ("resource://devtools/Console.jsm", {}).console;
+    dump ("using devtools\n");
+
+}
+catch (e) {}
+
+try
+{
     PersonaSwitcher.consoleLogger = Components.utils["import"]
         ("resource://gre/modules/devtools/Console.jsm", {}).console;
+    dump ("using gre\n");
 }
-catch (e)
+catch (e) {}
+
+// TBird's and SeaMonkey consoles don't log our stuff
+// this is a hack. i need to clean this up...
+// http://stackoverflow.com/questions/16686888/thunderbird-extension-console-logging
+if (null === PersonaSwitcher.consoleLogger ||
+    'Thunderbird' === PersonaSwitcher.XULAppInfo.name ||
+    'SeaMonkey' === PersonaSwitcher.XULAppInfo.name)
 {
     // nope, log to terminal
     PersonaSwitcher.consoleLogger = {};
@@ -117,7 +133,6 @@ PersonaSwitcher.extensionManager = null;
 
 PersonaSwitcher.currentThemes = null;
 PersonaSwitcher.currentIndex = 0;
-PersonaSwitcher.savedMenuPopup = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -257,23 +272,24 @@ PersonaSwitcher.rotate = function()
     'use strict';
     PersonaSwitcher.logger.log("in rotate");
 
-    if (PersonaSwitcher.currentThemes.length <= 1) { return; }
+    if (PersonaSwitcher.currentThemes.length <= 1) return;
 
-    var which;
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
         // pick a number between 1 and the end
-        which = Math.floor ((Math.random() *
+        PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
     }
     else
     {
-        which = (PersonaSwitcher.currentIndex + 1) %
+        PersonaSwitcher.currentIndex = (PersonaSwitcher.currentIndex + 1) %
             PersonaSwitcher.currentThemes.length;
     }
 
-    PersonaSwitcher.logger.log(which);
-    PersonaSwitcher.switchTo (PersonaSwitcher.currentThemes[which]);
+    PersonaSwitcher.logger.log (PersonaSwitcher.currentIndex);
+    PersonaSwitcher.prefs.setIntPref ('current', PersonaSwitcher.currentIndex);
+    PersonaSwitcher.switchTo
+        (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex]);
 };
 
 // ---------------------------------------------------------------------------
@@ -334,7 +350,7 @@ PersonaSwitcher.toggleAuto = function()
     ** just set the pref, the prefs observer does the work.
     */
     PersonaSwitcher.prefs.setBoolPref ('auto',
-        ! PersonaSwitcher.prefs.getBoolPref (auto));
+        ! PersonaSwitcher.prefs.getBoolPref ('auto'));
 };
 
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
@@ -439,14 +455,18 @@ PersonaSwitcher.getPersonas = function()
     'use strict';
     
     PersonaSwitcher.currentThemes = LightweightThemeManager.usedThemes;
-    PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes);
+    PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 
     if (PersonaSwitcher.PersonasPlusPresent)
     {
-        PersonaSwitcher.currentThemes = 
-            PersonaSwitcher.currentThemes.
+        PersonaSwitcher.logger.log (PersonaService.favorites);
+        if (PersonaService.favorites)
+        {
+            PersonaSwitcher.currentThemes = PersonaSwitcher.currentThemes.
                 concat (PersonaService.favorites);
+        }
     }
+    PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 };
 
 PersonaSwitcher.previous = function()

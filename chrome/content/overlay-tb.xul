@@ -31,13 +31,11 @@
             type="menu">
             <menupopup
                 id="personaswitcher-button-popup"
+                onpopupshowing="PersonaSwitcher.popupShowing (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </toolbarbutton>
     </toolbarpalette>
-                <!--
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
-                -->
 
     <menubar id="mail-menubar">
         <menu
@@ -46,13 +44,11 @@
             insertafter="tasksMenu">
             <menupopup
                 id="personaswitcher-main-menubar-popup"
+                onpopupshowing="PersonaSwitcher.popupShowing (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
     </menubar>
-                <!--
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
-                -->
 
     <menupopup id="taskPopup">
         <menu
@@ -60,13 +56,11 @@
             label="&personaswitcher.label;">
             <menupopup
                 id="personaswitcher-tools-submenu-popup"
+                onpopupshowing="PersonaSwitcher.popupShowing (event);"
                 onpopuphidden="PersonaSwitcher.popupHidden();"
             />
         </menu>
     </menupopup>
-                <!--
-                onpopupshowing="PersonaSwitcher.createMenuPopup (event);"
-                -->
 
     <script src="overlay.js"/>
 </overlay>
