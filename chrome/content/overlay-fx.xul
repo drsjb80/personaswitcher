@@ -47,8 +47,6 @@
             />
         </menu>
     </menupopup>
-                <!-- onpopupshowing="PersonaSwitcher.popupShowing (event);"
-                -->
 
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton

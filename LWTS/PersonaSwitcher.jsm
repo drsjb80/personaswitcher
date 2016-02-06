@@ -438,7 +438,15 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         // FF 4+
         PersonaSwitcher.logger.log ('using themeChanged');
-        LightweightThemeManager.themeChanged (toWhich);
+
+        if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
+        {
+            LightweightThemeManager.themeChanged (null);
+        }
+        else
+        {
+            LightweightThemeManager.themeChanged (toWhich);
+        }
     }
 
     // PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);

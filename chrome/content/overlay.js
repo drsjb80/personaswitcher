@@ -148,7 +148,19 @@ PersonaSwitcher.activateMenu = function()
     }
     else if (PersonaSwitcher.prefs.getBoolPref ('tools-submenu'))
     {
-        var toolsMenu = PersonaSwitcher.getToolsMenu (document);
+        // this is one thing i can't name
+        var toolsMenu = null;
+        switch (PersonaSwitcher.XULAppInfo.name)
+        {
+            case 'Thunderbird':
+            case 'Icedove':
+                toolsMenu = document.getElementById ('tasksMenu');
+                break;
+            default:
+                toolsMenu = document.getElementById ('tools-menu');
+                break;
+        }
+
         var subMenu = document.getElementById ('personaswitcher-tools-submenu');
 
         if (toolsMenu && subMenu)

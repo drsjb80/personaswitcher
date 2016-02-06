@@ -11,24 +11,7 @@ vi install.rdf chrome/content/about.xul # version changes
 ----
 cp -f personaswitcher.xpi ~/VirtualBox\ Shared/
 ----
-git status
-git diff
-git diff origin/master
-git diff -a v2.0.3
-git commit -a
-git push
-----
 cp personaswitcher.xpi personaswitcher-`cat VERSION`.xpi
-git add personaswitcher-`cat VERSION`.xpi
-git commit personaswitcher-`cat VERSION`.xpi
-git push
-----
-git tag -a v`cat VERSION` -m "Version `cat VERSION`"
-git commit -a
-git push origin v`cat VERSION`
-----
-echo `cat VERSION`'a'`date "+%Y-%m-%d"` > VERSIONA
-cp personaswitcher.xpi personaswitcher-`cat VERSIONA`.xpi
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
