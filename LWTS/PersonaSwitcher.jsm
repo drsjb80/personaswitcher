@@ -9,6 +9,8 @@
 Components.utils["import"]
     ("resource://gre/modules/LightweightThemeManager.jsm");
 
+"use strict";
+
 var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
 var PersonaSwitcher = {};
@@ -47,7 +49,6 @@ PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 
 PersonaSwitcher.log = function()
 {
-    'use strict';
     if (! PersonaSwitcher.prefs.getBoolPref ('debug')) { return; }
 
     var message = "";
@@ -70,8 +71,6 @@ PersonaSwitcher.log = function()
 
 PersonaSwitcher.setLogger = function()
 {
-    'use strict';
-
     if (PersonaSwitcher.prefs.getBoolPref ("debug"))
     {
         PersonaSwitcher.logger = PersonaSwitcher.consoleLogger;
@@ -161,7 +160,6 @@ PersonaSwitcher.prefsObserver =
 {
     observe: function (subject, topic, data)
     {
-        'use strict';
         // PersonaSwitcher.logger.log (subject);
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
@@ -190,16 +188,8 @@ PersonaSwitcher.prefsObserver =
                 }
                 break;
             case 'preview':
-                // regenerate all the popups
-                /*
-                if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
-                {
-                */
-                    PersonaSwitcher.allDocuments
-                        (PersonaSwitcher.createStaticPopups);
-                /*
-                }
-                */
+                PersonaSwitcher.allDocuments
+                    (PersonaSwitcher.createStaticPopups);
                 break;
             case 'startup-switch':
                 break; // nothing to do as the value is queried elsewhere
@@ -251,6 +241,9 @@ PersonaSwitcher.prefsObserver =
 
                 delay = delay < 0 ? 0 : delay > 10000 ? 10000 : delay;
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
+
+                PersonaSwitcher.allDocuments
+                    (PersonaSwitcher.createStaticPopups);
                 break;
             default:
                 PersonaSwitcher.logger.log (data);
@@ -269,7 +262,6 @@ PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 */
 PersonaSwitcher.rotate = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log("in rotate");
 
     if (PersonaSwitcher.currentThemes.length <= 1) return;
@@ -301,16 +293,12 @@ PersonaSwitcher.timerObserver =
 {
     observe: function (subject, topic, data)
     {
-        'use strict';
-
         PersonaSwitcher.rotate();
     }
 };
 
 PersonaSwitcher.startTimer = function()
 {
-    'use strict';
-
     if (! PersonaSwitcher.prefs.getBoolPref ('auto')) return;
 
     // in case the amount of time has changed
@@ -333,7 +321,6 @@ PersonaSwitcher.startTimer = function()
 
 PersonaSwitcher.stopTimer = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log();
 
     PersonaSwitcher.timer.cancel();
@@ -343,7 +330,6 @@ PersonaSwitcher.stopTimer = function()
 
 PersonaSwitcher.toggleAuto = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log();
 
     /*
@@ -356,8 +342,6 @@ PersonaSwitcher.toggleAuto = function()
 // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Alerts_and_Notifications#Using_notification_box
 PersonaSwitcher.removeNotification = function (win)
 {
-    'use strict';
-
     var notificationBox = null;
     var name = PersonaSwitcher.XULAppInfo.name;
 
@@ -392,7 +376,6 @@ PersonaSwitcher.removeNotification = function (win)
 
 PersonaSwitcher.switchTo = function (toWhich)
 {
-    'use strict';
     PersonaSwitcher.logger.log (toWhich);
 
     /*
@@ -417,39 +400,22 @@ PersonaSwitcher.switchTo = function (toWhich)
             PersonaService.changeToPersona (toWhich);
         }
     }
-    /*
-    ** http://www.idealog.us/2007/02/check_if_a_java.html
-    */
-    else if ('function' !== typeof LightweightThemeManager.themeChanged)
-    {
-        // 3.* compatability
-        PersonaSwitcher.logger.log ('using currentTheme');
+    PersonaSwitcher.logger.log ('using currentTheme');
 
-        if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
-        {
-            LightweightThemeManager.currentTheme = null;
-        }
-        else
-        {
-            LightweightThemeManager.currentTheme = toWhich;
-        }
+    if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
+    {
+        LightweightThemeManager.currentTheme = null;
     }
     else
     {
-        // FF 4+
-        PersonaSwitcher.logger.log ('using themeChanged');
-
-        if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
-        {
-            LightweightThemeManager.themeChanged (null);
-        }
-        else
-        {
-            LightweightThemeManager.themeChanged (toWhich);
-        }
+        LightweightThemeManager.currentTheme = toWhich;
     }
 
-    // PersonaSwitcher.logger.log (LightweightThemeManager.currentTheme);
+    /*
+        removed:
+        LightweightThemeManager.themeChanged (toWhich);
+        as it seemed to add an additional default theme
+    */
 
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ('notification-workaround'))
@@ -460,8 +426,6 @@ PersonaSwitcher.switchTo = function (toWhich)
 
 PersonaSwitcher.getPersonas = function()
 {
-    'use strict';
-    
     PersonaSwitcher.currentThemes = LightweightThemeManager.usedThemes;
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 
@@ -479,7 +443,6 @@ PersonaSwitcher.getPersonas = function()
 
 PersonaSwitcher.previous = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log ("in previous");
 
     var arr = PersonaSwitcher.currentThemes;
@@ -495,7 +458,6 @@ PersonaSwitcher.previous = function()
 */
 PersonaSwitcher.rotateKey = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log("in rotateKey");
 
     PersonaSwitcher.rotate();
@@ -504,7 +466,6 @@ PersonaSwitcher.rotateKey = function()
 
 PersonaSwitcher.setDefault = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log("in setDefault");
 
     PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme);
@@ -513,7 +474,6 @@ PersonaSwitcher.setDefault = function()
 
 PersonaSwitcher.onMenuItemCommand = function (which)
 {
-    'use strict';
     PersonaSwitcher.logger.log("in onMenuItemCommand");
 
     PersonaSwitcher.switchTo (which);
@@ -522,7 +482,6 @@ PersonaSwitcher.onMenuItemCommand = function (which)
 
 PersonaSwitcher.migratePrefs = function()
 {
-    'use strict';
     var oldPrefs =
         Components.classes['@mozilla.org/preferences-service;1'].
         getService (Components.interfaces.nsIPrefService).
@@ -567,8 +526,6 @@ PersonaSwitcher.migratePrefs = function()
 */
 PersonaSwitcher.dump = function (object, max)
 {
-    'use strict';
-
     if ('undefined' === typeof max) max = 1;
 
     if (0 === max) return;
