@@ -5,6 +5,8 @@
 
 // https://addons.mozilla.org/en-US/firefox/pages/appversions/
 
+"use strict";
+
 // 'import' for jslint
 Components.utils['import']
     ('resource://gre/modules/LightweightThemeManager.jsm');
@@ -25,7 +27,6 @@ PersonaSwitcher.XULNS =
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Attribute/modifiers
 PersonaSwitcher.findMods = function (which)
 {
-    'use strict';
     PersonaSwitcher.logger.log (which);
     var mods = '';
     var names = ['shift', 'control', 'alt', 'meta', 'accel', 'os'];
@@ -46,8 +47,6 @@ PersonaSwitcher.findMods = function (which)
 // http://unixpapa.com/js/key.html
 PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 {
-    'use strict';
-
     var key = doc.createElement ('key');
 
     key.setAttribute ('id', id); 
@@ -64,7 +63,6 @@ PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 // http://stackoverflow.com/questions/549650/how-to-dynamically-change-shortcut-key-in-firefox
 PersonaSwitcher.setKeyset = function (doc)
 {
-    'use strict';
     PersonaSwitcher.logger.log (doc);
 
     var existing = doc.getElementById ('PersonaSwitcher.keyBreadCrumb');
@@ -137,7 +135,6 @@ PersonaSwitcher.setKeyset = function (doc)
 
 PersonaSwitcher.activateMenu = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log();
 
     if (PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
@@ -177,7 +174,6 @@ PersonaSwitcher.activateMenu = function()
 
 PersonaSwitcher.setToolboxMinheight = function (doc)
 {
-    'use strict';
     PersonaSwitcher.logger.log();
 
     var minheight =
@@ -310,8 +306,6 @@ PersonaSwitcher.previewObserver =
 {
     observe: function (subject, topic, data)
     {
-        'use strict';
-
         PersonaSwitcher.logger.log();
         LightweightThemeManager.previewTheme (PersonaSwitcher.previewWhich);
     }
@@ -322,8 +316,6 @@ PersonaSwitcher.previewObserver =
 */
 PersonaSwitcher.createMenuItem = function (doc, which)
 {
-    'use strict';
-
     if (null === which || 'undefined' === typeof which.name)
         return (null);
 
@@ -348,6 +340,7 @@ PersonaSwitcher.createMenuItem = function (doc, which)
     }
 
     // create method and pass in item and which
+    PersonaSwitcher.logger.log (PersonaSwitcher.prefs.getBoolPref ('preview'));
     if (PersonaSwitcher.prefs.getBoolPref ('preview'))
     {
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime
@@ -462,6 +455,7 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
 
     while (menupopup.hasChildNodes())
     {
+        PersonaSwitcher.logger.log ("removeChild");
         menupopup.removeChild (menupopup.firstChild);
     }
 
@@ -488,8 +482,6 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
 
 PersonaSwitcher.createMenuPopup = function (event)
 {
-    'use strict';
-
     PersonaSwitcher.logger.log();
 
     var menupopup = event.target;
@@ -514,7 +506,6 @@ PersonaSwitcher.hideMenu = function (doc, which)
 */
 PersonaSwitcher.hideMenus = function (which)
 {
-    'use strict';
     PersonaSwitcher.logger.log (which);
 
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
@@ -534,7 +525,6 @@ PersonaSwitcher.showMenu = function (doc, which)
 
 PersonaSwitcher.showMenus = function (which)
 {
-    'use strict';
     PersonaSwitcher.logger.log (which);
 
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
@@ -548,7 +538,6 @@ PersonaSwitcher.showMenus = function (which)
 
 PersonaSwitcher.popupShowing = function (event)
 {
-    'use strict';
     PersonaSwitcher.logger.log ("in popupShowing");
     PersonaSwitcher.logger.log (event);
     PersonaSwitcher.logger.log (event.target);
@@ -565,7 +554,6 @@ PersonaSwitcher.popupShowing = function (event)
 
 PersonaSwitcher.popupHidden = function()
 {
-    'use strict';
     PersonaSwitcher.logger.log ("in popuphidden");
 
     if (PersonaSwitcher.prefs.getBoolPref ('preview'))
@@ -592,13 +580,14 @@ PersonaSwitcher.setAccessKey = function (doc)
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func)
 {
-    'use strict';
-    PersonaSwitcher.logger.log();
+    PersonaSwitcher.logger.log ("PersonaSwitcher.allDocuments");
 
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
 
+    PersonaSwitcher.logger.log (enumerator);
     while (enumerator.hasMoreElements())
     {
+        PersonaSwitcher.logger.log (enumerator.getNext().document);
         func (enumerator.getNext().document);
     }
 };
@@ -606,7 +595,6 @@ PersonaSwitcher.allDocuments = function (func)
 // call a function passed as a parameter for each window
 PersonaSwitcher.allWindows = function (func)
 {
-    'use strict';
     PersonaSwitcher.logger.log();
 
     var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
@@ -619,7 +607,6 @@ PersonaSwitcher.allWindows = function (func)
 
 PersonaSwitcher.createStaticPopups = function (doc)
 {
-    'use strict';
     PersonaSwitcher.logger.log ('in createStaticPopups');
 
     PersonaSwitcher.getPersonas();
@@ -631,6 +618,8 @@ PersonaSwitcher.createStaticPopups = function (doc)
     for (var popup in popups)
     {
         var item = doc.getElementById (popups[popup]);
+        PersonaSwitcher.logger.log (popups[popup]);
+        PersonaSwitcher.logger.log (item);
 
         // not all windows have this popup
         if (item)
@@ -643,7 +632,6 @@ PersonaSwitcher.createStaticPopups = function (doc)
 
 PersonaSwitcher.removeStaticPopups = function (doc)
 {
-    'use strict';
     PersonaSwitcher.logger.log ('in removeStaticPopups');
 
     var popups = ['personaswitcher-main-menubar-popup',
@@ -665,7 +653,6 @@ PersonaSwitcher.removeStaticPopups = function (doc)
 
 PersonaSwitcher.setDefaultTheme = function (doc)
 {
-    'use strict';
     PersonaSwitcher.logger.log ('in setDefaultTheme');
 
     if (PersonaSwitcher.addonManager)
@@ -701,8 +688,6 @@ PersonaSwitcher.setDefaultTheme = function (doc)
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/window
 PersonaSwitcher.onWindowLoad = function (event)
 {
-    'use strict';
-
     if (PersonaSwitcher.firstTime)
     {
         PersonaSwitcher.firstTime = false;
@@ -760,7 +745,6 @@ window.addEventListener ('load', PersonaSwitcher.onWindowLoad, false);
 /*
 PersonaSwitcher.onWindowActivate = function()
 {
-    'use strict';
     // PersonaSwitcher.logger.log();
 
     PersonaSwitcher.activeWindow = this;
@@ -768,7 +752,6 @@ PersonaSwitcher.onWindowActivate = function()
 
 PersonaSwitcher.onWindowDeactivate = function()
 {
-    'use strict';
     // PersonaSwitcher.logger.log();
 
     PersonaSwitcher.activeWindow = null;
