@@ -15,6 +15,8 @@ Components.utils['import']
 
 PersonaSwitcher.XULNS =
     'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+	
+var EXPORTED_SYMBOLS = ["PersonaSwitcher"];
 
 /*
 ***************************************************************************
@@ -690,7 +692,7 @@ PersonaSwitcher.onWindowLoad = function (event)
 {
     if (PersonaSwitcher.firstTime)
     {
-        PersonaSwitcher.firstTime = false;
+        //PersonaSwitcher.firstTime = false;
 
         // PersonaSwitcher.activeWindow = this;
         PersonaSwitcher.setLogger();
@@ -701,6 +703,7 @@ PersonaSwitcher.onWindowLoad = function (event)
 
         // this also sets up the menus as there is an asynchronous call to
         // addon manager. bleah.
+		let doc = event.target.ownerDocument.defaultView.document;
         PersonaSwitcher.setDefaultTheme (this.document);
 
         PersonaSwitcher.currentIndex =
@@ -737,7 +740,7 @@ PersonaSwitcher.onWindowLoad = function (event)
 };
 
 // leave the false for 3.6 compatibility
-window.addEventListener ('load', PersonaSwitcher.onWindowLoad, false);
+//window.addEventListener ('load', PersonaSwitcher.onWindowLoad, false);
 
 // getMostRecentWindow returns the newest one created, not the one on top
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Events#Window_events
