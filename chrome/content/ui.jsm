@@ -688,7 +688,7 @@ PersonaSwitcher.setDefaultTheme = function (doc)
 }
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/window
-PersonaSwitcher.onWindowLoad = function (event)
+PersonaSwitcher.onWindowLoad = function (doc)
 {
     if (PersonaSwitcher.firstTime)
     {
@@ -703,8 +703,7 @@ PersonaSwitcher.onWindowLoad = function (event)
 
         // this also sets up the menus as there is an asynchronous call to
         // addon manager. bleah.
-		let doc = event.target.ownerDocument.defaultView.document;
-        PersonaSwitcher.setDefaultTheme (this.document);
+        PersonaSwitcher.setDefaultTheme (doc);
 
         PersonaSwitcher.currentIndex =
             PersonaSwitcher.prefs.getIntPref ("current");
@@ -720,12 +719,12 @@ PersonaSwitcher.onWindowLoad = function (event)
     {
         // we already should have the default theme at this point, crosses
         // fingers
-        PersonaSwitcher.createStaticPopups (this.document);
+        PersonaSwitcher.createStaticPopups (doc);
     }
 
-    PersonaSwitcher.setKeyset (this.document);
-    PersonaSwitcher.setAccessKey (this.document);
-    PersonaSwitcher.setToolboxMinheight (this.document);
+    PersonaSwitcher.setKeyset (doc);
+    PersonaSwitcher.setAccessKey (doc);
+    PersonaSwitcher.setToolboxMinheight (doc);
 
     if (! PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {

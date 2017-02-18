@@ -2,8 +2,6 @@ Components.utils.import('resource://gre/modules/Services.jsm');
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
 
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
-var styleSheets = ["chrome://personaswitcher/skin/toolbar-button.css"];
-
 
 function startup(data, reason) {
   Components.utils.import('chrome://personaswitcher/content/ui.jsm');
@@ -16,28 +14,20 @@ function startup(data, reason) {
   forEachOpenWindow(loadIntoWindow);
   Services.wm.addListener(WindowListener);
   
-  // Load stylesheets
-    /*let styleSheetService= Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                                     .getService(Components.interfaces.nsIStyleSheetService);
-    for (let i=0,len=styleSheets.length;i<len;i++) {
-        let styleSheetURI = Services.io.newURI(styleSheets[i], null, null);
-        styleSheetService.loadAndRegisterSheet(styleSheetURI, styleSheetService.AUTHOR_SHEET);
-    }*/
-  
-  CustomizableUI.createWidget({
-    id: 'personaswitcher-button',
-    defaultArea: CustomizableUI.AREA_NAVBAR,
-    label: stringBundle.GetStringFromName('personaswitcher.label'),
-    type: 'view',
-    viewId: "personaswitcher-view-panel",
-    tooltiptext: stringBundle.GetStringFromName('personaswitcher.tooltip'),
-    onViewShowing: function(aEvent) {
-      
-    },
-    onViewHiding: function(aEvent) {
-      
-    }
-  });
+	CustomizableUI.createWidget({
+		id: 'personaswitcher-button',
+		defaultArea: CustomizableUI.AREA_NAVBAR,
+		label: stringBundle.GetStringFromName('personaswitcher.label'),
+		type: 'view',
+		viewId: "personaswitcher-view-panel",
+		tooltiptext: stringBundle.GetStringFromName('personaswitcher.tooltip'),
+		onViewShowing: function(aEvent) {
+			
+		},
+		onViewHiding: function(aEvent) {
+			
+		}
+	});
 }
 function shutdown(data, reason) {
   /*if (reason == APP_SHUTDOWN)
@@ -47,17 +37,7 @@ function shutdown(data, reason) {
 
   forEachOpenWindow(unloadFromWindow);
   Services.wm.removeListener(WindowListener);
-  
-  // Unload stylesheets
-    /*let styleSheetService = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                                      .getService(Components.interfaces.nsIStyleSheetService);
-    for (let i=0,len=styleSheets.length;i<len;i++) {
-        let styleSheetURI = Services.io.newURI(styleSheets[i], null, null);
-        if (styleSheetService.sheetRegistered(styleSheetURI, styleSheetService.AUTHOR_SHEET)) {
-            styleSheetService.unregisterSheet(styleSheetURI, styleSheetService.AUTHOR_SHEET);
-        }  
-    }*/
-  
+	
   //Components.utils.unload('chrome://personaswitcher/content/ui.jsm');
   
   // HACK WARNING: The Addon Manager does not properly clear all addon related caches on update;
@@ -72,63 +52,45 @@ function install(data, reason) {
 }
 function uninstall(data, reason) {
 }
-function loadIntoWindow(window) { 
-  let doc = window.document;
-  
-  //Panel for the CustomizableUI.jsm implementation of the PersonaSwitcher button
-  let panel = doc.createElement("panelView");
-  panel.setAttribute("id", "personaswitcher-view-panel");
-  let item = doc.createElementNS ('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'menuitem');
-  item.setAttribute("label", "Item");
-  panel.appendChild(item);
-  doc.getElementById("PanelUI-multiView").appendChild(panel);
-  
-  //SubMenu that is insterted into the Tools Menu
-  let subMenu_personaswitcher = doc.createElement("menu");
-  subMenu_personaswitcher.setAttribute("id", "personaswitcher-tools-submenu");
-  subMenu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
-  let subMenu_PSPopup = doc.createElement("menupopup");
-  subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
-  subMenu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
-  let item2 = doc.createElementNS ('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'menuitem');
-  item2.setAttribute("label", "Item");
-  subMenu_PSPopup.appendChild(item2);
-  subMenu_personaswitcher.appendChild(subMenu_PSPopup);
-  let subMenu_prefs = doc.getElementById("menu_preferences");
-  doc.getElementById("menu_ToolsPopup").insertBefore(subMenu_personaswitcher, subMenu_prefs);
-  
-  //PersonaSwitcher menu that is added to the main menubar
-  let menu_personaswitcher = doc.createElement("menu");
-  menu_personaswitcher.setAttribute("id", "personaswitcher-main-menubar");
-  menu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
-  menu_personaswitcher.setAttribute("accesskey", 'p');
-  let menu_PSPopup = doc.createElement("menupopup");
-  menu_PSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
-  menu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
-  let item3 = doc.createElementNS ('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'menuitem');
-  item3.setAttribute("label", "Item");
-  menu_PSPopup.appendChild(item3);
-  menu_personaswitcher.appendChild(menu_PSPopup);
-  let menu_tools = doc.getElementById("tools-menu");
-  doc.getElementById("main-menubar").insertBefore(menu_personaswitcher, menu_tools.nextSibling);
-
-  
-  this._uri = Services.io.newURI('chrome://personaswitcher/skin/toolbar-button.css', null, null);
+function loadIntoWindow(window) {		
+	switch (PersonaSwitcher.XULAppInfo.name)
+        {
+            case 'Thunderbird':
+				injectIntoThunderbird(window);
+				break;
+			case 'Seamonkey':
+				injectIntoSeamonkey(window);
+				break;
+            case 'Icedove':
+                injectIntoIcedove(window);
+                break;
+			case 'Firefox':
+				injectIntoFirefox(window);
+				break;
+            default:
+                //Shouldn't get here
+                break;
+        }
+	
+	//PersonaSwitcher.firstTime = true;
+	PersonaSwitcher.onWindowLoad(window.document);
+	
+	this._uri = Services.io.newURI('chrome://personaswitcher/skin/toolbar-button.css', null, null);
     window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
-    getInterface(Components.interfaces.nsIDOMWindowUtils).loadSheet(this._uri, 1);
+	  getInterface(Components.interfaces.nsIDOMWindowUtils).loadSheet(this._uri, 1);
 }
 function unloadFromWindow(window) {
-  let doc = window.document;
+	let doc = window.document;
     let panel = doc.getElementById("personaswitcher-view-panel");
-  let menu_personaswitcher = doc.getElementById("personaswitcher-main-menubar");  
-  let subMenu_personaswitcher = doc.getElementById("personaswitcher-tools-submenu");
+	let menu_personaswitcher = doc.getElementById("personaswitcher-main-menubar");	
+	let subMenu_personaswitcher = doc.getElementById("personaswitcher-tools-submenu");
 
     panel.parentNode.removeChild(panel);
-  menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);
-  subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);
-  
-  window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
-    getInterface(Components.interfaces.nsIDOMWindowUtils).removeSheet(this._uri, 1);
+	menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);
+	subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);
+	
+	window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
+	  getInterface(Components.interfaces.nsIDOMWindowUtils).removeSheet(this._uri, 1);
 
 }
 function forEachOpenWindow(todo) // Apply a function to all open browser windows
@@ -153,7 +115,64 @@ var WindowListener = {
   },
   onWindowTitleChange: function (xulWindow, newTitle) {
   }
-} //Default Preferences Setup
+} 
+//UI Injection
+function injectIntoFirefox(window)
+{
+	let doc = window.document;
+	
+	//Panel for the CustomizableUI.jsm implementation of the PersonaSwitcher button
+	let panel = doc.createElement("panelView");
+	panel.setAttribute("id", "personaswitcher-view-panel");
+	let item = doc.createElementNS ('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'menuitem');
+	item.setAttribute("label", "Item");
+	panel.appendChild(item);
+	doc.getElementById("PanelUI-multiView").appendChild(panel);
+	
+	//SubMenu that is insterted into the Tools Menu
+	let subMenu_personaswitcher = doc.createElement("menu");
+	subMenu_personaswitcher.setAttribute("id", "personaswitcher-tools-submenu");
+	subMenu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
+	let subMenu_PSPopup = doc.createElement("menupopup");
+	subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
+	subMenu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
+	let item2 = doc.createElementNS ('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'menuitem');
+	item2.setAttribute("label", "Item");
+	subMenu_PSPopup.appendChild(item2);
+	subMenu_personaswitcher.appendChild(subMenu_PSPopup);
+	let subMenu_prefs = doc.getElementById("menu_preferences");
+	doc.getElementById("menu_ToolsPopup").insertBefore(subMenu_personaswitcher, subMenu_prefs);
+	
+	//PersonaSwitcher menu that is added to the main menubar
+	let menu_personaswitcher = doc.createElement("menu");
+	menu_personaswitcher.setAttribute("id", "personaswitcher-main-menubar");
+	menu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
+	menu_personaswitcher.setAttribute("accesskey", 'p');
+	let menu_PSPopup = doc.createElement("menupopup");
+	menu_PSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
+	menu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
+	let item3 = doc.createElementNS ('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'menuitem');
+	item3.setAttribute("label", "Item");
+	menu_PSPopup.appendChild(item3);
+	menu_personaswitcher.appendChild(menu_PSPopup);
+	let menu_tools = doc.getElementById("tools-menu");
+	doc.getElementById("main-menubar").insertBefore(menu_personaswitcher, menu_tools.nextSibling);
+	
+}
+
+function injectIntoThunderbird(window) {
+	//Not implemented yet
+}
+
+function injectIntoSeamonkey(window) {
+	//Not implemented yet
+}
+
+function injectIntoIcedove(window) {
+	//Not implemented yet
+}
+
+//Default Preferences Setup
 
 function getGenericPref(branch, prefName)
 {

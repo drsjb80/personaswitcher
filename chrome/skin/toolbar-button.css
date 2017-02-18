@@ -1,7 +1,8 @@
+
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 @-moz-document url("chrome://browser/content/browser.xul") {
-	
+
 #personaswitcher-button {
   list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher24.png");
 }
@@ -11,14 +12,16 @@ toolbar[iconsize="small"]
     list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher16.png");
 }
 
-
     #personaswitcher-button[cui-areatype="menu-panel"],
 	toolbarpaletteitem[place="palette"] > #personaswitcher-button {
       list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher32.png");
     }
 
+#personaswitcher-menu-button { list-style-type: "PersonaSwitcher"; list-style-image: none; }
+
 	toolbarpaletteitem[place="palette"] > 
     #personaswitcher-button >
     .toolbarbutton-menu-dropmarker {
     display: none;
+}
 }
