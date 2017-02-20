@@ -39,24 +39,11 @@ function install(data, reason) {
 function uninstall(data, reason) {
 }
 function loadIntoWindow(window) {		
-	switch (PersonaSwitcher.XULAppInfo.name)
-        {
-			case 'Thunderbird':
-				injectIntoThunderbird(window);
-				break;
-			case 'Seamonkey':
-				injectIntoSeamonkey(window);
-				break;
-			case 'Icedove':
-				injectIntoIcedove(window);
-				break;
-			case 'Firefox':
-				injectIntoFirefox(window);
-				break;
-            default:
-                //Shouldn't get here
-                break;
-        }
+	let doc = window.document;
+	
+	injectMainMenu(doc);
+	injectSubMenu(doc);
+	injectButton(doc);
 	
 	//PersonaSwitcher.firstTime = true;
 	PersonaSwitcher.onWindowLoad(window.document);
@@ -103,21 +90,32 @@ var WindowListener = {
   }
 } 
 //UI Injection
-function injectIntoFirefox(window)
-{
-	let doc = window.document;
-	
-	//SubMenu that is insterted into the Tools Menu
-	let subMenu_personaswitcher = doc.createElement("menu");
-	subMenu_personaswitcher.setAttribute("id", "personaswitcher-tools-submenu");
-	subMenu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
-	let subMenu_PSPopup = doc.createElement("menupopup");
-	subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
-	subMenu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
-	subMenu_personaswitcher.appendChild(subMenu_PSPopup);
-	let subMenu_prefs = doc.getElementById("menu_preferences");
-	doc.getElementById("menu_ToolsPopup").insertBefore(subMenu_personaswitcher, subMenu_prefs);
-	
+function injectMainMenu(doc) {
+	let menuBar;
+	let menu_tools;
+	switch (PersonaSwitcher.XULAppInfo.name)
+	{
+		case 'Thunderbird':
+			menuBar;
+			menu_tools;
+			break;
+		case 'Seamonkey':
+			menuBar;
+			menu_tools;
+			break;
+		case 'Icedove':
+			menuBar;
+			menu_tools;
+			break;
+		case 'Firefox':
+			menuBar = doc.getElementById("main-menubar");			
+			menu_tools = doc.getElementById("tools-menu");
+			break;
+		default:
+			//Shouldn't get here
+			break;
+	}
+		
 	//PersonaSwitcher menu that is added to the main menubar
 	let menu_personaswitcher = doc.createElement("menu");
 	menu_personaswitcher.setAttribute("id", "personaswitcher-main-menubar");
@@ -127,9 +125,66 @@ function injectIntoFirefox(window)
 	menu_PSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
 	menu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
 	menu_personaswitcher.appendChild(menu_PSPopup);
-	let menu_tools = doc.getElementById("tools-menu");
-	doc.getElementById("main-menubar").insertBefore(menu_personaswitcher, menu_tools.nextSibling);
+	menuBar.insertBefore(menu_personaswitcher, menu_tools.nextSibling);
+}
+
+function injectSubMenu(doc) {
+	let menuPopup;
+	let subMenu_prefs;
+	switch (PersonaSwitcher.XULAppInfo.name)
+	{
+		case 'Thunderbird':
+			menuPopup;
+			subMenu_prefs;
+			break;
+		case 'Seamonkey':
+			menuPopup;
+			subMenu_prefs;
+			break;
+		case 'Icedove':
+			menuPopup;
+			subMenu_prefs;
+			break;
+		case 'Firefox':
+			menuPopup = doc.getElementById("menu_ToolsPopup");
+			subMenu_prefs = doc.getElementById("menu_preferences");
+			break;
+		default:
+			//Shouldn't get here
+			break;
+	}
 	
+	//SubMenu that is insterted into the Tools Menu
+	let subMenu_personaswitcher = doc.createElement("menu");
+	subMenu_personaswitcher.setAttribute("id", "personaswitcher-tools-submenu");
+	subMenu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
+	let subMenu_PSPopup = doc.createElement("menupopup");
+	subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
+	subMenu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
+	subMenu_personaswitcher.appendChild(subMenu_PSPopup);
+	menuPopup.insertBefore(subMenu_personaswitcher, subMenu_prefs);
+}
+
+function injectButton(doc) {
+	let toolbox;
+	switch (PersonaSwitcher.XULAppInfo.name)
+	{
+		case 'Thunderbird':
+			toolbox;
+			break;
+		case 'Seamonkey':
+			toolbox;
+			break;
+		case 'Icedove':
+			toolbox;
+			break;
+		case 'Firefox':
+			toolbox = doc.getElementById("navigator-toolbox");
+			break;
+		default:
+			//Shouldn't get here
+			break;
+	}
 	//PersonaSwitcher button added to the customize toolbox
 	let button = doc.createElement("toolbarbutton");
 	button.setAttribute("id", "personaswitcher-button");
@@ -141,28 +196,14 @@ function injectIntoFirefox(window)
 	button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
 	button_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
 	button.appendChild(button_PSPopup);
-	doc.getElementById("navigator-toolbox").palette.appendChild(button);
+	toolbox.palette.appendChild(button);
 
 	//Move PersonaSwitcher button to the navigation bar
 	var navBar = doc.querySelector('#nav-bar');
 	navBar.insertItem("personaswitcher-button");
-	
-}
-
-function injectIntoThunderbird(window) {
-	//Not implemented yet
-}
-
-function injectIntoSeamonkey(window) {
-	//Not implemented yet
-}
-
-function injectIntoIcedove(window) {
-	//Not implemented yet
 }
 
 //Default Preferences Setup
-
 function getGenericPref(branch, prefName)
 {
   switch (branch.getPrefType(prefName))
