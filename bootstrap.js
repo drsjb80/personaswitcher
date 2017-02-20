@@ -9,7 +9,6 @@ function startup(data, reason) {
    //load preferences
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/prefs.js', {
     pref: setDefaultPref  });
-
   
   forEachOpenWindow(loadIntoWindow);
   Services.wm.addListener(WindowListener);
@@ -23,8 +22,6 @@ function shutdown(data, reason) {
 
   forEachOpenWindow(unloadFromWindow);
   Services.wm.removeListener(WindowListener);
-	
-  //Components.utils.unload('chrome://personaswitcher/content/ui.jsm');
   
   // HACK WARNING: The Addon Manager does not properly clear all addon related caches on update;
   //               in order to fully update images and locales, their caches need clearing here
@@ -44,13 +41,10 @@ function loadIntoWindow(window) {
 	injectMainMenu(doc);
 	injectSubMenu(doc);
 	injectButton(doc);
+	loadStyleSheet(window);
 	
 	//PersonaSwitcher.firstTime = true;
-	PersonaSwitcher.onWindowLoad(window.document);
-	
-	this._uri = Services.io.newURI('chrome://personaswitcher/skin/toolbar-button.css', null, null);
-    window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
-	  getInterface(Components.interfaces.nsIDOMWindowUtils).loadSheet(this._uri, 1);
+	PersonaSwitcher.onWindowLoad(doc);
 }
 function unloadFromWindow(window) {
 	let doc = window.document;
@@ -58,9 +52,17 @@ function unloadFromWindow(window) {
 	let subMenu_personaswitcher = doc.getElementById("personaswitcher-tools-submenu");
 	let button = doc.getElementById("personaswitcher-button");
 
-	menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);
-	subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);
-	button.parentNode.removeChild(button);
+	if(menu_personaswitcher !== null) {
+		menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);		
+	}
+	if (subMenu_personaswitcher !== null) {
+		subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);		
+	}
+	if(button !== null){
+		button.parentNode.removeChild(button);		
+	}
+	
+	Components.utils.unload('chrome://personaswitcher/content/ui.jsm');
 	
 	window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
 	  getInterface(Components.interfaces.nsIDOMWindowUtils).removeSheet(this._uri, 1);
@@ -201,6 +203,12 @@ function injectButton(doc) {
 	//Move PersonaSwitcher button to the navigation bar
 	var navBar = doc.querySelector('#nav-bar');
 	navBar.insertItem("personaswitcher-button");
+}
+
+function loadStyleSheet(window) {		
+	this._uri = Services.io.newURI('chrome://personaswitcher/skin/toolbar-button.css', null, null);
+    window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
+	  getInterface(Components.interfaces.nsIDOMWindowUtils).loadSheet(this._uri, 1);
 }
 
 //Default Preferences Setup

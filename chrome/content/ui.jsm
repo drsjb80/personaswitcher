@@ -729,12 +729,12 @@ PersonaSwitcher.onWindowLoad = function (doc)
     if (! PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {
         PersonaSwitcher.logger.log ('hiding main-menubar');
-        PersonaSwitcher.hideMenu (this.document, 'main-menubar');
+        PersonaSwitcher.hideMenu (doc, 'main-menubar');
     }
     if (! PersonaSwitcher.prefs.getBoolPref ('tools-submenu'))
     {
         PersonaSwitcher.logger.log ('hiding tools-submenu');
-        PersonaSwitcher.hideMenu (this.document, 'tools-submenu');
+        PersonaSwitcher.hideMenu (doc, 'tools-submenu');
     }
 };
 
