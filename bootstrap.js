@@ -1,14 +1,24 @@
-Components.utils.import('resource://gre/modules/Services.jsm');
-Components.utils.import("resource:///modules/CustomizableUI.jsm");
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+Cu.import('resource://gre/modules/Services.jsm');
+
+var XULNS =
+    'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
 
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
 
 function startup(data, reason) {
-  Components.utils.import('chrome://personaswitcher/content/ui.jsm');
-
-   //load preferences
+  Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
+  
+  //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
+  //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
+  //load preferences
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/prefs.js', {
     pref: setDefaultPref  });
+	
+  let context = this;
+  Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
+                                    context, "UTF-8" /* The script's encoding */);
+
   
   forEachOpenWindow(loadIntoWindow);
   Services.wm.addListener(WindowListener);
@@ -18,7 +28,11 @@ function shutdown(data, reason) {
   /*if (reason == APP_SHUTDOWN)
   return;*/
 
-  CustomizableUI.destroyWidget('personaswitcher-button');
+	//Clears the cache on disable so reloading the addon when debugging works properly
+	//http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
+	if (reason == ADDON_DISABLE) {
+	  Services.obs.notifyObservers(null, "startupcache-invalidate", null);
+	}
 
   forEachOpenWindow(unloadFromWindow);
   Services.wm.removeListener(WindowListener);
@@ -28,12 +42,10 @@ function shutdown(data, reason) {
   Services.obs.notifyObservers(null, 'chrome-flush-caches', null);
 }
 function install(data, reason) {
-  //load preferences
-  /*Services.scriptloader.loadSubScript('chrome://personaswitcher/content/prefs.js', {
-    pref: setDefaultPref
-  });*/
+	//Installation happens here
 }
 function uninstall(data, reason) {
+	//Uninstall happens here
 }
 function loadIntoWindow(window) {		
 	let doc = window.document;
@@ -41,9 +53,9 @@ function loadIntoWindow(window) {
 	injectMainMenu(doc);
 	injectSubMenu(doc);
 	injectButton(doc);
+	addKeyset(doc);
 	loadStyleSheet(window);
 	
-	//PersonaSwitcher.firstTime = true;
 	PersonaSwitcher.onWindowLoad(doc);
 }
 function unloadFromWindow(window) {
@@ -51,6 +63,7 @@ function unloadFromWindow(window) {
 	let menu_personaswitcher = doc.getElementById("personaswitcher-main-menubar");	
 	let subMenu_personaswitcher = doc.getElementById("personaswitcher-tools-submenu");
 	let button = doc.getElementById("personaswitcher-button");
+	let keySet = doc.getElementById("personaSwitcherKeyset");
 
 	if(menu_personaswitcher !== null) {
 		menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);		
@@ -61,8 +74,9 @@ function unloadFromWindow(window) {
 	if(button !== null){
 		button.parentNode.removeChild(button);		
 	}
-	
-	Components.utils.unload('chrome://personaswitcher/content/ui.jsm');
+	if(keySet !== null) {
+		keySet.parentNode.removeChild(keySet);
+	}
 	
 	window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
 	  getInterface(Components.interfaces.nsIDOMWindowUtils).removeSheet(this._uri, 1);
@@ -98,16 +112,15 @@ function injectMainMenu(doc) {
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
 		case 'Thunderbird':
-			menuBar;
-			menu_tools;
+			menuBar = doc.getElementById("mail-menubar");
+			menu_tools = doc.getElementById("tasksMenu");
 			break;
 		case 'Seamonkey':
-			menuBar;
-			menu_tools;
+			menuBar = doc.getElementById("main-menubar");			
+			menu_tools = doc.getElementById("tasksMenu");
 			break;
 		case 'Icedove':
-			menuBar;
-			menu_tools;
+			//Not implemented
 			break;
 		case 'Firefox':
 			menuBar = doc.getElementById("main-menubar");			
@@ -122,9 +135,10 @@ function injectMainMenu(doc) {
 	let menu_personaswitcher = doc.createElement("menu");
 	menu_personaswitcher.setAttribute("id", "personaswitcher-main-menubar");
 	menu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
-	menu_personaswitcher.setAttribute("accesskey", 'p');
 	let menu_PSPopup = doc.createElement("menupopup");
 	menu_PSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
+	//Swap onpopuphidden attributes to verify the event is being fired and intercepted
+	//menu_PSPopup.setAttribute("onpopuphidden", "gBrowser.removeAllTabsBut(gBrowser.selectedTab)");
 	menu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
 	menu_personaswitcher.appendChild(menu_PSPopup);
 	menuBar.insertBefore(menu_personaswitcher, menu_tools.nextSibling);
@@ -136,20 +150,16 @@ function injectSubMenu(doc) {
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
 		case 'Thunderbird':
-			menuPopup;
-			subMenu_prefs;
+			menuPopup = doc.getElementById("taskPopup");
 			break;
 		case 'Seamonkey':
-			menuPopup;
-			subMenu_prefs;
+			menuPopup = doc.getElementById("taskPopup");
 			break;
 		case 'Icedove':
-			menuPopup;
-			subMenu_prefs;
+			//not implemented
 			break;
 		case 'Firefox':
 			menuPopup = doc.getElementById("menu_ToolsPopup");
-			subMenu_prefs = doc.getElementById("menu_preferences");
 			break;
 		default:
 			//Shouldn't get here
@@ -164,7 +174,7 @@ function injectSubMenu(doc) {
 	subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
 	subMenu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
 	subMenu_personaswitcher.appendChild(subMenu_PSPopup);
-	menuPopup.insertBefore(subMenu_personaswitcher, subMenu_prefs);
+	menuPopup.appendChild(subMenu_personaswitcher);
 }
 
 function injectButton(doc) {
@@ -172,13 +182,13 @@ function injectButton(doc) {
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
 		case 'Thunderbird':
-			toolbox;
+			toolbox = doc.getElementById("navigation-toolbox");
 			break;
 		case 'Seamonkey':
-			toolbox;
+			toolbox = doc.getElementById("navigation-toolbox");
 			break;
 		case 'Icedove':
-			toolbox;
+			//not implemented
 			break;
 		case 'Firefox':
 			toolbox = doc.getElementById("navigator-toolbox");
@@ -203,6 +213,19 @@ function injectButton(doc) {
 	//Move PersonaSwitcher button to the navigation bar
 	var navBar = doc.querySelector('#nav-bar');
 	navBar.insertItem("personaswitcher-button");
+}
+
+function addKeyset(doc) {
+	//http://forums.mozillazine.org/viewtopic.php?t=2711165
+	mainWindow = doc.getElementById('main-window');
+	
+	let keyset = doc.createElement ('keyset');
+	keyset.setAttribute("id", "personaSwitcherKeyset")
+    // a way to find the keyset no matter what.
+    let breadCrumb = doc.createElement ('key');
+    breadCrumb.setAttribute ('id', 'PersonaSwitcher.keyBreadCrumb'); 
+    keyset.appendChild (breadCrumb);
+	mainWindow.appendChild(keyset);	
 }
 
 function loadStyleSheet(window) {		
