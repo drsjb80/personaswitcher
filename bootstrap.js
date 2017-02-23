@@ -1,9 +1,6 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 
-var XULNS =
-    'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
-
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
 
 function startup(data, reason) {

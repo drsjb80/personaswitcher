@@ -186,11 +186,15 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.allDocuments
                         (PersonaSwitcher.removeStaticPopups);
                 }
-                break;
+                break;		
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
-                break;
+                break;	
+			case 'icon-preview':
+                PersonaSwitcher.allDocuments
+                    (PersonaSwitcher.createStaticPopups);
+                break;			
             case 'startup-switch':
                 break; // nothing to do as the value is queried elsewhere
             case 'fastswitch':

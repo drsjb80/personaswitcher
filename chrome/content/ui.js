@@ -6,7 +6,7 @@
 // https://addons.mozilla.org/en-US/firefox/pages/appversions/
 
 "use strict";
-
+Components.utils.import('resource://gre/modules/Services.jsm');
 // 'import' for jslint
 Components.utils['import']
     ('resource://gre/modules/LightweightThemeManager.jsm');
@@ -590,15 +590,10 @@ PersonaSwitcher.setAccessKey = function (doc)
 PersonaSwitcher.allDocuments = function (func)
 {
     PersonaSwitcher.logger.log ("PersonaSwitcher.allDocuments");
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    PersonaSwitcher.logger.log (enumerator);
-    while (enumerator.hasMoreElements())
-    {
-        PersonaSwitcher.logger.log (enumerator.getNext().document);
-        func (enumerator.getNext().document);
-    }
+	
+	var windows = Services.wm.getEnumerator('navigator:browser');
+    while (windows.hasMoreElements())
+    func(windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow).document);
 };
 
 // call a function passed as a parameter for each window
@@ -606,12 +601,9 @@ PersonaSwitcher.allWindows = function (func)
 {
     PersonaSwitcher.logger.log();
 
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        func (enumerator.getNext());
-    }
+	var windows = Services.wm.getEnumerator('navigator:browser');
+    while (windows.hasMoreElements())
+    func(windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow));
 };
 
 PersonaSwitcher.createStaticPopups = function (doc)
