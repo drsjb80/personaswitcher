@@ -129,7 +129,7 @@ function injectMainMenu(doc) {
 	//PersonaSwitcher menu that is added to the main menubar
 	let menu_personaswitcher = doc.createElement("menu");
 	menu_personaswitcher.setAttribute("id", "personaswitcher-main-menubar");
-	menu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
+	menu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher-menu.label'));
 	let menu_PSPopup = doc.createElement("menupopup");
 	menu_PSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
 	menu_PSPopup.addEventListener
@@ -167,7 +167,7 @@ function injectSubMenu(doc) {
 	//SubMenu that is insterted into the Tools Menu
 	let subMenu_personaswitcher = doc.createElement("menu");
 	subMenu_personaswitcher.setAttribute("id", "personaswitcher-tools-submenu");
-	subMenu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
+	subMenu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher-menu.label'));
 	let subMenu_PSPopup = doc.createElement("menupopup");
 	subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
 	subMenu_PSPopup.addEventListener
@@ -203,8 +203,8 @@ function injectButton(doc) {
 	//PersonaSwitcher button added to the customize toolbox
 	let button = doc.createElement("toolbarbutton");
 	button.setAttribute("id", "personaswitcher-button");
-	button.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
-	button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
+	button.setAttribute("label", stringBundle.GetStringFromName('personaswitcher-button.label'));
+	button.setAttribute("class", "toolbarbutton-1");
 	button.setAttribute("tooltiptext", stringBundle.GetStringFromName('personaswitcher.tooltip'));
 	button.setAttribute("type", "menu");
 	let button_PSPopup = doc.createElement("menupopup");
