@@ -161,14 +161,14 @@ PersonaSwitcher.activateMenu = function(doc)
         {
             case 'Thunderbird':
             case 'Icedove':
-                toolsMenu = document.getElementById ('tasksMenu');
+                toolsMenu = doc.getElementById ('tasksMenu');
                 break;
             default:
-                toolsMenu = document.getElementById ('tools-menu');
+                toolsMenu = doc.getElementById ('tools-menu');
                 break;
         }
 
-        var subMenu = document.getElementById ('personaswitcher-tools-submenu');
+        var subMenu = doc.getElementById ('personaswitcher-tools-submenu');
 
         if (toolsMenu && subMenu)
         {
