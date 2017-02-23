@@ -10,7 +10,8 @@ Components.utils["import"]
     ("resource://gre/modules/LightweightThemeManager.jsm");
 
 "use strict";
-
+//If this value is changed, it needs to be changed in options.xul as well
+const MAX_PREVIEW_DELAY = 10000;
 var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
 
 var PersonaSwitcher = {};
@@ -243,7 +244,7 @@ PersonaSwitcher.prefsObserver =
                 var delay  = parseInt
                     (PersonaSwitcher.prefs.getIntPref ("preview-delay"));
 
-                delay = delay < 0 ? 0 : delay > 10000 ? 10000 : delay;
+                delay = delay < 0 ? 0 : delay > MAX_PREVIEW_DELAY ? MAX_PREVIEW_DELAY : delay;
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
 
                 PersonaSwitcher.allDocuments
