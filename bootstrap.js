@@ -1,9 +1,6 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 
-var XULNS =
-    'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
-
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
 
 function startup(data, reason) {
@@ -18,11 +15,9 @@ function startup(data, reason) {
   let context = this;
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
                                     context, "UTF-8" /* The script's encoding */);
-
   
   forEachOpenWindow(loadIntoWindow);
-  Services.wm.addListener(WindowListener);
-  
+  Services.wm.addListener(WindowListener);  
 }
 function shutdown(data, reason) {
   /*if (reason == APP_SHUTDOWN)
@@ -80,7 +75,6 @@ function unloadFromWindow(window) {
 	
 	window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
 	  getInterface(Components.interfaces.nsIDOMWindowUtils).removeSheet(this._uri, 1);
-
 }
 function forEachOpenWindow(todo) // Apply a function to all open browser windows
 {
@@ -120,7 +114,8 @@ function injectMainMenu(doc) {
 			menu_tools = doc.getElementById("tasksMenu");
 			break;
 		case 'Icedove':
-			//Not implemented
+			menuBar = doc.getElementById("mail-menubar");
+			menu_tools = doc.getElementById("tasksMenu");
 			break;
 		case 'Firefox':
 			menuBar = doc.getElementById("main-menubar");			
@@ -137,9 +132,12 @@ function injectMainMenu(doc) {
 	menu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
 	let menu_PSPopup = doc.createElement("menupopup");
 	menu_PSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
-	//Swap onpopuphidden attributes to verify the event is being fired and intercepted
-	//menu_PSPopup.setAttribute("onpopuphidden", "gBrowser.removeAllTabsBut(gBrowser.selectedTab)");
-	menu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
+	menu_PSPopup.addEventListener
+    (
+        'popuphidden',
+        function() { PersonaSwitcher.popupHidden(); },
+        false
+    );
 	menu_personaswitcher.appendChild(menu_PSPopup);
 	menuBar.insertBefore(menu_personaswitcher, menu_tools.nextSibling);
 }
@@ -156,7 +154,7 @@ function injectSubMenu(doc) {
 			menuPopup = doc.getElementById("taskPopup");
 			break;
 		case 'Icedove':
-			//not implemented
+			menuPopup = doc.getElementById("taskPopup");
 			break;
 		case 'Firefox':
 			menuPopup = doc.getElementById("menu_ToolsPopup");
@@ -172,7 +170,12 @@ function injectSubMenu(doc) {
 	subMenu_personaswitcher.setAttribute("label", stringBundle.GetStringFromName('personaswitcher.label'));
 	let subMenu_PSPopup = doc.createElement("menupopup");
 	subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
-	subMenu_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
+	subMenu_PSPopup.addEventListener
+    (
+        'popuphidden',
+        function() { PersonaSwitcher.popupHidden(); },
+        false
+    );
 	subMenu_personaswitcher.appendChild(subMenu_PSPopup);
 	menuPopup.appendChild(subMenu_personaswitcher);
 }
@@ -188,7 +191,7 @@ function injectButton(doc) {
 			toolbox = doc.getElementById("navigation-toolbox");
 			break;
 		case 'Icedove':
-			//not implemented
+			toolbox = doc.getElementById("navigation-toolbox");
 			break;
 		case 'Firefox':
 			toolbox = doc.getElementById("navigator-toolbox");
@@ -206,7 +209,12 @@ function injectButton(doc) {
 	button.setAttribute("type", "menu");
 	let button_PSPopup = doc.createElement("menupopup");
 	button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
-	button_PSPopup.setAttribute("onpopuphidden", "PersonaSwitcher.popupHidden();");
+	button_PSPopup.addEventListener
+    (
+        'popuphidden',
+        function() { PersonaSwitcher.popupHidden(); },
+        false
+    );
 	button.appendChild(button_PSPopup);
 	toolbox.palette.appendChild(button);
 

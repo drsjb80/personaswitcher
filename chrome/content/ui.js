@@ -6,11 +6,12 @@
 // https://addons.mozilla.org/en-US/firefox/pages/appversions/
 
 "use strict";
-
+//Services
+Components.utils.import('resource://gre/modules/Services.jsm');
 // 'import' for jslint
 Components.utils['import']
     ('resource://gre/modules/LightweightThemeManager.jsm');
-Components.utils['import']('chrome://personaswitcher/content/PersonaSwitcher.jsm');
+//Components.utils['import']('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
 PersonaSwitcher.XULNS =
     'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
@@ -48,7 +49,7 @@ PersonaSwitcher.findMods = function (which)
 // http://unixpapa.com/js/key.html
 PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
 {
-    var key = doc.createElement ('key');
+    var key = doc.createElementNS (PersonaSwitcher.XULNS, 'key');
 
     key.setAttribute ('id', id); 
     if (mods !== '')
@@ -56,7 +57,14 @@ PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
         key.setAttribute ('modifiers', mods);
     }
     key.setAttribute ('key', which);
-    key.setAttribute ('oncommand', command);
+	//http://stackoverflow.com/questions/16779316/how-to-set-an-xul-key-dynamically-and-securely
+	key.setAttribute('oncommand', "void(0);");
+    key.addEventListener
+    (
+        'command',
+        function(aEvent) { let doc = aEvent.target.ownerDocument; command(doc); },
+        false
+    );
 
     return (key);
 };
@@ -94,30 +102,28 @@ PersonaSwitcher.setKeyset = function (doc)
             PersonaSwitcher.findMods ('def'),
             PersonaSwitcher.prefs.getCharPref ('defkey').
                 toUpperCase().charAt (0),
-			//Temp switch to make sure the shortcut key is firing and being caught
-            //'PersonaSwitcher.setDefault();'
-			"gBrowser.removeAllTabsBut(gBrowser.selectedTab)"
+            PersonaSwitcher.setDefault
         ],
         [
             'PersonaSwitcher.rotatePersonaKey',
             PersonaSwitcher.findMods ('rot'),
             PersonaSwitcher.prefs.getCharPref ('rotkey').
                 toUpperCase().charAt (0),
-            "PersonaSwitcher.rotateKey();"
+            PersonaSwitcher.rotateKey
         ],
         [
             'PersonaSwitcher.autoPersonaKey',
             PersonaSwitcher.findMods ('auto'),
             PersonaSwitcher.prefs.getCharPref ('autokey').
                 toUpperCase().charAt (0),
-            'PersonaSwitcher.toggleAuto();'
+            PersonaSwitcher.toggleAuto
         ],
         [
             'PersonaSwitcher.activatePersonaKey',
             PersonaSwitcher.findMods ('activate'),
             PersonaSwitcher.prefs.getCharPref ('activatekey').
                 toUpperCase().charAt (0),
-            'PersonaSwitcher.activateMenu();'
+            PersonaSwitcher.activateMenu
         ]
     ];
 
@@ -137,13 +143,13 @@ PersonaSwitcher.setKeyset = function (doc)
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts#Assigning_a_keyboard_shortcut_on_a_menu
 
-PersonaSwitcher.activateMenu = function()
+PersonaSwitcher.activateMenu = function(doc)
 {
     PersonaSwitcher.logger.log();
 
     if (PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {
-        var menu = document.getElementById ('personaswitcher-main-menubar');
+        var menu = doc.getElementById ('personaswitcher-main-menubar');
 
         menu.open = true;
     }
@@ -155,14 +161,14 @@ PersonaSwitcher.activateMenu = function()
         {
             case 'Thunderbird':
             case 'Icedove':
-                toolsMenu = document.getElementById ('tasksMenu');
+                toolsMenu = doc.getElementById ('tasksMenu');
                 break;
             default:
-                toolsMenu = document.getElementById ('tools-menu');
+                toolsMenu = doc.getElementById ('tools-menu');
                 break;
         }
 
-        var subMenu = document.getElementById ('personaswitcher-tools-submenu');
+        var subMenu = doc.getElementById ('personaswitcher-tools-submenu');
 
         if (toolsMenu && subMenu)
         {
@@ -577,7 +583,7 @@ PersonaSwitcher.setAccessKey = function (doc)
     if (accesskey !== '')
     {
         var menu = doc.getElementById ('personaswitcher-main-menubar');
-        menu.setAttribute ('accesskey', accesskey.toUpperCase().charAt (0));
+        menu.setAttribute ('accesskey', accesskey.toUpperCase().charAt(0));
     }
 };
 
@@ -585,15 +591,10 @@ PersonaSwitcher.setAccessKey = function (doc)
 PersonaSwitcher.allDocuments = function (func)
 {
     PersonaSwitcher.logger.log ("PersonaSwitcher.allDocuments");
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    PersonaSwitcher.logger.log (enumerator);
-    while (enumerator.hasMoreElements())
-    {
-        PersonaSwitcher.logger.log (enumerator.getNext().document);
-        func (enumerator.getNext().document);
-    }
+	
+	var windows = Services.wm.getEnumerator('navigator:browser');
+    while (windows.hasMoreElements())
+    func(windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow).document);
 };
 
 // call a function passed as a parameter for each window
@@ -601,12 +602,9 @@ PersonaSwitcher.allWindows = function (func)
 {
     PersonaSwitcher.logger.log();
 
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        func (enumerator.getNext());
-    }
+	var windows = Services.wm.getEnumerator('navigator:browser');
+    while (windows.hasMoreElements())
+    func(windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow));
 };
 
 PersonaSwitcher.createStaticPopups = function (doc)
