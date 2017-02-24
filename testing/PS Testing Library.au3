@@ -34,6 +34,7 @@ EndFunc
 
 ; Disconnects and closes Firefox.
 Func EndFirefox()
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    _FFWindowClose()
    _FFDisConnect()
 EndFunc
@@ -41,6 +42,7 @@ EndFunc
 
 ; Closes Firefox and starts a new session
 Func RestartFirefox()
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    EndFirefox()
    return InitializeFirefox()
 EndFunc
@@ -121,4 +123,37 @@ Func ResetPersonaSwitcherPrefs()
    _FFPrefReset("extensions.personaswitcher.toolbox-maxheight")
    _FFPrefReset("extensions.personaswitcher.toolbox-minheight")
    _FFPrefReset("extensions.personaswitcher.tools-submenu")
+EndFunc
+
+
+; Opens Persona Switcher's options page
+Func OpenPersonaSwitcherPrefs()
+   _FFTabAdd("about:addons")
+
+   Send("^f")
+   Sleep(500)
+   Send("+{TAB 2}")
+   Sleep(500)
+   Send("{UP 4}")
+   _FFLoadWait()
+   Send("{DOWN}")
+   _FFLoadWait()
+
+   Send("{TAB 3}")
+   Sleep(500)
+   Send("{DOWN}")
+   Sleep(500)
+   Send("{ENTER}")
+   _FFLoadWait()
+   Send("{TAB 5}")
+   Sleep(500)
+   Send("{ENTER}")
+
+   If Not WinWaitActive("Persona Switcher preferences", 5000) Then
+	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
+	  return False
+   EndIf
+
+   return True
+
 EndFunc
