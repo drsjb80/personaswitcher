@@ -112,7 +112,7 @@ function injectMainMenu(doc) {
 			menuBar = doc.getElementById("mail-menubar");
 			menu_tools = doc.getElementById("tasksMenu");
 			break;
-		case 'Seamonkey':
+		case 'SeaMonkey':
 			menuBar = doc.getElementById("main-menubar");			
 			menu_tools = doc.getElementById("tasksMenu");
 			break;
@@ -153,7 +153,7 @@ function injectSubMenu(doc) {
 		case 'Thunderbird':
 			menuPopup = doc.getElementById("taskPopup");
 			break;
-		case 'Seamonkey':
+		case 'SeaMonkey':
 			menuPopup = doc.getElementById("taskPopup");
 			break;
 		case 'Icedove':
@@ -190,8 +190,8 @@ function injectButton(doc) {
 		case 'Thunderbird':
 			toolbox = doc.getElementById("mail-toolbox");
 			break;
-		case 'Seamonkey':
-			toolbox = doc.getElementById("mail-toolbox");
+		case 'SeaMonkey':
+			toolbox = doc.getElementById("navigator-toolbox");
 			break;
 		case 'Icedove':
 			toolbox = doc.getElementById("navigation-toolbox");
@@ -230,8 +230,9 @@ function moveButtonToToolbar(doc) {
 			var tabbar = doc.getElementById('tabbar-toolbar');
 			tabbar.insertItem("personaswitcher-button");
 			break;
-		case 'Seamonkey':
-			//not implemented
+		case 'SeaMonkey':
+			var navBar = doc.querySelector('#nav-bar');
+			navBar.insertItem("personaswitcher-button");
 			break;
 		case 'Icedove':
 			//not implemented
@@ -253,11 +254,11 @@ function addKeyset(doc) {
 		case 'Thunderbird':
 			mainWindow = doc.getElementById('messengerWindow');
 			break;
-		case 'Seamonkey':
-			toolbox = doc.getElementById("navigation-toolbox");
+		case 'SeaMonkey':
+			mainWindow = doc.getElementById('main-window');
 			break;
 		case 'Icedove':
-			toolbox = doc.getElementById("navigation-toolbox");
+			mainWindow = doc.getElementById('main-window');
 			break;
 		case 'Firefox':
 			mainWindow = doc.getElementById('main-window');
