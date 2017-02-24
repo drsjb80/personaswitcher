@@ -4,6 +4,9 @@
 ; Starts Firefox Developer Edition, connects to it through MozRepl, then
 ; pauses the script until the Firefox window is active.
 ; Returns the process ID of the started Firefox window.
+
+#include <FF V0.6.0.1b-15.au3>
+
 Func InitializeFirefox()
    $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
    If FileExists($FF) Then
