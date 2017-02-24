@@ -1,17 +1,25 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
+Cu.import('resource://gre/modules/devtools/Console.jsm');
+
 
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
 
 function startup(data, reason) {
   Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
-  
+
   //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
   //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
   //load preferences
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/prefs.js', {
     pref: setDefaultPref  });
-	
+
+  //https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
+  //Loading the stylesheet into all windows is a noticable hit on performance but is necessary for Thunderbird compatibility
+  styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
+  uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
+  styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
+
   let context = this;
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
                                     context, "UTF-8" /* The script's encoding */);
@@ -20,17 +28,19 @@ function startup(data, reason) {
   Services.wm.addListener(WindowListener);  
 }
 function shutdown(data, reason) {
-  /*if (reason == APP_SHUTDOWN)
-  return;*/
 
-	//Clears the cache on disable so reloading the addon when debugging works properly
-	//http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
-	if (reason == ADDON_DISABLE) {
-	  Services.obs.notifyObservers(null, "startupcache-invalidate", null);
-	}
+  //Clears the cache on disable so reloading the addon when debugging works properly
+  //http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
+  if (reason == ADDON_DISABLE) {
+    Services.obs.notifyObservers(null, "startupcache-invalidate", null);
+  }
 
   forEachOpenWindow(unloadFromWindow);
   Services.wm.removeListener(WindowListener);
+  
+  if (styleSheetService.sheetRegistered(uri, styleSheetService.USER_SHEET)) {
+    styleSheetService.unregisterSheet(uri, styleSheetService.USER_SHEET);
+  }
   
   // HACK WARNING: The Addon Manager does not properly clear all addon related caches on update;
   //               in order to fully update images and locales, their caches need clearing here
@@ -48,9 +58,7 @@ function loadIntoWindow(window) {
 	injectMainMenu(doc);
 	injectSubMenu(doc);
 	injectButton(doc);
-	addKeyset(doc);
-	loadStyleSheet(window);
-	
+	addKeyset(doc);	
 	PersonaSwitcher.onWindowLoad(doc);
 }
 function unloadFromWindow(window) {
@@ -72,15 +80,10 @@ function unloadFromWindow(window) {
 	if(keySet !== null) {
 		keySet.parentNode.removeChild(keySet);
 	}
-	
-	window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
-	  getInterface(Components.interfaces.nsIDOMWindowUtils).removeSheet(this._uri, 1);
 }
-function forEachOpenWindow(todo) // Apply a function to all open browser windows
+function forEachOpenWindow(applyThisFunc) // Apply a function to all open browser windows
 {
-  var windows = Services.wm.getEnumerator('navigator:browser');
-  while (windows.hasMoreElements())
-  todo(windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow));
+	PersonaSwitcher.allWindows(applyThisFunc);
 }
 var WindowListener = {
   onOpenWindow: function (xulWindow)
@@ -185,10 +188,10 @@ function injectButton(doc) {
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
 		case 'Thunderbird':
-			toolbox = doc.getElementById("navigation-toolbox");
+			toolbox = doc.getElementById("mail-toolbox");
 			break;
 		case 'Seamonkey':
-			toolbox = doc.getElementById("navigation-toolbox");
+			toolbox = doc.getElementById("mail-toolbox");
 			break;
 		case 'Icedove':
 			toolbox = doc.getElementById("navigation-toolbox");
@@ -218,14 +221,51 @@ function injectButton(doc) {
 	button.appendChild(button_PSPopup);
 	toolbox.palette.appendChild(button);
 
-	//Move PersonaSwitcher button to the navigation bar
-	var navBar = doc.querySelector('#nav-bar');
-	navBar.insertItem("personaswitcher-button");
+	moveButtonToToolbar(doc);
 }
-
+function moveButtonToToolbar(doc) {
+	switch (PersonaSwitcher.XULAppInfo.name)
+	{
+		case 'Thunderbird':
+			var tabbar = doc.getElementById('tabbar-toolbar');
+			tabbar.insertItem("personaswitcher-button");
+			break;
+		case 'Seamonkey':
+			//not implemented
+			break;
+		case 'Icedove':
+			//not implemented
+			break;
+		case 'Firefox':
+			var navBar = doc.querySelector('#nav-bar');
+			navBar.insertItem("personaswitcher-button");
+			break;
+		default:
+			//Shouldn't get here
+			break;
+	}
+}
 function addKeyset(doc) {
 	//http://forums.mozillazine.org/viewtopic.php?t=2711165
-	mainWindow = doc.getElementById('main-window');
+	var mainWindow;
+	switch (PersonaSwitcher.XULAppInfo.name)
+	{
+		case 'Thunderbird':
+			mainWindow = doc.getElementById('messengerWindow');
+			break;
+		case 'Seamonkey':
+			toolbox = doc.getElementById("navigation-toolbox");
+			break;
+		case 'Icedove':
+			toolbox = doc.getElementById("navigation-toolbox");
+			break;
+		case 'Firefox':
+			mainWindow = doc.getElementById('main-window');
+			break;
+		default:
+			//Shouldn't get here
+			break;
+	}
 	
 	let keyset = doc.createElement ('keyset');
 	keyset.setAttribute("id", "personaSwitcherKeyset")

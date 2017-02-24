@@ -589,22 +589,22 @@ PersonaSwitcher.setAccessKey = function (doc)
 
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func)
-{
-    PersonaSwitcher.logger.log ("PersonaSwitcher.allDocuments");
-	
-	var windows = Services.wm.getEnumerator('navigator:browser');
-    while (windows.hasMoreElements())
-    func(windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow).document);
+{	
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+    while (enumerator.hasMoreElements())
+    {
+		func(enumerator.getNext().document);
+    }
 };
 
 // call a function passed as a parameter for each window
 PersonaSwitcher.allWindows = function (func)
 {
-    PersonaSwitcher.logger.log();
-
-	var windows = Services.wm.getEnumerator('navigator:browser');
-    while (windows.hasMoreElements())
-    func(windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow));
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+    while (enumerator.hasMoreElements())
+    {
+		func(enumerator.getNext());
+    }
 };
 
 PersonaSwitcher.createStaticPopups = function (doc)

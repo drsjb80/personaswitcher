@@ -6,6 +6,7 @@
 /*global Components*/
 /*jslint vars: false*/
 
+Components.utils.import('resource://gre/modules/devtools/Console.jsm');
 Components.utils["import"]
     ("resource://gre/modules/LightweightThemeManager.jsm");
 
@@ -116,7 +117,7 @@ if (null === PersonaSwitcher.consoleLogger ||
 
 PersonaSwitcher.nullLogger = {};
 PersonaSwitcher.nullLogger.log = function (s) { 'use strict'; return; };
-PersonaSwitcher.logger = null;
+PersonaSwitcher.logger = console;
 
 // ---------------------------------------------------------------------------
 
