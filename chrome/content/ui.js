@@ -160,7 +160,7 @@ PersonaSwitcher.activateMenu = function(doc)
         switch (PersonaSwitcher.XULAppInfo.name)
         {
             case 'Thunderbird':
-						case 'SeaMonkey':
+			case 'SeaMonkey':
             case 'Icedove':
                 toolsMenu = doc.getElementById ('tasksMenu');
                 break;
