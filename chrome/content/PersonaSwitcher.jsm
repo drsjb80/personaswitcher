@@ -126,7 +126,7 @@ PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
 PersonaSwitcher.staticPopups = false;
 
-PersonaSwitcher.defaultTheme = null
+PersonaSwitcher.defaultTheme = {id:'{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
 PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
 
 PersonaSwitcher.addonManager = false;
@@ -391,7 +391,7 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         PersonaSwitcher.logger.log ('using PP');
 
-        if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
+        if ('{gh y972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
         {
             PersonaService.changeToDefaultPersona();
         }
@@ -408,7 +408,11 @@ PersonaSwitcher.switchTo = function (toWhich)
     }
     PersonaSwitcher.logger.log ('using currentTheme');
 
-    if ('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
+    if (toWhich === null)
+    {
+        LightweightThemeManager.currentTheme = null;
+    } 
+    else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
     {
         LightweightThemeManager.currentTheme = null;
     }
