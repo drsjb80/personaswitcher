@@ -130,30 +130,43 @@ EndFunc
 Func OpenPersonaSwitcherPrefs()
    _FFTabAdd("about:addons")
 
-   Send("^f")
-   Sleep(500)
-   Send("+{TAB 2}")
+   ;Get to the extensions menu on the sidebar
+   Send("{TAB}")
    Sleep(500)
    Send("{UP 4}")
    _FFLoadWait()
    Send("{DOWN}")
    _FFLoadWait()
 
-   Send("{TAB 3}")
+   ;Search for Persona Switcher add-on
+   Send("^f")
    Sleep(500)
-   Send("{DOWN}")
+   Send("Persona Switcher")
    Sleep(500)
    Send("{ENTER}")
    _FFLoadWait()
+
+   ;Change the search filter to "My Add-ons"
+   _FFClick("search-filter-local", "id", 0)
+   Sleep(500)
+
+   ;Select Persona Switcher
    Send("{TAB 5}")
    Sleep(500)
+   Send("{UP}")
    Send("{ENTER}")
+   _FFLoadWait()
 
-   If Not WinWaitActive("Persona Switcher preferences", 5000) Then
+   ;Open the preferences menu
+   Send("{TAB 5}")
+   ;$result = _FFClick("detail-prefs-btn", "id", 0)
+   Send("{ENTER}")
+   Sleep(1000)
+
+   If WinActive("Persona Switcher preferences") Then
+	  return True
+   Else
 	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
 	  return False
    EndIf
-
-   return True
-
 EndFunc
