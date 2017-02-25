@@ -23,6 +23,7 @@ Func InitializeFirefox()
    ; connect to a running Firefox with MozRepl
    If _FFConnect(Default, Default, 10000) Then
 	  ; ensure firefox window is active before proceeding
+	  _FFLoadWait()
 	  WinWaitActive("[CLASS:MozillaWindowClass]")
 	  Return $PID
    Else
@@ -129,6 +130,7 @@ EndFunc
 ; Opens Persona Switcher's options page
 Func OpenPersonaSwitcherPrefs()
    _FFTabAdd("about:addons")
+   _FFLoadWait()
 
    ;Get to the extensions menu on the sidebar
    Send("{TAB}")
