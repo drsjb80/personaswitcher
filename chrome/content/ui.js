@@ -342,7 +342,7 @@ PersonaSwitcher.createMenuItem = function (doc, which)
 
     if (PersonaSwitcher.prefs.getBoolPref ('icon-preview'))
     {
-        // PersonaSwitcher.logger.log (which.iconURL);
+        PersonaSwitcher.logger.log (which.iconURL);
         if (null !== which.iconURL)
         {
             item.setAttribute ('class', 'menuitem-iconic');
@@ -435,15 +435,15 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     */
 
     var item = null;
-    // if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
-    // {
+    if (null !== PersonaSwitcher.defaultTheme)
+    {
         item = PersonaSwitcher.createMenuItem
             (doc, PersonaSwitcher.defaultTheme);
         if (item)
         {
             menupopup.appendChild (item);
         }
-    // }
+    }
 
     // arr.sort (function (a, b) { return a.name.localeCompare (b.name); });
 
@@ -670,8 +670,8 @@ PersonaSwitcher.setDefaultTheme = function (doc)
                 if (null !== theme)
                 {
                     PersonaSwitcher.defaultTheme = theme;
-                    PersonaSwitcher.createStaticPopups (doc);
                 }
+                PersonaSwitcher.createStaticPopups (doc);
             }
         );
     }
@@ -683,8 +683,9 @@ PersonaSwitcher.setDefaultTheme = function (doc)
         if (null !== theme)
         {
             PersonaSwitcher.defaultTheme = theme;
-            PersonaSwitcher.createStaticPopups (doc);
         }
+        
+        PersonaSwitcher.createStaticPopups (doc);
     }
 }
 

@@ -194,7 +194,7 @@ function injectButton(doc) {
 			toolbox = doc.getElementById("navigator-toolbox");
 			break;
 		case 'Icedove':
-			toolbox = doc.getElementById("navigation-toolbox");
+			toolbox = doc.getElementById("mail-toolbox");
 			break;
 		case 'Firefox':
 			toolbox = doc.getElementById("navigator-toolbox");
@@ -235,7 +235,8 @@ function moveButtonToToolbar(doc) {
 			navBar.insertItem("personaswitcher-button");
 			break;
 		case 'Icedove':
-			//not implemented
+			var tabbar = doc.getElementById('tabbar-toolbar');
+			tabbar.insertItem("personaswitcher-button");
 			break;
 		case 'Firefox':
 			var navBar = doc.querySelector('#nav-bar');
@@ -258,7 +259,7 @@ function addKeyset(doc) {
 			mainWindow = doc.getElementById('main-window');
 			break;
 		case 'Icedove':
-			mainWindow = doc.getElementById('main-window');
+			mainWindow = doc.getElementById('messengerWindow');
 			break;
 		case 'Firefox':
 			mainWindow = doc.getElementById('main-window');
