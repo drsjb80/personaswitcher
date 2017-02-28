@@ -1,6 +1,7 @@
 ; Persona Switcher Testing Library
 
 #include <FF V0.6.0.1b-15.au3>
+#include <Array.au3>
 
 ; ==========================================================
 ; Name ..........: InitializeFirefox
@@ -9,7 +10,6 @@
 ;                  pauses the script until the Firefox
 ;                  window is active.
 ; Return Value ..: The process ID of the started Firefox window.
-; Date ..........: 2/20/2017
 ; ==============================================================================
 Func InitializeFirefox()
    $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
@@ -40,7 +40,6 @@ EndFunc
 ; ==========================================================
 ; Name ..........: EndFirefox
 ; Description ...: Closes and disconnects from Firefox
-; Date ..........: 2/20/2017
 ; ==============================================================================
 Func EndFirefox()
    WinWaitActive("[CLASS:MozillaWindowClass]")
@@ -52,7 +51,6 @@ EndFunc
 ; ==========================================================
 ; Name ..........: RestartFirefox
 ; Description ...: Closes Firefox and starts a new session
-; Date ..........: 2/20/2017
 ; ==============================================================================
 Func RestartFirefox()
    WinWaitActive("[CLASS:MozillaWindowClass]")
@@ -67,7 +65,6 @@ EndFunc
 ;                  file is saved to same directory this script is ran from
 ; Parameters ....: $tests - an array of strings that provide test results
 ;                  $testname - the testing category name
-; Date ..........: 2/20/2017
 ; ==============================================================================
 Func SaveResultsToFile(ByRef $tests, ByRef $testname)
    ; set directory to script directory, append "Results .txt" to testname
@@ -97,7 +94,6 @@ EndFunc
 ; ==========================================================
 ; Name ..........: ResetPersonaSwitcherPrefs
 ; Description ...: Resets all of Persona Switcher's preferences on the about:config page
-; Date ..........: 2/23/2017
 ; ==============================================================================
 Func ResetPersonaSwitcherPrefs()
    _FFPrefReset("extensions.personaswitcher.accesskey")
@@ -152,7 +148,6 @@ EndFunc
 ; Description ...: Opens Persona Switcher's options page
 ; Return Value ..: Success      - 1
 ;                  Failure      - 0
-; Date ..........: 2/27/2017
 ; ==============================================================================
 Func OpenPersonaSwitcherPrefs()
    ; open addons page
@@ -183,8 +178,6 @@ EndFunc
 ; Description ...: Opens the popup associated with the Persona Switcher button loacted in the navigator toolbar
 ; Return Value ..: Success      - 1
 ;                  Failure      - 0
-; Author(s) .....: Jason Gould
-; Date ..........: 2/27/2017
 ; ==============================================================================
 Func OpenPersonaSwitcherButton()
    Local $PSDocument
@@ -192,4 +185,25 @@ Func OpenPersonaSwitcherButton()
    Local $PSPopup
    Local $PSmsg = 'try{PSDocument=Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser").document;PSButton=PSDocument.getElementsByAttribute("id", "personaswitcher-button")[0];PSPopup=PSDocument.getElementsByAttribute("id", "personaswitcher-button-popup")[0];PSPopup.openPopup(PSButton, "after_start", 0,0,false,false,null);}catch(e){"Unable to open Persona Switcher Button";};'
    return __FFSend($PSmsg)
+EndFunc
+
+; ==========================================================
+; Name ..........: GetListOfThemeIds
+; Description ...: Grabs the id's of the installed themes, except the defaults
+; Return Value ..: array of theme ids
+; ==============================================================================
+Func GetListOfThemeIds()
+   ; Grab json list from preferences and parse for theme ids
+   Local $jsonThemeList = _FFPrefGet("lightweightThemes.usedThemes")
+   Local $themesWithId = StringRegExp($jsonThemeList, '("id":"\d*")', 3) ; Regex for format "id":"286995"
+
+   ; Creating a list. Ubound method returns size of array
+   Local $size = Ubound($themesWithId, 1)
+   Local $themeIdList[$size]
+
+   ; Pass in only the id of a theme into the themeIdList array
+   For $i = 0 To $size-1
+   $themeIdList[$i] = StringRegExp($themesWithId[$i], '(\d+)',1)[0]
+   Next
+   return $themeIdList
 EndFunc
