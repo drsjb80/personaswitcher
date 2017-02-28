@@ -1,12 +1,16 @@
 ; Persona Switcher Testing Library
-; v1.0
-
-; Starts Firefox Developer Edition, connects to it through MozRepl, then
-; pauses the script until the Firefox window is active.
-; Returns the process ID of the started Firefox window.
 
 #include <FF V0.6.0.1b-15.au3>
 
+; ==========================================================
+; Name ..........: InitializeFirefox
+; Description ...: Starts Firefox Developer Edition,
+;                  connects to it through MozRepl, then
+;                  pauses the script until the Firefox
+;                  window is active.
+; Return Value ..: The process ID of the started Firefox window.
+; Date ..........: 2/20/2017
+; ==============================================================================
 Func InitializeFirefox()
    $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
    If FileExists($FF) Then
@@ -33,7 +37,11 @@ Func InitializeFirefox()
 EndFunc
 
 
-; Disconnects and closes Firefox.
+; ==========================================================
+; Name ..........: EndFirefox
+; Description ...: Closes and disconnects from Firefox
+; Date ..........: 2/20/2017
+; ==============================================================================
 Func EndFirefox()
    WinWaitActive("[CLASS:MozillaWindowClass]")
    _FFWindowClose()
@@ -41,7 +49,11 @@ Func EndFirefox()
 EndFunc
 
 
-; Closes Firefox and starts a new session
+; ==========================================================
+; Name ..........: RestartFirefox
+; Description ...: Closes Firefox and starts a new session
+; Date ..........: 2/20/2017
+; ==============================================================================
 Func RestartFirefox()
    WinWaitActive("[CLASS:MozillaWindowClass]")
    EndFirefox()
@@ -49,11 +61,17 @@ Func RestartFirefox()
 EndFunc
 
 
-; Takes an array of test result strings and prints them to a file.
-; file is saved to same directory this script is ran from
-Func SaveResultsToFile(ByRef $tests, ByRef $filename)
-   ; set directory to script directory, append "Results .txt" to filename
-   Local Const $sFilePath = @ScriptDir & "\" & $filename & " Results.txt"
+; ==========================================================
+; Name ..........: SaveResultsToFile
+; Description ...: Takes an array of test result strings and prints them to a file.
+;                  file is saved to same directory this script is ran from
+; Parameters ....: $tests - an array of strings that provide test results
+;                  $testname - the testing category name
+; Date ..........: 2/20/2017
+; ==============================================================================
+Func SaveResultsToFile(ByRef $tests, ByRef $testname)
+   ; set directory to script directory, append "Results .txt" to testname
+   Local Const $sFilePath = @ScriptDir & "\" & $testname & " Results.txt"
 
    ; open the file for writing and store the handle to a variable
    Local $hFileOpen = FileOpen($sFilePath, 2)
@@ -65,7 +83,7 @@ Func SaveResultsToFile(ByRef $tests, ByRef $filename)
    EndIf
 
    ; write file header
-   FileWrite($hFileOpen, $filename & " - results" & @CRLF)
+   FileWrite($hFileOpen, $testname & " - results" & @CRLF)
 
    ; write results to file
    For $i = 0 To UBound($tests) - 1
@@ -76,8 +94,11 @@ Func SaveResultsToFile(ByRef $tests, ByRef $filename)
    FileClose($hFileOpen)
 EndFunc
 
-
-; Resets all of Persona Switcher's preferences on the about:config page
+; ==========================================================
+; Name ..........: ResetPersonaSwitcherPrefs
+; Description ...: Resets all of Persona Switcher's preferences on the about:config page
+; Date ..........: 2/23/2017
+; ==============================================================================
 Func ResetPersonaSwitcherPrefs()
    _FFPrefReset("extensions.personaswitcher.accesskey")
    _FFPrefReset("extensions.personaswitcher.activateaccel")
@@ -126,45 +147,29 @@ Func ResetPersonaSwitcherPrefs()
    _FFPrefReset("extensions.personaswitcher.tools-submenu")
 EndFunc
 
-
-; Opens Persona Switcher's options page
+; ==========================================================
+; Name ..........: OpenPersonaSwitcherPrefs
+; Description ...: Opens Persona Switcher's options page
+; Return Value ..: Success      - 1
+;                  Failure      - 0
+; Date ..........: 2/27/2017
+; ==============================================================================
 Func OpenPersonaSwitcherPrefs()
+   ; open addons page
    _FFTabAdd("about:addons")
    _FFLoadWait()
 
-   ;Get to the extensions menu on the sidebar
-   Send("{TAB}")
-   Sleep(500)
-   Send("{UP 4}")
-   _FFLoadWait()
-   Send("{DOWN}")
-   _FFLoadWait()
+   ; opens addons in current window, disabled because of timing errors
+   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())")
 
-   ;Search for Persona Switcher add-on
-   Send("^f")
-   Sleep(500)
-   Send("Persona Switcher")
-   Sleep(500)
-   Send("{ENTER}")
+   ; get to the extensions menu on the sidebar
+   _FFClick("category-extension", "id", 0)
    _FFLoadWait()
 
-   ;Change the search filter to "My Add-ons"
-   _FFClick("search-filter-local", "id", 0)
-   Sleep(500)
+   ; send JavaScript to open prefs
+   _FFCmd("window.content.document.getElementsByAttribute('name', 'Persona Switcher')[0].showPreferences()", 500)
 
-   ;Select Persona Switcher
-   Send("{TAB 5}")
-   Sleep(500)
-   Send("{UP}")
-   Send("{ENTER}")
-   _FFLoadWait()
-
-   ;Open the preferences menu
-   Send("{TAB 5}")
-   ;$result = _FFClick("detail-prefs-btn", "id", 0)
-   Send("{ENTER}")
-   Sleep(1000)
-
+   ; check that the preferences window is open
    If WinActive("Persona Switcher preferences") Then
 	  return True
    Else
