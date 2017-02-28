@@ -157,3 +157,19 @@ Func OpenPersonaSwitcherPrefs()
    return True
 
 EndFunc
+
+; ==========================================================
+; Name ..........: OpenPersonaSwitcherButton
+; Description ...: Opens the popup associated with the Persona Switcher button loacted in the navigator toolbar
+; Return Value ..: Success      - 1
+;                  Failure      - 0
+; Author(s) .....: Jason Gould
+; Date ..........: 2/27/2017
+; ==============================================================================
+Func OpenPersonaSwitcherButton()
+   Local $PSDocument
+   Local $PSButton
+   Local $PSPopup
+   Local $PSmsg = 'try{PSDocument=Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser").document;PSButton=PSDocument.getElementsByAttribute("id", "personaswitcher-button")[0];PSPopup=PSDocument.getElementsByAttribute("id", "personaswitcher-button-popup")[0];PSPopup.openPopup(PSButton, "after_start", 0,0,false,false,null);}catch(e){"Unable to open Persona Switcher Button";};'
+   return __FFSend($PSmsg)
+EndFunc
