@@ -91,6 +91,7 @@ Func SaveResultsToFile(ByRef $tests, ByRef $testname)
    FileClose($hFileOpen)
 EndFunc
 
+
 ; ==========================================================
 ; Name ..........: ResetPersonaSwitcherPrefs
 ; Description ...: Resets all of Persona Switcher's preferences on the about:config page
@@ -143,11 +144,13 @@ Func ResetPersonaSwitcherPrefs()
    _FFPrefReset("extensions.personaswitcher.tools-submenu")
 EndFunc
 
+
 ; ==========================================================
 ; Name ..........: OpenPersonaSwitcherPrefs
 ; Description ...: Opens Persona Switcher's options page
 ; Return Value ..: Success      - 1
 ;                  Failure      - 0
+; Date ..........: 2/27/2017
 ; ==============================================================================
 Func OpenPersonaSwitcherPrefs()
    ; open addons page
@@ -162,16 +165,17 @@ Func OpenPersonaSwitcherPrefs()
    _FFLoadWait()
 
    ; send JavaScript to open prefs
-   _FFCmd("window.content.document.getElementsByAttribute('name', 'Persona Switcher')[0].showPreferences()", 500)
+   _FFCmd("window.content.document.getElementsByAttribute('name', 'Persona Switcher')[0].showPreferences()", 0)
 
-   ; check that the preferences window is open
-   If WinActive("Persona Switcher preferences") Then
+   ; wait at most 3 seconds for the preferences window to be open
+   If WinWaitActive("Persona Switcher preferences", "", 3) Then
 	  return True
    Else
 	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
 	  return False
    EndIf
 EndFunc
+
 
 ; ==========================================================
 ; Name ..........: OpenPersonaSwitcherButton
@@ -186,6 +190,7 @@ Func OpenPersonaSwitcherButton()
    Local $PSmsg = 'try{PSDocument=Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser").document;PSButton=PSDocument.getElementsByAttribute("id", "personaswitcher-button")[0];PSPopup=PSDocument.getElementsByAttribute("id", "personaswitcher-button-popup")[0];PSPopup.openPopup(PSButton, "after_start", 0,0,false,false,null);}catch(e){"Unable to open Persona Switcher Button";};'
    return __FFSend($PSmsg)
 EndFunc
+
 
 ; ==========================================================
 ; Name ..........: GetListOfThemeIds
