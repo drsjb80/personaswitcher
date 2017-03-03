@@ -108,24 +108,16 @@ function injectMainMenu(doc) {
 	let menu_tools;
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
+		case 'Icedove':
 		case 'Thunderbird':
-			menuBar = doc.getElementById("mail-menubar");
-			menu_tools = doc.getElementById("tasksMenu");
-			break;
 		case 'SeaMonkey':
 			menuBar = doc.getElementById("main-menubar");			
 			menu_tools = doc.getElementById("tasksMenu");
 			break;
-		case 'Icedove':
-			menuBar = doc.getElementById("mail-menubar");
-			menu_tools = doc.getElementById("tasksMenu");
-			break;
 		case 'Firefox':
+		default:
 			menuBar = doc.getElementById("main-menubar");			
 			menu_tools = doc.getElementById("tools-menu");
-			break;
-		default:
-			//Shouldn't get here
 			break;
 	}
 		
@@ -150,20 +142,14 @@ function injectSubMenu(doc) {
 	let subMenu_prefs;
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
+		case 'Icedove':
 		case 'Thunderbird':
-			menuPopup = doc.getElementById("taskPopup");
-			break;
 		case 'SeaMonkey':
 			menuPopup = doc.getElementById("taskPopup");
 			break;
-		case 'Icedove':
-			menuPopup = doc.getElementById("taskPopup");
-			break;
 		case 'Firefox':
-			menuPopup = doc.getElementById("menu_ToolsPopup");
-			break;
 		default:
-			//Shouldn't get here
+			menuPopup = doc.getElementById("menu_ToolsPopup");
 			break;
 	}
 	
@@ -187,20 +173,14 @@ function injectButton(doc) {
 	let toolbox;
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
+		case 'Icedove':
 		case 'Thunderbird':
 			toolbox = doc.getElementById("mail-toolbox");
 			break;
 		case 'SeaMonkey':
-			toolbox = doc.getElementById("navigator-toolbox");
-			break;
-		case 'Icedove':
-			toolbox = doc.getElementById("mail-toolbox");
-			break;
 		case 'Firefox':
-			toolbox = doc.getElementById("navigator-toolbox");
-			break;
 		default:
-			//Shouldn't get here
+			toolbox = doc.getElementById("navigator-toolbox");
 			break;
 	}
 	//PersonaSwitcher button added to the customize toolbox
@@ -226,24 +206,16 @@ function injectButton(doc) {
 function moveButtonToToolbar(doc) {
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
+		case 'Icedove':
 		case 'Thunderbird':
 			var tabbar = doc.getElementById('tabbar-toolbar');
 			tabbar.insertItem("personaswitcher-button");
 			break;
 		case 'SeaMonkey':
-			var navBar = doc.querySelector('#nav-bar');
-			navBar.insertItem("personaswitcher-button");
-			break;
-		case 'Icedove':
-			var tabbar = doc.getElementById('tabbar-toolbar');
-			tabbar.insertItem("personaswitcher-button");
-			break;
 		case 'Firefox':
+		default:
 			var navBar = doc.querySelector('#nav-bar');
 			navBar.insertItem("personaswitcher-button");
-			break;
-		default:
-			//Shouldn't get here
 			break;
 	}
 }
@@ -252,20 +224,14 @@ function addKeyset(doc) {
 	var mainWindow;
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
+		case 'Icedove':
 		case 'Thunderbird':
 			mainWindow = doc.getElementById('messengerWindow');
 			break;
 		case 'SeaMonkey':
-			mainWindow = doc.getElementById('main-window');
-			break;
-		case 'Icedove':
-			mainWindow = doc.getElementById('messengerWindow');
-			break;
 		case 'Firefox':
-			mainWindow = doc.getElementById('main-window');
-			break;
 		default:
-			//Shouldn't get here
+			mainWindow = doc.getElementById('main-window');
 			break;
 	}
 	
