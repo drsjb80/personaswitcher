@@ -237,10 +237,6 @@ function addKeyset(doc) {
 	
 	let keyset = doc.createElement ('keyset');
 	keyset.setAttribute("id", "personaSwitcherKeyset")
-    // a way to find the keyset no matter what.
-    let breadCrumb = doc.createElement ('key');
-    breadCrumb.setAttribute ('id', 'PersonaSwitcher.keyBreadCrumb'); 
-    keyset.appendChild (breadCrumb);
 	mainWindow.appendChild(keyset);	
 }
 

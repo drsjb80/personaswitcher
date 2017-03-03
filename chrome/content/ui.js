@@ -74,26 +74,19 @@ PersonaSwitcher.setKeyset = function (doc)
 {
     PersonaSwitcher.logger.log (doc);
 
-    var existing = doc.getElementById ('PersonaSwitcher.keyBreadCrumb');
-    PersonaSwitcher.logger.log (existing);
+    var oldKeyset = doc.getElementById ('personaSwitcherKeyset');
+    PersonaSwitcher.logger.log (oldKeyset);
 
     // there are windows/documents that don't have keyset -- e.g.: prefs
-    if (null === existing) return;
+    if (null === oldKeyset) return;
 
-    var parent = existing.parentNode;
-    // PersonaSwitcher.logger.log (parent);
-    var grandParent = parent.parentNode;
-    // PersonaSwitcher.logger.log (grandParent);
+    var parent = oldKeyset.parentNode;
+    // PersonaSwitcher.logger.log (oldKeyset);
 
-    // remove the existing keyset and make a brand new one
-    grandParent.removeChild (parent);
+    // remove the old keyset and make a brand new one
+    parent.removeChild (oldKeyset);
     var keyset = doc.createElement ('keyset');
-	keyset.setAttribute("id", "personaSwitcherKeyset");
-
-    // a way to find the keyset no matter what.
-    var breadCrumb = doc.createElement ('key');
-    breadCrumb.setAttribute ('id', 'PersonaSwitcher.keyBreadCrumb'); 
-    keyset.appendChild (breadCrumb);
+	  keyset.setAttribute("id", "personaSwitcherKeyset");
 
     var keys =
     [
@@ -138,7 +131,7 @@ PersonaSwitcher.setKeyset = function (doc)
         keyset.appendChild (newKey);
     }
 
-    grandParent.appendChild (keyset);
+    parent.appendChild (keyset);
 };
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts#Assigning_a_keyboard_shortcut_on_a_menu
