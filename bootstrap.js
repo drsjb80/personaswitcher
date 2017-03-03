@@ -2,13 +2,11 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/devtools/Console.jsm');
 
-
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
 
 function startup(data, reason) {
   Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
-  //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
   //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
   //load preferences
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/prefs.js', {
@@ -20,6 +18,7 @@ function startup(data, reason) {
   uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
   styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
 
+  //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
   let context = this;
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
                                     context, "UTF-8" /* The script's encoding */);
@@ -27,6 +26,7 @@ function startup(data, reason) {
   forEachOpenWindow(loadIntoWindow);
   Services.wm.addListener(WindowListener);  
 }
+
 function shutdown(data, reason) {
 
   //Clears the cache on disable so reloading the addon when debugging works properly
@@ -34,7 +34,8 @@ function shutdown(data, reason) {
   if (reason == ADDON_DISABLE) {
     Services.obs.notifyObservers(null, "startupcache-invalidate", null);
   }
-
+	
+	Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');	
   forEachOpenWindow(unloadFromWindow);
   Services.wm.removeListener(WindowListener);
   
@@ -42,16 +43,20 @@ function shutdown(data, reason) {
     styleSheetService.unregisterSheet(uri, styleSheetService.USER_SHEET);
   }
   
+	//https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_10_Bypass_cache_when_loading_properties_files/
   // HACK WARNING: The Addon Manager does not properly clear all addon related caches on update;
   //               in order to fully update images and locales, their caches need clearing here
   Services.obs.notifyObservers(null, 'chrome-flush-caches', null);
 }
+
 function install(data, reason) {
 	//Installation happens here
 }
+
 function uninstall(data, reason) {
 	//Uninstall happens here
 }
+
 function loadIntoWindow(window) {		
 	let doc = window.document;
 	
@@ -61,6 +66,7 @@ function loadIntoWindow(window) {
 	addKeyset(doc);	
 	PersonaSwitcher.onWindowLoad(doc);
 }
+
 function unloadFromWindow(window) {
 	let doc = window.document;
 	let menu_personaswitcher = doc.getElementById("personaswitcher-main-menubar");	
@@ -81,10 +87,12 @@ function unloadFromWindow(window) {
 		keySet.parentNode.removeChild(keySet);
 	}
 }
+
 function forEachOpenWindow(applyThisFunc) // Apply a function to all open browser windows
 {
 	PersonaSwitcher.allWindows(applyThisFunc);
 }
+
 var WindowListener = {
   onOpenWindow: function (xulWindow)
   {
@@ -102,6 +110,7 @@ var WindowListener = {
   onWindowTitleChange: function (xulWindow, newTitle) {
   }
 } 
+
 //UI Injection
 function injectMainMenu(doc) {
 	let menuBar;
@@ -203,6 +212,7 @@ function injectButton(doc) {
 
 	moveButtonToToolbar(doc);
 }
+
 function moveButtonToToolbar(doc) {
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
@@ -219,6 +229,7 @@ function moveButtonToToolbar(doc) {
 			break;
 	}
 }
+
 function addKeyset(doc) {
 	//http://forums.mozillazine.org/viewtopic.php?t=2711165
 	var mainWindow;
@@ -246,6 +257,7 @@ function loadStyleSheet(window) {
 	  getInterface(Components.interfaces.nsIDOMWindowUtils).loadSheet(this._uri, 1);
 }
 
+//https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences
 //Default Preferences Setup
 function getGenericPref(branch, prefName)
 {
@@ -262,6 +274,7 @@ function getGenericPref(branch, prefName)
       return branch.getBoolPref(prefName); // PREF_BOOL
   }
 }
+
 function setGenericPref(branch, prefName, prefValue)
 {
   switch (typeof prefValue)
@@ -277,6 +290,7 @@ function setGenericPref(branch, prefName, prefValue)
       return;
   }
 }
+
 function setDefaultPref(prefName, prefValue)
 {
   var defaultBranch = Services.prefs.getDefaultBranch(null);

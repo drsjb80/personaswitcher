@@ -1,5 +1,4 @@
 //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
-
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 // no space between comment delimiters. really.
@@ -126,6 +125,10 @@ PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
 PersonaSwitcher.staticPopups = false;
 
+//Default theme set to an object with an id property equal to the hard coded default theme id value
+//Necessary for Icedove compatibility as Icedove's default theme id is not the same, and thus cannot
+//be found using the same defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
+//can be set back to null and the correct id can be queried instead.
 PersonaSwitcher.defaultTheme = {id:'{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
 PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
 

@@ -9,14 +9,10 @@
 //Services
 Components.utils.import('resource://gre/modules/Services.jsm');
 // 'import' for jslint
-Components.utils['import']
-    ('resource://gre/modules/LightweightThemeManager.jsm');
-//Components.utils['import']('chrome://personaswitcher/content/PersonaSwitcher.jsm');
+Components.utils.import('resource://gre/modules/LightweightThemeManager.jsm');
 
 PersonaSwitcher.XULNS =
     'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
-	
-//var EXPORTED_SYMBOLS = ["PersonaSwitcher"];
 
 /*
 ***************************************************************************
@@ -135,7 +131,6 @@ PersonaSwitcher.setKeyset = function (doc)
 };
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts#Assigning_a_keyboard_shortcut_on_a_menu
-
 PersonaSwitcher.activateMenu = function(doc)
 {
     PersonaSwitcher.logger.log();
@@ -329,7 +324,7 @@ PersonaSwitcher.createMenuItem = function (doc, which)
     item.addEventListener
     (
         'command',
-        function() { PersonaSwitcher.onMenuItemCommand (which); },
+        function() { PersonaSwitcher.onMenuItemCommand(which); },
         false
     );
 
@@ -428,15 +423,15 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     */
 
     var item = null;
-    if (null !== PersonaSwitcher.defaultTheme)
-    {
+    //if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
+    //{
         item = PersonaSwitcher.createMenuItem
             (doc, PersonaSwitcher.defaultTheme);
         if (item)
         {
             menupopup.appendChild (item);
         }
-    }
+    //}
 
     // arr.sort (function (a, b) { return a.name.localeCompare (b.name); });
 
@@ -540,6 +535,8 @@ PersonaSwitcher.showMenus = function (which)
     }
 };
 
+//Appears to have been a Hack to get popupHidden to work in non-Firefox applications
+//Is no longer being called anywhere. Remove?
 PersonaSwitcher.popupShowing = function (event)
 {
     PersonaSwitcher.logger.log ("in popupShowing");
@@ -687,7 +684,7 @@ PersonaSwitcher.onWindowLoad = function (doc)
 {
     if (PersonaSwitcher.firstTime)
     {
-        //PersonaSwitcher.firstTime = false;
+        PersonaSwitcher.firstTime = false;
 
         // PersonaSwitcher.activeWindow = this;
         PersonaSwitcher.setLogger();
@@ -698,7 +695,7 @@ PersonaSwitcher.onWindowLoad = function (doc)
 
         // this also sets up the menus as there is an asynchronous call to
         // addon manager. bleah.
-        PersonaSwitcher.setDefaultTheme (doc);
+        PersonaSwitcher.setDefaultTheme(doc);
 
         PersonaSwitcher.currentIndex =
             PersonaSwitcher.prefs.getIntPref ("current");
