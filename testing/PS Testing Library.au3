@@ -43,7 +43,6 @@ EndFunc
 ; Description ...: Closes and disconnects from Firefox
 ; ==============================================================================
 Func EndFirefox()
-   WinWaitActive("[CLASS:MozillaWindowClass]")
    _FFWindowClose()
    _FFDisConnect()
 EndFunc
@@ -55,8 +54,8 @@ EndFunc
 ; Return Value ..: The process ID of the started Firefox window.
 ; ==============================================================================
 Func RestartFirefox()
-   WinWaitActive("[CLASS:MozillaWindowClass]")
    EndFirefox()
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    return InitializeFirefox()
 EndFunc
 
@@ -205,20 +204,19 @@ Func GetListOfThemeIds()
 
    ; Pass in only the id of a theme into the themeIdList array
    For $i = 0 To UBound($themeIdList) - 1
-	  $themeIdList[$i] = StringMid($themeIdList[$i], 6, -2)
+	  $themeIdList[$i] = StringTrimRight(StringTrimLeft($themeIdList[$i], 6), 1)
 	  Next
-   ;_ArrayDisplay($themeIdList)
    return $themeIdList
 EndFunc
 
 
 ; ==========================================================
-; Name ..........: ResetToDefaultThemes
+; Name ..........: ResetToDefaultTheme
 ; Description ...: Resets Firefox's theme to the default theme through the appearance page
 ; Return Value ..: Theme changed to default - True
 ;                  Theme unchanged          - False
 ; ==============================================================================
-Func ResetToDefaultThemes()
+Func ResetToDefaultTheme()
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return False
    EndIf
@@ -232,8 +230,14 @@ Func ResetToDefaultThemes()
    _FFLoadWait()
 
    ; send JavaScript to disable active themes
-   _FFCmd("window.content.document.getElementsByAttribute('active', 'true')[0].userDisabled = true", 0)
-   _FFCmd("window.content.document.getElementsByAttribute('active', 'true')[window.content.document.getElementsByAttribute('active', 'true').length - 1].userDisabled = true", 0)
+   _FFCmd("window.content.document" & _
+	  ".getElementsByAttribute('active', 'true')[0]" & _
+	  ".userDisabled = true", 0)
+   _FFCmd("window.content.document" & _
+	  ".getElementsByAttribute('active', 'true')[" & _
+		 "window.content.document" & _
+		 ".getElementsByAttribute('active', 'true').length - 1" & _
+	  "].userDisabled = true", 0)
 
    Sleep(1000)
    _FFTabClose()
@@ -245,4 +249,21 @@ Func ResetToDefaultThemes()
 	  MsgBox(64, "", "Error, default theme was not enabled.")
 	  return False
    EndIf
+EndFunc
+
+
+; ==========================================================
+; Name ..........: GetDisplayedThemeBackground
+; Description ...: Grabs the local URL of the current displayed Firefox theme's background image
+; Return Value ..: Success      - URL for background image of displayed theme
+;                  Failure      - False
+; ==============================================================================
+Func GetDisplayedThemeBackground()
+   Local $Cmd = _FFCmd('getComputedStyle(' & _
+		 'Components.classes["@mozilla.org/appshell/window-mediator;1"]' & _
+		 '.getService(Components.interfaces.nsIWindowMediator)' & _
+		 '.getMostRecentWindow("navigator:browser").document' & _
+		 '.getElementsByAttribute("id", "main-window")[0]' & _
+	  ').backgroundImage', 0)
+   return StringTrimRight(StringTrimLeft($Cmd, 5), 2)
 EndFunc
