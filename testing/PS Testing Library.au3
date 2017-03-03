@@ -28,6 +28,7 @@ Func InitializeFirefox()
    If _FFConnect(Default, Default, 10000) Then
 	  ; ensure firefox window is active before proceeding
 	  _FFLoadWait()
+	  ResetPersonaSwitcherPrefs()
 	  WinWaitActive("[CLASS:MozillaWindowClass]")
 	  Return $PID
    Else
@@ -51,6 +52,7 @@ EndFunc
 ; ==========================================================
 ; Name ..........: RestartFirefox
 ; Description ...: Closes Firefox and starts a new session
+; Return Value ..: The process ID of the started Firefox window.
 ; ==============================================================================
 Func RestartFirefox()
    WinWaitActive("[CLASS:MozillaWindowClass]")
@@ -68,7 +70,7 @@ EndFunc
 ; ==============================================================================
 Func SaveResultsToFile(ByRef $tests, ByRef $testname)
    ; set directory to script directory, append "Results .txt" to testname
-   Local Const $sFilePath = @ScriptDir & "\" & $testname & " Results.txt"
+   Local Const $sFilePath = @ScriptDir & "\PS Automated Tests Results.txt"
 
    ; open the file for writing and store the handle to a variable
    Local $hFileOpen = FileOpen($sFilePath, 2)
@@ -148,9 +150,8 @@ EndFunc
 ; ==========================================================
 ; Name ..........: OpenPersonaSwitcherPrefs
 ; Description ...: Opens Persona Switcher's options page
-; Return Value ..: Success      - 1
-;                  Failure      - 0
-; Date ..........: 2/27/2017
+; Return Value ..: Success      - True
+;                  Failure      - False
 ; ==============================================================================
 Func OpenPersonaSwitcherPrefs()
    ; open addons page
@@ -200,15 +201,48 @@ EndFunc
 Func GetListOfThemeIds()
    ; Grab json list from preferences and parse for theme ids
    Local $jsonThemeList = _FFPrefGet("lightweightThemes.usedThemes")
-   Local $themesWithId = StringRegExp($jsonThemeList, '("id":"\d*")', 3) ; Regex for format "id":"286995"
-
-   ; Creating a list. Ubound method returns size of array
-   Local $size = Ubound($themesWithId, 1)
-   Local $themeIdList[$size]
+   Local $themeIdList = StringRegExp($jsonThemeList, '("id":"[^\"]*")', 3) ; Regex for format "id":"286995"
 
    ; Pass in only the id of a theme into the themeIdList array
-   For $i = 0 To $size-1
-   $themeIdList[$i] = StringRegExp($themesWithId[$i], '(\d+)',1)[0]
-   Next
+   For $i = 0 To UBound($themeIdList) - 1
+	  $themeIdList[$i] = StringMid($themeIdList[$i], 6, -2)
+	  Next
+   ;_ArrayDisplay($themeIdList)
    return $themeIdList
+EndFunc
+
+
+; ==========================================================
+; Name ..........: ResetToDefaultThemes
+; Description ...: Resets Firefox's theme to the default theme through the appearance page
+; Return Value ..: Theme changed to default - True
+;                  Theme unchanged          - False
+; ==============================================================================
+Func ResetToDefaultThemes()
+   If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
+	  return False
+   EndIf
+
+   ; open addons page
+   _FFTabAdd("about:addons")
+   _FFLoadWait()
+
+   ; get to the appearences menu on the sidebar
+   _FFClick("category-theme", "id", 0)
+   _FFLoadWait()
+
+   ; send JavaScript to disable active themes
+   _FFCmd("window.content.document.getElementsByAttribute('active', 'true')[0].userDisabled = true", 0)
+   _FFCmd("window.content.document.getElementsByAttribute('active', 'true')[window.content.document.getElementsByAttribute('active', 'true').length - 1].userDisabled = true", 0)
+
+   Sleep(1000)
+   _FFTabClose()
+   _FFLoadWait()
+
+   If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
+	  return True
+   Else
+	  MsgBox(64, "", "Error, default theme was not enabled.")
+	  return False
+   EndIf
 EndFunc
