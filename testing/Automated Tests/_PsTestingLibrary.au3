@@ -1,7 +1,10 @@
 ; Persona Switcher Testing Library
+; includes functions required to run Persona Switcher's automated tests
 
 #include <FF V0.6.0.1b-15.au3>
 #include <Array.au3>
+#include <File.au3>
+#include <Date.au3>
 
 ; ==========================================================
 ; Name ..........: InitializeFirefox
@@ -55,7 +58,7 @@ EndFunc
 ; ==============================================================================
 Func RestartFirefox()
    EndFirefox()
-   WinWaitActive("[CLASS:MozillaWindowClass]")
+   ;WinWaitActive("[CLASS:MozillaWindowClass]")
    return InitializeFirefox()
 EndFunc
 
@@ -63,32 +66,78 @@ EndFunc
 ; ==========================================================
 ; Name ..........: SaveResultsToFile
 ; Description ...: Takes an array of test result strings and prints them to a file.
-;                  file is saved to same directory this script is ran from
+;                  file is saved in a directory named "Test Results" that must exist
+;                  in the parent directory of the script ran
 ; Parameters ....: $tests - an array of strings that provide test results
 ;                  $testname - the testing category name
 ; ==============================================================================
 Func SaveResultsToFile(ByRef $tests, ByRef $testname)
-   ; set directory to script directory, append "Results .txt" to testname
-   Local Const $sFilePath = @ScriptDir & "\PS Automated Tests Results.txt"
+   ; set results file path and file name
+   Local Const $sFilePath = StringRegExpReplace(@ScriptDir, '\\[^\\]*$', '') & _
+	  "\Test Results\PS Automated Tests Results.txt"
+
+   Local Const $sFileHeader = "# Persona Switcher Automated Test Results" & @CRLF & _
+	  "# " & _NowTime() & " latest test suite ran: " & $testname
 
    ; open the file for writing and store the handle to a variable
-   Local $hFileOpen = FileOpen($sFilePath, 2)
+   Local $hFileOpen = FileOpen($sFilePath, 0)
 
    ; check that file was opened
    If $hFileOpen = -1 Then
-       MsgBox(64, "", "An error occurred attempting to write results file.")
-       Exit(1)
+	  $hFileOpen = FileOpen($sFilePath, 2)
+	  If $hFileOpen = -1 Then
+		 MsgBox(64, "", "An error occurred attempting to write results file.")
+		 Exit(1)
+	  EndIf
    EndIf
 
-   ; write file header
-   FileWrite($hFileOpen, $testname & " - results" & @CRLF)
+   Local $lineCount = _FileCountLines($sFilePath)
+   Local $fileArray[$lineCount + UBound($tests) + 1]
+   Local $writeState = False;
 
-   ; write results to file
-   For $i = 0 To UBound($tests) - 1
-	  FileWrite($hFileOpen, $tests[$i] & @CRLF)
+   ; process old file
+   For $i = 1 to $lineCount
+	  $line = FileReadLine($sFilePath, $i)
+	  If StringLeft($line, 1) == '#' Then
+		 $fileArray[$i - 1] = ""
+	  ElseIf $line == "[" & $testname & "]" Then
+		 $writeState = True
+	  Else
+		 If $writeState Then
+			If StringLeft($line, 1) == '[' And StringRight($line, 1) == ']' Then
+			   $writeState = False
+			   $fileArray[$i - 1] = $line
+			Else
+			   $fileArray[$i - 1] = ""
+			EndIf
+		 Else
+			$fileArray[$i - 1] = $line
+		 EndIf
+	  EndIf
    Next
 
-   ; close the handle returned by FileOpen
+   FileClose($hFileOpen)
+
+   ; save test results into array
+   $fileArray[$lineCount] = "[" & $testname & "]"
+   For $i = 0 to UBound($tests) - 1
+	  $fileArray[$lineCount + $i + 1] = $tests[$i]
+   Next
+
+   $hFileOpen = FileOpen($sFilePath, 2)
+   FileWrite($hFileOpen, $sFileHeader & @CRLF)
+
+   ; write array to new file
+   For $i = 0 to UBound($fileArray) - 1
+	  If StringLen($fileArray[$i]) > 0 Then
+		 If StringLeft($fileArray[$i], 1) == '[' And StringRight($fileArray[$i], 1) == ']' Then
+			FileWrite($hFileOpen, @CRLF & $fileArray[$i] & @CRLF)
+		 Else
+			FileWrite($hFileOpen, $fileArray[$i] & @CRLF)
+		 EndIf
+	  EndIf
+   Next
+
    FileClose($hFileOpen)
 EndFunc
 
@@ -155,10 +204,11 @@ EndFunc
 Func OpenPersonaSwitcherPrefs()
    ; open addons page
    _FFTabAdd("about:addons")
-   _FFLoadWait()
 
    ; opens addons in current window, disabled because of timing errors
-   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())")
+   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())", 0)
+   ;Sleep(1000)
+   _FFLoadWait()
 
    ; get to the extensions menu on the sidebar
    _FFClick("category-extension", "id", 0)
@@ -174,39 +224,6 @@ Func OpenPersonaSwitcherPrefs()
 	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
 	  return False
    EndIf
-EndFunc
-
-
-; ==========================================================
-; Name ..........: OpenPersonaSwitcherButton
-; Description ...: Opens the popup associated with the Persona Switcher button loacted in the navigator toolbar
-; Return Value ..: Success      - 1
-;                  Failure      - 0
-; ==============================================================================
-Func OpenPersonaSwitcherButton()
-   Local $PSDocument
-   Local $PSButton
-   Local $PSPopup
-   Local $PSmsg = 'try{PSDocument=Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser").document;PSButton=PSDocument.getElementsByAttribute("id", "personaswitcher-button")[0];PSPopup=PSDocument.getElementsByAttribute("id", "personaswitcher-button-popup")[0];PSPopup.openPopup(PSButton, "after_start", 0,0,false,false,null);}catch(e){"Unable to open Persona Switcher Button";};'
-   return __FFSend($PSmsg)
-EndFunc
-
-
-; ==========================================================
-; Name ..........: GetListOfThemeIds
-; Description ...: Grabs the id's of the installed themes, except the defaults
-; Return Value ..: array of theme ids
-; ==============================================================================
-Func GetListOfThemeIds()
-   ; Grab json list from preferences and parse for theme ids
-   Local $jsonThemeList = _FFPrefGet("lightweightThemes.usedThemes")
-   Local $themeIdList = StringRegExp($jsonThemeList, '("id":"[^\"]*")', 3) ; Regex for format "id":"286995"
-
-   ; Pass in only the id of a theme into the themeIdList array
-   For $i = 0 To UBound($themeIdList) - 1
-	  $themeIdList[$i] = StringTrimRight(StringTrimLeft($themeIdList[$i], 6), 1)
-	  Next
-   return $themeIdList
 EndFunc
 
 
@@ -249,6 +266,39 @@ Func ResetToDefaultTheme()
 	  MsgBox(64, "", "Error, default theme was not enabled.")
 	  return False
    EndIf
+EndFunc
+
+
+; ==========================================================
+; Name ..........: OpenPersonaSwitcherButton
+; Description ...: Opens the popup associated with the Persona Switcher button loacted in the navigator toolbar
+; Return Value ..: Success      - 1
+;                  Failure      - 0
+; ==============================================================================
+Func OpenPersonaSwitcherButton()
+   Local $PSDocument
+   Local $PSButton
+   Local $PSPopup
+   Local $PSmsg = 'try{PSDocument=Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser").document;PSButton=PSDocument.getElementsByAttribute("id", "personaswitcher-button")[0];PSPopup=PSDocument.getElementsByAttribute("id", "personaswitcher-button-popup")[0];PSPopup.openPopup(PSButton, "after_start", 0,0,false,false,null);}catch(e){"Unable to open Persona Switcher Button";};'
+   return __FFSend($PSmsg)
+EndFunc
+
+
+; ==========================================================
+; Name ..........: GetListOfThemeIds
+; Description ...: Grabs the id's of the installed themes, except the defaults
+; Return Value ..: array of theme ids
+; ==============================================================================
+Func GetListOfThemeIds()
+   ; Grab json list from preferences and parse for theme ids
+   Local $jsonThemeList = _FFPrefGet("lightweightThemes.usedThemes")
+   Local $themeIdList = StringRegExp($jsonThemeList, '("id":"[^\"]*")', 3) ; Regex for format "id":"286995"
+
+   ; Pass in only the id of a theme into the themeIdList array
+   For $i = 0 To UBound($themeIdList) - 1
+	  $themeIdList[$i] = StringTrimRight(StringTrimLeft($themeIdList[$i], 6), 1)
+	  Next
+   return $themeIdList
 EndFunc
 
 
