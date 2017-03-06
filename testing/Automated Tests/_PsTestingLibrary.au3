@@ -44,10 +44,12 @@ EndFunc
 ; ==========================================================
 ; Name ..........: EndFirefox
 ; Description ...: Closes and disconnects from Firefox
+; Return Value ..: Success      - 1
+;                  Failure      - 0
 ; ==============================================================================
 Func EndFirefox()
    _FFWindowClose()
-   _FFDisConnect()
+   Return _FFDisconnect()
 EndFunc
 
 
@@ -57,9 +59,26 @@ EndFunc
 ; Return Value ..: The process ID of the started Firefox window.
 ; ==============================================================================
 Func RestartFirefox()
-   EndFirefox()
-   ;WinWaitActive("[CLASS:MozillaWindowClass]")
-   return InitializeFirefox()
+   _FFWindowClose()
+
+   If _FFDisConnect() Then
+	  $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
+	  Local $PID = Run($FF, "", @SW_SHOWMAXIMIZED)
+	  ProcessWait($PID)
+	  WinWaitActive("[CLASS:MozillaWindowClass]")
+
+	  ; connect to a running Firefox with MozRepl
+	  If _FFConnect(Default, Default, 10000) Then
+		 ; ensure firefox window is active before proceeding
+		 _FFLoadWait()
+		 ResetPersonaSwitcherPrefs()
+		 WinWaitActive("[CLASS:MozillaWindowClass]")
+		 Return $PID
+	  Else
+		 MsgBox(64, "", "Can't connect to Firefox. Aborting tests.")
+		 Exit(1)
+	  EndIf
+   EndIf
 EndFunc
 
 
