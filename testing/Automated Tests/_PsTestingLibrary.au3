@@ -15,6 +15,19 @@
 ; Return Value ..: The process ID of the started Firefox window.
 ; ==============================================================================
 Func InitializeFirefox()
+   If ProcessExists("firefox.exe") Then
+	  Local $iMsgBoxAnswer = MsgBox(33, "Firefox is already running", "Please close all Firefox processes, then hit 'OK' to proceed.")
+	  If $iMsgBoxAnswer == 1 Then
+		 Sleep(3000)
+		 If ProcessExists("firefox.exe") Then
+			Local $iMsgBoxAnswer = MsgBox(64, "Firefox is still running", "Firefox was not closed, aborting test.")
+			Exit(0)
+		 EndIf
+	  Else
+		 Exit(0)
+	  EndIf
+   EndIf
+
    $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
    If FileExists($FF) Then
 	  Local $PID = Run($FF, "", @SW_SHOWMAXIMIZED)
@@ -60,23 +73,26 @@ EndFunc
 ; ==============================================================================
 Func RestartFirefox()
    _FFWindowClose()
+   _FFDisConnect()
 
-   If _FFDisConnect() Then
-	  $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
-	  Local $PID = Run($FF, "", @SW_SHOWMAXIMIZED)
-	  ProcessWait($PID)
+   While ProcessExists("firefox.exe") Or _FFIsConnected()
+	  Sleep(250)
+   WEnd
+
+   $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
+   Local $PID = Run($FF, "", @SW_SHOWMAXIMIZED)
+   ProcessWait($PID)
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+
+   ; connect to a running Firefox with MozRepl
+   If _FFConnect(Default, Default, 10000) Then
+	  ; ensure firefox window is active before proceeding
+	  _FFLoadWait()
 	  WinWaitActive("[CLASS:MozillaWindowClass]")
-
-	  ; connect to a running Firefox with MozRepl
-	  If _FFConnect(Default, Default, 10000) Then
-		 ; ensure firefox window is active before proceeding
-		 _FFLoadWait()
-		 WinWaitActive("[CLASS:MozillaWindowClass]")
-		 Return $PID
-	  Else
-		 MsgBox(64, "", "Can't connect to Firefox. Aborting tests.")
-		 Exit(1)
-	  EndIf
+	  Return $PID
+   Else
+	  MsgBox(64, "", "Can't connect to Firefox. Aborting tests.")
+	  Exit(1)
    EndIf
 EndFunc
 
