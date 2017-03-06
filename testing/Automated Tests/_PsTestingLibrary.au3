@@ -71,7 +71,6 @@ Func RestartFirefox()
 	  If _FFConnect(Default, Default, 10000) Then
 		 ; ensure firefox window is active before proceeding
 		 _FFLoadWait()
-		 ResetPersonaSwitcherPrefs()
 		 WinWaitActive("[CLASS:MozillaWindowClass]")
 		 Return $PID
 	  Else
@@ -215,38 +214,6 @@ EndFunc
 
 
 ; ==========================================================
-; Name ..........: OpenPersonaSwitcherPrefs
-; Description ...: Opens Persona Switcher's options page
-; Return Value ..: Success      - True
-;                  Failure      - False
-; ==============================================================================
-Func OpenPersonaSwitcherPrefs()
-   ; open addons page
-   _FFTabAdd("about:addons")
-
-   ; opens addons in current window, disabled because of timing errors
-   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())", 0)
-   ;Sleep(1000)
-   _FFLoadWait()
-
-   ; get to the extensions menu on the sidebar
-   _FFClick("category-extension", "id", 0)
-   _FFLoadWait()
-
-   ; send JavaScript to open prefs
-   _FFCmd("window.content.document.getElementsByAttribute('name', 'Persona Switcher')[0].showPreferences()", 0)
-
-   ; wait at most 3 seconds for the preferences window to be open
-   If WinWaitActive("Persona Switcher preferences", "", 3) Then
-	  return True
-   Else
-	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
-	  return False
-   EndIf
-EndFunc
-
-
-; ==========================================================
 ; Name ..........: ResetToDefaultTheme
 ; Description ...: Resets Firefox's theme to the default theme through the appearance page
 ; Return Value ..: Theme changed to default - True
@@ -335,4 +302,58 @@ Func GetDisplayedThemeBackground()
 		 '.getElementsByAttribute("id", "main-window")[0]' & _
 	  ').backgroundImage', 0)
    return StringTrimRight(StringTrimLeft($Cmd, 5), 2)
+EndFunc
+
+
+; ==========================================================
+; Name ..........: OpenPersonaSwitcherPrefs
+; Description ...: Opens Persona Switcher's options page
+; Return Value ..: Success      - True
+;                  Failure      - False
+; ==============================================================================
+Func OpenPersonaSwitcherPrefs()
+   ; open addons page
+   _FFTabAdd("about:addons")
+
+   ; opens addons in current window, disabled because of timing errors
+   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())", 0)
+   ;Sleep(1000)
+   _FFLoadWait()
+
+   ; get to the extensions menu on the sidebar
+   _FFClick("category-extension", "id", 0)
+   _FFLoadWait()
+
+   ; send JavaScript to open prefs
+   _FFCmd("window.content.document.getElementsByAttribute('name', 'Persona Switcher')[0].showPreferences()", 0)
+
+   ; wait at most 3 seconds for the preferences window to be open
+   If WinWaitActive("Persona Switcher preferences", "", 3) Then
+	  return True
+   Else
+	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
+	  return False
+   EndIf
+EndFunc
+
+
+Func TogglePsIconPreviewPref()
+   OpenPersonaSwitcherPrefs()
+   Send("{TAB 35}")
+   Sleep(500)
+   Send("{SPACE}")
+   Sleep(500)
+   Send("{ENTER}")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+EndFunc
+
+
+Func TogglePsMainMenuBarPref()
+   OpenPersonaSwitcherPrefs()
+   Send("{TAB 39}")
+   Sleep(500)
+   Send("{SPACE}")
+   Sleep(500)
+   Send("{ENTER}")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
 EndFunc
