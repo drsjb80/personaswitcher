@@ -19,7 +19,7 @@ For $test In $aTestsList
 		 Local $iPID = Run(@AutoItExe & ' "' & $sTestDirectory & $test & '"')
 	  EndIf
 
-	  While ProcessExists($iPID) And Not $abortTests
+	  While (ProcessExists($iPID) or ProcessExists("firefox.exe")) And Not $abortTests
 		 If Not WinActive("[CLASS:MozillaWindowClass]") Then
 			$MouseStartX = MouseGetPos(0)
 			$MouseStartY = MouseGetPos(1)
@@ -36,6 +36,8 @@ For $test In $aTestsList
 	  Else
 		 $totalTests = $totalTests + 1
 	  EndIf
+
+
 
    EndIf
 Next

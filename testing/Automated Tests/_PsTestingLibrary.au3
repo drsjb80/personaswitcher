@@ -5,6 +5,7 @@
 #include <Array.au3>
 #include <File.au3>
 #include <Date.au3>
+#include <Misc.au3>
 
 ; ==========================================================
 ; Name ..........: InitializeFirefox
@@ -15,8 +16,17 @@
 ; Return Value ..: The process ID of the started Firefox window.
 ; ==============================================================================
 Func InitializeFirefox()
+   If _Singleton("PSTest", 1) = 0 Then
+	  If IsDeclared("testName") Then
+		 MsgBox(64, "Warning", "'" & $testName & "' was not started, an automated test is already running.")
+	  Else
+		 MsgBox(64, "Warning", "New test was not started, an automated test is already running.")
+	  EndIf
+	  Exit(-1)
+   EndIf
+
    If ProcessExists("firefox.exe") Then
-	  Local $iMsgBoxAnswer = MsgBox(33, "Firefox is already running", "Please close all Firefox processes, then hit 'OK' to proceed.")
+	  Local $iMsgBoxAnswer = MsgBox(33, "Firefox is already running", "Please close all Firefox processes, then hit 'Ok' to proceed.")
 	  If $iMsgBoxAnswer == 1 Then
 		 Sleep(3000)
 		 If ProcessExists("firefox.exe") Then
@@ -304,6 +314,14 @@ Func GetListOfThemeIds()
 EndFunc
 
 
+Func GetAllThemeIds()
+   Local $themeIdList = GetListOfThemeIds()
+   Local $devThemes = ["firefox-compact-light@mozilla.org", "firefox-compact-dark@mozilla.org"]
+   _ArrayAdd($themeIdList, $devThemes)
+   Return $themeIdList
+EndFunc
+
+
 ; ==========================================================
 ; Name ..........: GetDisplayedThemeBackground
 ; Description ...: Grabs the local URL of the current displayed Firefox theme's background image
@@ -373,3 +391,16 @@ Func TogglePsMainMenuBarPref()
    Send("{ENTER}")
    WinWaitActive("[CLASS:MozillaWindowClass]")
 EndFunc
+
+
+Func TogglePsRandomPersonaPref()
+   OpenPersonaSwitcherPrefs()
+   Send("{TAB 31}")
+   Sleep(500)
+   Send("{SPACE}")
+   Sleep(500)
+   Send("{ENTER}")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+EndFunc
+
+
