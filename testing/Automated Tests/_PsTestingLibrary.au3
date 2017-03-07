@@ -347,7 +347,9 @@ EndFunc
 ; ==============================================================================
 Func OpenPersonaSwitcherPrefs()
    ; open addons page
-   _FFTabAdd("about:addons")
+   If Not (_FFTabGetSelected("label") == "Add-ons Manager") Then
+	  _FFTabAdd("about:addons")
+   EndIf
 
    ; opens addons in current window, disabled because of timing errors
    ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())", 0)
