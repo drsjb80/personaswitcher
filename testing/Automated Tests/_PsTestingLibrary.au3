@@ -1,7 +1,11 @@
 ; Persona Switcher Testing Library
+; includes functions required to run Persona Switcher's automated tests
 
 #include <FF V0.6.0.1b-15.au3>
 #include <Array.au3>
+#include <File.au3>
+#include <Date.au3>
+#include <Misc.au3>
 
 ; ==========================================================
 ; Name ..........: InitializeFirefox
@@ -12,6 +16,28 @@
 ; Return Value ..: The process ID of the started Firefox window.
 ; ==============================================================================
 Func InitializeFirefox()
+   If _Singleton("PSTest", 1) = 0 Then
+	  If IsDeclared("testName") Then
+		 MsgBox(64, "Warning", "'" & $testName & "' was not started, an automated test is already running.")
+	  Else
+		 MsgBox(64, "Warning", "New test was not started, an automated test is already running.")
+	  EndIf
+	  Exit(-1)
+   EndIf
+
+   If ProcessExists("firefox.exe") Then
+	  Local $iMsgBoxAnswer = MsgBox(33, "Firefox is already running", "Please close all Firefox processes, then hit 'Ok' to proceed.")
+	  If $iMsgBoxAnswer == 1 Then
+		 Sleep(3000)
+		 If ProcessExists("firefox.exe") Then
+			Local $iMsgBoxAnswer = MsgBox(64, "Firefox is still running", "Firefox was not closed, aborting test.")
+			Exit(0)
+		 EndIf
+	  Else
+		 Exit(0)
+	  EndIf
+   EndIf
+
    $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
    If FileExists($FF) Then
 	  Local $PID = Run($FF, "", @SW_SHOWMAXIMIZED)
@@ -41,11 +67,12 @@ EndFunc
 ; ==========================================================
 ; Name ..........: EndFirefox
 ; Description ...: Closes and disconnects from Firefox
+; Return Value ..: Success      - 1
+;                  Failure      - 0
 ; ==============================================================================
 Func EndFirefox()
-   WinWaitActive("[CLASS:MozillaWindowClass]")
    _FFWindowClose()
-   _FFDisConnect()
+   Return _FFDisconnect()
 EndFunc
 
 
@@ -55,41 +82,106 @@ EndFunc
 ; Return Value ..: The process ID of the started Firefox window.
 ; ==============================================================================
 Func RestartFirefox()
+   _FFWindowClose()
+   _FFDisConnect()
+
+   While ProcessExists("firefox.exe") Or _FFIsConnected()
+	  Sleep(250)
+   WEnd
+
+   $FF = @ProgramFilesDir & "\Firefox Developer Edition\firefox.exe"
+   Local $PID = Run($FF, "", @SW_SHOWMAXIMIZED)
+   ProcessWait($PID)
    WinWaitActive("[CLASS:MozillaWindowClass]")
-   EndFirefox()
-   return InitializeFirefox()
+
+   ; connect to a running Firefox with MozRepl
+   If _FFConnect(Default, Default, 10000) Then
+	  ; ensure firefox window is active before proceeding
+	  _FFLoadWait()
+	  WinWaitActive("[CLASS:MozillaWindowClass]")
+	  Return $PID
+   Else
+	  MsgBox(64, "", "Can't connect to Firefox. Aborting tests.")
+	  Exit(1)
+   EndIf
 EndFunc
 
 
 ; ==========================================================
 ; Name ..........: SaveResultsToFile
 ; Description ...: Takes an array of test result strings and prints them to a file.
-;                  file is saved to same directory this script is ran from
+;                  file is saved in a directory named "Test Results" that must exist
+;                  in the parent directory of the script ran
 ; Parameters ....: $tests - an array of strings that provide test results
 ;                  $testname - the testing category name
 ; ==============================================================================
 Func SaveResultsToFile(ByRef $tests, ByRef $testname)
-   ; set directory to script directory, append "Results .txt" to testname
-   Local Const $sFilePath = @ScriptDir & "\PS Automated Tests Results.txt"
+   ; set results file path and file name
+   Local Const $sFilePath = StringRegExpReplace(@ScriptDir, '\\[^\\]*$', '') & _
+	  "\Test Results\PS Automated Tests Results.txt"
+
+   Local Const $sFileHeader = "# Persona Switcher Automated Test Results" & @CRLF & _
+	  "# " & _NowTime() & " latest test suite ran: " & $testname
 
    ; open the file for writing and store the handle to a variable
-   Local $hFileOpen = FileOpen($sFilePath, 2)
+   Local $hFileOpen = FileOpen($sFilePath, 0)
 
    ; check that file was opened
    If $hFileOpen = -1 Then
-       MsgBox(64, "", "An error occurred attempting to write results file.")
-       Exit(1)
+	  $hFileOpen = FileOpen($sFilePath, 2)
+	  If $hFileOpen = -1 Then
+		 MsgBox(64, "", "An error occurred attempting to write results file.")
+		 Exit(1)
+	  EndIf
    EndIf
 
-   ; write file header
-   FileWrite($hFileOpen, $testname & " - results" & @CRLF)
+   Local $lineCount = _FileCountLines($sFilePath)
+   Local $fileArray[$lineCount + UBound($tests) + 1]
+   Local $writeState = False;
 
-   ; write results to file
-   For $i = 0 To UBound($tests) - 1
-	  FileWrite($hFileOpen, $tests[$i] & @CRLF)
+   ; process old file
+   For $i = 1 to $lineCount
+	  $line = FileReadLine($sFilePath, $i)
+	  If StringLeft($line, 1) == '#' Then
+		 $fileArray[$i - 1] = ""
+	  ElseIf $line == "[" & $testname & "]" Then
+		 $writeState = True
+	  Else
+		 If $writeState Then
+			If StringLeft($line, 1) == '[' And StringRight($line, 1) == ']' Then
+			   $writeState = False
+			   $fileArray[$i - 1] = $line
+			Else
+			   $fileArray[$i - 1] = ""
+			EndIf
+		 Else
+			$fileArray[$i - 1] = $line
+		 EndIf
+	  EndIf
    Next
 
-   ; close the handle returned by FileOpen
+   FileClose($hFileOpen)
+
+   ; save test results into array
+   $fileArray[$lineCount] = "[" & $testname & "]"
+   For $i = 0 to UBound($tests) - 1
+	  $fileArray[$lineCount + $i + 1] = $tests[$i]
+   Next
+
+   $hFileOpen = FileOpen($sFilePath, 2)
+   FileWrite($hFileOpen, $sFileHeader & @CRLF)
+
+   ; write array to new file
+   For $i = 0 to UBound($fileArray) - 1
+	  If StringLen($fileArray[$i]) > 0 Then
+		 If StringLeft($fileArray[$i], 1) == '[' And StringRight($fileArray[$i], 1) == ']' Then
+			FileWrite($hFileOpen, @CRLF & $fileArray[$i] & @CRLF)
+		 Else
+			FileWrite($hFileOpen, $fileArray[$i] & @CRLF)
+		 EndIf
+	  EndIf
+   Next
+
    FileClose($hFileOpen)
 EndFunc
 
@@ -148,31 +240,42 @@ EndFunc
 
 
 ; ==========================================================
-; Name ..........: OpenPersonaSwitcherPrefs
-; Description ...: Opens Persona Switcher's options page
-; Return Value ..: Success      - True
-;                  Failure      - False
+; Name ..........: ResetToDefaultTheme
+; Description ...: Resets Firefox's theme to the default theme through the appearance page
+; Return Value ..: Theme changed to default - True
+;                  Theme unchanged          - False
 ; ==============================================================================
-Func OpenPersonaSwitcherPrefs()
+Func ResetToDefaultTheme()
+   If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
+	  return False
+   EndIf
+
    ; open addons page
    _FFTabAdd("about:addons")
    _FFLoadWait()
 
-   ; opens addons in current window, disabled because of timing errors
-   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())")
-
-   ; get to the extensions menu on the sidebar
-   _FFClick("category-extension", "id", 0)
+   ; get to the appearences menu on the sidebar
+   _FFClick("category-theme", "id", 0)
    _FFLoadWait()
 
-   ; send JavaScript to open prefs
-   _FFCmd("window.content.document.getElementsByAttribute('name', 'Persona Switcher')[0].showPreferences()", 0)
+   ; send JavaScript to disable active themes
+   _FFCmd("window.content.document" & _
+	  ".getElementsByAttribute('active', 'true')[0]" & _
+	  ".userDisabled = true", 0)
+   _FFCmd("window.content.document" & _
+	  ".getElementsByAttribute('active', 'true')[" & _
+		 "window.content.document" & _
+		 ".getElementsByAttribute('active', 'true').length - 1" & _
+	  "].userDisabled = true", 0)
 
-   ; wait at most 3 seconds for the preferences window to be open
-   If WinWaitActive("Persona Switcher preferences", "", 3) Then
+   Sleep(1000)
+   _FFTabClose()
+   _FFLoadWait()
+
+   If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return True
    Else
-	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
+	  MsgBox(64, "", "Error, default theme was not enabled.")
 	  return False
    EndIf
 EndFunc
@@ -205,44 +308,101 @@ Func GetListOfThemeIds()
 
    ; Pass in only the id of a theme into the themeIdList array
    For $i = 0 To UBound($themeIdList) - 1
-	  $themeIdList[$i] = StringMid($themeIdList[$i], 6, -2)
+	  $themeIdList[$i] = StringTrimRight(StringTrimLeft($themeIdList[$i], 6), 1)
 	  Next
-   ;_ArrayDisplay($themeIdList)
    return $themeIdList
 EndFunc
 
 
+Func GetAllThemeIds()
+   Local $themeIdList = GetListOfThemeIds()
+   Local $devThemes = ["firefox-compact-light@mozilla.org", "firefox-compact-dark@mozilla.org"]
+   _ArrayAdd($themeIdList, $devThemes)
+   Return $themeIdList
+EndFunc
+
+
 ; ==========================================================
-; Name ..........: ResetToDefaultThemes
-; Description ...: Resets Firefox's theme to the default theme through the appearance page
-; Return Value ..: Theme changed to default - True
-;                  Theme unchanged          - False
+; Name ..........: GetDisplayedThemeBackground
+; Description ...: Grabs the local URL of the current displayed Firefox theme's background image
+; Return Value ..: Success      - URL for background image of displayed theme
+;                  Failure      - False
 ; ==============================================================================
-Func ResetToDefaultThemes()
-   If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
-	  return False
+Func GetDisplayedThemeBackground()
+   Local $Cmd = _FFCmd('getComputedStyle(' & _
+		 'Components.classes["@mozilla.org/appshell/window-mediator;1"]' & _
+		 '.getService(Components.interfaces.nsIWindowMediator)' & _
+		 '.getMostRecentWindow("navigator:browser").document' & _
+		 '.getElementsByAttribute("id", "main-window")[0]' & _
+	  ').backgroundImage', 0)
+   return StringTrimRight(StringTrimLeft($Cmd, 5), 2)
+EndFunc
+
+
+; ==========================================================
+; Name ..........: OpenPersonaSwitcherPrefs
+; Description ...: Opens Persona Switcher's options page
+; Return Value ..: Success      - True
+;                  Failure      - False
+; ==============================================================================
+Func OpenPersonaSwitcherPrefs()
+   ; open addons page
+   If Not (_FFTabGetSelected("label") == "Add-ons Manager") Then
+	  _FFTabAdd("about:addons")
    EndIf
 
-   ; open addons page
-   _FFTabAdd("about:addons")
+   ; opens addons in current window, disabled because of timing errors
+   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())", 0)
+   ;Sleep(1000)
    _FFLoadWait()
 
-   ; get to the appearences menu on the sidebar
-   _FFClick("category-theme", "id", 0)
+   ; get to the extensions menu on the sidebar
+   _FFClick("category-extension", "id", 0)
    _FFLoadWait()
 
-   ; send JavaScript to disable active themes
-   _FFCmd("window.content.document.getElementsByAttribute('active', 'true')[0].userDisabled = true", 0)
-   _FFCmd("window.content.document.getElementsByAttribute('active', 'true')[window.content.document.getElementsByAttribute('active', 'true').length - 1].userDisabled = true", 0)
+   ; send JavaScript to open prefs
+   _FFCmd("window.content.document.getElementsByAttribute('name', 'Persona Switcher')[0].showPreferences()", 0)
 
-   Sleep(1000)
-   _FFTabClose()
-   _FFLoadWait()
-
-   If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
+   ; wait at most 3 seconds for the preferences window to be open
+   If WinWaitActive("Persona Switcher preferences", "", 3) Then
 	  return True
    Else
-	  MsgBox(64, "", "Error, default theme was not enabled.")
+	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
 	  return False
    EndIf
 EndFunc
+
+
+Func TogglePsIconPreviewPref()
+   OpenPersonaSwitcherPrefs()
+   Send("{TAB 35}")
+   Sleep(500)
+   Send("{SPACE}")
+   Sleep(500)
+   Send("{ENTER}")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+EndFunc
+
+
+Func TogglePsMainMenuBarPref()
+   OpenPersonaSwitcherPrefs()
+   Send("{TAB 39}")
+   Sleep(500)
+   Send("{SPACE}")
+   Sleep(500)
+   Send("{ENTER}")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+EndFunc
+
+
+Func TogglePsRandomPersonaPref()
+   OpenPersonaSwitcherPrefs()
+   Send("{TAB 31}")
+   Sleep(500)
+   Send("{SPACE}")
+   Sleep(500)
+   Send("{ENTER}")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+EndFunc
+
+

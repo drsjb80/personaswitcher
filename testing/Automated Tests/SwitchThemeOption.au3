@@ -1,4 +1,4 @@
-#include <PS Testing Library.au3>
+#include "_PSTestingLibrary.au3"
 ;-----------------------------------------------------------------------------;
 
 Local $testName = "Switch Theme Option"
