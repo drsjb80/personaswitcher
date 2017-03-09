@@ -33,10 +33,8 @@
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "default": "Ctrl+Shift+P",
-        "mac": "Command+Shift+P"
-      },
-      "description": "Send a 'show-browser-action' event"
+        "default": "Alt+Shift+P"
+      }
     }
   },
 
