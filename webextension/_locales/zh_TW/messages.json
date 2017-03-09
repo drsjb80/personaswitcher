@@ -1,0 +1,16 @@
+{
+  "extensionName": {
+    "message": "Persona Switcher",
+    "description": "Name of the extension."
+  },
+
+	"extensionShortName": {
+    "message": "PSwitcher",
+    "description": "Short name of the extension."
+  },
+	
+  "extensionDescription": {
+    "message": "讓您以「定時更換、重啟更換、隨機更換、自行切換、瞬間預覽」的方式享受火狐面板，也能瞬間切回預設面板，並有方便的「快捷鍵、附加元件列圖示選單、主功能表選單、工具功能表選單」供快速操作，外加清楚易懂的中文化介面供您使用！！",
+    "description": "Description of the extension."
+  }
+}

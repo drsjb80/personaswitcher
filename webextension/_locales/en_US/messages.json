@@ -1,0 +1,16 @@
+{
+  "extensionName": {
+    "message": "Persona Switcher",
+    "description": "Name of the extension."
+  },
+
+	"extensionShortName": {
+    "message": "PSwitcher",
+    "description": "Short name of the extension."
+  },
+	
+  "extensionDescription": {
+    "message": "Quickly switch between your personas or reset it back to the default.",
+    "description": "Description of the extension."
+  }
+}

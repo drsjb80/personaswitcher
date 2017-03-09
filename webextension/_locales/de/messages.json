@@ -1,0 +1,16 @@
+{
+  "extensionName": {
+    "message": "Persona Switcher",
+    "description": "Name of the extension."
+  },
+
+	"extensionShortName": {
+    "message": "PSwitcher",
+    "description": "Short name of the extension."
+  },
+	
+  "extensionDescription": {
+    "message": "Schneller Wechsel zwischen ihren Personas oder zurück zu den Standardeinstellungen über das Menü oder der Tastatur. Sie können auch automatisch durch alle Themen in einem Intervall ihrer Wahl wechseln. Arbeitet mit Firefox, Thunderbird und Seamonkey.",
+    "description": "Description of the extension."
+  }
+}

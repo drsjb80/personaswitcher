@@ -1,0 +1,16 @@
+{
+  "extensionName": {
+    "message": "Persona Switcher",
+    "description": "Name of the extension."
+  },
+
+	"extensionShortName": {
+    "message": "PSwitcher",
+    "description": "Short name of the extension."
+  },
+	
+  "extensionDescription": {
+    "message": "Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facoltà di ritorno al tema Predefinito. Possibilità di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox/Thunderbird/Seamonkey.",
+    "description": "Description of the extension."
+  }
+}
