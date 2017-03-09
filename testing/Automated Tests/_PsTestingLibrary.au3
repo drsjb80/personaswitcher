@@ -241,11 +241,31 @@ EndFunc
 
 ; ==========================================================
 ; Name ..........: ResetToDefaultTheme
+; Description ...: Resets Firefox's theme to the default theme through Persona Switcher
+; Return Value ..: ThemeID is empty string      - True
+;                  ThemeID is not empty string  - False
+; ==============================================================================
+Func ResetToDefaultTheme()
+   _FFCmd("PersonaSwitcher.setDefault()")
+   Sleep(500)
+
+   If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
+	  return True
+   Else
+	  MsgBox(64, "", "Error, default theme was not enabled.")
+	  return False
+   EndIf
+EndFunc
+
+
+
+; ==========================================================
+; Name ..........: ResetToDefaultThemeFF
 ; Description ...: Resets Firefox's theme to the default theme through the appearance page
 ; Return Value ..: Theme changed to default - True
 ;                  Theme unchanged          - False
 ; ==============================================================================
-Func ResetToDefaultTheme()
+Func ResetToDefaultThemeFF()
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return False
    EndIf
@@ -268,16 +288,28 @@ Func ResetToDefaultTheme()
 		 ".getElementsByAttribute('active', 'true').length - 1" & _
 	  "].userDisabled = true", 0)
 
-   Sleep(1000)
    _FFTabClose()
    _FFLoadWait()
+   Sleep(1000)
 
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return True
    Else
-	  MsgBox(64, "", "Error, default theme was not enabled.")
+	  ;MsgBox(64, "", "Error, default theme was not enabled.")
 	  return False
    EndIf
+EndFunc
+
+
+; ==========================================================
+; Name ..........: PersonaSwitcherRotate
+; Description ...: Call's Persona Switcher's rotate() function
+; ==============================================================================
+Func PersonaSwitcherRotate()
+   _FFCmd('Components.classes["@mozilla.org/appshell/window-mediator;1"]' & _
+   '.getService(Components.interfaces.nsIWindowMediator)' & _
+   '.getMostRecentWindow("navigator:browser")' & _
+   '.PersonaSwitcher.rotate()')
 EndFunc
 
 
@@ -314,6 +346,12 @@ Func GetListOfThemeIds()
 EndFunc
 
 
+; ==========================================================
+; Name ..........: GetAllThemeIds
+; Description ...: Grabs the id's of the installed themes,
+;                  appends dark and light themes to end of list
+; Return Value ..: array of theme ids
+; ==============================================================================
 Func GetAllThemeIds()
    Local $themeIdList = GetListOfThemeIds()
    Local $devThemes = ["firefox-compact-light@mozilla.org", "firefox-compact-dark@mozilla.org"]
@@ -349,12 +387,8 @@ Func OpenPersonaSwitcherPrefs()
    ; open addons page
    If Not (_FFTabGetSelected("label") == "Add-ons Manager") Then
 	  _FFTabAdd("about:addons")
+	  _FFLoadWait()
    EndIf
-
-   ; opens addons in current window, disabled because of timing errors
-   ;_FFCmd("openUILinkIn('about:addons', whereToOpenLink())", 0)
-   ;Sleep(1000)
-   _FFLoadWait()
 
    ; get to the extensions menu on the sidebar
    _FFClick("category-extension", "id", 0)
