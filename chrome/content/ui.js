@@ -581,7 +581,7 @@ PersonaSwitcher.setAccessKey = function (doc)
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func)
 {	
-	var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
     while (enumerator.hasMoreElements())
     {
 		func(enumerator.getNext().document);
@@ -591,7 +591,7 @@ PersonaSwitcher.allDocuments = function (func)
 // call a function passed as a parameter for each window
 PersonaSwitcher.allWindows = function (func)
 {
-	var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
     while (enumerator.hasMoreElements())
     {
 		func(enumerator.getNext());

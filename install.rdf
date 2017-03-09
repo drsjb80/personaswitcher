@@ -10,6 +10,7 @@
         <em:creator>Steve Beaty</em:creator>
         <em:multiprocessCompatible>true</em:multiprocessCompatible>
         <em:bootstrap>true</em:bootstrap>
+				<em:hasEmbeddedWebExtension>true</em:hasEmbeddedWebExtension>
         <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
         <em:contributor>鄭筑云 (Zheng Zhu-Yun)</em:contributor>
         <em:translator>鄭筑云 (Zheng Zhu-Yun)</em:translator>
@@ -59,7 +60,7 @@
         </em:localized>
 
         <em:aboutURL>chrome://personaswitcher/content/about.xul</em:aboutURL>
-        <em:optionsURL>chrome://personaswitcher/content/options.xul</em:optionsURL>
+        <!-- <em:optionsURL>chrome://personaswitcher/content/options.xul</em:optionsURL> -->
 
         <!-- https://developer.mozilla.org/en-US/docs/Toolkit_version_format -->
         <em:targetApplication>

@@ -6,6 +6,11 @@ var stringBundle = Services.strings.createBundle('chrome://personaswitcher/local
 
 function startup(data, reason) {
   Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
+	
+	data.webExtension.startup().then(api => {
+    const {browser} = api;
+    browser.runtime.onMessage.addListener(messageHandler);
+  });
 
   //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
   //load preferences
@@ -62,7 +67,7 @@ function loadIntoWindow(window) {
 	
 	injectMainMenu(doc);
 	injectSubMenu(doc);
-	injectButton(doc);
+	//injectButton(doc);
 	addKeyset(doc);	
 	PersonaSwitcher.onWindowLoad(doc);
 }
@@ -71,7 +76,7 @@ function unloadFromWindow(window) {
 	let doc = window.document;
 	let menu_personaswitcher = doc.getElementById("personaswitcher-main-menubar");	
 	let subMenu_personaswitcher = doc.getElementById("personaswitcher-tools-submenu");
-	let button = doc.getElementById("personaswitcher-button");
+	//let button = doc.getElementById("personaswitcher-button");
 	let keySet = doc.getElementById("personaSwitcherKeyset");
 
 	if(menu_personaswitcher !== null) {
@@ -80,9 +85,9 @@ function unloadFromWindow(window) {
 	if (subMenu_personaswitcher !== null) {
 		subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);		
 	}
-	if(button !== null){
+	/*if(button !== null){
 		button.parentNode.removeChild(button);		
-	}
+	}*/
 	if(keySet !== null) {
 		keySet.parentNode.removeChild(keySet);
 	}
@@ -110,6 +115,16 @@ var WindowListener = {
   onWindowTitleChange: function (xulWindow, newTitle) {
   }
 } 
+//Message handler for communication with embedded WebExtension
+function messageHandler(message, sender, sendResponse) {
+	//Example message evaluation and response
+	/*switch (message.command) 
+	{
+		case "some-message":
+			 sendResponse({anId: responseDatum});
+			break;
+	}*/
+}
 
 //UI Injection
 function injectMainMenu(doc) {
