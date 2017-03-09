@@ -187,6 +187,7 @@ Func PreviewPersonaMinDelayTime()
    Send("{TAB 34}")
    Sleep(500)
    Send("-1")
+   Sleep(500)
    Send("^a")
    Sleep(500)
    Send("^c")
@@ -207,13 +208,12 @@ Func PreviewPersonaMinDelayTime()
    Sleep(500)
 
    ; check that value is set to the min
-   If $zeroValueCopy == 0 AND Not $negativeValueCopy == 1 Then
+   If $zeroValueCopy == 0 AND $negativeValueCopy == 1 Then
       $testResults = "TEST PASSED: value -1 for the preference was not accepted, but value 0 was accepted because the min is 0"
    Else
-      $testResults = "TEST FAILED: values -1 and 0 for the preference were both accepted even thought the min is 0"
+      $testResults = "TEST FAILED: values -1 and 0 for the preference were both accepted even though the min is 0"
    EndIf
    Return $testResults
-
 EndFunc
 ;------------------------------------------------------------------------------------
 ; Testing that the max value of the preference is 10000 and nothing larger
@@ -226,6 +226,7 @@ Func PreviewPersonaMaxDelayTime()
    Send("{TAB 34}")
    Sleep(500)
    Send("10001")
+   Sleep(500)
    Send("^a")
    Sleep(500)
    Send("^c")
@@ -240,7 +241,7 @@ Func PreviewPersonaMaxDelayTime()
    If $valueCopy == 10000 Then
       $testResults = "TEST PASSED: the value 10001 was not accepted for the preference because the max is 10000"
    Else
-      $testResults = "TEST FAILED: the value 10001 was accepted for the preference even thought the max is 10000"
+      $testResults = "TEST FAILED: the value 10001 was accepted for the preference even though the max is 10000"
    EndIf
    Return $testResults
 EndFunc

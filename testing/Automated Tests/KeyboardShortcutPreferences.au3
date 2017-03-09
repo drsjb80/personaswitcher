@@ -61,6 +61,7 @@ Func DefaultPersona_DifferentKeyAndChar()
    Sleep(500)
 
    ; use the new key combination to reset the theme to default
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+!w")
    Sleep(500)
 
@@ -109,6 +110,7 @@ Func DefaultPersona_ExtraKey()
    Sleep(500)
 
    ; use the new key combination to reset the theme to default
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+^!d")
    Sleep(500)
 
@@ -200,6 +202,7 @@ Func RotatePersona_DifferentKeyAndChar($themeList)
    Sleep(500)
 
    ; use the new key combination to change to the next theme
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+!w")
    Sleep(500)
 
@@ -244,6 +247,7 @@ Func RotatePersona_ExtraKey($themeList)
    Sleep(500)
 
    ; use the new key combination to change to the next theme
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+^!r")
    Sleep(500)
 
@@ -288,6 +292,7 @@ Func AutoSwitch_DifferentKeyAndChar()
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; use the new key combination to change theme and enable "Switch every __ minutes"
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+!w")
    Sleep(500)
 
@@ -326,6 +331,7 @@ Func AutoSwitch_ExtraKey()
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; use the new key combination to change theme and enable "Switch every __ minutes"
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+^!a")
    Sleep(500)
 
@@ -385,6 +391,7 @@ Func AutoSwitch_Disable()
    Sleep(500)
 
    ; use the shortcut to disable "Switch every __ minutes"
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("^!a")
    Sleep(500)
 
