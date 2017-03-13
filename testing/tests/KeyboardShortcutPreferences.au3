@@ -66,9 +66,9 @@ Func DefaultPersona_DifferentKeyAndChar()
       $testResults = "TEST PASSED: the default persona shortcut changed the theme to the default with the new combination : Shift + Alt + W"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.defcontrol") ; ctrl
-   _FFPrefReset("extensions.personaswitcher.defshift") ; shift
-   _FFPrefReset("extensions.personaswitcher.defkey") ; key
+   ResetPsOption("defcontrol") ; ctrl
+   ResetPsOption("defshift") ; shift
+   ResetPsOption("defkey") ; key
 
    Return $testResults
  EndFunc
@@ -109,7 +109,7 @@ Func DefaultPersona_ExtraKey()
       $testResults = "TEST PASSED: the default persona shortcut changed the theme to the default with the new combination : Shift + Ctrl + Alt + D"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.defshift") ; shift
+   ResetPsOption("defshift") ; shift
 
    Return $testResults
 EndFunc
@@ -184,9 +184,9 @@ Func RotatePersona_DifferentKeyAndChar($themeList)
       $testResults = "TEST FAILED: the rotate persona shortcut did not change the theme to the next theme on the list with the new combination : Shift + Alt + W"
    EndIF
 
-   _FFPrefReset("extensions.personaswitcher.rotcontrol") ;ctrl
-   _FFPrefReset("extensions.personaswitcher.rotshift") ;shift
-   _FFPrefReset("extensions.personaswitcher.rotkey") ;key
+   ResetPsOption("rotcontrol") ;ctrl
+   ResetPsOption("rotshift") ;shift
+   ResetPsOption("rotkey") ;key
    ResetRotateCurrentPref(UBound($themeList))
 
    Return $testResults
@@ -221,7 +221,7 @@ Func RotatePersona_ExtraKey($themeList)
       $testResults = "TEST FAILED: the rotate persona shortcut did not change the theme to the next theme on the list with the new combination : Shift + Ctrl + Alt + R"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.rotshift") ;shift
+   ResetPsOption("rotshift") ;shift
    ResetRotateCurrentPref(UBound($themeList))
 
    Return $testResults
@@ -253,10 +253,10 @@ Func AutoSwitch_DifferentKeyAndChar()
       $testResults = "TEST PASSED: the auto switch shortcut changed the theme and enabled the 'Switch every __ minutes' preference with the new combination: Shift + Alt + W"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.autocontrol") ;ctrl
-   _FFPrefReset("extensions.personaswitcher.autoshift") ;shift
-   _FFPrefReset("extensions.personaswitcher.autokey") ;key
-   _FFPrefReset("extensions.personaswitcher.auto")
+   ResetPsOption("autocontrol") ;ctrl
+   ResetPsOption("autoshift") ;shift
+   ResetPsOption("autokey") ;key
+   ResetPsOption("auto")
 
    Return $testResults
  EndFunc
@@ -285,8 +285,8 @@ Func AutoSwitch_ExtraKey()
       $testResults = "TEST PASSED: the auto switch shortcut changed the theme and enabled the 'Switch every __ minutes' preference with the new combination: Shift + Ctrl + Alt + A"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.autoshift") ;shift
-   _FFPrefReset("extensions.personaswitcher.auto")
+   ResetPsOption("autoshift") ;shift
+   ResetPsOption("auto")
 
    Return $testResults
 EndFunc
