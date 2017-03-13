@@ -119,6 +119,9 @@ function injectMainMenu(doc) {
 	{
 		case 'Icedove':
 		case 'Thunderbird':
+			menuBar = doc.getElementById("mail-menubar");			
+			menu_tools = doc.getElementById("tasksMenu");
+			break;
 		case 'SeaMonkey':
 			menuBar = doc.getElementById("main-menubar");			
 			menu_tools = doc.getElementById("tasksMenu");
