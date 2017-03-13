@@ -1,4 +1,5 @@
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
+
 ;---------------------------------------------------------------------------------------;
 ; This script tests for proper functionality of Persona Switcher's "add icon-preview
 ; to menu items" preference
@@ -7,6 +8,7 @@ Local $testName = "Icon Preview Preferences"
 Local $tests[4]
 
 InitializeFirefox()
+SetPsOption("main-menubar", True)
 
 $tests[0] = Test_IconPreviewEnabledNoRestart()
 $tests[1] = Test_IconPreviewDisabledNoRestart()
@@ -26,13 +28,9 @@ Exit(0)
 ; have icons next to their menu items.
 Func Test_IconPreviewEnabledNoRestart()
    ; disable the icon-preview pref and restart firefox before testing enabling it
-   _FFPrefSet("extensions.personaswitcher.icon-preview", False)
-   _FFPrefSet("extensions.personaswitcher.main-menubar", True)
+   SetPsOption("icon-preview", False)
    RestartFirefox()
-
-   If Not _FFPrefGet("extensions.personaswitcher.icon-preview") Then
-	  TogglePsIconPreviewPref()
-   EndIf
+   SetPsOption("icon-preview", True)
 
    Local $sResults = ""
    ; check ps button, tools, and menubar for icons, store as booleans
@@ -66,13 +64,9 @@ EndFunc
 ; do not have icons next to their menu items.
 Func Test_IconPreviewDisabledNoRestart()
    ; enable the icon-preview pref and restart firefox before testing disabling it
-   _FFPrefSet("extensions.personaswitcher.icon-preview", True)
-   _FFPrefSet("extensions.personaswitcher.main-menubar", True)
+   SetPsOption("icon-preview", True)
    RestartFirefox()
-
-   If _FFPrefGet("extensions.personaswitcher.icon-preview") Then
-	  TogglePsIconPreviewPref()
-   EndIf
+   SetPsOption("icon-preview", False)
 
    Local $sResults = ""
    ; check ps button, tools, and menubar for icons, store as booleans
@@ -105,11 +99,7 @@ EndFunc
 ; preference, restarts Firefox, then checks that the persona switcher button, tools,
 ; and menubar menus have icons next to their menu items.
 Func Test_IconPreviewEnabledWithRestart()
-   _FFPrefSet("extensions.personaswitcher.main-menubar", True)
-   ; enable the icon-preview preference and restart firefox
-   If Not _FFPrefGet("extensions.personaswitcher.icon-preview") Then
-	  TogglePsIconPreviewPref()
-   EndIf
+   SetPsOption("icon-preview", True)
    RestartFirefox()
 
    Local $sResults = ""
@@ -125,13 +115,13 @@ Func Test_IconPreviewEnabledWithRestart()
 	  $sResults = "TEST FAILED: After enabling the icon-preview preference and" & _
 		 " restarting Firefox, the following menus were missing icons:"
 	  If Not $psButtonMenuHasIcons Then
-		 $sResults = $sResults & @CRLF & "Persona Switcher Button Menu"
+		 $sResults = $sResults & @CRLF & "  Persona Switcher Button Menu"
 	  EndIf
 	  If Not $psToolsMenuHasIcons Then
-		 $sResults = $sResults & @CRLF & "Persona Switcher Tools Menu"
+		 $sResults = $sResults & @CRLF & "  Persona Switcher Tools Menu"
 	  EndIf
 	  If Not $psMenubarMenuHasIcons Then
-		 $sResults = $sResults & @CRLF & "Persona Switcher Menubar Menu"
+		 $sResults = $sResults & @CRLF & "  Persona Switcher Menubar Menu"
 	  EndIf
    EndIf
 
@@ -143,11 +133,7 @@ EndFunc
 ; preference, restarts Firefox, then checks that the persona switcher button, tools,
 ; and menubar menus do not have icons next to their menu items.
 Func Test_IconPreviewDisabledWithRestart()
-   _FFPrefSet("extensions.personaswitcher.main-menubar", True)
-   ; enable the icon-preview preference and restart firefox
-   If _FFPrefGet("extensions.personaswitcher.icon-preview") Then
-	  TogglePsIconPreviewPref()
-   EndIf
+   SetPsOption("icon-preview", False)
    RestartFirefox()
 
    Local $sResults = ""

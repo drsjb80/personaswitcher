@@ -1,4 +1,5 @@
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
+
 ;-----------------------------------------------------------------------------;
 Local $testName = "HeightToolbarOptions"
 Local $tests[4]
@@ -23,28 +24,25 @@ EndFirefox()
 Func ToolbarHeightExpands()
    Local $testResults
 
+   ; Set height to 0
+   SetPsOption('toolbox-minheight', "0")
+
    Local $startingHeight = GetToolbarHeight()
 
-   ; Update height to 175
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 37}")
-   Sleep(500)
-   Send("175")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(1000)
+   ; Set height to 175
+   SetPsOption('toolbox-minheight', "175")
 
    ; grab the height of the toolbar after updating the preference
    Local $modifiedHeight = GetToolBarHeight()
 
    ; verify that the toolbar height expanded
-   If $startingHeight == 0 And $modifiedHeight == 175 Then
+   If ($modifiedHeight == 175 And $modifiedHeight > $startingHeight) Then
 	  $testResults = "TEST PASSED: The height of the toolbar expanded from 0 to 175."
    Else
 	  $testResults = "TEST FAILED: The height of the toolbar did not expand from 0 to 175."
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.toolbox-minheight")
+   ResetPsOption("toolbox-minheight")
 
    Return $testResults
 EndFunc
@@ -55,24 +53,12 @@ Func ToolbarHeightShrinks()
    Local $testResults
 
    ; Update height to 175
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 37}")
-   Sleep(500)
-   Send("175")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(1000)
+   SetPsOption('toolbox-minheight', "175")
 
    Local $startingHeight = GetToolbarHeight()
 
    ; Update height to 10
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 37}")
-   Sleep(500)
-   Send("10")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(1000)
+   SetPsOption('toolbox-minheight', "10")
 
    ; grab the height of the toolbar after updating the preference
    Local $modifiedHeight = GetToolbarHeight()
@@ -84,7 +70,7 @@ Func ToolbarHeightShrinks()
 	  $testResults = "TEST FAILED: The height of the toolbar did not shrink from 175 to 10."
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.toolbox-minheight")
+   ResetPsOption("toolbox-minheight")
 
    Return $testResults
   EndFunc
@@ -93,30 +79,11 @@ Func ToolbarHeightShrinks()
 Func ToolbarHeightMinValue()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
-   Sleep(100)
-   Send("{TAB 37}")
-   Sleep(500)
-   Send("-1")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $negativeValueCopy = ClipGet() ; store value
+   ; Try sending -1 to toolbox height preference
+   Local $negativeValueCopy = SetPsOption('toolbox-minheight', "-1", True)
 
    ; If -1 didn't work, try 0
-   Send("0")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $zeroValueCopy = ClipGet() ;store value
-
-   ; close preferences
-   Send("{ENTER}")
-   Sleep(500)
+   Local $zeroValueCopy = SetPsOption('toolbox-minheight', "0", True)
 
    ; check that the value in the preference is zero
    If $zeroValueCopy == 0 AND $negativeValueCopy == 1 Then
@@ -133,21 +100,7 @@ EndFunc
 Func ToolbarHeightMaxValue()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
-   Sleep(100)
-   Send("{TAB 37}")
-   Sleep(500)
-   Send("201")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $valueCopy = ClipGet() ;store value
-
-   ; close preferences
-   Send("{ENTER}")
-   Sleep(500)
+   Local $valueCopy = SetPsOption('toolbox-minheight', "201", True)
 
    ; check that value is set to the max
    If $valueCopy == 200 Then
@@ -161,10 +114,10 @@ EndFunc
 ;-----------------------------------------------------------------------------
 ; Helper function
 Func GetToolbarHeight()
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Local $Cmd = _FFCmd('Components.classes["@mozilla.org/appshell/window-mediator;1"]' & _
    '.getService(Components.interfaces.nsIWindowMediator)' & _
    '.getMostRecentWindow("navigator:browser").document' & _
    '.getElementsByAttribute("id", "navigator-toolbox")[0].minHeight')
-
-   return $Cmd
+   return Number($Cmd)
 EndFunc
