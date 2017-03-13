@@ -1,4 +1,5 @@
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
+
 ;-----------------------------------------------------------------------------;
 
 Local $testName = "Keyboard Shortcut Preferences"
@@ -44,21 +45,9 @@ Func DefaultPersona_DifferentKeyAndChar()
    SelectTheme()
    Local $selectedTheme =  _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   OpenPersonaSwitcherPrefs()
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 5}")
-   Sleep(500)
-   Send("W")
-   Sleep(500)
-   Send("{TAB 34}")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(500)
+   SetPsOption("defshift", True)
+   SetPsOption("defcontrol", False)
+   SetPsOption("defkey", "W")
 
    ; use the new key combination to reset the theme to default
    WinWaitActive("[CLASS:MozillaWindowClass]")
@@ -77,9 +66,9 @@ Func DefaultPersona_DifferentKeyAndChar()
       $testResults = "TEST PASSED: the default persona shortcut changed the theme to the default with the new combination : Shift + Alt + W"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.defcontrol") ; ctrl
-   _FFPrefReset("extensions.personaswitcher.defshift") ; shift
-   _FFPrefReset("extensions.personaswitcher.defkey") ; key
+   ResetPsOption("defcontrol") ; ctrl
+   ResetPsOption("defshift") ; shift
+   ResetPsOption("defkey") ; key
 
    Return $testResults
  EndFunc
@@ -101,13 +90,7 @@ Func DefaultPersona_ExtraKey()
    SelectTheme()
    Local $selectedTheme =  _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   OpenPersonaSwitcherPrefs()
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 40}")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(500)
+   SetPsOption("defshift", True)
 
    ; use the new key combination to reset the theme to default
    WinWaitActive("[CLASS:MozillaWindowClass]")
@@ -126,7 +109,7 @@ Func DefaultPersona_ExtraKey()
       $testResults = "TEST PASSED: the default persona shortcut changed the theme to the default with the new combination : Shift + Ctrl + Alt + D"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.defshift") ; shift
+   ResetPsOption("defshift") ; shift
 
    Return $testResults
 EndFunc
@@ -183,23 +166,9 @@ Func RotatePersona_DifferentKeyAndChar($themeList)
    ; grabbing the id of the next theme
    Local $nextThemeId = GetNextThemeId($themeList)
 
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 7}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 5}")
-   Sleep(500)
-   Send("W")
-   Sleep(500)
-   Send("{TAB 27}")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(500)
+   SetPsOption("rotshift", True)
+   SetPsOption("rotcontrol", False)
+   SetPsOption("rotkey", "W")
 
    ; use the new key combination to change to the next theme
    WinWaitActive("[CLASS:MozillaWindowClass]")
@@ -215,9 +184,9 @@ Func RotatePersona_DifferentKeyAndChar($themeList)
       $testResults = "TEST FAILED: the rotate persona shortcut did not change the theme to the next theme on the list with the new combination : Shift + Alt + W"
    EndIF
 
-   _FFPrefReset("extensions.personaswitcher.rotcontrol") ;ctrl
-   _FFPrefReset("extensions.personaswitcher.rotshift") ;shift
-   _FFPrefReset("extensions.personaswitcher.rotkey") ;key
+   ResetPsOption("rotcontrol") ;ctrl
+   ResetPsOption("rotshift") ;shift
+   ResetPsOption("rotkey") ;key
    ResetRotateCurrentPref(UBound($themeList))
 
    Return $testResults
@@ -236,15 +205,7 @@ Func RotatePersona_ExtraKey($themeList)
    ; grabbing the id of the next theme
    Local $nextThemeId = GetNextThemeId($themeList)
 
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 7}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 33}")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(500)
+   SetPsOption("rotshift", True)
 
    ; use the new key combination to change to the next theme
    WinWaitActive("[CLASS:MozillaWindowClass]")
@@ -260,7 +221,7 @@ Func RotatePersona_ExtraKey($themeList)
       $testResults = "TEST FAILED: the rotate persona shortcut did not change the theme to the next theme on the list with the new combination : Shift + Ctrl + Alt + R"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.rotshift") ;shift
+   ResetPsOption("rotshift") ;shift
    ResetRotateCurrentPref(UBound($themeList))
 
    Return $testResults
@@ -272,22 +233,9 @@ EndFunc
 Func AutoSwitch_DifferentKeyAndChar()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 14}")
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 5}")
-   Sleep(500)
-   Send("W")
-   Sleep(500)
-   Send("{TAB 20}")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(500)
+   SetPsOption("autoshift", True)
+   SetPsOption("autocontrol", False)
+   SetPsOption("autokey", "W")
 
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
@@ -305,10 +253,10 @@ Func AutoSwitch_DifferentKeyAndChar()
       $testResults = "TEST PASSED: the auto switch shortcut changed the theme and enabled the 'Switch every __ minutes' preference with the new combination: Shift + Alt + W"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.autocontrol") ;ctrl
-   _FFPrefReset("extensions.personaswitcher.autoshift") ;shift
-   _FFPrefReset("extensions.personaswitcher.autokey") ;key
-   _FFPrefReset("extensions.personaswitcher.auto")
+   ResetPsOption("autocontrol") ;ctrl
+   ResetPsOption("autoshift") ;shift
+   ResetPsOption("autokey") ;key
+   ResetPsOption("auto")
 
    Return $testResults
  EndFunc
@@ -319,14 +267,7 @@ Func AutoSwitch_DifferentKeyAndChar()
 Func AutoSwitch_ExtraKey()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 14}")
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 26}")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(500)
+   SetPsOption("autoshift", True)
 
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
@@ -344,8 +285,8 @@ Func AutoSwitch_ExtraKey()
       $testResults = "TEST PASSED: the auto switch shortcut changed the theme and enabled the 'Switch every __ minutes' preference with the new combination: Shift + Ctrl + Alt + A"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.autoshift") ;shift
-   _FFPrefReset("extensions.personaswitcher.auto")
+   ResetPsOption("autoshift") ;shift
+   ResetPsOption("auto")
 
    Return $testResults
 EndFunc
@@ -380,15 +321,7 @@ Func AutoSwitch_Disable()
    Local $testResults
 
    ; enable the "Switch every __minutes" preference
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 29}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 11}")
-   Sleep(500)
-   Send("{ENTER}")
-   Sleep(500)
+   SetPsOption("auto", True)
 
    ; use the shortcut to disable "Switch every __ minutes"
    WinWaitActive("[CLASS:MozillaWindowClass]")
