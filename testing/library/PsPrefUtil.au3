@@ -93,6 +93,8 @@ Func SetPsOption(ByRef $sOption, ByRef $value, $copyToClipboard = False)
 		 (Not $value And $oldValue == 0)) Then
 	  Return False
    Else
+	  Local $returnVal = True
+
 	  OpenPersonaSwitcherPrefs()
 	  TabToPref($sOption)
 
@@ -100,25 +102,18 @@ Func SetPsOption(ByRef $sOption, ByRef $value, $copyToClipboard = False)
 		 Send("{SPACE}")
 		 Sleep(500)
 	  Else
-		 Send($value)
+		 Send($value, 1)
 		 Sleep(500)
 	  EndIf
 
 	  If $copyToClipboard Then
-		 Send("^a")
-		 Sleep(500)
-		 Send("^c")
-		 Sleep(500)
-		 Send("{ENTER}")
-		 WinWaitActive("[CLASS:MozillaWindowClass]")
-		 Sleep(500)
-		 Return ClipGet()
+		 $returnVal = GetTextFromFocusedField()
 	  EndIf
 
 	  Send("{ENTER}")
 	  WinWaitActive("[CLASS:MozillaWindowClass]")
 	  Sleep(500)
-	  Return True
+	  Return $returnVal
    EndIf
 EndFunc
 
@@ -126,8 +121,18 @@ Func ResetPsOption(ByRef $sOption)
    _FFPrefReset("extensions.personaswitcher." & $sOption)
 EndFunc
 
+
+Func GetTextFromFocusedField()
+   Send("^a")
+   Sleep(500)
+   Send("^c")
+   Sleep(500)
+   Return ClipGet()
+EndFunc
+
 Func TabToPref(ByRef $sOption)
    Local $tabMap[40]
+
    $tabMap[0] = 'defshift'
    $tabMap[1] = 'defcontrol'
    $tabMap[5] = 'defos'
@@ -138,11 +143,22 @@ Func TabToPref(ByRef $sOption)
    $tabMap[14] = 'autoshift'
    $tabMap[15] = 'autocontrol'
    $tabMap[20] = 'autokey'
+   $tabMap[21] = 'accesskey'
+   $tabMap[22] = 'activateshift'
+   $tabMap[23] = 'activatecontrol'
+   $tabMap[24] = 'activatealt'
+   $tabMap[28] = 'activatekey'
    $tabMap[29] = 'auto'
+   $tabMap[30] = 'autominutes'
    $tabMap[31] = 'random'
+   $tabMap[32] = 'startup-switch'
+   $tabMap[33] = 'preview'
+   $tabMap[34] = 'preview-delay'
    $tabMap[35] = 'icon-preview'
    $tabMap[37] = 'toolbox-minheight'
+   $tabMap[38] = 'tools-submenu'
    $tabMap[39] = 'main-menubar'
+
 
    For $i = 0 To UBound($tabMap) - 1
 	  If ($tabMap[$i] = $sOption) Then
@@ -152,5 +168,6 @@ Func TabToPref(ByRef $sOption)
 	  EndIf
    Next
 
+   MsgBox(64, '', "Preference error")
    Return False
 EndFunc

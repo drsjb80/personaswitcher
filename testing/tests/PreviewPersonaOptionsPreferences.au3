@@ -1,4 +1,4 @@
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
 ;-----------------------------------------------------------------------------;
 Local $testName = "Preview Persona Options Preferences" ;
 Local $tests[5]
@@ -31,17 +31,9 @@ EndFirefox()
 ; Helper function
 Func EnablePreviewPersonaWithTime()
    ;Set preference value to 10000ms (10 sec)
-   OpenPersonaSwitcherPrefs()
 
-   Send("{TAB 33}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB}")
-   Sleep(500)
-   Send("10000")
-   Sleep(500)
-   Send("{ENTER}")
+   SetPsOption('preview', True)
+   SetPsOption('preview-delay', "10000")
 
    RestartFirefox()
 EndFunc
@@ -90,13 +82,10 @@ EndFunc
 Func PreviewThemeOnPSwitcherMenuBar($themeList)
    Local $testResults
 
-   ;Enable menu preference
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 39}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{ENTER}")
+   ;Set menu preference
+   SetPsOption('main-menubar', True)
+   SetPsOption('preview', True)
+   SetPsOption('preview-delay', "10000")
 
    ; grab default theme
    ResetToDefaultTheme()
@@ -138,6 +127,11 @@ EndFunc
 ; a preview of that theme is displayed after 10 seconds.
 Func PreviewThemeOnToolsMenu($themeList)
    Local $testResults
+
+   ; Set menu preference
+   SetPsOption('tools-submenu', True)
+   SetPsOption('preview', True)
+   SetPsOption('preview-delay', "10000")
 
    ; grab default theme
    ResetToDefaultTheme()
@@ -182,30 +176,8 @@ EndFunc
 Func PreviewPersonaMinDelayTime()
    Local $testResults
 
-   ; Update preference value to -1
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 34}")
-   Sleep(500)
-   Send("-1")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $negativeValueCopy  = ClipGet()
-
-   ; if -1 didn't work, try 0
-   Send("0")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $zeroValueCopy = ClipGet()
-
-   ; close preferences
-   Send("{ENTER}")
-   Sleep(500)
+   Local $negativeValueCopy = SetPsOption('preview-delay', "-1", True)
+   Local $zeroValueCopy = SetPsOption('preview-delay', "0", True)
 
    ; check that value is set to the min
    If $zeroValueCopy == 0 AND $negativeValueCopy == 1 Then
@@ -221,21 +193,7 @@ EndFunc
 Func PreviewPersonaMaxDelayTime()
    Local $testResults
 
-   ; Update preference value to 10001
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 34}")
-   Sleep(500)
-   Send("10001")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $valueCopy  = ClipGet()
-
-   ; close preferences
-   Send("{ENTER}")
-   Sleep(500)
+   Local $valueCopy = SetPsOption('preview-delay', "10001", True)
 
    ; check that value is set to the max
    If $valueCopy == 10000 Then

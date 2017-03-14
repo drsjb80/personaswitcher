@@ -1,4 +1,4 @@
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
 ;---------------------------------------------------------------------------------------;
 ; This script tests for proper functionality of Persona Switcher's "switch to random
 ; persona instead of least recent" preference
@@ -26,9 +26,9 @@ Exit(0)
 ; Disables Persona Switcher's switch to random preference, rotates through all
 ; installed themes twice, checks that the pattern of themes displayed was a cycle
 Func Test_SwitchToRandomDisabledRotate()
-   _FFPrefSet("extensions.personaswitcher.random", True)
+   SetPsOption('random', True)
+   SetPsOption('random', False)
 
-   TogglePsRandomPersonaPref()
    Local $themeIndices = GetThemeCycleIndices()
    Local $sResults = ""
 
@@ -51,9 +51,9 @@ EndFunc
 ; Enables Persona Switcher's switch to random preference, rotates through
 ; themes, checks that the pattern of themes displayed was not a cycle
 Func Test_SwitchToRandomEnabledRotate()
-   _FFPrefSet("extensions.personaswitcher.random", False)
+   SetPsOption('random', False)
+   SetPsOption('random', True)
 
-   TogglePsRandomPersonaPref()
    Local $themeIndices = GetThemeCycleIndices()
    Local $sResults = ""
 
@@ -83,10 +83,10 @@ EndFunc
 ; displayed are not a cycle. Note: this test could falsely fail if the
 ; random themes selected happen to be in chronological order
 Func Test_SwitchToRandomEnabledRestart()
-   _FFPrefSet("extensions.personaswitcher.random", False)
-   _FFPrefSet("extensions.personaswitcher.startup-switch", True)
+   SetPsOption('random', False)
+   SetPsOption('startup-switch', True)
+   SetPsOption('random', True)
 
-   TogglePsRandomPersonaPref()
    Local $numberOfRestarts = 3
    Local $themeIndices[$numberOfRestarts + 1]
    Local $sResults = ""

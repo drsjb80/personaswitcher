@@ -8,7 +8,7 @@
 
 #ce --------------------------------------------------------------------------;
 
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
 ;-----------------------------------------------------------------------------;
 
 Local $testName = "Persona Menu Loacations Tests"
@@ -34,74 +34,74 @@ EndFirefox()
 ;---------------------------Global functions---------------------------------;
 Func SelectTheme()
    Send("{f10}")
-   Sleep(300)
+   Sleep(500)
    Send("t")
-   Sleep(300)
+   Sleep(500)
    Send("p")
-   Sleep(300)
+   Sleep(500)
    Send("{ENTER}")
 EndFunc
 
 Func CloseAddOnWindow()
    Send("^w")
-   Sleep(300)
+   Sleep(500)
 EndFunc
 
 
 ;----------------Functions for tool menu preference tests--------------------;
 Func GetToTheToolMenu()
    Send("{TAB 38}")
-   Sleep(300)
+   Sleep(500)
 EndFunc
 
 Func SaveChangesToolMenu()
    Send("{TAB 2}")
-   Sleep(300)
+   Sleep(500)
    Send("{ENTER}")
-   Sleep(300)
+   Sleep(500)
 EndFunc
 
 Func NavigateToToolMenu()
    Send("{f10}")
-   Sleep(300)
+   Sleep(500)
    Send("t")
-   Sleep(300)
+   Sleep(500)
    Send("{UP}")
-   Sleep(300)
+   Sleep(500)
    Send("{RIGHT}")
-   Sleep(300)
+   Sleep(500)
 
 EndFunc
 
 Func ChangeTheme()
    Send("{DOWN}")
-   Sleep(300)
+   Sleep(500)
    Send("{ENTER}")
-   Sleep(300)
+   Sleep(500)
 EndFunc
 
 
 ;--------------Functions for main menu preference tests----------------------;
 Func NavigateToMainMenuChangeTheme()
    Send("{f10}")
-   Sleep(300)
+   Sleep(500)
    Send("p")
-   Sleep(300)
+   Sleep(500)
    Send("{DOWN}")
-   Sleep(300)
+   Sleep(500)
    Send("{ENTER}")
 EndFunc
 
 Func GetToTheMainMenuBar()
    Send("{TAB 39}")
-   Sleep(300)
+   Sleep(500)
 EndFunc
 
 Func SaveChangesMainMenu()
    Send("{TAB}")
-   Sleep(300)
+   Sleep(500)
    Send("{ENTER}")
-   Sleep(300)
+   Sleep(500)
 EndFunc
 
 
@@ -113,25 +113,12 @@ EndFunc
 Func EnableToolMenuPreferenceTest()
    Local $testResults
 
-   Call(SelectTheme)
-
    ;Get the current theme.
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
-   OpenPersonaSwitcherPrefs()
-   Call(GetToTheToolMenu)
 
-   ;Unselect and select tool menu.
-   Sleep(1200)
-   Send("{SPACE}")
-   Sleep(1000)
-   Send("{SPACE}")
-   Sleep(300)
+   SetPsOption("tools-submenu", False)
+   Call(SelectTheme)
 
-   Call(SaveChangesToolMenu)
-   Sleep(300)
-   Call(NavigateToToolMenu)
-   Call(ChangeTheme)
-   Call(CloseAddOnWindow)
    ;Check if the tool menu is enabled.
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
 
@@ -158,24 +145,10 @@ Func DisableToolMenuPreferenceTest()
    ;Get the current theme.
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   OpenPersonaSwitcherPrefs()
-   Call(GetToTheToolMenu)
+   SetPsOption("tools-submenu", True)
 
-   ;Unselect tool menu.
-   Sleep(1200)
-   Send("{SPACE}")
-   Sleep(300)
-
-   Call(SaveChangesToolMenu)
    Call(NavigateToToolMenu)
    Call(ChangeTheme)
-
-   ;Needed in order to close a window since tool menu is disabled.
-   Sleep(300)
-   Send("^w")
-   Sleep(300)
-
-   Call(CloseAddOnWindow)
 
    ;Check if the tool menu is disabled.
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
@@ -203,19 +176,9 @@ Func EnableMainMenuPreferenceTest()
 
    ;Get the current theme
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
+   SetPsOption("main-menubar", True)
 
-   OpenPersonaSwitcherPrefs()
-
-   Call(GetToTheMainMenuBar)
-
-   ;Select main menu bar
-   Sleep(1200)
-   Send("{SPACE}")
-   Sleep(300)
-
-   Call(SaveChangesMainMenu)
    Call(NavigateToMainMenuChangeTheme)
-   Call(CloseAddOnWindow)
 
    ;Check if the main menu bar is enabled.
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
@@ -241,27 +204,11 @@ Func DisableMainMenuPreferenceTest()
    ;Get the current theme.
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   OpenPersonaSwitcherPrefs()
+   SetPsOption("main-menubar", False)
+   SetPsOption("main-menubar", True)
+   SetPsOption("main-menubar", False)
 
-   Call(GetToTheMainMenuBar)
-
-   ;Select and unselect main menu bar.
-   Sleep(1200)
-   Send("{SPACE}")
-   Sleep(1000)
-   Send("{SPACE}")
-   Sleep(300)
-
-   Call(SaveChangesMainMenu)
    Call(NavigateToMainMenuChangeTheme)
-
-   ;Needed in order to not disable addon since the Main Menu Bar is disabled.
-   Send("{TAB}")
-   Sleep(300)
-   Send("e")
-   Sleep(300)
-
-   Call(CloseAddOnWindow)
 
    ;Check if the main menu bar is disabled.
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then

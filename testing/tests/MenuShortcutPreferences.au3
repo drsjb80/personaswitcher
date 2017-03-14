@@ -1,4 +1,4 @@
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
 
 ;-----------------------------------------------------------------------------;
 
@@ -25,38 +25,27 @@ EndFirefox()
 
 
 ;------------------------------------ tests ----------------------------------;
-; testing the that the default Main menu shortcut key opens the dropdown menu
+; testing that the default Main menu shortcut key opens the dropdown menu
 Func MainMenuShortCutKey()
 	Local $testResults
 
-	SelectingDefaultTheme()
+	ResetToDefaultTheme()
 
 	; get the current theme
 	Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
 	; opening the preferences menu in personaswitcher addon
-	OpenPersonaSwitcherPrefs()
+	SetPsOption('main-menubar', True)
 
-	Send("{TAB 39}")
-	Sleep(1000)
-
-	Send("{SPACE}")
-	Sleep(1000)
-
-	Send("{TAB}")
-	Sleep(1000)
-
-	Send("{ENTER}")
-	Sleep(1000)
 ;-----------------------------------------------------------------------------
 	;testing the default keyvalue for the main menu dropdown menu ("Alt + P")
 	; by selecting a different theme to verify that such menu exists
 	Send("!P")
-	Sleep(100)
+	Sleep(500)
 	Send("{DOWN}")
-	Sleep(100)
+	Sleep(500)
 	Send("{ENTER}")
-	Sleep(100)
+	Sleep(500)
 
 	; check that theme at the start of the test has been changed
 	If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
@@ -73,7 +62,7 @@ EndFunc
 Func ChangedMainMenuShortCutKeyValue()
 	Local $testResults
 
-	SelectingDefaultTheme()
+	ResetToDefaultTheme()
 
 	; get the current theme
 	Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
@@ -81,21 +70,7 @@ Func ChangedMainMenuShortCutKeyValue()
 	;changing the keyvalue of the main menu
 ;----------------------------------------------------------------------
 	;getting to the addon's preferences	as it is already selected, we only need to press enter
-    Send("{ENTER}")
-    Sleep(1000)
-;----------------------------------------------------------------
-	Send("{TAB 21}")
-	Sleep(100)
-
-	;changing the keyvalue to L
-	Send("L")
-	Sleep(500)
-
-	;Exit the preferences menu
-	Send("{TAB 19}")
-	Sleep(500)
-	Send("{ENTER}")
-	Sleep(500)
+    SetPsOption('accesskey', "L")
 
 	;testing if the Main Menu will open with the new shortcut key
 	Send("!L")
@@ -123,7 +98,7 @@ EndFunc
 Func SpecialKeyPSwitcherMenuShortcutKey()
 Local $testResults
 
-	SelectingDefaultTheme()
+	ResetToDefaultTheme()
 
 	; get the current theme
 	Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
@@ -132,28 +107,9 @@ Local $testResults
 	;----------------------------------------------------------------
 	;getting to the addon's preferences
 
-    Send("{ENTER}")
-    Sleep(1000)
-	;----------------------------------------------------------------
-
-	Send("{TAB 22}")
-	Sleep(500)
-
-	Send("{SPACE}")
-	Sleep(500)
-
-	Send("{TAB}")
-	Sleep(500)
-
-	Send("{Space}")
-	Sleep(500)
-
-	;ask if someone can test that the shift alt ctrl plus P changes
-	Send("{TAB 17}")
-	Sleep(500)
-
-	Send("{ENTER}")
-	Sleep(500)
+   SetPsOption('activateshift', True)
+   SetPsOption('activatecontrol', False)
+   SetPsOption('activatealt', True)
 
 	;Trying to open the PSwitchermenu through the new shortcut
 	Send("+!P")
@@ -181,7 +137,7 @@ EndFunc
 Func CombinationPSwitcherMenuShortcutKey()
 	Local $testResults
 
-    SelectingDefaultTheme()
+    ResetToDefaultTheme()
 
 	; get the current theme
 	Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
@@ -190,29 +146,10 @@ Func CombinationPSwitcherMenuShortcutKey()
 	;----------------------------------------------------------------
 	;getting to the addon's preferences
 
-	;Get to the option select
-    Send("{ENTER}")
-    Sleep(1000)
-	;----------------------------------------------------------------
-
-	Send("{TAB 23}")
-	Sleep(500)
-
-	Send("{SPACE}")
-	Sleep(500)
-
-	Send("{TAB 5}")
-	Sleep(500)
-
-	Send("W")
-	Sleep(500)
-
-	;ask if someone can test that the shift alt ctrl plus P changes
-	Send("{TAB 17}")
-	Sleep(500)
-
-	Send("{ENTER}")
-	Sleep(500)
+   SetPsOption('activateshift', True)
+   SetPsOption('activatecontrol', True)
+   SetPsOption('activatealt', True)
+   SetPsOption('activatekey', 'W')
 
 	;Trying to open the PSwitchermenu through the new shortcut
 	Send("+^!W")
@@ -239,7 +176,7 @@ EndFunc
 Func DisableMenuShortcut()
    Local $testResults
 
-   SelectingDefaultTheme()
+   ResetToDefaultTheme()
 
    ; get the current theme
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
@@ -254,31 +191,10 @@ Func DisableMenuShortcut()
     Sleep(1000)
 	;----------------------------------------------------------------
 
-	Send("{TAB 22}")
-	Sleep(500)
-
-	Send("{SPACE}")
-	Sleep(500)
-
-	Send("{TAB 6}")
-	Sleep(500)
-
-	Send("P")
-	Sleep(500)
-
-	Send("{TAB 11}")
-	Sleep(500)
-
-	;Disabling the Menu from the Main bar
-	;Moving the mouse to the options button of persona and clicking it
-	Send("{SPACE}")
-	Sleep(500)
-
-	Send("{TAB}")
-	Sleep(500)
-
-	Send("{ENTER}")
-	Sleep(500)
+   SetPsOption('activateshift', False)
+   SetPsOption('activatecontrol', True)
+   SetPsOption('activatealt', True)
+   SetPsOption('activatekey', 'p')
 
 	;Opening the dropdown throught the shortcut
 	Send("^!p")
@@ -299,15 +215,4 @@ Func DisableMenuShortcut()
 	  $testResults = "TEST PASSED: theme was changed through the Disabled Main Menu Bar Shortcut"
 	EndIf
    Return $testResults
-EndFunc
-;---------------------------------------------------
-Func SelectingDefaultTheme()
-	Send("{f10}")
-	Sleep(1000)
-	Send("t")
-	Sleep(1000)
-	Send("p")
-	Sleep(1000)
-	Send("{ENTER}")
-	Sleep(1000)
 EndFunc

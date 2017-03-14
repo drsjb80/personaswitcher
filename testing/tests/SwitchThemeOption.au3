@@ -1,4 +1,4 @@
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
 ;-----------------------------------------------------------------------------;
 
 Local $testName = "Switch Theme Option"
@@ -35,7 +35,7 @@ Func SwitchTheme()
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; Enable switch theme preference
-   EnableDisableSwitch()
+   SetPsOption("auto", True)
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
@@ -44,7 +44,7 @@ Func SwitchTheme()
       $testResults = "TEST PASSED: the theme changed as soon as the preference was enabled"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.auto")
+   ResetPsOption("auto")
    Return $testResults
 EndFunc
 
@@ -55,13 +55,13 @@ Func NoSwitch()
    Local $testResults
 
    ; Enable switch theme preference
-   EnableDisableSwitch()
+   SetPsOption("auto", True)
 
    ; get the current theme
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; Disable Switch Theme preference
-   EnableDisableSwitch()
+   SetPsOption("auto", False)
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
@@ -70,7 +70,7 @@ Func NoSwitch()
       $testResults = "TEST FAILED: the theme changed after disabling the preference"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.auto")
+   ResetPsOption("auto")
    Return $testResults
 EndFunc
 
@@ -80,20 +80,9 @@ EndFunc
 Func SwitchThemeOneMin()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
-
    ; Enable switch theme preference and to 1 min
-   Send("{TAB 29}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB}")
-   Sleep(500)
-   Send("1")
-   Sleep(500)
-   Send("{TAB 10}")
-   Sleep(500)
-   Send("{ENTER}")
+   SetPsOption("auto", True)
+   SetPsOption("autominutes", "1")
 
    ; get the current theme
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
@@ -107,8 +96,8 @@ Func SwitchThemeOneMin()
       $testResults = "TEST PASSED: the theme was changed in 1 minute"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.auto")
-   _FFPrefReset("extensions.personaswitcher.autominutes")
+   ResetPsOption("auto")
+   ResetPsOption("autominutes")
    Return $testResults
 EndFunc
 ;******************************************************************************
@@ -120,24 +109,14 @@ Func SwitchThemeOneMinWithKeys()
    Local $noThemeChange = false
 
    ; Enable switch theme preference and to 1 min
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 29}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB}")
-   Sleep(500)
-   Send("1")
-   Sleep(500)
-   Send("{TAB 10}")
-   Sleep(500)
-   Send("{ENTER}")
+   SetPsOption("auto", True)
+   SetPsOption("autominutes", "1")
 
    ; get the current theme
    Local $firstTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; Disable switch theme preference
-   EnableDisableSwitch()
+   SetPsOption("auto", False)
 
    Sleep(500)
    Send("^!a")
@@ -159,8 +138,8 @@ Func SwitchThemeOneMinWithKeys()
       $testResults = "TEST PASSED: the theme was changed after enabling with shortcut key and also after in 1 minute"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.auto")
-   _FFPrefReset("extensions.personaswitcher.autominutes")
+   ResetPsOption("auto")
+   ResetPsOption("autominutes")
    Return $testResults
 EndFunc
 ;******************************************************************************
@@ -168,23 +147,8 @@ EndFunc
 Func SwitchThemeHappyValue()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
-
    ; Update preference value to 50 min
-   Send("{TAB 30}")
-   Sleep(500)
-   Send("50")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $valueCopy = ClipGet()
-
-   ; Close preferences
-   Send("{TAB 10}")
-   Sleep(500)
-   Send("{ENTER}")
+   Local $valueCopy = SetPsOption("autominutes", "50", True)
 
    ; check that value is set to the value entered
    If $valueCopy == 50 Then
@@ -193,7 +157,7 @@ Func SwitchThemeHappyValue()
       $testResults = "TEST FAILED: the value 50 was not accepted"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.autominutes")
+   ResetPsOption("autominutes")
    Return $testResults
 EndFunc
 ;******************************************************************************
@@ -201,23 +165,10 @@ EndFunc
 Func SwitchThemeMinValue()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
+   SetPsOption("auto", True)
 
    ; Update preference value to 0 min
-   Send("{TAB 30}")
-   Sleep(500)
-   Send("0")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $valueCopy = ClipGet()
-
-   ; Close preferences
-   Send("{TAB 10}")
-   Sleep(500)
-   Send("{ENTER}")
+   Local $valueCopy = SetPsOption("autominutes", "0", True)
 
    ; check that value is set to the min
    If $valueCopy == 1 Then
@@ -226,7 +177,7 @@ Func SwitchThemeMinValue()
       $testResults = "TEST FAILED: the value 0 was accepted even thought the min is 1"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.autominutes")
+   ResetPsOption("autominutes")
    Return $testResults
 EndFunc
 ;******************************************************************************
@@ -235,18 +186,7 @@ EndFunc
 Func SwitchThemeMaxValue()
    Local $testResults
 
-   OpenPersonaSwitcherPrefs()
-
-   ; Update preference value to 1000
-   Send("{TAB 30}")
-   Sleep(500)
-   Send("1000")
-   Sleep(500)
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-
-   Local $valueCopy = ClipGet()
+   Local $valueCopy = SetPsOption("autominutes", 1000, True)
 
    ; Close preferences
    Send("{TAB 10}")
@@ -260,19 +200,6 @@ Func SwitchThemeMaxValue()
       $testResults = "TEST FAILED: the value 1000 was accepted even thought the max is 999"
    EndIf
 
-   _FFPrefReset("extensions.personaswitcher.autominutes")
+   ResetPsOption("autominutes")
    Return $testResults
 EndFunc
-
-;---------------------------------------------------
-; Helper Function
-Func EnableDisableSwitch()
-   OpenPersonaSwitcherPrefs()
-   Send("{TAB 29}")
-   Sleep(500)
-   Send("{SPACE}")
-   Sleep(500)
-   Send("{TAB 11}")
-   Sleep(500)
-   Send("{ENTER}")
- EndFunc

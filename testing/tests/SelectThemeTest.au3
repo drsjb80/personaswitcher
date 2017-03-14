@@ -3,7 +3,7 @@
  Author:         Trever Mock
 #ce ----------------------------------------------------------------------------
 
-#include "_PSTestingLibrary.au3"
+#include "..\library\_PSTestingLibrary.au3"
 
 ;-----------------------------------------------------------------------------;
 
@@ -15,7 +15,7 @@ InitializeFirefox()
 
 ; Reset Persona Switcher Preferences to Defaults and enable the toolbar menu
 ResetPersonaSwitcherPrefs()
-_FFPrefSet("extensions.personaswitcher.main-menubar", true)
+SetPsOption("main-menubar", true)
 
 ; run tests and store results
 $tests[0] = SelectThemeCaseOne()	; "Ctrl" + "Alt" + "D" selects default theme

@@ -10,7 +10,7 @@
 #include "PsTestUtil.au3"
 #include "PsPrefUtil.au3"
 
-
+Local Const $SLEEP_STANDARD = 500
 
 ; ==========================================================
 ; Name ..........: PersonaSwitcherRotate
