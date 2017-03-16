@@ -12,5 +12,200 @@
   "extensionDescription": {
     "message": "讓您以「定時更換、重啟更換、隨機更換、自行切換、瞬間預覽」的方式享受火狐面板，也能瞬間切回預設面板，並有方便的「快捷鍵、附加元件列圖示選單、主功能表選單、工具功能表選單」供快速操作，外加清楚易懂的中文化介面供您使用！！",
     "description": "Description of the extension."
+  },
+  
+  "ps_noPersonas": {
+	"message": "找不到面板",
+	"description": "No Personas Found text"
+  },
+  
+  "ps_menuLabel": {
+	"message": "面板",
+	"description": "Menu Label text"
+  },
+  
+  "ps_buttonLabel": {
+	"message": "面板",
+	"description": "Button Label text"
+  },
+  
+  "ps_toolTip": {
+	"message": "快速更換、預覽面板。",
+	"description": "Tooltip text"
+  },
+  
+   "ps_default": {
+	"message": "預設面板",
+	"description": "Default text"
+  },
+  
+   "about": {
+	"message": "關於",
+	"description": "The word 'About'"
+  },
+  
+   "version": {
+	"message": "版本：",
+	"description": "The word 'Version'"
+  },
+  
+   "createdBy": {
+	"message": "作者：",
+	"description": "The words 'Created By'"
+  },
+  
+   "homepage": {
+	"message": "首頁",
+	"description": "The words 'Home Page'"
+  },
+  
+   "options_title": {
+	"message": "Persona Switcher 選項",
+	"description": "Title of the options menu"
+  },
+  
+  "options_pane1": {
+	"message": "Persona Switcher 選項",
+	"description": "Title of the options menu pane"
+  },
+  
+  "options_kbshortcuts_title": {
+	"message": "快捷鍵",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_default": {
+	"message": "切換至預設面板",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_rotate": {
+	"message": "切換至其他面板",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_toggle": {
+	"message": "切換為自動更換",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_auto": {
+	"message": "Automatic rotation",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_menushortcuts": {
+	"message": "「面板」選單快捷鍵",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_access": {
+	"message": "第一種快捷鍵：　Alt +",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_activate": {
+	"message": "第二種快捷鍵：",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_key": {
+	"message": "按鍵",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_shift": {
+	"message": "Shift",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_control": {
+	"message": "Control",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_alt": {
+	"message": "Alt",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_meta": {
+	"message": "Meta",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_accel": {
+	"message": "Accel",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_os": {
+	"message": "OS",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_options_title": {
+	"message": "選項",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_autoevery_switch": {
+	"message": "每當經過",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_autoevery_minutes": {
+	"message": "分鐘時輪換",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_random_desc": {
+	"message": "不以固定的順序更換面板。",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_startupSwitch_desc": {
+	"message": "開啟 Firefox 時立即更換一次面板。",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_toolboxMinHeight_desc": {
+	"message": "限制上方工具列最低總高度至：",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_preview_desc": {
+	"message": "游標停留於選單選項經過一千分之",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_previewDelay_desc": {
+	"message": "秒後預覽。",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_iconPreview_desc": {
+	"message": "在選單中顯示縮圖圖示。",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_notificationWorkaround_desc": {
+	"message": "隱藏 Personas Plus 在面板更換時顯示的提示。",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_menus_title": {
+	"message": "將「面板」選單顯示於（至少勾一項才能以快捷鍵呼叫「面板」選單）",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_toolsSubmenu": {
+	"message": "選單列→工具　（僅適用第二種快捷鍵）",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_mainMenuBar": {
+	"message": "選單列　　　　（適用一、二種快捷鍵）",
+	"description": "Text displayed in the options pane"
   }
 }

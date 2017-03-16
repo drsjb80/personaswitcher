@@ -50,12 +50,12 @@
   },
   
    "createdBy": {
-	"message": "Created By",
+	"message": "Created By:",
 	"description": "The words 'Created By'"
   },
   
    "homepage": {
-	"message": "Home Page",
+	"message": "Home Page:",
 	"description": "The words 'Home Page'"
   },
   

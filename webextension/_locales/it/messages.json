@@ -12,5 +12,200 @@
   "extensionDescription": {
     "message": "Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facoltà di ritorno al tema Predefinito. Possibilità di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox/Thunderbird/Seamonkey.",
     "description": "Description of the extension."
+  },
+  
+  "ps_noPersonas": {
+	"message": "Nessun Tema Disponibile",
+	"description": "No Personas Found text"
+  },
+  
+  "ps_menuLabel": {
+	"message": "Persona Switcher",
+	"description": "Menu Label text"
+  },
+  
+  "ps_buttonLabel": {
+	"message": "PSwitcher",
+	"description": "Button Label text"
+  },
+  
+  "ps_toolTip": {
+	"message": "Premi per accedere ai Temi",
+	"description": "Tooltip text"
+  },
+  
+   "ps_default": {
+	"message": "Predefinito",
+	"description": "Default text"
+  },
+  
+   "about": {
+	"message": "Info",
+	"description": "The word 'About'"
+  },
+  
+   "version": {
+	"message": "Versione:",
+	"description": "The word 'Version'"
+  },
+  
+   "createdBy": {
+	"message": "Realizzato da:",
+	"description": "The words 'Created By'"
+  },
+  
+   "homepage": {
+	"message": "Sito Ufficiale:",
+	"description": "The words 'Home Page'"
+  },
+  
+   "options_title": {
+	"message": "Persona Switcher: Settaggi di Configurazione",
+	"description": "Title of the options menu"
+  },
+  
+  "options_pane1": {
+	"message": "Persona Switcher: Settaggi di Configurazione",
+	"description": "Title of the options menu pane"
+  },
+  
+  "options_kbshortcuts_title": {
+	"message": "Scorciatoie da Tastiera - Combinazione Tasti",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_default": {
+	"message": "Tema Predefinito:",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_rotate": {
+	"message": "Cambio Tema:",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_toggle": {
+	"message": "Attiva/Disattiva Cambio Automatico:",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_auto": {
+	"message": "Cambio Automatico del Tema",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_menushortcuts": {
+	"message": "Tasti scorciatoia del Menu (Non su OS X)",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_access": {
+	"message": "Menu Principale:",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_activate": {
+	"message": "PSwitcher Menu:",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_key": {
+	"message": "Tasto",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_shift": {
+	"message": "Shift",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_control": {
+	"message": "Control",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_alt": {
+	"message": "Alt",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_meta": {
+	"message": "Meta",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_accel": {
+	"message": "Accel",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_kbshortcuts_os": {
+	"message": "OS",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_options_title": {
+	"message": "Opzioni",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_autoevery_switch": {
+	"message": "Cambia Tema ogni",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_autoevery_minutes": {
+	"message": "Minuti/o.",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_random_desc": {
+	"message": "Cambia Tema a caso anziché dal meno recente.",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_startupSwitch_desc": {
+	"message": "Cambia Tema ad ogni avvio.",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_toolboxMinHeight_desc": {
+	"message": "Altezza minima della Toolbox superiore (in Firefox e SeaMonkey):",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_preview_desc": {
+	"message": "Anteprima del Tema selezionato nella lista          Ritardata di:",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_previewDelay_desc": {
+	"message": "(ms)",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_iconPreview_desc": {
+	"message": "Aggiungi icona di Anteprima nel listato.",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_notificationWorkaround_desc": {
+	"message": "Rimuovi notifiche di Personas Plus.",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_menus_title": {
+	"message": "Posizioni del Menu Persona",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_toolsSubmenu": {
+	"message": "Nel Menu Strumenti.",
+	"description": "Text displayed in the options pane"
+  },
+  
+  "options_mainMenuBar": {
+	"message": "Nella Menu-Bar Principale.",
+	"description": "Text displayed in the options pane"
   }
 }
