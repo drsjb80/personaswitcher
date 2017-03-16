@@ -1,11 +1,27 @@
 html, body {
-  width: 100px;
+  width: auto;
+  background-color: #FFFFF;
 }
 
 .button {
-  margin: 3% auto;
-  padding: 4px;
-  text-align: center;
-  font-size: 1.5em;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 1em;
   cursor: pointer;
 }
+
+.theme:hover {
+	border: 1px solid black;
+	background-color: #EEEEEE;
+}
+
+.theme{
+	border: none;
+ background-color: #FFFFFF;
+}
+
+.button:hover{
+	border: 1px solid black;
+	background-color: #EEEEEE;
+}
+

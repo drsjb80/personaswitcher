@@ -117,14 +117,34 @@ var WindowListener = {
 } 
 //Message handler for communication with embedded WebExtension
 function messageHandler(message, sender, sendResponse) {
-	//Example message evaluation and response
-	/*switch (message.command) 
-	{
-		case "some-message":
-			 sendResponse({anId: responseDatum});
+	 switch (message.command)
+   {
+	   case "Return-Theme-List-With-Icons":
+           PersonaSwitcher.getPersonas();
+		   var themeList = PersonaSwitcher.currentThemes;
+		   var defaultTheme = {id: PersonaSwitcher.defaultTheme.id, name: PersonaSwitcher.defaultTheme.name, iconURL: PersonaSwitcher.defaultTheme.iconURL};
+		   themeList.push(defaultTheme);
+		   sendResponse({themes: themeList});
+           break;
+       case "Return-Theme-List-With-No-Icons":
+           PersonaSwitcher.getPersonas();
+		   var themeList = PersonaSwitcher.currentThemes;
+		   var defaultTheme = {id: PersonaSwitcher.defaultTheme.id, name: PersonaSwitcher.defaultTheme.name, iconURL: PersonaSwitcher.defaultTheme.iconURL};
+		   themeList.push(defaultTheme);
+		   sendResponse({themes: themeList});
+           break;
+		case "Switch-Themes":
+           PersonaSwitcher.switchTo(message.theme);
+           break;	
+		case "Preview-Theme":
+            LightweightThemeManager.previewTheme (message.theme);
 			break;
-	}*/
-}
+		case "End-Preview":
+			LightweightThemeManager.resetPreview();
+			break;
+		}
+	}
+
 
 //UI Injection
 function injectMainMenu(doc) {
