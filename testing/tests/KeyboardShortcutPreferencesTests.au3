@@ -8,7 +8,7 @@ Local $testName = "Keyboard Shortcut Preferences Tests"
 Local $tests[9]
 
 InitializeFirefox()
-Local $themeList = GetListOfInstalledThemeIds()
+Local $themeList = GetInstalledThemeIds()
 
 ; run tests and store results
 $tests[0] = DefaultPersona_DifferentKeyAndChar()

@@ -3,7 +3,7 @@
 ; Runs all tests found in child "\tests\" directory
 ; Stops running tests if the cursor is moved while Firefox is active
 
-Local Const $sTestDirectory = @ScriptDir & "\Automated Tests\"
+Local Const $sTestDirectory = @ScriptDir & "\tests\"
 Local $aTestsList = _FileListToArray($sTestDirectory, "*.au3")
 Local $testsRan = 0
 Local $totalTests = 0
