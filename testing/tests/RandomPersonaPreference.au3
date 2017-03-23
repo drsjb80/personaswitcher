@@ -1,9 +1,10 @@
-#include "..\library\_PSTestingLibrary.au3"
+#include "..\library\PSTestingLibrary.au3"
+
 ;---------------------------------------------------------------------------------------;
 ; This script tests for proper functionality of Persona Switcher's "switch to random
 ; persona instead of least recent" preference
 
-Local $testName = "Random Persona Preference"
+Local $testName = "Random Persona Preference Tests"
 Local $rotateKey = "^!r"
 Local $tests[3]
 
@@ -11,6 +12,7 @@ InitializeFirefox()
 ResetToDefaultTheme()
 PersonaSwitcherRotate()
 
+; run tests and store results
 $tests[0] = Test_SwitchToRandomDisabledRotate()
 $tests[1] = Test_SwitchToRandomEnabledRotate()
 $tests[2] = Test_SwitchToRandomEnabledRestart()
@@ -26,55 +28,63 @@ Exit(0)
 ; Disables Persona Switcher's switch to random preference, rotates through all
 ; installed themes twice, checks that the pattern of themes displayed was a cycle
 Func Test_SwitchToRandomDisabledRotate()
+   Local $sDescription
+   Local $testPassed = False
+
    SetPsOption('random', True)
    SetPsOption('random', False)
 
    Local $themeIndices = GetThemeCycleIndices()
-   Local $sResults = ""
+   Local $sDescription = ""
 
    If Not ArrayIsCycle($themeIndices) Then
-	  $sResults = "TEST FAILED: After disabling the 'switch to random " & _
+	  $sDescription = "After disabling the 'switch to random " & _
 		 "persona' preference, rotating through personas did not follow " & _
 		 "a cycle." & @CRLF & "  Resulting order of persona indices:  " & _
 		 _ArrayToString($themeIndices)
    Else
-	  $sResults = "TEST PASSED: After disabling the 'switch to random " & _
+	  $testPassed = True
+	  $sDescription = "After disabling the 'switch to random " & _
 		 "persona' preference, rotating through personas followed a cycle." & _
 		 @CRLF & "  Resulting order of persona indices:  " & _
 		 _ArrayToString($themeIndices)
    EndIf
 
-   Return $sResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 
 ; Enables Persona Switcher's switch to random preference, rotates through
 ; themes, checks that the pattern of themes displayed was not a cycle
 Func Test_SwitchToRandomEnabledRotate()
+   Local $sDescription
+   Local $testPassed = False
+
    SetPsOption('random', False)
    SetPsOption('random', True)
 
    Local $themeIndices = GetThemeCycleIndices()
-   Local $sResults = ""
+   Local $sDescription = ""
 
    If FirstHalfOfArrayIsEqualToSecond($themeIndices) Then
-	  $sResults = "TEST FAILED: After enabling the 'switch to random " & _
+	  $sDescription = "After enabling the 'switch to random " & _
 		 "persona' preference, rotating through personas was not random." & _
 		 @CRLF & "  Resulting order of persona indices:  " & _
 		 _ArrayToString($themeArrays)
    ElseIf ArrayIsCycle($themeIndices) Then
-	  $sResults = "TEST FAILED: After enabling the 'switch to random " & _
+	  $sDescription = "After enabling the 'switch to random " & _
 		 "persona' preference, rotating through personas followed a cycle." & _
 		 @CRLF & "  Resulting order of persona indices:  " & _
 		 _ArrayToString($themeIndices)
    Else
-	  $sResults = "TEST PASSED: After enabling the 'switch to random " & _
+	  $testPassed = True
+	  $sDescription = "After enabling the 'switch to random " & _
 		 "persona' preference, rotating through personas did not follow" & _
 		 " a cycle." & @CRLF & "  Resulting order of persona indices:  " & _
 		 _ArrayToString($themeIndices)
    EndIf
 
-   Return $sResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 
@@ -83,36 +93,40 @@ EndFunc
 ; displayed are not a cycle. Note: this test could falsely fail if the
 ; random themes selected happen to be in chronological order
 Func Test_SwitchToRandomEnabledRestart()
+   Local $sDescription
+   Local $testPassed = False
+
    SetPsOption('random', False)
    SetPsOption('startup-switch', True)
    SetPsOption('random', True)
 
    Local $numberOfRestarts = 3
    Local $themeIndices[$numberOfRestarts + 1]
-   Local $sResults = ""
+   Local $sDescription = ""
 
-   $themeIndices[0] = _FFPrefGet("extensions.personaswitcher.current")
+   $themeIndices[0] = GetPsOption("current")
 
    For $i = 1 To $numberOfRestarts
 	  RestartFirefox()
-	  $themeIndices[$i] = _FFPrefGet("extensions.personaswitcher.current")
+	  $themeIndices[$i] = GetPsOption("current")
    Next
 
    If ArrayIsCycle($themeIndices) Then
-	  $sResults = "TEST FAILED: After enabling the 'switch to random " & _
+	  $sDescription = "After enabling the 'switch to random " & _
 		 "persona' and 'rotate on startup' preferences, rotating " & _
 		 "personas by restarting Firefox followed a cycle." & _
 		 @CRLF & "  Resulting order of persona indices:  " & _
 		 _ArrayToString($themeIndices)
    Else
-	  $sResults = "TEST PASSED: After enabling the 'switch to random " & _
+	  $testPassed = True
+	  $sDescription = "After enabling the 'switch to random " & _
 	  "persona' and 'rotate on startup' preferences, rotating " & _
 	  "personas by restarting Firefox didn't follow a cycle." & _
 	  @CRLF & "  Resulting order of persona indices:  " & _
 	  _ArrayToString($themeIndices)
    EndIf
 
-   return $sResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 
@@ -125,12 +139,12 @@ Func GetThemeCycleIndices()
    Local $themes = GetAllThemeIds()
    Local $themeIndices[Ubound($themes) * 2 + 1]
 
-   $themeIndices[0] = _FFPrefGet("extensions.personaswitcher.current")
+   $themeIndices[0] = GetPsOption("current")
 
    For $i = 1 To (Ubound($themeIndices) - 1)
 	  Send($rotateKey)
 	  Sleep(750)
-	  $themeIndices[$i] = _FFPrefGet("extensions.personaswitcher.current")
+	  $themeIndices[$i] = GetPsOption("current")
    Next
 
    return $themeIndices

@@ -1,6 +1,8 @@
 #include "..\library\PSTestingLibrary.au3"
 
 ;-----------------------------------------------------------------------------;
+; This script tests for proper functionality of Persona Switcher's keyboard
+; shortcut preferences
 
 Local $testName = "Keyboard Shortcut Preferences Tests"
 Local $tests[9]
@@ -23,8 +25,11 @@ SaveResultsToFile($tests, $testName)
 EndFirefox()
 Exit(0)
 
+
 ;---------------------------------------- tests ----------------------------------------;
 
+
+;------------------------------------------------------------------------------
 ; Testing that the new shortcut key combination assigned to the Default Persona
 ; shortcut will change the theme back to default.
 ; Changed Ctrl + Alt + D to Shift + Alt + W
@@ -354,10 +359,7 @@ Func AutoSwitch_Disable()
 
    Return FormatTestString($testPassed, $sDescription)
 EndFunc
-
-
-;------------------------------------ helper functions ---------------------------------;
-
+;------------------------------------------------------------------------------
 ; Helper function to change the theme, except default
 Func SelectTheme()
    ; ensure firefox window is active before proceeding

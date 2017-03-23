@@ -1,6 +1,6 @@
 #include <File.au3>
 
-; Runs all tests found in child "\Automated Tests\" directory
+; Runs all tests found in child "\tests\" directory
 ; Stops running tests if the cursor is moved while Firefox is active
 
 Local Const $sTestDirectory = @ScriptDir & "\Automated Tests\"
@@ -36,9 +36,6 @@ For $test In $aTestsList
 	  Else
 		 $totalTests = $totalTests + 1
 	  EndIf
-
-
-
    EndIf
 Next
 

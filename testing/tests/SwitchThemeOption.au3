@@ -1,10 +1,11 @@
-#include "..\library\_PSTestingLibrary.au3"
+#include "..\library\PSTestingLibrary.au3"
+
 ;-----------------------------------------------------------------------------;
+; This script tests Persona Switcher's 'switch every _ minutes' preference
 
-Local $testName = "Switch Theme Option"
-Local $tests[7]
+Local $testName = "Auto Switch Preference Tests"
+Local $tests[6]
 
-; start Firefox and setup for tests
 InitializeFirefox()
 
 ; run tests and store results
@@ -12,24 +13,18 @@ $tests[0] = SwitchTheme()
 $tests[1] = NoSwitch()
 $tests[2] = SwitchThemeOneMin()
 $tests[3] = SwitchThemeOneMinWithKeys()
-$tests[4] = SwitchThemeHappyValue()
-$tests[5] = SwitchThemeMinValue()
-$tests[6] = SwitchThemeMaxValue()
+$tests[4] = SwitchThemeMinValue()
+$tests[5] = SwitchThemeMaxValue()
 
-; save results to file
 SaveResultsToFile($tests, $testName)
-
-; reset preferences
-ResetPersonaSwitcherPrefs()
-
-; disconnect and close from Firefox
 EndFirefox()
 
 ;------------------------------------ tests ----------------------------------;
 ; Testing that the theme changes when the "Switch every __ minutes"
 ; preference is enabled
 Func SwitchTheme()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; get the current theme
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
@@ -39,20 +34,21 @@ Func SwitchTheme()
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-      $testResults = "TEST FAILED: the theme did not change as soon as the preference was enabled"
+      $sDescription = "After enabling the 'switch every _ minutes' preference, the theme did not immediately change."
    Else
-      $testResults = "TEST PASSED: the theme changed as soon as the preference was enabled"
+	  $testPassed = True
+      $sDescription = "After enabling the 'switch every _ minutes' preference, the theme immediately changed."
    EndIf
 
-   ResetPsOption("auto")
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ;******************************************************************************
 ; Testing that the theme does not change when the "Switch every __ minutes"
 ; preference goes from enabled to disabled
 Func NoSwitch()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; Enable switch theme preference
    SetPsOption("auto", True)
@@ -63,22 +59,23 @@ Func NoSwitch()
    ; Disable Switch Theme preference
    SetPsOption("auto", False)
 
-   ; check that theme at the start of the test has been changed
+   ; check that theme at the start of the test has not been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-      $testResults = "TEST PASSED: the theme stayed the same after disabling the preference"
+	  $testPassed = True
+      $sDescription = "After disabling the 'switch every _ minutes' preference, the theme did not immediately change."
    Else
-      $testResults = "TEST FAILED: the theme changed after disabling the preference"
+      $sDescription = "After disabling the 'switch every _ minutes' preference, the theme immediately changed."
    EndIf
 
-   ResetPsOption("auto")
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ;******************************************************************************
 ; Testing that the theme changes after 1 minute when the "Switch every __ minutes"
 ; preference is enabled and set to 1 minute
 Func SwitchThemeOneMin()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; Enable switch theme preference and to 1 min
    SetPsOption("auto", True)
@@ -87,25 +84,32 @@ Func SwitchThemeOneMin()
    ; get the current theme
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   Sleep(60000)
-
-   ; check that theme at the start of the test has been changed
-   If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-      $testResults = "TEST FAILED: the theme was not changed in 1 minute"
+   ; wait one minute (5 second window)
+   Sleep(57500)
+   If $startTheme <> _FFPrefGet("lightweightThemes.selectedThemeID") Then
+	  $sDescription = "After setting 'switch ever _ minutes' to one minute, the theme changed in under a minute."
    Else
-      $testResults = "TEST PASSED: the theme was changed in 1 minute"
+	  Sleep(5000)
+	  If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
+		 $sDescription = "After setting 'switch ever _ minutes' to one minute and waiting one minute, the theme was not changed."
+	  Else
+		 $testPassed = True
+		 $sDescription = "After setting 'switch ever _ minutes' to one minute and waiting one minute, the theme changed."
+	  EndIf
    EndIf
 
    ResetPsOption("auto")
    ResetPsOption("autominutes")
-   Return $testResults
+
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 ;******************************************************************************
 ; Testing that the theme changes when "Switch every __ minutes" preference is
 ; enabled through the shortcut key (default = ctrl + alt + a) and also changes
 ; again after 1 minute
 Func SwitchThemeOneMinWithKeys()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
    Local $noThemeChange = false
 
    ; Enable switch theme preference and to 1 min
@@ -115,91 +119,72 @@ Func SwitchThemeOneMinWithKeys()
    ; get the current theme
    Local $firstTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   ; Disable switch theme preference
-   SetPsOption("auto", False)
-
-   Sleep(500)
    Send("^!a")
+   Sleep(500)
 
    ; get the current theme
    Local $secondTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   Sleep(60000)
-
-   ; check that theme changed when we enabled the preference with the shortcut key
-   If $firstTheme == $secondTheme Then
-	  $noThemeChange = true;
-   EndIf
-
-    ; check that theme changed after 1 min
-   If $secondTheme == _FFPrefGet("lightweightThemes.selectedThemeID") OR $noThemeChange Then
-      $testResults = "TEST FAILED: the theme did not change after enabling with shortcut key or after 1 minute"
+   If $firstTheme <> $secondTheme Then
+	  $sDescription = "Theme was not rotated by pressing 'ctrl + alt + a' with the 'switch every _ minutes' preference enabled."
    Else
-      $testResults = "TEST PASSED: the theme was changed after enabling with shortcut key and also after in 1 minute"
+	  ; wait one minute (5 second window)
+	  Sleep(57000)
+
+	  If $secondTheme <> _FFPrefGet("lightweightThemes.selectedThemeID") Then
+		 $sDescription = "After rotating to a new theme, the theme automatically changed in under a minute."
+	  Else
+		 Sleep(5000)
+		 If $secondTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
+			$sDescription = "After rotating to a new theme, the theme was not automatically changed in a minute."
+		 Else
+			$testPassed = True
+			$sDescription = "After rotating to a new theme, the theme was automatically changed in a minute."
+		 EndIf
+	  EndIf
    EndIf
 
-   ResetPsOption("auto")
-   ResetPsOption("autominutes")
-   Return $testResults
-EndFunc
-;******************************************************************************
-; Testing that the "happy path" value (1 - 999) of the preference is valid.
-Func SwitchThemeHappyValue()
-   Local $testResults
-
-   ; Update preference value to 50 min
-   Local $valueCopy = SetPsOption("autominutes", "50", True)
-
-   ; check that value is set to the value entered
-   If $valueCopy == 50 Then
-      $testResults = "TEST PASSED: the value 50 was accepted because it is a valid value"
-   Else
-      $testResults = "TEST FAILED: the value 50 was not accepted"
-   EndIf
-
-   ResetPsOption("autominutes")
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 ;******************************************************************************
 ; Testing that the min value of the preference is 1 and nothing less can be entered.
 Func SwitchThemeMinValue()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    SetPsOption("auto", True)
 
-   ; Update preference value to 0 min
+   ; Update preference value to 0 min and copy actual stored result to clipboard
    Local $valueCopy = SetPsOption("autominutes", "0", True)
 
    ; check that value is set to the min
-   If $valueCopy == 1 Then
-      $testResults = "TEST PASSED: the value 0 was not accepted because the min is 1"
+   If $valueCopy >= 1 Then
+	  $testPassed = True
+      $sDescription = "Persona Switcher did not allow a value less than the minimum (1) for the 'switch every _ minutes' preference to be entered."
    Else
-      $testResults = "TEST FAILED: the value 0 was accepted even thought the min is 1"
+      $sDescription = "Persona Switcher allowed a value less than the minimum (1) for the 'switch every _ minutes' preference to be entered."
    EndIf
 
    ResetPsOption("autominutes")
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 ;******************************************************************************
 ; Testing that the max value of the preference is 999 and nothing larger
 ; can be entered.
 Func SwitchThemeMaxValue()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    Local $valueCopy = SetPsOption("autominutes", 1000, True)
 
-   ; Close preferences
-   Send("{TAB 10}")
-   Sleep(500)
-   Send("{ENTER}")
-
    ; check that value is set to the max
-   If $valueCopy == 999 Then
-      $testResults = "TEST PASSED: the value 1000 was not accepted because the max is 999"
+   If $valueCopy <= 999 Then
+	  $testPassed = True
+      $sDescription = "Persona Switcher did not allow a value less than the maximum (999) for the 'switch every _ minutes' preference to be entered."
    Else
-      $testResults = "TEST FAILED: the value 1000 was accepted even thought the max is 999"
+      $sDescription = "Persona Switcher allowed a value less than the maximum (999) for the 'switch every _ minutes' preference to be entered."
    EndIf
 
    ResetPsOption("autominutes")
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc

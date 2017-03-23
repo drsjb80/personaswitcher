@@ -1,11 +1,15 @@
+; This library contains functions related to getting, setting, and
+; resetting Persona Switcher's preferences. Tests that interface
+; with Persona Switcher's preferences should do so through these
+; functions.
+
+
 ; ==========================================================
-; Name ..........: OpenPersonaSwitcherPrefs
-; Description ...: Opens Persona Switcher's options page
-; Return Value ..: Success      - True
-;                  Failure      - False
+; Opens Persona Switcher's options page. Ends calling script on failure
 ; ==============================================================================
 Func OpenPersonaSwitcherPrefs()
-   ; open addons page
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+
    If Not (_FFTabGetSelected("label") == "Add-ons Manager") Then
 	  _FFTabAdd("about:addons")
 	  _FFLoadWait()
@@ -22,16 +26,14 @@ Func OpenPersonaSwitcherPrefs()
    If WinWaitActive("Persona Switcher preferences", "", 3) Then
 	  return True
    Else
-	  MsgBox(64, "", "Unable to reach Persona Switcher preferences.")
-	  return False
+	  MsgBox(64, "", "Unable to reach Persona Switcher preferences, aborting tests")
+	  Exit(1)
    EndIf
 EndFunc
 
 
-
 ; ==========================================================
-; Name ..........: ResetPersonaSwitcherPrefs
-; Description ...: Resets all of Persona Switcher's preferences on the about:config page
+; Resets all of Persona Switcher's preferences on the about:config page
 ; ==============================================================================
 Func ResetPersonaSwitcherPrefs()
    _FFPrefReset("extensions.personaswitcher.accesskey")
@@ -82,13 +84,25 @@ Func ResetPersonaSwitcherPrefs()
 EndFunc
 
 
-Func GetPsOption(ByRef $sOption)
+; ==========================================================
+; Returns the value from the passed persona switcher preference
+; Parameters - $sOption			String associated with preference to get
+; ==============================================================================
+Func GetPsOption(Const $sOption)
+   WinWaitActive("[CLASS:MozillaWindowClass]")
    Return _FFPrefGet("extensions.personaswitcher." & $sOption)
 EndFunc
 
-Func SetPsOption(ByRef $sOption, ByRef $value, $copyToClipboard = False)
+
+; ==========================================================
+; Sets the value of the passed persona switcher preference
+; Parameters - $sOption			String associated with preference to set
+;              $value			Value to set preference
+;              $copyToClipboard	Copy the text field of this preference after setting it
+; ==============================================================================
+Func SetPsOption(Const $sOption, Const $value, $copyToClipboard = False)
    Local $oldValue = GetPsOption($sOption)
-   If ($value == $oldValue Or _
+   If Not $copyToClipboard And ($value == $oldValue Or _
 		 ($value And $oldValue == 1) Or _
 		 (Not $value And $oldValue == 0)) Then
 	  Return False
@@ -99,29 +113,44 @@ Func SetPsOption(ByRef $sOption, ByRef $value, $copyToClipboard = False)
 	  TabToPref($sOption)
 
 	  If isBool($value) Then
+		 Sleep(500)
 		 Send("{SPACE}")
 		 Sleep(500)
 	  Else
+		 Send("{DELETE}")
+		 Sleep(250)
 		 Send($value, 1)
 		 Sleep(500)
 	  EndIf
 
-	  If $copyToClipboard Then
-		 $returnVal = GetTextFromFocusedField()
-	  EndIf
-
 	  Send("{ENTER}")
 	  WinWaitActive("[CLASS:MozillaWindowClass]")
-	  Sleep(500)
+	  Sleep(1000)
+
+	  If $copyToClipboard Then
+		 OpenPersonaSwitcherPrefs()
+		 TabToPref($sOption)
+		 $returnVal = GetTextFromFocusedField()
+		 Send("{ENTER}")
+		 WinWaitActive("[CLASS:MozillaWindowClass]")
+	  EndIf
+
 	  Return $returnVal
    EndIf
 EndFunc
 
-Func ResetPsOption(ByRef $sOption)
+
+; ==========================================================
+; Resets the value from the passed persona switcher preference
+; Parameters - $sOption			String associated with preference to reset
+; ==============================================================================
+Func ResetPsOption(Const $sOption)
    _FFPrefReset("extensions.personaswitcher." & $sOption)
 EndFunc
 
 
+
+; Copies the text from the focued field and returns the clipboard contents
 Func GetTextFromFocusedField()
    Send("^a")
    Sleep(500)
@@ -130,9 +159,11 @@ Func GetTextFromFocusedField()
    Return ClipGet()
 EndFunc
 
-Func TabToPref(ByRef $sOption)
+; Tabs to the passed in preference (assumes persona switcher's option page is open)
+Func TabToPref(Const $sOption)
    Local $tabMap[40]
 
+   ; index = # of tabs to reach preference
    $tabMap[0] = 'defshift'
    $tabMap[1] = 'defcontrol'
    $tabMap[5] = 'defos'
@@ -159,6 +190,7 @@ Func TabToPref(ByRef $sOption)
    $tabMap[38] = 'tools-submenu'
    $tabMap[39] = 'main-menubar'
 
+   WinWaitActive("Persona Switcher preferences")
 
    For $i = 0 To UBound($tabMap) - 1
 	  If ($tabMap[$i] = $sOption) Then
@@ -168,6 +200,7 @@ Func TabToPref(ByRef $sOption)
 	  EndIf
    Next
 
-   MsgBox(64, '', "Preference error")
-   Return False
+   ; preference wasn't found
+   MsgBox(64, 'PsPrefUtil Error', "'" & $sOption & "' was not found")
+   Exit(1)
 EndFunc

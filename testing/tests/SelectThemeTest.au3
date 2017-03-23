@@ -1,20 +1,12 @@
-#cs ----------------------------------------------------------------------------
- AutoIt Version: 3.3.14.2
- Author:         Trever Mock
-#ce ----------------------------------------------------------------------------
-
-#include "..\library\_PSTestingLibrary.au3"
+#include "..\library\PSTestingLibrary.au3"
 
 ;-----------------------------------------------------------------------------;
+; This script tests various methods of changing themes with Persona Switcher
 
-Local $testName = "Select a Theme Test" ; name of test category (ex: Toolbar Tests)
-Local $tests[7] ; size of array = number of tests
+Local $testName = "Theme Selecting Tests"
+Local $tests[7]
 
-; start Firefox and setup for tests
 InitializeFirefox()
-
-; Reset Persona Switcher Preferences to Defaults and enable the toolbar menu
-ResetPersonaSwitcherPrefs()
 SetPsOption("main-menubar", true)
 
 ; run tests and store results
@@ -26,10 +18,7 @@ $tests[4] = SelectThemeCaseFive()	; PSwitcher Menu (by F10 Shortcut)
 $tests[5] = SelectThemeCaseSix()	; Firefox toolbar (by F10 Shortcut)
 $tests[6] = SelectThemeCaseSeven()	; PSwitcher icon button
 
-; save results to file
 SaveResultsToFile($tests, $testName)
-
-; disconnect and close from Firefox
 EndFirefox()
 
 ;------------------------------------ tests ----------------------------------;
@@ -37,13 +26,14 @@ EndFirefox()
 ;Press "Ctrl" + "Alt" + "D"
 ;Check if theme changes to default theme
 Func SelectThemeCaseOne()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
-   ; store the default theme information
-   Local $defaultTheme = ""	; The default theme id is the empty string
+   ResetToDefaultTheme()
+   Local $defaultTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; change the theme from default to the first in the theme list
-   _FFPrefSet("lightweightThemes.selectedThemeID", GetListOfThemeIds()[0])
+   _FFPrefSet("lightweightThemes.selectedThemeID", GetInstalledThemeIds()[0])
 
    ; change back to default
    Send("{CTRLDOWN}")
@@ -59,12 +49,13 @@ Func SelectThemeCaseOne()
 
    ; check that theme at the start of the test has been changed
    If $defaultTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-	  $testResults = "TEST PASSED: 'CTRL' + 'ALT' + 'D' correctly selected the default theme"
+	  $testPassed = True
+	  $sDescription = "'CTRL' + 'ALT' + 'D' correctly selected the default theme."
    Else
-	  $testResults = "TEST FAILED: 'CTRL' + 'ALT' + 'D' did not select the default theme"
+	  $sDescription = "'CTRL' + 'ALT' + 'D' did not select the default theme."
    EndIf
 
-   return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ; Press "Ctrl" + "Alt" + "R"
@@ -72,12 +63,12 @@ EndFunc
 ; Check if theme rotates each time (exccluding default)
 ; Check if the theme rotates back to the original persona
 Func SelectThemeCaseTwo()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; Copied from PS Testing Library 'GetListOfThemeIds' function to get size of list
    Local $jsonThemeList = _FFPrefGet("lightweightThemes.usedThemes")
-   Local $themesWithId = StringRegExp($jsonThemeList, '("id":"\d*")', 3) ; Regex for format "id":"286995"
-   Local $size = Ubound($themesWithId, 1)
+   Local $size = Ubound(GetAllThemeIds())
 
    Send("{CTRLDOWN}")
    Sleep(500)
@@ -88,21 +79,18 @@ Func SelectThemeCaseTwo()
 
    Local $originalTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   Local $i = 0
-   While $i <= $size
+   For $i = 1 To $size - 1
 	  Send("{r}")
-	  Sleep(500)
+	  Sleep(750)
 	  if $originalTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-		 $testResults = "TEST FAILED: 'CTRL' + 'ALT' + 'R' does not rotate through personas correctly"
+		 $sDescription = "'CTRL' + 'ALT' + 'R' did not rotate through all personas before returning to starting persona."
 		 Send("{CTRLUP}")
 		 Sleep(500)
 		 Send("{ALTUP}")
 		 Sleep(500)
-		 return $testResults
-	  else
-		 $i = $i + 1
+		 Return FormatTestString($testPassed, $sDescription)
 	  EndIf
-   WEnd
+   Next
 
    ; rotate theme to different theme
    Send("{r}")
@@ -112,14 +100,18 @@ Func SelectThemeCaseTwo()
    Send("{ALTUP}")
    Sleep(500)
 
-   ; check that theme at the start of the test has been changed
-   If $originalTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-	  $testResults = "TEST PASSED: 'CTRL' + 'ALT' + 'R' correctly rotates through all personas"
+   Local $endingTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
+
+   If $originalTheme == $endingTheme Then
+	  $testPassed = True
+	  $sDescription = "'CTRL' + 'ALT' + 'R' correctly rotated through all personas."
    Else
-	  $testResults = "TEST FAILED: 'CTRL' + 'ALT' + 'R' does not rotate through personas correctly"
+	  $sDescription = "'CTRL' + 'ALT' + 'R' did not return to starting persona." & _
+		 @CRLF & "  starting persona ID: " & $originalTheme & _
+		 @CRLF & "  ending persona ID: " & $endingTheme
    EndIf
 
-   return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ;Press "Alt" + "P"
@@ -127,10 +119,11 @@ EndFunc
 ;Press Enter Key
 ;Check if theme changes to theme selected
 Func SelectThemeCaseThree()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; set theme to default
-   _FFPrefSet("lightweightThemes.selectedThemeID", "")
+   ResetToDefaultTheme()
    Sleep(500)
 
    ; get the current theme
@@ -150,12 +143,13 @@ Func SelectThemeCaseThree()
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-	  $testResults = "TEST FAILED: theme was not selected using the PSwitcher Menu ('ALT' + 'P') on the Firefox Menu Bar"
+	  $sDescription = "Theme was not selected using the PSwitcher Menu ('ALT' + 'P') on the Firefox Menu Bar."
    Else
-	  $testResults = "TEST PASSED: theme was selected using the PSwitcher Menu ('ALT' + 'P') on the Firefox Menu Bar"
+	  $testPassed = True
+	  $sDescription = "Theme was selected using the PSwitcher Menu ('ALT' + 'P') on the Firefox Menu Bar."
    EndIf
 
-   return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ;Press "Ctrl" + "Alt" + "P"
@@ -163,10 +157,11 @@ EndFunc
 ;Press Enter Key
 ;Check if theme changes to theme selected
 Func SelectThemeCaseFour()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; set theme to default
-   _FFPrefSet("lightweightThemes.selectedThemeID", "")
+   ResetToDefaultTheme()
    Sleep(500)
 
    ; get the current theme
@@ -192,22 +187,24 @@ Func SelectThemeCaseFour()
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-	  $testResults = "TEST FAILED: theme was not selected using the PSwitcher Menu ('CTRL' + 'ALT' + 'P') on the Firefox Menu Bar"
+	  $sDescription = "Theme was not selected using the PSwitcher Menu ('CTRL' + 'ALT' + 'P') on the Firefox Menu Bar."
    Else
-	  $testResults = "TEST PASSED: theme was selected using the PSwitcher Menu ('CTRL' + 'ALT' + 'P') on the Firefox Menu Bar"
+	  $testPassed = True
+	  $sDescription = "Theme was selected using the PSwitcher Menu ('CTRL' + 'ALT' + 'P') on the Firefox Menu Bar."
    EndIf
 
-   return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ; Select PSSwitcher Menu on Menu Bar
 ; Select Theme
 ; Check if theme changed
 Func SelectThemeCaseFive()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; set theme to default
-   _FFPrefSet("lightweightThemes.selectedThemeID", "")
+   ResetToDefaultTheme()
    Sleep(500)
 
    ; get the current theme
@@ -225,22 +222,24 @@ Func SelectThemeCaseFive()
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-	  $testResults = "TEST FAILED: theme was selected through PSwitcher Menu (by F10 Shortcut) on the Firefox Menu Bar"
+	  $sDescription = "Theme was selected through PSwitcher Menu (by F10 Shortcut) on the Firefox Menu Bar."
    Else
-	  $testResults = "TEST PASSED: theme was selected through PSwitcher Menu (by F10 Shortcut) on the Firefox Menu Bar"
+	  $testPassed = True
+	  $sDescription = "Theme was selected through PSwitcher Menu (by F10 Shortcut) on the Firefox Menu Bar."
    EndIf
 
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ; send keys 'f10', 't' to open firefox toolbar
 ; then send key 'p' to select PersonaSwitcher
 ; use arrow keys to navigate themes, enter to select
 Func SelectThemeCaseSix()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; set theme to default
-   _FFPrefSet("lightweightThemes.selectedThemeID", "")
+   ResetToDefaultTheme()
    Sleep(500)
 
    ; get the current theme
@@ -260,21 +259,23 @@ Func SelectThemeCaseSix()
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-	  $testResults = "TEST FAILED: theme was not selected through the Firefox toolbar (by F10 Shortcut)"
+	  $sDescription = "Theme was not selected through the Firefox toolbar (by F10 Shortcut)."
    Else
-	  $testResults = "TEST PASSED: theme was selected through the Firefox toolbar (by F10 Shortcut)"
+	  $testPassed = True
+	  $sDescription = "Theme was selected through the Firefox toolbar (by F10 Shortcut)."
    EndIf
 
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
 
 ; click on the persona switcher icon and switch the persona
 ; check if the persona has been changed
 Func SelectThemeCaseSeven()
-   Local $testResults
+   Local $sDescription
+   Local $testPassed = False
 
    ; set theme to default
-   _FFPrefSet("lightweightThemes.selectedThemeID", "")
+   ResetToDefaultTheme()
    Sleep(500)
 
    ; get the current theme
@@ -292,10 +293,11 @@ Func SelectThemeCaseSeven()
 
    ; check that theme at the start of the test has been changed
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-	  $testResults = "TEST FAILED: theme was not selected through the PSwitcher icon button"
+	  $sDescription = "Theme was not selected through the PSwitcher icon button."
    Else
-	  $testResults = "TEST PASSED: theme was selected through the PSwitcher icon button"
+	  $testPassed = True
+	  $sDescription = "Theme was selected through the PSwitcher icon button."
    EndIf
 
-   Return $testResults
+   Return FormatTestString($testPassed, $sDescription)
 EndFunc
