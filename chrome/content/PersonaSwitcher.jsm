@@ -5,7 +5,7 @@
 /*global Components*/
 /*jslint vars: false*/
 
-Components.utils.import('resource://gre/modules/devtools/Console.jsm');
+Components.utils.import("resource://gre/modules/Console.jsm");
 Components.utils["import"]
     ("resource://gre/modules/LightweightThemeManager.jsm");
 
@@ -196,7 +196,7 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
                 break;	
-			case 'icon-preview':
+						case 'icon-preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
                 break;			
@@ -263,6 +263,72 @@ PersonaSwitcher.prefsObserver =
 
 PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 
+
+
+// call a function passed as a parameter with one document of each window
+PersonaSwitcher.allDocuments = function (func)
+{	
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
+	var aWindow;
+    while (enumerator.hasMoreElements())
+    {
+			aWindow = enumerator.getNext();
+			PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
+			func(aWindow.document);
+    }
+};
+
+// call a function passed as a parameter for each window
+PersonaSwitcher.allWindows = function (func)
+{
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
+    while (enumerator.hasMoreElements())
+    {
+		func(enumerator.getNext());
+    }
+};
+
+PersonaSwitcher.hideMenu = function (doc, which)
+{
+    var d = doc.getElementById ('personaswitcher-' + which);
+    if (d) d.hidden = true;
+};
+
+/*
+** remove a particular menu in all windows
+*/
+PersonaSwitcher.hideMenus = function (which)
+{
+    PersonaSwitcher.logger.log (which);
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+
+    while (enumerator.hasMoreElements())
+    {
+        var doc = enumerator.getNext().document;
+        PersonaSwitcher.hideMenu (doc, which);
+    }
+};
+
+PersonaSwitcher.showMenu = function (doc, which)
+{
+    var d = doc.getElementById ('personaswitcher-' + which);
+    if (d) d.hidden = false;
+};
+
+PersonaSwitcher.showMenus = function (which)
+{
+    PersonaSwitcher.logger.log (which);
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+
+    while (enumerator.hasMoreElements())
+    {
+        var doc = enumerator.getNext().document;
+        PersonaSwitcher.showMenu (doc, which);
+    }
+};
+
 // ---------------------------------------------------------------------------
 
 /*
@@ -277,9 +343,12 @@ PersonaSwitcher.rotate = function()
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
-        // pick a number between 1 and the end
+			var prevIndex = PersonaSwitcher.currentIndex;
+			// pick a number between 1 and the end until a new index is found
+			while(PersonaSwitcher.currentIndex === prevIndex) {
         PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
+			}
     }
     else
     {
@@ -466,8 +535,7 @@ PersonaSwitcher.previous = function()
 };
 
 /*
-** if the user pressed the rotate keyboard command, rotate and
-** reset the timer.
+** if the user pressed the rotate keyboard command
 */
 PersonaSwitcher.rotateKey = function()
 {

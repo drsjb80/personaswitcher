@@ -494,47 +494,6 @@ PersonaSwitcher.createMenuPopup = function (event)
     PersonaSwitcher.createMenuPopupWithDoc (doc, menupopup);
 };
 
-PersonaSwitcher.hideMenu = function (doc, which)
-{
-    var d = doc.getElementById ('personaswitcher-' + which);
-    if (d) d.hidden = true;
-};
-
-/*
-** remove a particular menu in all windows
-*/
-PersonaSwitcher.hideMenus = function (which)
-{
-    PersonaSwitcher.logger.log (which);
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        var doc = enumerator.getNext().document;
-        PersonaSwitcher.hideMenu (doc, which);
-    }
-};
-
-PersonaSwitcher.showMenu = function (doc, which)
-{
-    var d = doc.getElementById ('personaswitcher-' + which);
-    if (d) d.hidden = false;
-};
-
-PersonaSwitcher.showMenus = function (which)
-{
-    PersonaSwitcher.logger.log (which);
-
-    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-
-    while (enumerator.hasMoreElements())
-    {
-        var doc = enumerator.getNext().document;
-        PersonaSwitcher.showMenu (doc, which);
-    }
-};
-
 //Appears to have been a Hack to get popupHidden to work in non-Firefox applications
 //Is no longer being called anywhere. Remove?
 PersonaSwitcher.popupShowing = function (event)
@@ -575,26 +534,6 @@ PersonaSwitcher.setAccessKey = function (doc)
     {
         var menu = doc.getElementById ('personaswitcher-main-menubar');
         menu.setAttribute ('accesskey', accesskey.toUpperCase().charAt(0));
-    }
-};
-
-// call a function passed as a parameter with one document of each window
-PersonaSwitcher.allDocuments = function (func)
-{	
-	var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-    while (enumerator.hasMoreElements())
-    {
-		func(enumerator.getNext().document);
-    }
-};
-
-// call a function passed as a parameter for each window
-PersonaSwitcher.allWindows = function (func)
-{
-	var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
-    while (enumerator.hasMoreElements())
-    {
-		func(enumerator.getNext());
     }
 };
 
@@ -717,6 +656,8 @@ PersonaSwitcher.onWindowLoad = function (doc)
     PersonaSwitcher.setKeyset (doc);
     PersonaSwitcher.setAccessKey (doc);
     PersonaSwitcher.setToolboxMinheight (doc);
+		
+		var mainMenu = PersonaSwitcher.prefs.getBoolPref ('main-menubar');
 
     if (! PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {

@@ -1,27 +1,27 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
-Cu.import('resource://gre/modules/devtools/Console.jsm');
+Cu.import("resource://gre/modules/Console.jsm");
 
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
 
 function startup(data, reason) {
-  Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
-
   //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
   //load preferences
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/prefs.js', {
     pref: setDefaultPref  });
+		
+  Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
+
+  //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
+  let context = this;
+  Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
+                                    context, "UTF-8" /* The script's encoding */);
 
   //https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
   //Loading the stylesheet into all windows is a noticable hit on performance but is necessary for Thunderbird compatibility
   styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
   uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
   styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
-
-  //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
-  let context = this;
-  Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
-                                    context, "UTF-8" /* The script's encoding */);
   
   forEachOpenWindow(loadIntoWindow);
   Services.wm.addListener(WindowListener);  
@@ -35,9 +35,10 @@ function shutdown(data, reason) {
     Services.obs.notifyObservers(null, "startupcache-invalidate", null);
   }
 	
-	Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');	
   forEachOpenWindow(unloadFromWindow);
+	PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
   Services.wm.removeListener(WindowListener);
+	Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');	
   
   if (styleSheetService.sheetRegistered(uri, styleSheetService.USER_SHEET)) {
     styleSheetService.unregisterSheet(uri, styleSheetService.USER_SHEET);
@@ -54,7 +55,7 @@ function install(data, reason) {
 }
 
 function uninstall(data, reason) {
-	//Uninstall happens here
+	removeUserPrefs();
 }
 
 function loadIntoWindow(window) {		
@@ -311,3 +312,69 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
   branch = branch ? branch : Services.prefs;
   branch.setComplexValue(prefName, Components.interfaces.nsISupportsString, string);
 };
+
+function removeUserPrefs() 
+{
+	var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
+        getService(Components.interfaces.nsIPrefService).
+            getBranch ("extensions.personaswitcher.");
+						
+	userBranch.clearUserPref("defshift");
+	userBranch.clearUserPref("defcontrol");
+	userBranch.clearUserPref("defalt");
+	userBranch.clearUserPref("defmeta");
+	userBranch.clearUserPref("defaccel");
+	userBranch.clearUserPref("defos");
+	userBranch.clearUserPref("defkey");
+
+	userBranch.clearUserPref("rotshift");
+	userBranch.clearUserPref("rotcontrol");
+	userBranch.clearUserPref("rotalt");
+	userBranch.clearUserPref("rotmeta");
+	userBranch.clearUserPref("rotaccel");
+	userBranch.clearUserPref("rotos");
+	userBranch.clearUserPref("rotkey");
+
+	userBranch.clearUserPref("autoshift");
+	userBranch.clearUserPref("autocontrol");
+	userBranch.clearUserPref("autoalt");
+	userBranch.clearUserPref("autometa");
+	userBranch.clearUserPref("autoaccel");
+	userBranch.clearUserPref("autoos");
+	userBranch.clearUserPref("autokey");
+
+	userBranch.clearUserPref("activateshift");
+	userBranch.clearUserPref("activatecontrol");
+	userBranch.clearUserPref("activatealt");
+	userBranch.clearUserPref("activatemeta");
+	userBranch.clearUserPref("activateaccel");
+	userBranch.clearUserPref("activateos");
+	userBranch.clearUserPref("activatekey");
+
+	userBranch.clearUserPref("accesskey");
+
+	userBranch.clearUserPref("auto");
+	userBranch.clearUserPref("autominutes");
+
+	userBranch.clearUserPref("random");
+
+	userBranch.clearUserPref("preview");
+	userBranch.clearUserPref("preview-delay");
+	userBranch.clearUserPref("icon-preview");
+
+	userBranch.clearUserPref("tools-submenu");
+	userBranch.clearUserPref("main-menubar");
+
+	userBranch.clearUserPref("debug");
+	userBranch.clearUserPref("notification-workaround");
+
+	userBranch.clearUserPref("toolbox-minheight");
+
+	userBranch.clearUserPref("startup-switch");
+
+	userBranch.clearUserPref("fastswitch");
+
+	userBranch.clearUserPref("static-popups");
+
+	userBranch.clearUserPref("current");
+}
