@@ -1,21 +1,22 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
-Cu.import('resource://gre/modules/devtools/Console.jsm');
+Cu.import("resource://gre/modules/Console.jsm");
 
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
 
-function startup(data, reason) {
-  Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
-	
-	data.webExtension.startup().then(api => {
-    const {browser} = api;
-    browser.runtime.onMessage.addListener(messageHandler);
-  });
-
-  //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
+function startup(data, reason) {	
+	//https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
   //load preferences
   Services.scriptloader.loadSubScript('chrome://personaswitcher/content/prefs.js', {
     pref: setDefaultPref  });
+		
+  Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
+	
+  //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
+  let context = this;
+  Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
+                                    context, "UTF-8" /* The script's encoding */);
+
 
   //https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
   //Loading the stylesheet into all windows is a noticable hit on performance but is necessary for Thunderbird compatibility
@@ -23,13 +24,15 @@ function startup(data, reason) {
   uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
   styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
 
-  //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
-  let context = this;
-  Services.scriptloader.loadSubScript('chrome://personaswitcher/content/ui.js',
-                                    context, "UTF-8" /* The script's encoding */);
+																		
+	data.webExtension.startup().then(api => {
+    const {browser} = api;
+    browser.runtime.onMessage.addListener(messageHandler);
+  });
   
   forEachOpenWindow(loadIntoWindow);
   Services.wm.addListener(WindowListener);  
+	
 }
 
 function shutdown(data, reason) {
@@ -40,9 +43,10 @@ function shutdown(data, reason) {
     Services.obs.notifyObservers(null, "startupcache-invalidate", null);
   }
 	
-	Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');	
   forEachOpenWindow(unloadFromWindow);
+	PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
   Services.wm.removeListener(WindowListener);
+	Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');	
   
   if (styleSheetService.sheetRegistered(uri, styleSheetService.USER_SHEET)) {
     styleSheetService.unregisterSheet(uri, styleSheetService.USER_SHEET);
@@ -55,11 +59,11 @@ function shutdown(data, reason) {
 }
 
 function install(data, reason) {
-	//Installation happens here
+	//install stuff here
 }
 
 function uninstall(data, reason) {
-	//Uninstall happens here
+	removeUserPrefs();
 }
 
 function loadIntoWindow(window) {		
@@ -119,32 +123,165 @@ var WindowListener = {
 function messageHandler(message, sender, sendResponse) {
 	 switch (message.command)
    {
-	   case "Return-Theme-List-With-Icons":
-           PersonaSwitcher.getPersonas();
+	   case "Return-Theme-List":
+       PersonaSwitcher.getPersonas();
 		   var themeList = PersonaSwitcher.currentThemes;
 		   var defaultTheme = {id: PersonaSwitcher.defaultTheme.id, name: PersonaSwitcher.defaultTheme.name, iconURL: PersonaSwitcher.defaultTheme.iconURL};
 		   themeList.push(defaultTheme);
 		   sendResponse({themes: themeList});
-           break;
-       case "Return-Theme-List-With-No-Icons":
-           PersonaSwitcher.getPersonas();
-		   var themeList = PersonaSwitcher.currentThemes;
-		   var defaultTheme = {id: PersonaSwitcher.defaultTheme.id, name: PersonaSwitcher.defaultTheme.name, iconURL: PersonaSwitcher.defaultTheme.iconURL};
-		   themeList.push(defaultTheme);
-		   sendResponse({themes: themeList});
-           break;
+       break;
 		case "Switch-Themes":
-           PersonaSwitcher.switchTo(message.theme);
-           break;	
+			 PersonaSwitcher.switchTo(message.theme);
+			 break;	
 		case "Preview-Theme":
-            LightweightThemeManager.previewTheme (message.theme);
+			LightweightThemeManager.previewTheme(message.theme);
 			break;
 		case "End-Preview":
 			LightweightThemeManager.resetPreview();
 			break;
-		}
+		case "Rotate-Theme":
+			PersonaSwitcher.rotate();
+			break;
+		case "Return-Pref-Auto":
+			sendResponse({auto: PersonaSwitcher.prefs.getBoolPref ('auto')});
+			break;
+		case "Get-Current-Index":
+			sendResponse({current: PersonaSwitcher.currentIndex});
+		case "Set-Preference":
+			setPreference(message.preference, message.value);
+			break;
 	}
+}
 
+//Handles copying the preference values from the webextension to the legacy code
+function setPreference(preference, value) {
+	switch(preference) {
+		case 'toolboxMinHeight':
+			PersonaSwitcher.prefs.setCharPref("toolbox-minheight", value);
+			break;
+		case 'iconPreview':
+			PersonaSwitcher.prefs.setBoolPref("icon-preview", value);
+			break;
+		case 'preview':
+			PersonaSwitcher.prefs.setBoolPref("preview", value);
+			break;
+		case 'previewDelay':
+			PersonaSwitcher.prefs.setIntPref("preview-delay", parseInt(value));
+			break;
+		case 'auto':
+			PersonaSwitcher.prefs.setBoolPref("auto", value);
+			break;
+		case 'autoMinutes':
+			PersonaSwitcher.prefs.setIntPref("autominutes", parseInt(value));
+			break;
+		case 'startupSwitch':
+			PersonaSwitcher.prefs.setBoolPref("startup-switch", value);
+			break;
+		case 'mainMenuBar':
+			PersonaSwitcher.prefs.setBoolPref("main-menubar", value);
+			break;
+		case 'toolsMenu':
+			PersonaSwitcher.prefs.setBoolPref("tools-submenu", value);
+			break;
+		case 'random':
+			PersonaSwitcher.prefs.setBoolPref("random", value);
+			break;
+		case 'defaultKeyShift':
+			PersonaSwitcher.prefs.setBoolPref("defshift", value);
+			break;
+		case 'defaultKeyControl':
+			PersonaSwitcher.prefs.setBoolPref("defcontrol", value);
+			break;
+		case 'defaultKeyAlt':
+			PersonaSwitcher.prefs.setBoolPref("defalt", value);
+			break;
+		case 'defaultKeyMeta':
+			PersonaSwitcher.prefs.setBoolPref("defmeta", value);
+			break;
+		case 'defaultKeyAccel':
+			PersonaSwitcher.prefs.setBoolPref("defaccel", value);
+			break;
+		case 'defaultKeyOS':
+			PersonaSwitcher.prefs.setBoolPref("defos", value);
+			break;
+		case 'defaultKey':
+			PersonaSwitcher.prefs.setCharPref("defkey", value);
+			break;
+		case 'rotateKeyShift':
+			PersonaSwitcher.prefs.setBoolPref("rotshift", value);
+			break;
+		case 'rotateKeyControl':
+			PersonaSwitcher.prefs.setBoolPref("rotcontrol", value);
+			break;
+		case 'rotateKeyAlt':
+			PersonaSwitcher.prefs.setBoolPref("rotalt", value);
+			break;
+		case 'rotateKeyMeta':
+			PersonaSwitcher.prefs.setBoolPref("rotmeta", value);
+			break;
+		case 'rotateKeyAccel':
+			PersonaSwitcher.prefs.setBoolPref("rotaccel", value);
+			break;
+		case 'rotateKeyOS':
+			PersonaSwitcher.prefs.setBoolPref("rotos", value);
+			break;
+		case 'rotateKey':
+			PersonaSwitcher.prefs.setCharPref("rotkey", value);
+			break;
+		case 'autoKeyShift':
+			PersonaSwitcher.prefs.setBoolPref("autoshift", value);
+			break;
+		case 'autoKeyControl':
+			PersonaSwitcher.prefs.setBoolPref("autocontrol", value);
+			break;
+		case 'autoKeyAlt':
+			PersonaSwitcher.prefs.setBoolPref("autoalt", value);
+			break;
+		case 'autoKeyMeta':
+			PersonaSwitcher.prefs.setBoolPref("autometa", value);
+			break;
+		case 'autoKeyAccel':
+			PersonaSwitcher.prefs.setBoolPref("autoaccel", value);
+			break;
+		case 'autoKeyOS':
+			PersonaSwitcher.prefs.setBoolPref("autoos", value);
+			break;
+		case 'autoKey':
+			PersonaSwitcher.prefs.setCharPref("autokey", value);
+			break;
+		case 'accessKey':
+			PersonaSwitcher.prefs.setCharPref("accesskey", value);
+			break;
+		case 'activateKeyShift':
+			PersonaSwitcher.prefs.setBoolPref("activateshift", value);
+			break;
+		case 'activateKeyControl':
+			PersonaSwitcher.prefs.setBoolPref("activatecontrol", value);
+			break;
+		case 'activateKeyAlt':
+			PersonaSwitcher.prefs.setBoolPref("activatealt", value);
+			break;
+		case 'activateKeyMeta':
+			PersonaSwitcher.prefs.setBoolPref("activatemeta", value);
+			break;
+		case 'activateKeyAccel':
+			PersonaSwitcher.prefs.setBoolPref("activateaccel", value);
+			break;
+		case 'activateKeyOs':
+			PersonaSwitcher.prefs.setBoolPref("activateos", value);
+			break;
+		case 'activateKey':
+			PersonaSwitcher.prefs.setCharPref("activatekey", value);
+			break;
+		case 'current':
+			PersonaSwitcher.currentIndex = parseInt(value);
+			PersonaSwitcher.prefs.setIntPref ('current', parseInt(value));
+			break;
+		case "fastSwitch":
+			PersonaSwitcher.prefs.setBoolPref("fastswitch", value);
+			break;
+	}
+}
 
 //UI Injection
 function injectMainMenu(doc) {
@@ -331,15 +468,83 @@ function setDefaultPref(prefName, prefValue)
   var defaultBranch = Services.prefs.getDefaultBranch(null);
   setGenericPref(defaultBranch, prefName, prefValue);
 }
+
 function getUCharPref(prefName, branch) // Unicode getCharPref
 {
   branch = branch ? branch : Services.prefs;
   return branch.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
 }
+
 function setUCharPref(prefName, text, branch) // Unicode setCharPref
 {
   var string = Components.classes['@mozilla.org/supports-string;1'].createInstance(Components.interfaces.nsISupportsString);
   string.data = text;
   branch = branch ? branch : Services.prefs;
   branch.setComplexValue(prefName, Components.interfaces.nsISupportsString, string);
-};
+}
+
+function removeUserPrefs() 
+{
+	var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
+        getService(Components.interfaces.nsIPrefService).
+            getBranch ("extensions.personaswitcher.");
+						
+	userBranch.clearUserPref("defshift");
+	userBranch.clearUserPref("defcontrol");
+	userBranch.clearUserPref("defalt");
+	userBranch.clearUserPref("defmeta");
+	userBranch.clearUserPref("defaccel");
+	userBranch.clearUserPref("defos");
+	userBranch.clearUserPref("defkey");
+
+	userBranch.clearUserPref("rotshift");
+	userBranch.clearUserPref("rotcontrol");
+	userBranch.clearUserPref("rotalt");
+	userBranch.clearUserPref("rotmeta");
+	userBranch.clearUserPref("rotaccel");
+	userBranch.clearUserPref("rotos");
+	userBranch.clearUserPref("rotkey");
+
+	userBranch.clearUserPref("autoshift");
+	userBranch.clearUserPref("autocontrol");
+	userBranch.clearUserPref("autoalt");
+	userBranch.clearUserPref("autometa");
+	userBranch.clearUserPref("autoaccel");
+	userBranch.clearUserPref("autoos");
+	userBranch.clearUserPref("autokey");
+
+	userBranch.clearUserPref("activateshift");
+	userBranch.clearUserPref("activatecontrol");
+	userBranch.clearUserPref("activatealt");
+	userBranch.clearUserPref("activatemeta");
+	userBranch.clearUserPref("activateaccel");
+	userBranch.clearUserPref("activateos");
+	userBranch.clearUserPref("activatekey");
+
+	userBranch.clearUserPref("accesskey");
+
+	userBranch.clearUserPref("auto");
+	userBranch.clearUserPref("autominutes");
+
+	userBranch.clearUserPref("random");
+
+	userBranch.clearUserPref("preview");
+	userBranch.clearUserPref("preview-delay");
+	userBranch.clearUserPref("icon-preview");
+
+	userBranch.clearUserPref("tools-submenu");
+	userBranch.clearUserPref("main-menubar");
+
+	userBranch.clearUserPref("debug");
+	userBranch.clearUserPref("notification-workaround");
+
+	userBranch.clearUserPref("toolbox-minheight");
+
+	userBranch.clearUserPref("startup-switch");
+
+	userBranch.clearUserPref("fastswitch");
+
+	userBranch.clearUserPref("static-popups");
+
+	userBranch.clearUserPref("current");
+}
