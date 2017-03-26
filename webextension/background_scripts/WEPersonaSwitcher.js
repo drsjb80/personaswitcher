@@ -1,12 +1,10 @@
 function handleStartup() {
-	// Verify if we need to load the default preferences by checking if the 
-	// default_loaded flag is undefined. 
 	var checkDefaultsLoaded = browser.storage.local.get("defaults_loaded");
 	checkDefaultsLoaded
 	.then(loadDefaultsIfNeeded)
 	.then(setLogger)
 	.then(startRotateAlarm)
-	.then(getBuildMenuPromise)
+	.then(getMenuData)
 	.then(buildMenu)
 	.then(rotateOnStartup)
 	.then(function() {
@@ -15,6 +13,8 @@ function handleStartup() {
 	.catch(handleError);
 }
 
+// Verify if we need to load the default preferences by checking if the 
+// default_loaded flag is undefined. 
 function loadDefaultsIfNeeded(prefs) {
 		if(undefined === prefs.defaults_loaded) {
 			return loadDefaults();
@@ -83,7 +83,7 @@ function loadDefaults(){
 	return setting.then( function() {return Promise.resolve()}, handleError);
 }
 
-function getBuildMenuPromise() {
+function getMenuData() {
 		var menuPreferences = ["iconPreview", "preview", "previewDelay"];
 		var getData = Promise.all([
 				browser.storage.local.get(menuPreferences),
@@ -209,7 +209,7 @@ function stopRotateAlarm() {
 //the shortcuts can be migrated to the WebExtension code.
 function autoRotate() {
 	var checkRotatePref = Promise.all([
-		browser.storage.local.get(["auto"]),
+		browser.storage.local.get("auto"),
 		browser.runtime.sendMessage({command: "Return-Pref-Auto"})]);	
 		
 	checkRotatePref.then(results => {
@@ -287,12 +287,9 @@ function reactToPrefChange(prefName, prefData) {
 			toggleMenuIcons(prefData.newValue);
 			break;
 		case 'preview':
-			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
-			getBuildMenuPromise().then(buildMenu, handleError);
-			break;
 		case 'previewDelay':
 			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
-			getBuildMenuPromise().then(buildMenu, handleError);
+			getMenuData().then(buildMenu, handleError);
 			break;
 		case 'debug':
 			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
