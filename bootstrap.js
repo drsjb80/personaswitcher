@@ -3,6 +3,8 @@ Cu.import('resource://gre/modules/Services.jsm');
 Cu.import("resource://gre/modules/Console.jsm");
 
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
+var styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
+var uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
 
 function startup(data, reason) {	
 	//https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
@@ -20,8 +22,6 @@ function startup(data, reason) {
 
   //https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
   //Loading the stylesheet into all windows is a noticable hit on performance but is necessary for Thunderbird compatibility
-  styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
-  uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
   styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
 
 																		
@@ -120,7 +120,8 @@ var WindowListener = {
   },
   onWindowTitleChange: function (xulWindow, newTitle) {
   }
-} 
+};
+
 //Message handler for communication with embedded WebExtension
 function messageHandler(message, sender, sendResponse) {
 	 switch (message.command)
@@ -149,6 +150,7 @@ function messageHandler(message, sender, sendResponse) {
 			break;
 		case "Get-Current-Index":
 			sendResponse({current: PersonaSwitcher.currentIndex});
+			break;
 		case "Set-Preference":
 			setPreference(message.preference, message.value);
 			break;
@@ -322,7 +324,6 @@ function injectMainMenu(doc) {
 
 function injectSubMenu(doc) {
 	let menuPopup;
-	let subMenu_prefs;
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
 		case 'Icedove':
@@ -421,14 +422,8 @@ function addKeyset(doc) {
 	}
 	
 	let keyset = doc.createElement ('keyset');
-	keyset.setAttribute("id", "personaSwitcherKeyset")
+	keyset.setAttribute("id", "personaSwitcherKeyset");
 	mainWindow.appendChild(keyset);	
-}
-
-function loadStyleSheet(window) {		
-	this._uri = Services.io.newURI('chrome://personaswitcher/skin/toolbar-button.css', null, null);
-    window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).
-	  getInterface(Components.interfaces.nsIDOMWindowUtils).loadSheet(this._uri, 1);
 }
 
 //https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences

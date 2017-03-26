@@ -14,10 +14,6 @@ function removeMenu() {
 	backgroundPage.document.body.appendChild(backgroundPage.browserActionMenu);
 }
 
-function handleError(error) {
-	console.log(`Error: ${error}`);
-}
-
 var gettingBackgroundPage = browser.runtime.getBackgroundPage();
 gettingBackgroundPage.then(appendMenu);
 window.addEventListener("unload", removeMenu);

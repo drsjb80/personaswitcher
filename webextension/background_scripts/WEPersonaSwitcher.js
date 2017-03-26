@@ -80,7 +80,7 @@ function loadDefaults(){
 			staticPopups: false,
 			current: 0
 		});
-	return setting.then( function() {return Promise.resolve()}, handleError);
+	return setting.then( function() {return Promise.resolve();}, handleError);
 }
 
 function getMenuData() {
@@ -88,7 +88,7 @@ function getMenuData() {
 		var getData = Promise.all([
 				browser.storage.local.get(menuPreferences),
 				browser.runtime.sendMessage({command: "Return-Theme-List"})
-		])
+		]);
 		return getData;
 }
 
@@ -135,7 +135,7 @@ var clickListener = function(theTheme) {
 		stopRotateAlarm(); 
 		browser.runtime.sendMessage({command: "Switch-Themes", theme: theTheme});
 		startRotateAlarm(); 
-	} 
+	};
 };
 
 var previewAlarmListener;
@@ -146,7 +146,7 @@ var mouseOverListener = function(theTheme, previewDelay) {
 		previewAlarmListener = innerAlarmListener;
 		browser.alarms.create("previewAlarm", {when});
 		browser.alarms.onAlarm.addListener(previewAlarmListener);
-	}
+	};
 };
 
 var mouseOutListener = function(theTheme) { 
@@ -154,7 +154,7 @@ var mouseOutListener = function(theTheme) {
 		browser.alarms.clear("previewAlarm");
 		browser.alarms.onAlarm.removeListener(previewAlarmListener);
 		browser.runtime.sendMessage({command: "End-Preview", theme: theTheme}); 
-	}
+	};
 };
 
 function toggleMenuIcons(iconsShown) {
@@ -164,10 +164,10 @@ function toggleMenuIcons(iconsShown) {
 	} else {
 		displayValue = "none";
 	}		
-		icons = browserActionMenu.querySelectorAll(".icon");
-		for(i=0; i < icons.length; i++) {
-			logger.log("Icon Node", icons[i]);
-			icons[i].style.display = displayValue;
+		var icons = browserActionMenu.querySelectorAll(".icon");
+		for(var index=0; index < icons.length; index++) {
+			logger.log("Icon Node", icons[index]);
+			icons[index].style.display = displayValue;
 		}
 }
 
@@ -182,7 +182,7 @@ function startRotateAlarm() {
 		//When the shorcuts are migrated over to the WebExtension replace the if(true) with if(true === results.auto)
 		if(true) {	
 			const periodInMinutes = results.fastSwitch ? ONE_SECOND : results.autoMinutes;
-			var innerAlarmListener = function(alarmInfo) {if ("rotateAlarm" === alarmInfo.name) {autoRotate()} };
+			var innerAlarmListener = function(alarmInfo) {if ("rotateAlarm" === alarmInfo.name) {autoRotate();} };
 			rotateAlarmListener = innerAlarmListener;
 			browser.alarms.create("rotateAlarm", {periodInMinutes});
 			browser.alarms.onAlarm.addListener(rotateAlarmListener);
@@ -299,6 +299,7 @@ function reactToPrefChange(prefName, prefData) {
 			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
 			stopRotateAlarm();
 			startRotateAlarm();
+			break;
 		case 'auto':
 			//When the shortcuts are migrated to the WebExtension code, turn off/on the rotate timer here.
 		case 'toolboxMinHeight':
@@ -345,7 +346,7 @@ function reactToPrefChange(prefName, prefData) {
 }
 
 var logger;
-nullLogger = {};
+var nullLogger = {};
 nullLogger.log = function (s) { 'use strict'; return; };
 function setLogger() {
 	var checkIfDebugging = browser.storage.local.get("debug");
@@ -361,6 +362,6 @@ function setLogger() {
 
 function handleError(error) {
 	logger.log(`Error: ${error}`);
-};
+}
 
 handleStartup();
