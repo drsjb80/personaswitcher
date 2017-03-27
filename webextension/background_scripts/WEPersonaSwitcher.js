@@ -345,6 +345,14 @@ function reactToPrefChange(prefName, prefData) {
 	}
 }
 
+browser.contextMenus.create({
+  id: "PSOptions",
+  title: "Persona Switcher Options",
+  contexts: ["browser_action"]
+});
+
+browser.contextMenus.onClicked.addListener((info) => { browser.runtime.openOptionsPage(); });
+
 var logger;
 var nullLogger = {};
 nullLogger.log = function (s) { 'use strict'; return; };
