@@ -6,7 +6,7 @@
         <em:id>drsjb80@gmail.com</em:id>
         <em:name>Persona Switcher</em:name>
         <em:type>2</em:type>
-        <em:version>2.0.4</em:version>
+        <em:version>2.0.6a2017-02-23</em:version>
         <em:creator>Steve Beaty</em:creator>
         <em:multiprocessCompatible>true</em:multiprocessCompatible>
         <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
@@ -65,7 +65,7 @@
           <Description>
             <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
             <em:minVersion>3.6</em:minVersion>
-            <em:maxVersion>36.*</em:maxVersion>
+            <em:maxVersion>55.*</em:maxVersion>
           </Description>
         </em:targetApplication>
 
