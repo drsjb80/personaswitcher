@@ -63,9 +63,7 @@ function install(data, reason) {
 }
 
 function uninstall(data, reason) {
-	if(ADDON_UNINSTALL === reason) {
 		removeUserPrefs();
-	}
 }
 
 function loadIntoWindow(window) {		

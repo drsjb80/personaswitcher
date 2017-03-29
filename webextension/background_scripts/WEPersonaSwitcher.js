@@ -77,7 +77,7 @@ function loadDefaults(){
 			debug: false,
 			toolboxMaxHeight: 200,
 			fastSwitch: false,
-			staticPopups: false,
+			staticMenus: true,
 			current: 0
 		});
 	return setting.then( function() {return Promise.resolve();}, handleError);

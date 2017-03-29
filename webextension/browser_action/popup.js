@@ -1,7 +1,21 @@
 var backgroundPage;
 function appendMenu(page) {
 	backgroundPage = page;
-	document.body.appendChild(backgroundPage.browserActionMenu);
+	var getStaticPreference = browser.storage.local.get("staticMenus");
+	getStaticPreference.then((result) => {
+		backgroundPage.logger.log("Creating a new menu: " + !result.staticMenus);
+		if(false === result.staticMenus) {
+			var gettingMenuData = backgroundPage.getMenuData();
+			gettingMenuData
+			.then(backgroundPage.buildMenu)
+			.then(() => {
+				document.body.appendChild(backgroundPage.browserActionMenu);
+			})
+			.catch(backgroundPage.handleError);
+		} else {
+			document.body.appendChild(backgroundPage.browserActionMenu);
+		}
+	});
 }
 
 function removeMenu() {

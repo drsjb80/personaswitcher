@@ -123,7 +123,7 @@ PersonaSwitcher.logger = console;
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
-PersonaSwitcher.staticPopups = false;
+//PersonaSwitcher.staticPopups = false;
 
 //Default theme set to an object with an id property equal to the hard coded default theme id value
 //Necessary for Icedove compatibility as Icedove's default theme id is not the same, and thus cannot
@@ -180,7 +180,7 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.setToolboxMinheight);
                 break;
-            case 'static-popups':
+            /*case 'static-popups':
                 if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
                 {
                     PersonaSwitcher.allDocuments
@@ -191,7 +191,7 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.allDocuments
                         (PersonaSwitcher.removeStaticPopups);
                 }
-                break;		
+                break;		*/
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
