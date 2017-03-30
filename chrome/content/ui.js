@@ -433,7 +433,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
         }
     //}
 
-    // arr.sort (function (a, b) { return a.name.localeCompare (b.name); });
+    arr.sort (function (a, b) { return a.name.localeCompare (b.name); });
 
     for (var i = 0; i < arr.length; i++)
     {
