@@ -127,7 +127,6 @@ function messageHandler(message, sender, sendResponse) {
 	   case "Return-Theme-List":
        PersonaSwitcher.getPersonas();
 		   var themeList = PersonaSwitcher.currentThemes;
-		   themeList.sort (function (a, b) { return a.name.localeCompare (b.name); });
 		   var defaultTheme = {id: PersonaSwitcher.defaultTheme.id, name: PersonaSwitcher.defaultTheme.name, iconURL: PersonaSwitcher.defaultTheme.iconURL};
 		   themeList.push(defaultTheme);
 		   sendResponse({themes: themeList});
