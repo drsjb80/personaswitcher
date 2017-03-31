@@ -161,17 +161,18 @@ var clickListener = function(theTheme)
 
 var previewAlarmListener;
 var mouseOverListener = function(theTheme, previewDelay) 
-{ 
+{
+	const MS_TO_MINUTE_CONVERSION = 60000;
 	return function() 
 	{ 
-		const when = Date.now() + previewDelay;
+		const delayInMinutes = previewDelay/MS_TO_MINUTE_CONVERSION;
 		var innerAlarmListener = function(alarmInfo) 
 		{
 			browser.runtime.sendMessage({command: "Preview-Theme",
 										 theme: theTheme}); 
 		};
 		previewAlarmListener = innerAlarmListener;
-		browser.alarms.create("previewAlarm", {when});
+		browser.alarms.create("previewAlarm", {delayInMinutes});
 		browser.alarms.onAlarm.addListener(previewAlarmListener);
 	};
 };
