@@ -110,12 +110,12 @@ function buildMenu(data)
 	for (var index = 0; index < currentThemes.length; index++) 
 	{		
 		browserActionMenu.
-			appendChild(buildMenuItem(currentThemes[index], data[0]));
+			appendChild(buildMenuItem(currentThemes[index], data[0], index));
 	}
 	logger.log("Menu ", browserActionMenu);
 }
 
-function buildMenuItem(theme, prefs) 
+function buildMenuItem(theme, prefs, theIndex) 
 {
 	var themeChoice = document.createElement("div");
 	themeChoice.setAttribute("class", "button theme");
@@ -130,7 +130,7 @@ function buildMenuItem(theme, prefs)
 		themeChoice.addEventListener('mouseout',
 						mouseOutListener(theme, prefs.preview));
 	}
-	themeChoice.addEventListener('click', clickListener(theme));
+	themeChoice.addEventListener('click', clickListener(theme, theIndex));
 	return themeChoice;
 }
 
@@ -148,13 +148,14 @@ function createIcon(iconURL, iconPreview)
 	return themeImg;
 }
 
-var clickListener = function(theTheme) 
+var clickListener = function(theTheme, theIndex) 
 { 
 	return function() 
 	{
 		stopRotateAlarm(); 
 		browser.runtime.sendMessage({command: "Switch-Themes",
-									 theme: theTheme});
+									 theme: theTheme,
+									 index: theIndex});
 		startRotateAlarm(); 
 	};
 }

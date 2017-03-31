@@ -158,7 +158,7 @@ function messageHandler(message, sender, sendResponse)
             sendResponse({themes: themeList});
             break;
 		case "Switch-Themes":
-			PersonaSwitcher.switchTo(message.theme);
+			PersonaSwitcher.switchTo(message.theme, message.index);
 			break;	
 		case "Preview-Theme":
 			LightweightThemeManager.previewTheme(message.theme);

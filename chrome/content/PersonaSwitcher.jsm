@@ -320,12 +320,13 @@ PersonaSwitcher.rotate = function()
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
-			var prevIndex = PersonaSwitcher.currentIndex;
-			// pick a number between 1 and the end until a new index is found
-			while(PersonaSwitcher.currentIndex === prevIndex) {
-        PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
+		var prevIndex = PersonaSwitcher.currentIndex;
+		// pick a number between 1 and the end until a new index is found
+		while(PersonaSwitcher.currentIndex === prevIndex) 
+        {
+            PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
-			}
+		}
     }
     else
     {
@@ -334,9 +335,9 @@ PersonaSwitcher.rotate = function()
     }
 
     PersonaSwitcher.logger.log (PersonaSwitcher.currentIndex);
-    PersonaSwitcher.prefs.setIntPref ('current', PersonaSwitcher.currentIndex);
     PersonaSwitcher.switchTo
-        (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex]);
+        (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+         PersonaSwitcher.currentIndex);
 };
 
 
@@ -384,9 +385,14 @@ PersonaSwitcher.removeNotification = function (win)
     }
 };
 
-PersonaSwitcher.switchTo = function (toWhich)
+PersonaSwitcher.switchTo = function (toWhich, index)
 {
     PersonaSwitcher.logger.log (toWhich);
+    PersonaSwitcher.currentIndex = undefined !== index ? 
+                                            index :
+                                            PersonaSwitcher.currentIndex;
+    
+    PersonaSwitcher.prefs.setIntPref ('current', PersonaSwitcher.currentIndex);
 
     /*
     ** if it's there, use it
@@ -458,15 +464,15 @@ PersonaSwitcher.rotateKey = function()
 PersonaSwitcher.setDefault = function()
 {
     PersonaSwitcher.logger.log("in setDefault");
-
-    PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme);
+    var indexOfDefault = PersonaSwitcher.currentThemes.length-1;
+    PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme, indexOfDefault);
 };
 
-PersonaSwitcher.onMenuItemCommand = function (which)
+PersonaSwitcher.onMenuItemCommand = function (which, index)
 {
     PersonaSwitcher.logger.log("in onMenuItemCommand");
 
-    PersonaSwitcher.switchTo(which);
+    PersonaSwitcher.switchTo(which, index);
 };
 
 /*

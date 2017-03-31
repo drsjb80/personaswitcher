@@ -321,7 +321,7 @@ PersonaSwitcher.previewObserver =
 /*
 ** create a menuitem, possibly creating a preview
 */
-PersonaSwitcher.createMenuItem = function (doc, which)
+PersonaSwitcher.createMenuItem = function (doc, which, index)
 {
     if (null === which || 'undefined' === typeof which.name)
     {
@@ -334,7 +334,7 @@ PersonaSwitcher.createMenuItem = function (doc, which)
     item.addEventListener
     (
         'command',
-        function() { PersonaSwitcher.onMenuItemCommand(which); },
+        function() { PersonaSwitcher.onMenuItemCommand(which, index); },
         false
     );
 
@@ -419,14 +419,15 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     {
         PersonaSwitcher.logger.log (i);
         PersonaSwitcher.logger.log (arr[i]);
-        item = PersonaSwitcher.createMenuItem (doc, arr[i]);
+        item = PersonaSwitcher.createMenuItem (doc, arr[i], i);
         if (item)
         {
             menupopup.appendChild (item);
         }
     }
 	
-    item = PersonaSwitcher.createMenuItem(doc, PersonaSwitcher.defaultTheme);
+    item = PersonaSwitcher.createMenuItem(doc, PersonaSwitcher.defaultTheme, 
+                                          arr.length);
     if (item)
     {
         menupopup.appendChild (item);
@@ -605,7 +606,8 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.currentIndex =
             PersonaSwitcher.prefs.getIntPref ("current");
         PersonaSwitcher.switchTo 
-            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex]);
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+             PersonaSwitcher.currentIndex);
 
         if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
         {
