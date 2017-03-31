@@ -5,7 +5,7 @@
 /*global Components*/
 /*jslint vars: false*/
 
-Components.utils.import('resource://gre/modules/devtools/Console.jsm');
+Components.utils.import("resource://gre/modules/Console.jsm");
 Components.utils["import"]
     ("resource://gre/modules/LightweightThemeManager.jsm");
 
@@ -123,7 +123,7 @@ PersonaSwitcher.logger = console;
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
-PersonaSwitcher.staticPopups = false;
+//PersonaSwitcher.staticPopups = false;
 
 //Default theme set to an object with an id property equal to the hard coded default theme id value
 //Necessary for Icedove compatibility as Icedove's default theme id is not the same, and thus cannot
@@ -180,7 +180,7 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.setToolboxMinheight);
                 break;
-            case 'static-popups':
+            /*case 'static-popups':
                 if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
                 {
                     PersonaSwitcher.allDocuments
@@ -191,22 +191,22 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.allDocuments
                         (PersonaSwitcher.removeStaticPopups);
                 }
-                break;		
+                break;		*/
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
                 break;	
-			case 'icon-preview':
+						case 'icon-preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
                 break;			
             case 'startup-switch':
                 break; // nothing to do as the value is queried elsewhere
             case 'fastswitch':
-                PersonaSwitcher.startTimer();
+                //PersonaSwitcher.startTimer();
                 break;
             case 'auto':
-                if (PersonaSwitcher.prefs.getBoolPref ('auto'))
+                /*if (PersonaSwitcher.prefs.getBoolPref ('auto'))
                 {
                     PersonaSwitcher.startTimer();
                     PersonaSwitcher.rotate();
@@ -214,10 +214,10 @@ PersonaSwitcher.prefsObserver =
                 else
                 {
                     PersonaSwitcher.stopTimer();
-                }
+                }*/
                 break;
             case 'autominutes':
-                PersonaSwitcher.startTimer();
+                //PersonaSwitcher.startTimer();
                 break;
             case 'main-menubar': case 'tools-submenu':
                 if (PersonaSwitcher.prefs.getBoolPref (data))
@@ -263,6 +263,72 @@ PersonaSwitcher.prefsObserver =
 
 PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 
+
+
+// call a function passed as a parameter with one document of each window
+PersonaSwitcher.allDocuments = function (func)
+{	
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
+	var aWindow;
+    while (enumerator.hasMoreElements())
+    {
+			aWindow = enumerator.getNext();
+			PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
+			func(aWindow.document);
+    }
+};
+
+// call a function passed as a parameter for each window
+PersonaSwitcher.allWindows = function (func)
+{
+	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
+    while (enumerator.hasMoreElements())
+    {
+		func(enumerator.getNext());
+    }
+};
+
+PersonaSwitcher.hideMenu = function (doc, which)
+{
+    var d = doc.getElementById ('personaswitcher-' + which);
+    if (d) d.hidden = true;
+};
+
+/*
+** remove a particular menu in all windows
+*/
+PersonaSwitcher.hideMenus = function (which)
+{
+    PersonaSwitcher.logger.log (which);
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+
+    while (enumerator.hasMoreElements())
+    {
+        var doc = enumerator.getNext().document;
+        PersonaSwitcher.hideMenu (doc, which);
+    }
+};
+
+PersonaSwitcher.showMenu = function (doc, which)
+{
+    var d = doc.getElementById ('personaswitcher-' + which);
+    if (d) d.hidden = false;
+};
+
+PersonaSwitcher.showMenus = function (which)
+{
+    PersonaSwitcher.logger.log (which);
+
+    var enumerator = PersonaSwitcher.windowMediator.getEnumerator (null);
+
+    while (enumerator.hasMoreElements())
+    {
+        var doc = enumerator.getNext().document;
+        PersonaSwitcher.showMenu (doc, which);
+    }
+};
+
 // ---------------------------------------------------------------------------
 
 /*
@@ -277,9 +343,12 @@ PersonaSwitcher.rotate = function()
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
-        // pick a number between 1 and the end
+			var prevIndex = PersonaSwitcher.currentIndex;
+			// pick a number between 1 and the end until a new index is found
+			while(PersonaSwitcher.currentIndex === prevIndex) {
         PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
+			}
     }
     else
     {
@@ -295,7 +364,7 @@ PersonaSwitcher.rotate = function()
 
 // ---------------------------------------------------------------------------
 
-PersonaSwitcher.timer = Components.classes['@mozilla.org/timer;1'].
+/*PersonaSwitcher.timer = Components.classes['@mozilla.org/timer;1'].
     createInstance(Components.interfaces.nsITimer);
 
 PersonaSwitcher.timerObserver =
@@ -333,7 +402,7 @@ PersonaSwitcher.stopTimer = function()
     PersonaSwitcher.logger.log();
 
     PersonaSwitcher.timer.cancel();
-};
+};*/
 
 // ---------------------------------------------------------------------------
 
@@ -430,11 +499,11 @@ PersonaSwitcher.switchTo = function (toWhich)
         as it seemed to add an additional default theme
     */
 
-    if (PersonaSwitcher.PersonasPlusPresent && 
+    /*if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref ('notification-workaround'))
     {
         PersonaSwitcher.allWindows (PersonaSwitcher.removeNotification);
-    }
+    }*/
 };
 
 PersonaSwitcher.getPersonas = function()
@@ -451,6 +520,7 @@ PersonaSwitcher.getPersonas = function()
                 concat (PersonaService.favorites);
         }
     }
+	PersonaSwitcher.currentThemes.sort (function (a, b) { return a.name.localeCompare (b.name); });
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 };
 
@@ -466,15 +536,14 @@ PersonaSwitcher.previous = function()
 };
 
 /*
-** if the user pressed the rotate keyboard command, rotate and
-** reset the timer.
+** if the user pressed the rotate keyboard command
 */
 PersonaSwitcher.rotateKey = function()
 {
     PersonaSwitcher.logger.log("in rotateKey");
 
     PersonaSwitcher.rotate();
-    PersonaSwitcher.startTimer();
+    //PersonaSwitcher.startTimer();
 };
 
 PersonaSwitcher.setDefault = function()
@@ -482,7 +551,7 @@ PersonaSwitcher.setDefault = function()
     PersonaSwitcher.logger.log("in setDefault");
 
     PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme);
-    PersonaSwitcher.stopTimer();
+    //PersonaSwitcher.stopTimer();
 };
 
 PersonaSwitcher.onMenuItemCommand = function (which)
@@ -490,7 +559,7 @@ PersonaSwitcher.onMenuItemCommand = function (which)
     PersonaSwitcher.logger.log("in onMenuItemCommand");
 
     PersonaSwitcher.switchTo (which);
-    PersonaSwitcher.startTimer();
+    //PersonaSwitcher.startTimer();
 };
 
 PersonaSwitcher.migratePrefs = function()

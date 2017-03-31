@@ -1,70 +1,33 @@
-//boolean that will be utilized by the preferences to choose to display the icon on the popup menu
-var showIcon = false;
-if (showIcon === true) {
-    var getThemes = browser.runtime.sendMessage({command: "Return-Theme-List-With-Icons"});
-    getThemes.then(buildMenuWithIcons, handleError);
-} else {
-    var getThemes = browser.runtime.sendMessage({command: "Return-Theme-List-With-No-Icons"});
-    getThemes.then(buildMenuNoIcons, handleError);
-}
-
-function buildMenuWithIcons(themeList) {
-	var themes = themeList.themes;
-	for (var index = 0; index < themes.length; index++) {
-		var themeChoice = document.createElement("div");
-		themeChoice.setAttribute("class", "button theme");
-		var textNode = document.createTextNode(themes[index].name);
-		themeChoice.appendChild(textNode);
-		var themeImg = document.createElement("img");
-		themeImg.setAttribute("class", "button icon");
-		themeImg.setAttribute("src", themes[index].iconURL);
-		themeChoice.insertBefore(themeImg, textNode);
-		themeChoice.addEventListener('click', clickListener(themes[index]));
-		themeChoice.addEventListener('mouseover', mouseOverListener(themes[index]));
-		themeChoice.addEventListener('mouseout',  mouseOutListener(themes[index]));
-		document.body.appendChild(themeChoice);
-		console.log("ImgUrl: ", themes[index].iconURL);
-  }
-}
-
-function buildMenuNoIcons(themeList) {
-	var themes = themeList.themes;
-	for (var index = 0; index < themes.length; index++) {
-		var themeChoice = document.createElement("div");
-		themeChoice.setAttribute("class", "button class");
-		var textNode = document.createTextNode(themes[index].name);
-		themeChoice.appendChild(textNode);	
-		themeChoice.addEventListener('click', clickListener(themes[index]));
-		themeChoice.addEventListener('mouseover', mouseOverListener(themes[index]));
-		themeChoice.addEventListener('mouseout',  mouseOutListener(themes[index]));
-		document.body.appendChild(themeChoice);
-		console.log("ImgUrl: ", themes[index].iconURL);
-  }
-}
-//Helper functions
-var clickListener = function(theTheme) { 
-		return function() { browser.runtime.sendMessage({command: "Switch-Themes", theme: theTheme}); } 
-	};
-
-var alarmListener;
-	var mouseOverListener = function(theTheme) { 
-		return function() { 
-			const when = Date.now()+1000;
-			var innerAlarmListener = function(alarmInfo) {browser.runtime.sendMessage({command: "Preview-Theme", theme: theTheme}); };
-			browser.alarms.create({when});
-			browser.alarms.onAlarm.addListener(innerAlarmListener);
-			alarmListener = innerAlarmListener;
+var backgroundPage;
+function appendMenu(page) {
+	backgroundPage = page;
+	var getStaticPreference = browser.storage.local.get("staticMenus");
+	getStaticPreference.then((result) => {
+		backgroundPage.logger.log("Creating a new menu: " + !result.staticMenus);
+		if(false === result.staticMenus) {
+			var gettingMenuData = backgroundPage.getMenuData();
+			gettingMenuData
+			.then(backgroundPage.buildMenu)
+			.then(() => {
+				document.body.appendChild(backgroundPage.browserActionMenu);
+			})
+			.catch(backgroundPage.handleError);
+		} else {
+			document.body.appendChild(backgroundPage.browserActionMenu);
 		}
-	};
-	
-	var mouseOutListener = function(theTheme) { 
-		return function() { 
-			browser.alarms.clearAll();
-			browser.alarms.onAlarm.removeListener(alarmListener);
-			browser.runtime.sendMessage({command: "End-Preview", theme: theTheme}); 
-		}
-	};
-
-function handleError(error) {
-console.log(`Error: ${error}`);
+	});
 }
+
+function removeMenu() {
+	document.body.removeChild(backgroundPage.browserActionMenu);
+	//The ownerDocument is set as the last DOM that the element was assigned to.
+	//If the menu's ownerDocument remains this window, it will be marked as a 
+	//deadObject when this window finishes unloading. Since we don't want to have
+	//to rebuild it, we need to assign it to a window that isn't going to
+	//be closed.
+	backgroundPage.document.body.appendChild(backgroundPage.browserActionMenu);
+}
+
+var gettingBackgroundPage = browser.runtime.getBackgroundPage();
+gettingBackgroundPage.then(appendMenu);
+window.addEventListener("unload", removeMenu);

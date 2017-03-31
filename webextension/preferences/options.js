@@ -82,13 +82,13 @@ function saveOptions(e){
 			activateKeyOs: activateKeyOS_object.checked,
 			activateKey: activateKey_object.value,
 			auto: auto_object.checked,
-			autoMinutes: autoMinutes_object.value,
+			autoMinutes: parseInt(autoMinutes_object.value),
 			random: random_object.checked,
 			startupSwitch: startupSwitch_object.checked,
 			preview: preview_object.checked,
-			previewDelay: previewDelay_object.value,
+			previewDelay: parseInt(previewDelay_object.value),
 			iconPreview: iconPreview_object.checked,
-			toolboxMinHeight: toolboxMinHeight_object.value,
+			toolboxMinHeight: parseInt(toolboxMinHeight_object.value),
 			toolsMenu: toolsMenu_object.checked,
 			mainMenuBar: mainMenuBar_object.checked
 		});
@@ -97,66 +97,72 @@ function saveOptions(e){
 
 function loadOptions(){
  
-  function getCurrentPrefs(result) {
-  	defaultKeyShift_object.checked = result.defaultKeyShift;
-  	defaultKeyControl_object.checked = result.defaultKeyControl;
-  	defaultKeyAlt_object.checked = result.defaultKeyAlt;
-  	defaultKeyMeta_object.checked = result.defaultKeyMeta;
-  	defaultKeyAccel_object.checked = result.defaultKeyAccel;
-  	defaultKeyOS_object.checked = result.defaultKeyOS;
-    defaultKey_object.value = result.defaultKey;
-    rotateKeyShift_object.checked = result.rotateKeyShift;
-	rotateKeyControl_object.checked = result.rotateKeyControl;
-	rotateKeyAlt_object.checked = result.rotateKeyAlt;
-	rotateKeyMeta_object.checked = result.rotateKeyMeta;
-	rotateKeyAccel_object.checked = result.rotateKeyAccel;
-	rotateKeyOS_object.checked = result.rotateKeyOS;
-	rotateKey_object.value = result.rotateKey;
-	autoKeyShift_object.checked = result.autoKeyShift;
-	autoKeyControl_object.checked = result.autoKeyControl;
-	autoKeyAlt_object.checked = result.autoKeyAlt;
-	autoKeyMeta_object.checked = result.autoKeyMeta;
-	autoKeyAccel_object.checked = result.autoKeyAccel;
-	autoKeyOS_object.checked = result.autoKeyOS;
-	autoKey_object.value = result.autoKey;
-	accessKey_object.value = result.accessKey;
-	activateKeyShift_object.checked = result.activateKeyShift;
-	activateKeyControl_object.checked = result.activateKeyControl;
-	activateKeyAlt_object.checked = result.activateKeyAlt;
-	activateKeyMeta_object.checked = result.activateKeyMeta;
-	activateKeyAccel_object.checked = result.activateKeyAccel;
-	activateKeyOS_object.checked = result.activateKeyOs;
-	activateKey_object.value = result.activateKey;
-	auto_object.checked = result.auto;
-	autoMinutes_object.value = result.autoMinutes;
-	random_object.checked = result.random;
-	startupSwitch_object.checked = result.startupSwitch;
-	preview_object.checked = result.preview;
-	previewDelay_object.value = result.previewDelay;
-	iconPreview_object.checked = result.iconPreview;
-	toolboxMinHeight_object.value = result.toolboxMinHeight;
-	toolsMenu_object.checked = result.toolsMenu;
-	mainMenuBar_object.checked = result.mainMenuBar;
+  function getCurrentPrefs(results) {
+		var result = results[0];
+		defaultKeyShift_object.checked = result.defaultKeyShift;
+		defaultKeyControl_object.checked = result.defaultKeyControl;
+		defaultKeyAlt_object.checked = result.defaultKeyAlt;
+		defaultKeyMeta_object.checked = result.defaultKeyMeta;
+		defaultKeyAccel_object.checked = result.defaultKeyAccel;
+		defaultKeyOS_object.checked = result.defaultKeyOS;
+		defaultKey_object.value = result.defaultKey;
+		rotateKeyShift_object.checked = result.rotateKeyShift;
+		rotateKeyControl_object.checked = result.rotateKeyControl;
+		rotateKeyAlt_object.checked = result.rotateKeyAlt;
+		rotateKeyMeta_object.checked = result.rotateKeyMeta;
+		rotateKeyAccel_object.checked = result.rotateKeyAccel;
+		rotateKeyOS_object.checked = result.rotateKeyOS;
+		rotateKey_object.value = result.rotateKey;
+		autoKeyShift_object.checked = result.autoKeyShift;
+		autoKeyControl_object.checked = result.autoKeyControl;
+		autoKeyAlt_object.checked = result.autoKeyAlt;
+		autoKeyMeta_object.checked = result.autoKeyMeta;
+		autoKeyAccel_object.checked = result.autoKeyAccel;
+		autoKeyOS_object.checked = result.autoKeyOS;
+		autoKey_object.value = result.autoKey;
+		accessKey_object.value = result.accessKey;
+		activateKeyShift_object.checked = result.activateKeyShift;
+		activateKeyControl_object.checked = result.activateKeyControl;
+		activateKeyAlt_object.checked = result.activateKeyAlt;
+		activateKeyMeta_object.checked = result.activateKeyMeta;
+		activateKeyAccel_object.checked = result.activateKeyAccel;
+		activateKeyOS_object.checked = result.activateKeyOs;
+		activateKey_object.value = result.activateKey;
+		//Load the auto value from the bootstrap pref until shortcuts are migrated
+		auto_object.checked = results[1].auto;
+		autoMinutes_object.value = result.autoMinutes;
+		random_object.checked = result.random;
+		startupSwitch_object.checked = result.startupSwitch;
+		preview_object.checked = result.preview;
+		previewDelay_object.value = result.previewDelay;
+		iconPreview_object.checked = result.iconPreview;
+		toolboxMinHeight_object.value = result.toolboxMinHeight;
+		toolsMenu_object.checked = result.toolsMenu;
+		mainMenuBar_object.checked = result.mainMenuBar;
+		
+		//If the two auto preferences don't match, update the WebExtension's preference
+		if(results[0].auto !== results[1].auto) {
+			browser.storage.local.set({auto: results[1].auto});
+		}
   }
 
-  var getting = browser.storage.local.get(preferences);
+	//Because the auto preference can be toggled silently in the bootstrap code we
+	//need to load the preference from there instead of the WebExtension, and update
+	//the WebExtension's auto preference if necessary.
+  var getting = Promise.all([
+		browser.storage.local.get(preferences),
+		browser.runtime.sendMessage({command: "Return-Pref-Auto"})
+	]);
   getting.then(getCurrentPrefs, onError);
 }
 
 // Send a request message to the background script to reload and store the default 
 // prefs. After a response message is received, reload the prefs on the menu.
-function reloadDefaultPreferences(){
-	var sending = browser.runtime.sendMessage({message: "load defaults"});
-	sending.then(result => { if("defaults loaded" === result.response) {
-								loadOptions();
-							}else{
-								onError(result.error);
-							}});
-}
-
 function resetOptions(){
-	var clearStorage = browser.storage.local.clear();
-	clearStorage.then(reloadDefaultPreferences, onError); 
+	var backgroundPage = browser.extension.getBackgroundPage();
+	backgroundPage.loadDefaults().then(function() {  
+		loadOptions();
+	}); 
 }
 
 function onError(error) {

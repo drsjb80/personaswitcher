@@ -52,7 +52,7 @@ pref ("extensions.personaswitcher.main-menubar", false);
 pref ("extensions.personaswitcher.debug", true);
 pref ("extensions.personaswitcher.notification-workaround", true);
 
-pref ("extensions.personaswitcher.toolbox-minheight", "");
+pref ("extensions.personaswitcher.toolbox-minheight", "0");
 //If this changes, change it in the options.xul as well
 pref ("extensions.personaswitcher.toolbox-maxheight", "200");
 
@@ -60,7 +60,7 @@ pref ("extensions.personaswitcher.startup-switch", false);
 
 pref ("extensions.personaswitcher.fastswitch", false);
 
-pref ("extensions.personaswitcher.static-popups", false);
+//pref ("extensions.personaswitcher.static-popups", false);
 
 pref ("extensions.personaswitcher.current", 0);
 
