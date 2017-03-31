@@ -1,8 +1,8 @@
-content   personaswitcher		    chrome/content/
-locale    personaswitcher	en-US	chrome/locale/en-US/
-locale    personaswitcher	zh-TW   chrome/locale/zh-TW/
-locale    personaswitcher	zh-CN   chrome/locale/zh-CN/
-locale    personaswitcher	de      chrome/locale/de/
-locale    personaswitcher	it      chrome/locale/it/
+content     personaswitcher         chrome/content/
+locale      personaswitcher en-US   chrome/locale/en-US/
+locale      personaswitcher zh-TW   chrome/locale/zh-TW/
+locale      personaswitcher zh-CN   chrome/locale/zh-CN/
+locale      personaswitcher de      chrome/locale/de/
+locale      personaswitcher it      chrome/locale/it/
 
 skin    personaswitcher classic/1.0 chrome/skin/
