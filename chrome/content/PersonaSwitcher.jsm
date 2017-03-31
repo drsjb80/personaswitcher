@@ -180,11 +180,12 @@ PersonaSwitcher.prefsObserver =
             case 'toolbox-minheight':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.setToolboxMinheight);
+                break;
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
                 break;	
-						case 'icon-preview':
+			case 'icon-preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
                 break;			
