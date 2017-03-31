@@ -6,8 +6,8 @@
 /*jslint vars: false*/
 
 Components.utils.import("resource://gre/modules/Console.jsm");
-Components.utils["import"]
-    ("resource://gre/modules/LightweightThemeManager.jsm");
+Components.utils.
+    import("resource://gre/modules/LightweightThemeManager.jsm");
 
 "use strict";
 //If this value is changed, it needs to be changed in options.xul as well
@@ -41,7 +41,8 @@ PersonaSwitcher.XULRuntime =
 PersonaSwitcher.stringBundle =
     Components.classes["@mozilla.org/intl/stringbundle;1"].
         getService(Components.interfaces.nsIStringBundleService).
-            createBundle("chrome://personaswitcher/locale/personaswitcher.properties");
+            createBundle(
+                "chrome://personaswitcher/locale/personaswitcher.properties");
 
 // needed for addObserver
 PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
@@ -123,11 +124,11 @@ PersonaSwitcher.logger = console;
 PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
-//PersonaSwitcher.staticPopups = false;
 
-//Default theme set to an object with an id property equal to the hard coded default theme id value
-//Necessary for Icedove compatibility as Icedove's default theme id is not the same, and thus cannot
-//be found using the same defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
+//Default theme set to an object with an id property equal to the hard coded 
+//default theme id value. Necessary for Icedove compatibility as Icedove's 
+//default theme id is not the same, and thus cannot be found using the same 
+//defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
 //can be set back to null and the correct id can be queried instead.
 PersonaSwitcher.defaultTheme = {id:'{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
 PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
@@ -180,45 +181,16 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.setToolboxMinheight);
                 break;
-            /*case 'static-popups':
-                if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
-                {
-                    PersonaSwitcher.allDocuments
-                        (PersonaSwitcher.createStaticPopups);
-                }
-                else
-                {
-                    PersonaSwitcher.allDocuments
-                        (PersonaSwitcher.removeStaticPopups);
-                }
-                break;		*/
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
-                break;	
-						case 'icon-preview':
+                break;
+            case 'icon-preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
-                break;			
+                break;            
             case 'startup-switch':
                 break; // nothing to do as the value is queried elsewhere
-            case 'fastswitch':
-                //PersonaSwitcher.startTimer();
-                break;
-            case 'auto':
-                /*if (PersonaSwitcher.prefs.getBoolPref ('auto'))
-                {
-                    PersonaSwitcher.startTimer();
-                    PersonaSwitcher.rotate();
-                }
-                else
-                {
-                    PersonaSwitcher.stopTimer();
-                }*/
-                break;
-            case 'autominutes':
-                //PersonaSwitcher.startTimer();
-                break;
             case 'main-menubar': case 'tools-submenu':
                 if (PersonaSwitcher.prefs.getBoolPref (data))
                 {
@@ -245,10 +217,14 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.allDocuments (PersonaSwitcher.setAccessKey);
                 break;
             case 'preview-delay':
-                var delay  = parseInt
-                    (PersonaSwitcher.prefs.getIntPref ("preview-delay"));
+                var delay = 
+                    parseInt(PersonaSwitcher.prefs.getIntPref("preview-delay"));
 
-                delay = delay < 0 ? 0 : delay > MAX_PREVIEW_DELAY ? MAX_PREVIEW_DELAY : delay;
+                delay = delay < 0 ? 
+                            0 : 
+                            delay > MAX_PREVIEW_DELAY ? 
+                                MAX_PREVIEW_DELAY : 
+                                delay;
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
 
                 PersonaSwitcher.allDocuments
@@ -267,24 +243,26 @@ PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func)
-{	
-	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
-	var aWindow;
+{    
+    var enumerator = PersonaSwitcher.windowMediator.
+                        getEnumerator ("navigator:browser");
+    var aWindow;
     while (enumerator.hasMoreElements())
     {
-			aWindow = enumerator.getNext();
-			PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
-			func(aWindow.document);
+            aWindow = enumerator.getNext();
+            PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
+            func(aWindow.document);
     }
 };
 
 // call a function passed as a parameter for each window
 PersonaSwitcher.allWindows = function (func)
 {
-	var enumerator = PersonaSwitcher.windowMediator.getEnumerator ("navigator:browser");
+    var enumerator = PersonaSwitcher.windowMediator.
+                        getEnumerator ("navigator:browser");
     while (enumerator.hasMoreElements())
     {
-		func(enumerator.getNext());
+        func(enumerator.getNext());
     }
 };
 
@@ -343,12 +321,13 @@ PersonaSwitcher.rotate = function()
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
-			var prevIndex = PersonaSwitcher.currentIndex;
-			// pick a number between 1 and the end until a new index is found
-			while(PersonaSwitcher.currentIndex === prevIndex) {
-        PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
+        var prevIndex = PersonaSwitcher.currentIndex;
+        // pick a number between 1 and the end until a new index is found
+        while(PersonaSwitcher.currentIndex === prevIndex) 
+        {
+            PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
-			}
+        }
     }
     else
     {
@@ -357,59 +336,14 @@ PersonaSwitcher.rotate = function()
     }
 
     PersonaSwitcher.logger.log (PersonaSwitcher.currentIndex);
-    PersonaSwitcher.prefs.setIntPref ('current', PersonaSwitcher.currentIndex);
     PersonaSwitcher.switchTo
-        (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex]);
+        (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+         PersonaSwitcher.currentIndex);
 };
 
-// ---------------------------------------------------------------------------
-
-/*PersonaSwitcher.timer = Components.classes['@mozilla.org/timer;1'].
-    createInstance(Components.interfaces.nsITimer);
-
-PersonaSwitcher.timerObserver =
-{
-    observe: function (subject, topic, data)
-    {
-        PersonaSwitcher.rotate();
-    }
-};
-
-PersonaSwitcher.startTimer = function()
-{
-    if (! PersonaSwitcher.prefs.getBoolPref ('auto')) return;
-
-    // in case the amount of time has changed
-    PersonaSwitcher.stopTimer();
-
-    var minutes = PersonaSwitcher.prefs.getIntPref ('autominutes');
-    PersonaSwitcher.logger.log (minutes);
-
-    if (minutes > 0)
-    {
-        PersonaSwitcher.timer.init
-        (
-            PersonaSwitcher.timerObserver,
-            PersonaSwitcher.prefs.getBoolPref ('fastswitch') ? 10000 :
-                1000 * 60 * minutes,
-            Components.interfaces.nsITimer.TYPE_REPEATING_SLACK
-        );
-    }
-};
-
-PersonaSwitcher.stopTimer = function()
-{
-    PersonaSwitcher.logger.log();
-
-    PersonaSwitcher.timer.cancel();
-};*/
-
-// ---------------------------------------------------------------------------
 
 PersonaSwitcher.toggleAuto = function()
 {
-    PersonaSwitcher.logger.log();
-
     /*
     ** just set the pref, the prefs observer does the work.
     */
@@ -452,9 +386,14 @@ PersonaSwitcher.removeNotification = function (win)
     }
 };
 
-PersonaSwitcher.switchTo = function (toWhich)
+PersonaSwitcher.switchTo = function (toWhich, index)
 {
     PersonaSwitcher.logger.log (toWhich);
+    PersonaSwitcher.currentIndex = undefined !== index ? 
+                                            index :
+                                            PersonaSwitcher.currentIndex;
+    
+    PersonaSwitcher.prefs.setIntPref ('current', PersonaSwitcher.currentIndex);
 
     /*
     ** if it's there, use it
@@ -492,18 +431,6 @@ PersonaSwitcher.switchTo = function (toWhich)
     {
         LightweightThemeManager.currentTheme = toWhich;
     }
-
-    /*
-        removed:
-        LightweightThemeManager.themeChanged (toWhich);
-        as it seemed to add an additional default theme
-    */
-
-    /*if (PersonaSwitcher.PersonasPlusPresent && 
-        PersonaSwitcher.prefs.getBoolPref ('notification-workaround'))
-    {
-        PersonaSwitcher.allWindows (PersonaSwitcher.removeNotification);
-    }*/
 };
 
 PersonaSwitcher.getPersonas = function()
@@ -520,19 +447,9 @@ PersonaSwitcher.getPersonas = function()
                 concat (PersonaService.favorites);
         }
     }
-	PersonaSwitcher.currentThemes.sort (function (a, b) { return a.name.localeCompare (b.name); });
+    PersonaSwitcher.currentThemes.
+        sort(function (a, b) { return a.name.localeCompare(b.name); });
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
-};
-
-PersonaSwitcher.previous = function()
-{
-    PersonaSwitcher.logger.log ("in previous");
-
-    var arr = PersonaSwitcher.currentThemes;
-
-    if (arr.length <= 1) return;
-
-    PersonaSwitcher.switchTo (arr[1]);
 };
 
 /*
@@ -543,64 +460,20 @@ PersonaSwitcher.rotateKey = function()
     PersonaSwitcher.logger.log("in rotateKey");
 
     PersonaSwitcher.rotate();
-    //PersonaSwitcher.startTimer();
 };
 
 PersonaSwitcher.setDefault = function()
 {
     PersonaSwitcher.logger.log("in setDefault");
-
-    PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme);
-    //PersonaSwitcher.stopTimer();
+    var indexOfDefault = PersonaSwitcher.currentThemes.length-1;
+    PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme, indexOfDefault);
 };
 
-PersonaSwitcher.onMenuItemCommand = function (which)
+PersonaSwitcher.onMenuItemCommand = function (which, index)
 {
     PersonaSwitcher.logger.log("in onMenuItemCommand");
 
-    PersonaSwitcher.switchTo (which);
-    //PersonaSwitcher.startTimer();
-};
-
-PersonaSwitcher.migratePrefs = function()
-{
-    var oldPrefs =
-        Components.classes['@mozilla.org/preferences-service;1'].
-        getService (Components.interfaces.nsIPrefService).
-            getBranch ('extensions.themeswitcher.');
-
-    var kids = oldPrefs.getChildList ('', {});
-
-    if (0 === kids.length) return;
-
-    for (var i in kids)
-    {
-        var type = oldPrefs.getPrefType (kids[i]);
-        PersonaSwitcher.logger.log (kids[i]);
-
-        switch (type)
-        {
-            case oldPrefs.PREF_STRING:
-            {
-                PersonaSwitcher.prefs.setCharPref (kids[i],
-                    oldPrefs.getCharPref (kids[i]));
-                break;
-            }
-            case oldPrefs.PREF_INT:
-            {
-                PersonaSwitcher.prefs.setIntPref (kids[i],
-                    oldPrefs.getIntPref (kids[i]));
-                break;
-            }
-            case oldPrefs.PREF_BOOL:
-            {
-                PersonaSwitcher.prefs.setBoolPref (kids[i],
-                    oldPrefs.getBoolPref (kids[i]));
-                break;
-            }
-        }
-    }
-    oldPrefs.deleteBranch ('');
+    PersonaSwitcher.switchTo(which, index);
 };
 
 /*
@@ -608,9 +481,15 @@ PersonaSwitcher.migratePrefs = function()
 */
 PersonaSwitcher.dump = function (object, max)
 {
-    if ('undefined' === typeof max) max = 1;
+    if ('undefined' === typeof max) 
+    {
+        max = 1;
+    }
 
-    if (0 === max) return;
+    if (0 === max) 
+    {
+        return;
+    }
 
     for (var property in object)
     {
