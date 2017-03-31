@@ -1,4 +1,5 @@
-function handleStartup() {
+function handleStartup() 
+{
 	var checkDefaultsLoaded = browser.storage.local.get("defaults_loaded");
 	checkDefaultsLoaded
 	.then(loadDefaultsIfNeeded)
@@ -7,7 +8,8 @@ function handleStartup() {
 	.then(getMenuData)
 	.then(buildMenu)
 	.then(rotateOnStartup)
-	.then(function() {
+	.then(function() 
+	{
 		return browser.storage.onChanged.addListener(handlePreferenceChange);
 	})
 	.catch(handleError);
@@ -16,14 +18,18 @@ function handleStartup() {
 // Verify if we need to load the default preferences by checking if the 
 // default_loaded flag is undefined. 
 function loadDefaultsIfNeeded(prefs) {
-		if(undefined === prefs.defaults_loaded) {
+		if (undefined === prefs.defaults_loaded) 
+		{
 			return loadDefaults();
-		} else {
+		} 
+		else 
+		{
 			return Promise.resolve();
 		}
 }
 
-function loadDefaults(){
+function loadDefaults()
+{
 	var setting = browser.storage.local.set(
 		{
 			default_loaded: true,
@@ -80,109 +86,150 @@ function loadDefaults(){
 			staticMenus: true,
 			current: 0
 		});
-	return setting.then( function() {return Promise.resolve();}, handleError);
+	return setting.then( function() { return Promise.resolve(); }, handleError);
 }
 
-function getMenuData() {
-		var menuPreferences = ["iconPreview", "preview", "previewDelay"];
-		var getData = Promise.all([
-				browser.storage.local.get(menuPreferences),
-				browser.runtime.sendMessage({command: "Return-Theme-List"})
-		]);
-		return getData;
+function getMenuData() 
+{
+	var menuPreferences = ["iconPreview", "preview", "previewDelay"];
+	var getData = Promise.all([
+		browser.storage.local.get(menuPreferences),
+		browser.runtime.sendMessage({command: "Return-Theme-List"})
+	]);
+	return getData;
 }
 
 var currentThemes;
 var browserActionMenu;
-function buildMenu(data) {
+function buildMenu(data) 
+{
 	logger.log("Menu ", browserActionMenu);
 	browserActionMenu = document.createElement("div");
 	browserActionMenu.setAttribute("class", "menu");
 	currentThemes = data[1].themes;
-	for (var index = 0; index < currentThemes.length; index++) {		
-		browserActionMenu.appendChild(buildMenuItem(currentThemes[index], data[0]));
+	for (var index = 0; index < currentThemes.length; index++) 
+	{		
+		browserActionMenu.
+			appendChild(buildMenuItem(currentThemes[index], data[0]));
 	}
 	logger.log("Menu ", browserActionMenu);
 }
 
-function buildMenuItem(theme, prefs) {
+function buildMenuItem(theme, prefs) 
+{
 	var themeChoice = document.createElement("div");
 	themeChoice.setAttribute("class", "button theme");
 	var textNode = document.createTextNode(theme.name);
 	themeChoice.appendChild(textNode);
-	themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview), textNode);
-	if(true === prefs.preview) {
-		themeChoice.addEventListener('mouseover', mouseOverListener(theme, prefs.previewDelay));
-		themeChoice.addEventListener('mouseout',  mouseOutListener(theme, prefs.preview));
+	themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview),
+							 textNode);
+	if (true === prefs.preview) 
+	{
+		themeChoice.addEventListener('mouseover',
+						mouseOverListener(theme, prefs.previewDelay));
+		themeChoice.addEventListener('mouseout',
+						mouseOutListener(theme, prefs.preview));
 	}
 	themeChoice.addEventListener('click', clickListener(theme));
 	return themeChoice;
 }
 
 	
-function createIcon(iconURL, iconPreview) {
+function createIcon(iconURL, iconPreview) 
+{
 	var themeImg = document.createElement("img");
 	themeImg.setAttribute("class", "button icon");
 	themeImg.setAttribute("src", iconURL);
-	if(false === iconPreview) {
+
+	if (false === iconPreview) 
+	{
 		themeImg.style.display = "none";
-	}
+	}	
 	return themeImg;
 }
 
-var clickListener = function(theTheme) { 
-	return function() {
+var clickListener = function(theTheme) 
+{ 
+	return function() 
+	{
 		stopRotateAlarm(); 
-		browser.runtime.sendMessage({command: "Switch-Themes", theme: theTheme});
+		browser.runtime.sendMessage({command: "Switch-Themes",
+									 theme: theTheme});
 		startRotateAlarm(); 
 	};
-};
+}
 
 var previewAlarmListener;
-var mouseOverListener = function(theTheme, previewDelay) { 
-	return function() { 
+var mouseOverListener = function(theTheme, previewDelay) 
+{ 
+	return function() 
+	{ 
 		const when = Date.now() + previewDelay;
-		var innerAlarmListener = function(alarmInfo) {browser.runtime.sendMessage({command: "Preview-Theme", theme: theTheme}); };
+		var innerAlarmListener = function(alarmInfo) 
+		{
+			browser.runtime.sendMessage({command: "Preview-Theme",
+										 theme: theTheme}); 
+		};
 		previewAlarmListener = innerAlarmListener;
 		browser.alarms.create("previewAlarm", {when});
 		browser.alarms.onAlarm.addListener(previewAlarmListener);
 	};
 };
 
-var mouseOutListener = function(theTheme) { 
-	return function() { 
+var mouseOutListener = function(theTheme) 
+{ 
+	return function() 
+	{ 
 		browser.alarms.clear("previewAlarm");
 		browser.alarms.onAlarm.removeListener(previewAlarmListener);
 		browser.runtime.sendMessage({command: "End-Preview", theme: theTheme}); 
 	};
 };
 
-function toggleMenuIcons(iconsShown) {
+function toggleMenuIcons(iconsShown) 
+{
 	var displayValue;
-	if(true === iconsShown) {
+	if (true === iconsShown) 
+	{
 		displayValue = "inline";
-	} else {
+	} 
+	else 
+	{
 		displayValue = "none";
 	}		
-		var icons = browserActionMenu.querySelectorAll(".icon");
-		for(var index=0; index < icons.length; index++) {
-			logger.log("Icon Node", icons[index]);
-			icons[index].style.display = displayValue;
-		}
+	
+	var icons = browserActionMenu.querySelectorAll(".icon");
+	for (var index = 0; index < icons.length; index++) 
+	{
+		logger.log("Icon Node", icons[index]);
+		icons[index].style.display = displayValue;
+	}
 }
 
 var rotateAlarmListener;
 function startRotateAlarm() {	
-	const ONE_SECOND = (1.0/60);
+	const ONE_SECOND = (1.0/60.0);
 	logger.log("In Rotate Alarm");
-	var checkRotatePref = browser.storage.local.get(["auto", "autoMinutes", "fastSwitch"]);
-	return checkRotatePref.then(results => { 
-		//Because the WebExtension can't be notified to turn on/off the rotate when the associated
-		//shortcut is pressed and processed in the bootstrap code, we have to run the alarm constantly.
-		//When the shorcuts are migrated over to the WebExtension replace the if(true) with if(true === results.auto)
-		if(true) {	
-			const periodInMinutes = results.fastSwitch ? ONE_SECOND : results.autoMinutes;
-			var innerAlarmListener = function(alarmInfo) {if ("rotateAlarm" === alarmInfo.name) {autoRotate();} };
+	var checkRotatePref = browser.storage.local.
+							get(["auto", "autoMinutes", "fastSwitch"]);
+	return checkRotatePref.then(results => 
+	{ 
+		//Because the WebExtension can't be notified to turn on/off the rotate
+		//when the associated shortcut is pressed and processed in the bootstrap 
+		//code, we have to run the alarm constantly. When the shortcuts are
+		//migrated over to the WebExtension replace the if(true) with 
+		//if(true === results.auto)
+		if (true) 
+		{	
+			const periodInMinutes = results.fastSwitch ? ONE_SECOND :
+														 results.autoMinutes;
+			var innerAlarmListener = function(alarmInfo) 
+			{
+				if ("rotateAlarm" === alarmInfo.name) 
+				{
+					autoRotate();
+				} 
+			};
 			rotateAlarmListener = innerAlarmListener;
 			browser.alarms.create("rotateAlarm", {periodInMinutes});
 			browser.alarms.onAlarm.addListener(rotateAlarmListener);
@@ -191,57 +238,70 @@ function startRotateAlarm() {
 	});
 }
 
-function stopRotateAlarm() {
-	if(undefined !== rotateAlarmListener) {
+function stopRotateAlarm() 
+{
+	if (undefined !== rotateAlarmListener) 
+	{
 		browser.alarms.clear("rotateAlarm");
 		browser.alarms.onAlarm.removeListener(rotateAlarmListener);		
 	}
 }
 
-//Because the legacy bootstrap code cannot initiate contact with the embedded WebExtension,
-//and because the shortcuts are still handled by the bootstrap code, when the shortcut
-//to toggle autoswitching is pressed the WebExtension is unable to react. Thus, we have to
-//check the bootstrap autoswitch preference before we rotate to make sure that the preference
-//is still true. Likewise, even if the preference in the WebExtension code is false, it may
-//have been toggled on by a shortcut key press in the bootstrap code. Thus we have to leave
-//the periodic timer continually running and only respond when the bootstrap code's auto
-//preference is true. This is not optimal from a performance standpoint but is necessary until
-//the shortcuts can be migrated to the WebExtension code.
-function autoRotate() {
+//Because the legacy bootstrap code cannot initiate contact with the embedded 
+//WebExtension, and because the shortcuts are still handled by the bootstrap 
+//code, when the shortcut to toggle autoswitching is pressed the WebExtension is 
+//unable to react. Thus, we have to check the bootstrap autoswitch preference 
+//before we rotate to make sure that the preference is still true. Likewise, 
+//even if the preference in the WebExtension code is false, it may have been 
+//toggled on by a shortcut key press in the bootstrap code. Thus we have to 
+//leave the periodic timer continually running and only respond when the 
+//bootstrap code's auto preference is true. This is not optimal from a 
+//performance standpoint but is necessary until the shortcuts can be migrated to 
+//the WebExtension code.
+function autoRotate() 
+{
 	var checkRotatePref = Promise.all([
-		browser.storage.local.get("auto"),
-		browser.runtime.sendMessage({command: "Return-Pref-Auto"})]);	
+			browser.storage.local.get("auto"),
+			browser.runtime.sendMessage({command: "Return-Pref-Auto"})
+		]);	
 		
-	checkRotatePref.then(results => {
-		if(true === results[1].auto) {
+	checkRotatePref.then(results => 
+	{
+		if (true === results[1].auto) 
+		{
 			rotate();
 		}
 		
 		//If the two preferences don't match, update the WebExtension's pref
-		if(results[0].auto !== results[1].auto) {
+		if(results[0].auto !== results[1].auto) 
+		{
 			browser.storage.local.set({auto: results[1].auto});
 		}
 	}, handleError);
 }
 
-function rotate() {
+function rotate() 
+{
 	if (currentThemes.length <= 1) return;
 
-	//Because the shorcuts are still handled by the bootstrap code the currentIndex 
-	//in the bootstrap code is always as (or more) accurate than the currentIndex
-	//stored in the Webextension due to use of the rotate shortcut. 
+	//Because the shortcuts are still handled by the bootstrap code the  
+	//currentIndex in the bootstrap code is always as (or more) accurate than 
+	//the currentIndex stored in the Webextension due to use of the rotate 
+	//shortcut. 
 	var getRotatePref = Promise.all([
-		browser.storage.local.get("random"),
-		browser.runtime.sendMessage({command: "Get-Current-Index"})
+			browser.storage.local.get("random"),
+			browser.runtime.sendMessage({command: "Get-Current-Index"})
 		]);
-	getRotatePref.then( results => {
+	getRotatePref.then( results => 
+	{
 		var currentIndex = results[1].current;
 		logger.log ("Current index before ", currentIndex);
 		if (true === results[0].random)
 		{
 			var prevIndex = currentIndex;
 			// pick a number between 1 and the end until a new index is found
-			while(currentIndex === prevIndex) {
+			while(currentIndex === prevIndex) 
+			{
 				currentIndex = Math.floor ((Math.random() *
 						(currentThemes.length-1)) + 1);
 			}
@@ -253,55 +313,82 @@ function rotate() {
 		}
 
 		logger.log ("Current index after ", currentIndex);
-		var updatingCurrentIndex = browser.storage.local.set({current: currentIndex});
+		var updatingCurrentIndex = browser.storage.local.
+										set({current: currentIndex});
 		updatingCurrentIndex.catch(handleError);
-		browser.runtime.sendMessage({command: "Switch-Themes", theme: currentThemes[currentIndex]}); 
-	});
-	
+		browser.runtime.sendMessage({command: "Switch-Themes",
+									 theme: currentThemes[currentIndex]}); 
+	});	
 }
 
-function rotateOnStartup() {
+function rotateOnStartup() 
+{
 	logger.log("Rotate on Startup");
 	var checkRotateOnStartup = browser.storage.local.get("startupSwitch");
-	checkRotateOnStartup.then( prefs => {
-		if(true === prefs.startupSwitch) {
+	checkRotateOnStartup.then( prefs => 
+	{
+		if(true === prefs.startupSwitch) 
+		{
 			rotate();
 		}
 	});
 }
 
-function handlePreferenceChange(changes, area) { 
-  var changedPrefs = Object.keys(changes);
+function handlePreferenceChange(changes, area) 
+{ 
+  	var changedPrefs = Object.keys(changes);
  
-  for (var pref of changedPrefs) {
-		if(undefined !== changes[pref].newValue && changes[pref].oldValue !== changes[pref].newValue) {
+  	for (var pref of changedPrefs) 
+  	{
+		if (undefined !== changes[pref].newValue && 
+			changes[pref].oldValue !== changes[pref].newValue) 
+		{
 			reactToPrefChange(pref, changes[pref]);
 		}
-  }
+	}
 }
 
-function reactToPrefChange(prefName, prefData) {
-	switch(prefName) {
+function reactToPrefChange(prefName, prefData) 
+{
+	switch (prefName) 
+	{
 		case 'iconPreview':
-			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
+			browser.runtime.sendMessage({
+											command: "Set-Preference",
+										 	preference: prefName,
+										 	value: prefData.newValue
+										});
 			toggleMenuIcons(prefData.newValue);
 			break;
 		case 'preview':
 		case 'previewDelay':
-			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
+			browser.runtime.sendMessage({
+											command: "Set-Preference",
+										 	preference: prefName,
+										 	value: prefData.newValue
+										});
 			getMenuData().then(buildMenu, handleError);
 			break;
 		case 'debug':
-			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
+			browser.runtime.sendMessage({
+											command: "Set-Preference",
+										 	preference: prefName,
+										 	value: prefData.newValue
+										});
 			setLogger();
 			break;
 		case 'autoMinutes':
-			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
+			browser.runtime.sendMessage({
+											command: "Set-Preference",
+										 	preference: prefName,
+										 	value: prefData.newValue
+										});
 			stopRotateAlarm();
 			startRotateAlarm();
 			break;
 		case 'auto':
-			//When the shortcuts are migrated to the WebExtension code, turn off/on the rotate timer here.
+			//When the shortcuts are migrated to the WebExtension code, 
+			//turn off/on the rotate timer here.
 		case 'toolboxMinHeight':
 		case 'startupSwitch':
 		case 'random':
@@ -338,37 +425,51 @@ function reactToPrefChange(prefName, prefData) {
 		case 'activateKey':
 		case 'current':
 		case 'fastSwitch':
-			browser.runtime.sendMessage({command: "Set-Preference", preference: prefName, value: prefData.newValue});
+			browser.runtime.sendMessage({
+											command: "Set-Preference",
+										 	preference: prefName,
+										 	value: prefData.newValue
+										});
 			break;
 		default:
 			logger.log(prefName, " " + prefData.newValue);
 	}
 }
 
-browser.contextMenus.create({
-  id: "PSOptions",
-  title: "Persona Switcher Options",
-  contexts: ["browser_action"]
+browser.contextMenus.create(
+{
+  	id: "PSOptions",
+  	title: "Persona Switcher Options",
+  	contexts: ["browser_action"]
 });
 
-browser.contextMenus.onClicked.addListener((info) => { browser.runtime.openOptionsPage(); });
+browser.contextMenus.onClicked.addListener((info) => 
+	{
+		browser.runtime.openOptionsPage(); 
+	});
 
 var logger;
 var nullLogger = {};
 nullLogger.log = function (s) { 'use strict'; return; };
-function setLogger() {
+function setLogger() 
+{
 	var checkIfDebugging = browser.storage.local.get("debug");
-	return checkIfDebugging.then(result => {
-		if(true === result.debug) {
+	return checkIfDebugging.then(result => 
+	{
+		if (true === result.debug) 
+		{
 			logger = console;
-		} else {
+		} 
+		else 
+		{
 			logger = nullLogger;
 		}		
 		return Promise.resolve();
 	});
 }
 
-function handleError(error) {
+function handleError(error) 
+{
 	logger.log(`Error: ${error}`);
 }
 

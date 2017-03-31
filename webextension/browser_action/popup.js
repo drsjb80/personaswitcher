@@ -1,24 +1,31 @@
 var backgroundPage;
-function appendMenu(page) {
+function appendMenu(page) 
+{
 	backgroundPage = page;
 	var getStaticPreference = browser.storage.local.get("staticMenus");
-	getStaticPreference.then((result) => {
-		backgroundPage.logger.log("Creating a new menu: " + !result.staticMenus);
-		if(false === result.staticMenus) {
+	getStaticPreference.then((result) => 
+	{
+		backgroundPage.logger.log("Creating a new menu:" + !result.staticMenus);
+		if(false === result.staticMenus) 
+		{
 			var gettingMenuData = backgroundPage.getMenuData();
 			gettingMenuData
 			.then(backgroundPage.buildMenu)
-			.then(() => {
+			.then(() => 
+			{
 				document.body.appendChild(backgroundPage.browserActionMenu);
 			})
 			.catch(backgroundPage.handleError);
-		} else {
+		} 
+		else 
+		{
 			document.body.appendChild(backgroundPage.browserActionMenu);
 		}
 	});
 }
 
-function removeMenu() {
+function removeMenu() 
+{
 	document.body.removeChild(backgroundPage.browserActionMenu);
 	//The ownerDocument is set as the last DOM that the element was assigned to.
 	//If the menu's ownerDocument remains this window, it will be marked as a 
