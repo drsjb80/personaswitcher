@@ -53,8 +53,8 @@ PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
         key.setAttribute ('modifiers', mods);
     }
     key.setAttribute ('key', which);
-	//http://stackoverflow.com/questions/16779316/how-to-set-an-xul-key-dynamically-and-securely
-	key.setAttribute('oncommand', "void(0);");
+    //http://stackoverflow.com/questions/16779316/how-to-set-an-xul-key-dynamically-and-securely
+    key.setAttribute('oncommand', "void(0);");
     key.addEventListener
     (
         'command',
@@ -85,7 +85,7 @@ PersonaSwitcher.setKeyset = function (doc)
     // remove the old keyset and make a brand new one
     parent.removeChild(oldKeyset);
     var keyset = doc.createElement('keyset');
-	keyset.setAttribute("id", "personaSwitcherKeyset");
+    keyset.setAttribute("id", "personaSwitcherKeyset");
 
     var keys =
     [
@@ -150,7 +150,7 @@ PersonaSwitcher.activateMenu = function(doc)
         switch (PersonaSwitcher.XULAppInfo.name)
         {
             case 'Thunderbird':
-			case 'SeaMonkey':
+            case 'SeaMonkey':
             case 'Icedove':
                 toolsMenu = doc.getElementById ('tasksMenu');
                 break;
@@ -284,7 +284,7 @@ PersonaSwitcher.themeMonitor = function()
     // http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
     // https://github.com/ehsan/mozilla-cvs-history/blob/master/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
 
-    // 550   const unsigned long TYPE_THEME       = 0x04;
+    // 550   const unsigned long TYPE_THEME = 0x04;
     // 559   readonly attribute long type;
 
     // can we pretend add-ons aren't removed until reboot because there is no
@@ -425,7 +425,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
             menupopup.appendChild (item);
         }
     }
-	
+    
     item = PersonaSwitcher.createMenuItem(doc, PersonaSwitcher.defaultTheme, 
                                           arr.length);
     if (item)
@@ -624,8 +624,8 @@ PersonaSwitcher.onWindowLoad = function (doc)
     PersonaSwitcher.setKeyset (doc);
     PersonaSwitcher.setAccessKey (doc);
     PersonaSwitcher.setToolboxMinheight (doc);
-		
-		var mainMenu = PersonaSwitcher.prefs.getBoolPref ('main-menubar');
+        
+        var mainMenu = PersonaSwitcher.prefs.getBoolPref ('main-menubar');
 
     if (! PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {

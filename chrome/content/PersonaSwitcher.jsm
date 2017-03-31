@@ -184,11 +184,11 @@ PersonaSwitcher.prefsObserver =
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
-                break;	
-			case 'icon-preview':
+                break;
+            case 'icon-preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
-                break;			
+                break;            
             case 'startup-switch':
                 break; // nothing to do as the value is queried elsewhere
             case 'main-menubar': case 'tools-submenu':
@@ -243,26 +243,26 @@ PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func)
-{	
-	var enumerator = PersonaSwitcher.windowMediator.
+{    
+    var enumerator = PersonaSwitcher.windowMediator.
                         getEnumerator ("navigator:browser");
-	var aWindow;
+    var aWindow;
     while (enumerator.hasMoreElements())
     {
-			aWindow = enumerator.getNext();
-			PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
-			func(aWindow.document);
+            aWindow = enumerator.getNext();
+            PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
+            func(aWindow.document);
     }
 };
 
 // call a function passed as a parameter for each window
 PersonaSwitcher.allWindows = function (func)
 {
-	var enumerator = PersonaSwitcher.windowMediator.
+    var enumerator = PersonaSwitcher.windowMediator.
                         getEnumerator ("navigator:browser");
     while (enumerator.hasMoreElements())
     {
-		func(enumerator.getNext());
+        func(enumerator.getNext());
     }
 };
 
@@ -321,13 +321,13 @@ PersonaSwitcher.rotate = function()
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
-		var prevIndex = PersonaSwitcher.currentIndex;
-		// pick a number between 1 and the end until a new index is found
-		while(PersonaSwitcher.currentIndex === prevIndex) 
+        var prevIndex = PersonaSwitcher.currentIndex;
+        // pick a number between 1 and the end until a new index is found
+        while(PersonaSwitcher.currentIndex === prevIndex) 
         {
             PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
-		}
+        }
     }
     else
     {
@@ -447,7 +447,7 @@ PersonaSwitcher.getPersonas = function()
                 concat (PersonaService.favorites);
         }
     }
-	PersonaSwitcher.currentThemes.
+    PersonaSwitcher.currentThemes.
         sort(function (a, b) { return a.name.localeCompare(b.name); });
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 };
