@@ -60,8 +60,6 @@ pref ("extensions.personaswitcher.startup-switch", false);
 
 pref ("extensions.personaswitcher.fastswitch", false);
 
-pref ("extensions.personaswitcher.static-popups", false);
-
 pref ("extensions.personaswitcher.current", 0);
 
 // https://developer.mozilla.org/en/Localizing_extension_descriptions

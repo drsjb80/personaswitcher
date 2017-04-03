@@ -181,19 +181,7 @@ PersonaSwitcher.prefsObserver =
             case 'toolbox-minheight':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.setToolboxMinheight);
-                break;
-            case 'static-popups':
-                if (PersonaSwitcher.prefs.getBoolPref ('static-popups'))
-                {
-                    PersonaSwitcher.allDocuments
-                        (PersonaSwitcher.createStaticPopups);
-                }
-                else
-                {
-                    PersonaSwitcher.allDocuments
-                        (PersonaSwitcher.removeStaticPopups);
-                }
-                break;        
+                break;       
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);

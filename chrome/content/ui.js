@@ -568,27 +568,6 @@ PersonaSwitcher.createStaticPopups = function (doc)
     }
 };
 
-PersonaSwitcher.removeStaticPopups = function (doc)
-{
-    PersonaSwitcher.logger.log('in removeStaticPopups');
-
-    var popups = ['personaswitcher-main-menubar-popup',
-        'personaswitcher-tools-submenu-popup',
-        'personaswitcher-button-popup'];
-
-    for (var popup in popups)
-    {
-        var item = doc.getElementById(popups[popup]);
-
-        // not all windows have this popup
-        if (item)
-        {
-            item.setAttribute('onpopupshowing',
-                'PersonaSwitcher.createMenuPopup (event);');
-        }
-    }
-};
-
 PersonaSwitcher.setDefaultTheme = function (doc)
 {
     PersonaSwitcher.logger.log('in setDefaultTheme');
