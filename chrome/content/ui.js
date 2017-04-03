@@ -442,8 +442,6 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
         }
     //}
 
-    // arr.sort (function (a, b) { return a.name.localeCompare (b.name); });
-
     for (var i = 0; i < arr.length; i++)
     {
         PersonaSwitcher.logger.log (i);
@@ -679,30 +677,3 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.hideMenu(doc, 'tools-submenu');
     }
 };
-
-// leave the false for 3.6 compatibility
-//window.addEventListener ('load', PersonaSwitcher.onWindowLoad, false);
-
-// getMostRecentWindow returns the newest one created, not the one on top
-// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Events#Window_events
-// Gecko 1.9.2 => FF3.6 and TB3.1
-/*
-PersonaSwitcher.onWindowActivate = function()
-{
-    // PersonaSwitcher.logger.log();
-
-    PersonaSwitcher.activeWindow = this;
-};
-
-PersonaSwitcher.onWindowDeactivate = function()
-{
-    // PersonaSwitcher.logger.log();
-
-    PersonaSwitcher.activeWindow = null;
-};
-
-window.addEventListener
-    ('activate', PersonaSwitcher.onWindowActivate, false);
-window.addEventListener
-    ('deactivate', PersonaSwitcher.onWindowDeactivate, false);
-*/

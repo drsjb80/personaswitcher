@@ -510,12 +510,6 @@ PersonaSwitcher.switchTo = function (toWhich, index)
         LightweightThemeManager.currentTheme = toWhich;
     }
 
-    /*
-        removed:
-        LightweightThemeManager.themeChanged (toWhich);
-        as it seemed to add an additional default theme
-    */
-
     if (PersonaSwitcher.PersonasPlusPresent && 
         PersonaSwitcher.prefs.getBoolPref('notification-workaround'))
     {
