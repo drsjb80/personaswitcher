@@ -537,6 +537,8 @@ PersonaSwitcher.getPersonas = function()
                 concat(PersonaService.favorites);
         }
     }
+    PersonaSwitcher.currentThemes.
+        sort(function (a, b) { return a.name.localeCompare (b.name); });
     PersonaSwitcher.logger.log(PersonaSwitcher.currentThemes.length);
 };
 
