@@ -432,15 +432,6 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     */
 
     var item = null;
-    //if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
-    //{
-        item = PersonaSwitcher.createMenuItem
-            (doc, PersonaSwitcher.defaultTheme, arr.length);
-        if (item)
-        {
-            menupopup.appendChild(item);
-        }
-    //}
 
     for (var i = 0; i < arr.length; i++)
     {
@@ -452,6 +443,16 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
             menupopup.appendChild(item);
         }
     }
+	
+	//if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
+    //{
+        item = PersonaSwitcher.createMenuItem
+            (doc, PersonaSwitcher.defaultTheme);
+        if (item)
+        {
+            menupopup.appendChild (item);
+        }
+    //}
 };
 
 PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
