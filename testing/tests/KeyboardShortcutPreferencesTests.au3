@@ -8,7 +8,7 @@ Local $testName = "Keyboard Shortcut Preferences Tests"
 Local $tests[9]
 
 InitializeFirefox()
-Local $themeList = GetInstalledThemeIds()
+Local $themeList = GetAllThemeIds()
 
 ; run tests and store results
 $tests[0] = DefaultPersona_DifferentKeyAndChar()
@@ -128,14 +128,15 @@ Func RotatePersona_RotateAll($themeList)
 
    ; Select the first theme
    SelectTheme()
+
    Local $firstTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   For $i = 0 To UBound($themeList)
+   For $i = 0 To UBound($themeList) - 1
 	  ; grabbing the id of the next theme
 	  Local $nextThemeId = GetNextThemeId($themeList)
 
 	  Send("^!r")
-	  Sleep(500)
+	  Sleep(1000)
 
 	  Local $currentTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
@@ -148,6 +149,7 @@ Func RotatePersona_RotateAll($themeList)
 		 ResetRotateCurrentPref(UBound($themeList))
 		 ExitLoop
 	  Else
+		 ;MsgBox(0, "", $currentTheme & @CRLF & $nextThemeId & @CRLF & GePsOption("current"))
 		 $result = False
 		 ExitLoop
 	  EndIf
@@ -258,7 +260,7 @@ Func AutoSwitch_DifferentKeyAndChar()
    Sleep(500)
 
    ; grab the value for the "Switch every __ minutes" preference
-   Local $isSwitchEnabled = _FFPrefGet("extensions.personaswitcher.auto")
+   Local $isSwitchEnabled = GetPsOption("auto")
 
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") AND Not $isSwitchEnabled Then
       $sDescription = "the auto switch shortcut did not change the theme or enabled the 'Switch every __ minutes' preference with the new combination: Shift + Alt + W"
@@ -292,7 +294,7 @@ Func AutoSwitch_ExtraKey()
    Sleep(500)
 
    ; grab the value for the "Switch every __ minutes" preference
-   Local $isSwitchEnabled = _FFPrefGet("extensions.personaswitcher.auto")
+   Local $isSwitchEnabled = GetPsOption("auto")
 
    If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") AND Not $isSwitchEnabled Then
       $sDescription = "the auto switch shortcut did not change the theme or enabled the 'Switch every __ minutes' preference with the new combination: Shift + Ctrl + Alt + A"
@@ -321,7 +323,7 @@ Func AutoSwitch_DoublePress()
    Sleep(500)
 
    ; checking the current value for the switch preference
-   Local $isSwitchEnabled = _FFPrefGet("extensions.personaswitcher.auto")
+   Local $isSwitchEnabled = GetPsOption("auto")
 
    If $isSwitchEnabled AND $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
       $sDescription = "Pressing the auto switch shortcut twice did not change the theme or disable the 'Switch every __ minutes' preference"
@@ -348,7 +350,7 @@ Func AutoSwitch_Disable()
    Sleep(500)
 
    ; checking the current value for the switch preference
-   Local $isSwitchEnabled = _FFPrefGet("extensions.personaswitcher.auto")
+   Local $isSwitchEnabled = GetPsOption("auto")
 
    If $isSwitchEnabled Then
       $sDescription = "While the 'Switch every __ minutes' preference was enabled, the auto switch shortcut did not disable it"
@@ -363,14 +365,7 @@ EndFunc
 ; Helper function to change the theme, except default
 Func SelectTheme()
    ; ensure firefox window is active before proceeding
-   WinWaitActive("[CLASS:MozillaWindowClass]")
-   Send("{f10}")
-   Sleep(500)
-   Send("{t}")
-   Sleep(500)
-   Send("{p}")
-   Sleep(500)
-   Send("{DOWN}")
+   OpenPersonaSwitcherToolsMenu()
    Sleep(500)
    Send("{ENTER}")
    Sleep(500)
@@ -378,8 +373,8 @@ EndFunc
 ;------------------------------------------------------------------------------
 ; Helper function to grab the next theme id in the rotate persona list
 Func GetNextThemeId($themeList)
-   Local $rotateCurrentIndex = _FFPrefGet("extensions.personaswitcher.current")
-   Local $arrayIndex = Mod(($rotateCurrentIndex + 1), (UBound($themeList)-1))
+   Local $rotateCurrentIndex = GetPsOption("current")
+   Local $arrayIndex = Mod($rotateCurrentIndex + 1, UBound($themeList) - 1)
 
    Return $themeList[$arrayIndex]
 EndFunc
@@ -387,10 +382,10 @@ EndFunc
 ; Helper function to manually reset the current index preference for the
 ; rotate persona shortcut
 Func ResetRotateCurrentPref($themeListSize)
-   While(_FFPrefGet("extensions.personaswitcher.current") >= $themeListSize-1)
+   While(GetPsOption("current") >= $themeListSize-1)
 	  Send("^!r")
 	  Sleep(500)
-	  if(_FFPrefGet("extensions.personaswitcher.current") == 0) Then
+	  if(GetPsOption("current") == 0) Then
 		 ExitLoop
 	  EndIf
    WEnd
