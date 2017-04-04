@@ -35,6 +35,14 @@ pref ("extensions.personaswitcher.activateaccel", false);
 pref ("extensions.personaswitcher.activateos", false);
 pref ("extensions.personaswitcher.activatekey", "P");
 
+pref ("extensions.personaswitcher.toolsshift", false);
+pref ("extensions.personaswitcher.toolscontrol", true);
+pref ("extensions.personaswitcher.toolsalt", true);
+pref ("extensions.personaswitcher.toolsmeta", false);
+pref ("extensions.personaswitcher.toolsaccel", false);
+pref ("extensions.personaswitcher.toolsos", false);
+pref ("extensions.personaswitcher.toolskey", "M");
+
 pref ("extensions.personaswitcher.accesskey", "P");
 
 pref ("extensions.personaswitcher.auto", false);

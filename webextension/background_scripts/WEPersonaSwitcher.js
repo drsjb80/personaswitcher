@@ -68,6 +68,14 @@ function loadDefaults()
             activateKeyOs: false,
             activateKey: "P",
 
+            toolsKeyShift: false,
+            toolsKeyControl: true,
+            toolsKeyAlt: true,
+            toolsKeyMeta: false,
+            toolsKeyAccel: false,
+            toolsKeyOs: false,
+            toolsKey: "M",
+
             auto: false,
             autoMinutes: 30,
             random: false,
@@ -78,12 +86,12 @@ function loadDefaults()
             toolboxMinHeight: 0,
             toolsMenu: true,
             mainMenuBar: false,
-
-            //hidden preferences
             debug: false,
-            toolboxMaxHeight: 200,
             fastSwitch: false,
             staticMenus: true,
+            toolboxMaxHeight: 200,
+
+            //hidden preferences
             current: 0
         });
     return setting.then( function() { return Promise.resolve(); }, handleError);
@@ -425,6 +433,13 @@ function reactToPrefChange(prefName, prefData)
         case 'activateKeyAccel':
         case 'activateKeyOs':
         case 'activateKey':
+        case 'toolsKeyShift':
+        case 'toolsKeyControl':
+        case 'toolsKeyAlt':
+        case 'toolsKeyMeta':
+        case 'toolsKeyAccel':
+        case 'toolsKeyOs':
+        case 'toolsKey':
         case 'current':
         case 'fastSwitch':
             browser.runtime.sendMessage({

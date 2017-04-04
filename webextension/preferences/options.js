@@ -1,15 +1,18 @@
-var preferences = [ "defaultKeyShift", "defaultKeyControl", "defaultKeyAlt", 
-                    "defaultKeyMeta", "defaultKeyAccel", "defaultKeyOS", 
-                    "defaultKey", "rotateKeyShift",    "rotateKeyControl",
-                    "rotateKeyAlt",    "rotateKeyMeta", "rotateKeyAccel",
-                    "rotateKeyOS", "rotateKey",    "autoKeyShift",
-                    "autoKeyControl", "autoKeyAlt",    "autoKeyMeta",
-                    "autoKeyAccel", "autoKeyOS", "autoKey", "accessKey",
-                    "activateKeyShift", "activateKeyControl", "activateKeyAlt",
-                    "activateKeyMeta", "activateKeyAccel",  "activateKeyOs",
-                    "activateKey", "auto",    "autoMinutes", "random",
-                    "startupSwitch", "preview", "previewDelay", "iconPreview", 
-                    "toolboxMinHeight", "toolsMenu", "mainMenuBar"];
+var preferences = [ "defaultKeyShift", "defaultKeyControl", "defaultKeyAlt",
+                    "defaultKeyMeta", "defaultKeyAccel", "defaultKeyOS",
+                    "defaultKey", "rotateKeyShift", "rotateKeyControl",
+                    "rotateKeyAlt", "rotateKeyMeta", "rotateKeyAccel",
+                    "rotateKeyOS", "rotateKey", "autoKeyShift", "autoKeyControl",
+                    "autoKeyAlt", "autoKeyMeta", "autoKeyAccel", "autoKeyOS",
+                    "autoKey", "accessKey", "activateKeyShift", 
+                    "activateKeyControl", "activateKeyAlt", "activateKeyMeta",
+                    "activateKeyAccel", "activateKeyOs", "activateKey",
+                    "toolsKeyShift", "toolsKeyControl", "toolsKeyAlt",
+                    "toolsKeyMeta", "toolsKeyAccel", "toolsKeyOs", "toolsKey",
+                    "auto", "autoMinutes", "random", "startupSwitch", "preview",
+                    "previewDelay", "iconPreview", "toolboxMinHeight", "toolsMenu",
+                    "mainMenuBar", "debug", "fastSwitch", "staticMenus",
+                    "toolboxMaxHeight"];
 
 var defaultKeyShiftObject = document.querySelector("#default-key-shift");
 var defaultKeyControlObject = document.querySelector("#default-key-control");
@@ -40,6 +43,13 @@ var activateKeyMetaObject = document.querySelector("#activate-key-meta");
 var activateKeyAccelObject = document.querySelector("#activate-key-accel");
 var activateKeyOSObject = document.querySelector("#activate-key-os");
 var activateKeyObject = document.querySelector("#activate-key");
+var toolsKeyShiftObject = document.querySelector("#tools-key-shift");
+var toolsKeyControlObject = document.querySelector("#tools-key-control");
+var toolsKeyAltObject = document.querySelector("#tools-key-alt");
+var toolsKeyMetaObject = document.querySelector("#tools-key-meta");
+var toolsKeyAccelObject = document.querySelector("#tools-key-accel");
+var toolsKeyOSObject = document.querySelector("#tools-key-os");
+var toolsKeyObject = document.querySelector("#tools-key");
 var autoObject = document.querySelector("#auto");
 var autoMinutesObject = document.querySelector("#auto-minutes");
 var randomObject = document.querySelector("#random");
@@ -50,6 +60,10 @@ var iconPreviewObject = document.querySelector("#icon-preview");
 var toolboxMinHeightObject = document.querySelector("#toolbox-minheight");
 var toolsMenuObject = document.querySelector("#tools-menu");
 var mainMenuBarObject = document.querySelector("#main-menubar");
+var debugObject = document.querySelector("#debug");
+var fastSwitchObject = document.querySelector("#fast-switch");
+var staticMenusObject = document.querySelector("#static-menus");
+var toolboxMaxHeightObject = document.querySelector("#toolbox-maxheight");
 
 function saveOptions(e)
 {
@@ -85,6 +99,13 @@ function saveOptions(e)
             activateKeyAccel: activateKeyAccelObject.checked,
             activateKeyOs: activateKeyOSObject.checked,
             activateKey: activateKeyObject.value,
+            toolsKeyShift: toolsKeyShiftObject.checked,
+            toolsKeyControl: toolsKeyControlObject.checked,
+            toolsKeyAlt: toolsKeyAltObject.checked,
+            toolsKeyMeta: toolsKeyMetaObject.checked,
+            toolsKeyAccel: toolsKeyAccelObject.checked,
+            toolsKeyOs: toolsKeyOSObject.checked,
+            toolsKey: toolsKeyObject.value,
             auto: autoObject.checked,
             autoMinutes: parseInt(autoMinutesObject.value),
             random: randomObject.checked,
@@ -94,7 +115,11 @@ function saveOptions(e)
             iconPreview: iconPreviewObject.checked,
             toolboxMinHeight: parseInt(toolboxMinHeightObject.value),
             toolsMenu: toolsMenuObject.checked,
-            mainMenuBar: mainMenuBarObject.checked
+            mainMenuBar: mainMenuBarObject.checked,
+            debug: debugObject.checked,
+            fastSwitch: fastSwitchObject.checked,
+            staticMenus: staticMenusObject.checked,
+            toolboxMaxHeight: parseInt(toolboxMaxHeightObject.value)
         });
     setting.catch(onError);
 }
@@ -134,7 +159,14 @@ function loadOptions()
         activateKeyAccelObject.checked = result.activateKeyAccel;
         activateKeyOSObject.checked = result.activateKeyOs;
         activateKeyObject.value = result.activateKey;
-//Load the auto value from the bootstrap pref until shortcuts are migrated
+        toolsKeyShiftObject.checked = result.toolsKeyShift;
+        toolsKeyControlObject.checked = result.toolsKeyControl;
+        toolsKeyAltObject.checked = result.toolsKeyAlt;
+        toolsKeyMetaObject.checked = result.toolsKeyMeta;
+        toolsKeyAccelObject.checked = result.toolsKeyAccel;
+        toolsKeyOSObject.checked = result.toolsKeyOs;
+        toolsKeyObject.value = result.toolsKey;
+		//Load the auto value from the bootstrap pref until shortcuts are migrated
         autoObject.checked = results[1].auto;
         autoMinutesObject.value = result.autoMinutes;
         randomObject.checked = result.random;
@@ -145,21 +177,28 @@ function loadOptions()
         toolboxMinHeightObject.value = result.toolboxMinHeight;
         toolsMenuObject.checked = result.toolsMenu;
         mainMenuBarObject.checked = result.mainMenuBar;
+        debugObject.checked = result.debug;
+        fastSwitchObject.checked = result.fastSwitch;
+        staticMenusObject.checked = result.staticMenus;
+        toolboxMaxHeightObject.value = result.toolboxMaxHeight;
+
         
-//If the two auto preferences don't match, update the WebExtension's preference
-        if(results[0].auto !== results[1].auto) {
+		//If the two auto preferences don't match, update the WebExtension's preference
+        if(results[0].auto !== results[1].auto) 
+        {
             browser.storage.local.set({auto: results[1].auto});
         }
   }
 
-    //Because the auto preference can be toggled silently in the bootstrap code
-    //we need to load the preference from there instead of the WebExtension, and 
-    //update the WebExtension's auto preference if necessary.
-  var getting = Promise.all([
-        browser.storage.local.get(preferences),
-        browser.runtime.sendMessage({command: "Return-Pref-Auto"})
-    ]);
-  getting.then(getCurrentPrefs, onError);
+    	//Because the auto preference can be toggled silently in the bootstrap code
+    	//we need to load the preference from there instead of the WebExtension, and 
+    	//update the WebExtension's auto preference if necessary.
+  		var getting = Promise.all([
+        	browser.storage.local.get(preferences),
+        	browser.runtime.sendMessage({command: "Return-Pref-Auto"})
+        ]);
+
+  		getting.then(getCurrentPrefs, onError);
 }
 
 // Send a request message to the background script to reload and store the  
@@ -189,7 +228,23 @@ function localizeHtmlPage()
     }
 }
 
+// Shows or hides the advanced options menu
+function displayAdvanced()
+{
+	var advancedOptionsObject = document.getElementById("advancedOptions")
+
+	if(advancedOptionsObject.style.display === "block")
+	{
+		advancedOptionsObject.style.display = "none";
+	}
+	else
+	{
+		advancedOptionsObject.style.display = "block"
+	}
+}
+
 document.addEventListener('DOMContentLoaded', loadOptions);
 document.addEventListener('DOMContentLoaded', localizeHtmlPage);
 document.querySelector("form").addEventListener("submit", saveOptions);
 document.querySelector("form").addEventListener("reset", resetOptions);
+document.getElementById("advancedButton").addEventListener("click", displayAdvanced);

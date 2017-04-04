@@ -11,6 +11,21 @@
 		body {
 			overflow: auto;
 		}
+		#advancedOptions {
+			display: none
+		}
+		#keyboardShortcutTitles, #keyboardShortcutKeys,
+		#menuShortcutTitles, #menuShortcutKeys, #toolboxHint,
+		#previewDelayHint, #autoMinutesHint{
+    		display: inline-block;
+    		vertical-align: text-top;
+		}
+		#keyboardShortcutTitles, #keyboardShortcutKeys{
+			line-height: 165%
+		}
+		#menuShortcutTitles, #menuShortcutKeys{
+			line-height: 150%
+		}
 	</style>
   </head>
 
@@ -20,255 +35,362 @@
 		<legend><font size="4"><b><element name="i18n" id="options_title"></element></b></font></legend>
 		<fieldset>
 			<legend><element name="i18n" id="options_kbshortcuts_title"></element></legend>
-			<p align="right"><element name="i18n" id="options_kbshortcuts_default"></element>
-				<input 
-					type="checkbox"
-					id="default-key-shift"
-					tabindex="1">
-				<label for="default-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
-				<input
-					type="checkbox"
-					id="default-key-control"
-					tabindex="2">
-				<label for="default-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="default-key-alt"
-					tabindex="3">
-				<label for="default-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="default-key-meta"
-					tabindex="4">
-				<label for="default-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="default-key-accel"
-					tabindex="5">
-				<label for="default-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="default-key-os"
-					tabindex="6">
-				<label for="default-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
-				<label for="default-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
-				<input 
-					type="text"
-					id="default-key"
-					size="1"
-					maxlength="1"
-					tabindex="7">
-			</p>
-			<p align="right"><element name="i18n" id="options_kbshortcuts_rotate"></element>
-				<input 
-					type="checkbox"
-					id="rotate-key-shift"
-					tabindex="8">
-				<label for="rotate-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
-				<input
-					type="checkbox"
-					id="rotate-key-control"
-					tabindex="9">
-				<label for="rotate-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="rotate-key-alt"
-					tabindex="10">
-				<label for="rotate-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="rotate-key-meta"
-					tabindex="11">
-				<label for="rotate-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="rotate-key-accel"
-					tabindex="12">
-				<label for="rotate-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="rotate-key-os"
-					tabindex="13">
-				<label for="rotate-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
-				<label for="rotate-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
-				<input 
-					type="text"
-					id="rotate-key"
-					size="1"
-					maxlength="1"
-					tabindex="14">
-			</p>
-			<p align="right"><element name="i18n" id="options_kbshortcuts_toggle"></element>
-				<input 
-					type="checkbox"
-					id="auto-key-shift"
-					tabindex="15">
-				<label for="auto-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
-				<input
-					type="checkbox"
-					id="auto-key-control"
-					tabindex="16">
-				<label for="auto-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="auto-key-alt"
-					tabindex="17">
-				<label for="auto-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="auto-key-meta"
-					tabindex="18">
-				<label for="auto-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="auto-key-accel"
-					tabindex="19">
-				<label for="auto-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="auto-key-os"
-					tabindex="20">
-				<label for="auto-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
-				<label for="auto-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
-				<input 
-					type="text"
-					id="auto-key"
-					size="1"
-					maxlength="1"
-					tabindex="21">
-			</p>
+			<div>
+				<div id="keyboardShortcutTitles" align="left">
+					<p><element name="i18n" id="options_kbshortcuts_default"></element></p>
+					<p><element name="i18n" id="options_kbshortcuts_rotate"></element></p>
+					<p><element name="i18n" id="options_kbshortcuts_toggle"></element></p>
+				</div>
+				<div id="keyboardShortcutKeys" align="left">
+					<p>
+						<input 
+							type="checkbox"
+							id="default-key-shift"
+							tabindex="1">
+						<label for="default-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
+						<input
+							type="checkbox"
+							id="default-key-control"
+							tabindex="2">
+						<label for="default-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="default-key-alt"
+							tabindex="3">
+						<label for="default-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="default-key-meta"
+							tabindex="4">
+						<label for="default-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="default-key-accel"
+							tabindex="5">
+						<label for="default-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="default-key-os"
+							tabindex="6">
+						<label for="default-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
+						<label for="default-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
+						<input 
+							type="text"
+							id="default-key"
+							size="1"
+							maxlength="1"
+							tabindex="7">
+					</p>
+					<p>
+						<input 
+							type="checkbox"
+							id="rotate-key-shift"
+							tabindex="8">
+						<label for="rotate-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
+						<input
+							type="checkbox"
+							id="rotate-key-control"
+							tabindex="9">
+						<label for="rotate-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="rotate-key-alt"
+							tabindex="10">
+						<label for="rotate-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="rotate-key-meta"
+							tabindex="11">
+						<label for="rotate-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="rotate-key-accel"
+							tabindex="12">
+						<label for="rotate-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="rotate-key-os"
+							tabindex="13">
+						<label for="rotate-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
+						<label for="rotate-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
+						<input 
+							type="text"
+							id="rotate-key"
+							size="1"
+							maxlength="1"
+							tabindex="14">
+					</p>
+					<p>
+						<input 
+							type="checkbox"
+							id="auto-key-shift"
+							tabindex="15">
+						<label for="auto-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
+						<input
+							type="checkbox"
+							id="auto-key-control"
+							tabindex="16">
+						<label for="auto-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="auto-key-alt"
+							tabindex="17">
+						<label for="auto-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="auto-key-meta"
+							tabindex="18">
+						<label for="auto-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="auto-key-accel"
+							tabindex="19">
+						<label for="auto-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="auto-key-os"
+							tabindex="20">
+						<label for="auto-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
+						<label for="auto-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
+						<input 
+							type="text"
+							id="auto-key"
+							size="1"
+							maxlength="1"
+							tabindex="21">
+					</p>
+				</div>
+			</div>
 		</fieldset><br>
 		<fieldset>
-      		<legend><element name="i18n" id="options_kbshortcuts_menushortcuts"></element></legend>
-      		<p align="left"><element name="i18n" id="options_kbshortcuts_access"></element>
+      		<legend><element name="i18n" id="options_kbshortcuts_menushortcuts"></element></legend><br>
+      		<div align="left"><element name="i18n" id="options_kbshortcuts_access"></element>
       			<input 
 					type="text"
 					id="access-key"
 					size="1"
 					maxlength="1"
 					tabindex="22">
-			</p>
-			<p align="left"><element name="i18n" id="options_kbshortcuts_activate"></element>
-				<input 
-					type="checkbox"
-					id="activate-key-shift"
-					tabindex="23">
-				<label for="activate-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
-				<input
-					type="checkbox"
-					id="activate-key-control"
-					tabindex="24">
-				<label for="activate-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="activate-key-alt"
-					tabindex="25">
-				<label for="activate-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="activate-key-meta"
-					tabindex="26">
-				<label for="activate-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="activate-key-accel"
-					tabindex="27">
-				<label for="activate-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
-				<input 
-					type="checkbox"
-					id="activate-key-os"
-					tabindex="28">
-				<label for="activate-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
-				<label for="activate-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
-				<input 
-					type="text"
-					id="activate-key"
-					size="1"
-					maxlength="1"
-					tabindex="29">
-			</p>
+			</div>
+			<div>
+				<div id="menuShortcutTitles" align="left">
+					<p><element name="i18n" id="options_kbshortcuts_activate"></element></p>
+					<p><element name="i18n" id="options_kbshortcuts_tools"></element></p>
+				</div>
+				<div id="menuShortcutKeys" align="left">
+					<p>
+						<input 
+							type="checkbox"
+							id="activate-key-shift"
+							tabindex="23">
+						<label for="activate-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
+						<input
+							type="checkbox"
+							id="activate-key-control"
+							tabindex="24">
+						<label for="activate-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="activate-key-alt"
+							tabindex="25">
+						<label for="activate-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="activate-key-meta"
+							tabindex="26">
+						<label for="activate-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="activate-key-accel"
+							tabindex="27">
+						<label for="activate-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="activate-key-os"
+							tabindex="28">
+						<label for="activate-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
+						<label for="activate-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
+						<input 
+							type="text"
+							id="activate-key"
+							size="1"
+							maxlength="1"
+							tabindex="29">
+					</p>
+					<p>
+						<input 
+							type="checkbox"
+							id="tools-key-shift"
+							tabindex="30">
+						<label for="tools-key-shift"><element name="i18n" id="options_kbshortcuts_shift"></element>&ensp;</label>
+						<input
+							type="checkbox"
+							id="tools-key-control"
+							tabindex="31">
+						<label for="tools-key-control"><element name="i18n" id="options_kbshortcuts_control"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="tools-key-alt"
+							tabindex="32">
+						<label for="tools-key-alt"><element name="i18n" id="options_kbshortcuts_alt"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="tools-key-meta"
+							tabindex="33">
+						<label for="tools-key-meta"><element name="i18n" id="options_kbshortcuts_meta"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="tools-key-accel"
+							tabindex="34">
+						<label for="tools-key-accel"><element name="i18n" id="options_kbshortcuts_accel"></element>&ensp;</label>
+						<input 
+							type="checkbox"
+							id="tools-key-os"
+							tabindex="35">
+						<label for="tools-key-os"><element name="i18n" id="options_kbshortcuts_os"></element>&ensp;</label>
+						<label for="tools-key"><element name="i18n" id="options_kbshortcuts_key"></element>&ensp;</label>
+						<input 
+							type="text"
+							id="tools-key"
+							size="1"
+							maxlength="1"
+							tabindex="36">
+					</p>
+				</div>
+			</div>
+			<label><small><element name="i18n" id="options_menushortcuts_hint"></element></small></label>
 		</fieldset><br>
 		<fieldset>
-			<legend><element name="i18n" id="options_options_title"></element></legend>
-			<p>
+			<legend><element name="i18n" id="options_options_title"></element></legend><br>
+			<div>
 				<input 
 					type="checkbox"
 					id="auto"
-					tabindex="30">
+					tabindex="37">
 				<label for="auto"><element name="i18n" id="options_autoevery_switch"></element></label>
-				<input 
-					type="number"
-					id="auto-minutes"
-					size="1"
-					min="1"
-					max="999"
-					tabindex="=31">
-				<label for="auto-minutes"><element name="i18n" id="options_autoevery_minutes"></element></label>
-			</p>
-			<p>
+				<div id="autoMinutesHint">
+					<input 
+						type="number"
+						id="auto-minutes"
+						size="1"
+						min="1"
+						max="999"
+						tabindex="=38">
+					<label for="auto-minutes"><element name="i18n" id="options_autoevery_minutes"></element></label><br>
+					<label>&ensp;<small><element name="i18n" id="options_autoevery_hint"></element></small></label>
+				</div>
+			</div>
+			<div>
 				<input 
 					type="checkbox"
 					id="random"
-					tabindex="32">
+					tabindex="39">
 				<label for="random"><element name="i18n" id="options_random_desc"></element></label>
-			</p>
-			<p>
+			</div><br>
+			<div>
 				<input
 					type="checkbox"
 					id="startup-switch"
-					tabindex="33">
+					tabindex="40">
 				<label for="startup-switch"><element name="i18n" id="options_startupSwitch_desc"></element></label>
-			</p>
-			<p>
+			</div><br>
+			<div>
 				<input
 					type="checkbox"
 					id="preview"
-					tabindex="34">
+					tabindex="41">
 				<label for="preview"><element name="i18n" id="options_preview_desc"></element></label>
-				<input
-					type="number"
-					id="preview-delay"
-					size="5"
-					min="0"
-					max="10000"
-					increment="10"
-					tabindex="35">
-				<label for="preview-delay"><element name="i18n" id="options_previewDelay_desc"></element></label>
-			</p>
-			<p>
+				<div id="previewDelayHint">
+					<input
+						type="number"
+						id="preview-delay"
+						size="5"
+						min="0"
+						max="10000"
+						increment="10"
+						tabindex="42">
+					<label for="preview-delay"><element name="i18n" id="options_previewDelay_desc"></element></label><br>
+					<label>&nbsp;<small><element name="i18n" id="options_previewDelay_hint"></element></small></label>
+				</div>
+			</div>
+			<div>
 				<input
 					type="checkbox"
 					id="icon-preview"
-					tabindex="36">
+					tabindex="43">
 				<label for="icon-preview"><element name="i18n" id="options_iconPreview_desc"></element></label>
-			</p>
-			<p>
+			</div><br>
+			<div>
 				<label for="toolbox-minheight"><element name="i18n" id="options_toolboxMinHeight_desc"></element></label>
-				<input
-					type="number"
-					id="toolbox-minheight"
-					size="3"
-					min="0"
-					max="200"
-					tabindex="37">
-			</p>
+				<div id="toolboxHint">
+					<input
+						type="number"
+						id="toolbox-minheight"
+						size="3"
+						min="0"
+						max="200"
+						tabindex="44"><br>
+					<label>&ensp;<small><element name="i18n" id="options_toolboxMinHeight_hint"></element></small></label>
+				</div>
+			</div>
 		</fieldset><br>
 		<fieldset>
 			<legend><element name="i18n" id="options_menus_title"></element></legend>
-			<p>
+			<div>
 				<input
 					type="checkbox"
 					id="tools-menu"
-					tabindex="38">
+					tabindex="45">
 				<label for="tools-menu"><element name="i18n" id="options_toolsSubmenu"></element></label>
-			</p>
-			<p>
+			</div><br>
+			<div>
 				<input
 					type="checkbox"
 					id="main-menubar"
-					tabindex="40">
+					tabindex="46">
 				<label for="main-menubar"><element name="i18n" id="options_mainMenuBar"></element></label>	
-			</p>
+			</div>
+		</fieldset><br>
+		<button type="button" id="advancedButton">Advanced Options...</button><br><br>
+		<fieldset id="advancedOptions">
+			<legend>Advanced Options</legend>
+			<div>
+				<input 
+					type="checkbox"
+					id="debug"
+					tabindex="47">
+				<label for="debug">Debug</label>
+			</div><br>
+			<div>
+				<input 
+					type="checkbox"
+					id="fast-switch"
+					tabindex="48">
+				<label for="fast-switch">Quickly switch through personas</label>
+			</div><br>
+			<div>Menu loading:
+				<input 
+					type="radio"
+					id="static-menus"
+					name="menu-loading"
+					tabindex="49">
+				<label for="static-switch">Static</label>
+				<input 
+					type="radio"
+					id="dynamic-switch"
+					name="menu-loading"
+					tabindex="50">
+				<label for="dynamic-switch">Dynamic</label>
+			</div><br>
+			<div>
+				<label for="toolbox-maxheight">Maximum height of top toolbox:</label>
+				<input
+					type="number"
+					id="toolbox-maxheight"
+					size="3"
+					min="0"
+					tabindex="51">
+			</div>
 		</fieldset><br>
 		<button type="submit">Ok</button>
 		<button type="reset">Reset</button>
