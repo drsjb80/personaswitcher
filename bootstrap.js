@@ -63,7 +63,7 @@ function loadIntoWindow(window) {
 	
 	injectMainMenu(doc);
 	injectSubMenu(doc);
-	injectButton(doc);
+	injectButton(window);
 	addKeyset(doc);	
 	PersonaSwitcher.onWindowLoad(doc);
 }
@@ -74,7 +74,7 @@ function unloadFromWindow(window) {
 	let subMenu_personaswitcher = doc.getElementById("personaswitcher-tools-submenu");
 	let button = doc.getElementById("personaswitcher-button");
 	let keySet = doc.getElementById("personaSwitcherKeyset");
-
+	
 	if(menu_personaswitcher !== null) {
 		menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);		
 	}
@@ -182,39 +182,53 @@ function injectSubMenu(doc) {
 	menuPopup.appendChild(subMenu_personaswitcher);
 }
 
-function injectButton(doc) {
-	let toolbox;
-	switch (PersonaSwitcher.XULAppInfo.name)
-	{
-		case 'Icedove':
-		case 'Thunderbird':
-			toolbox = doc.getElementById("mail-toolbox");
-			break;
-		case 'SeaMonkey':
-		case 'Firefox':
-		default:
-			toolbox = doc.getElementById("navigator-toolbox");
-			break;
-	}
-	//PersonaSwitcher button added to the customize toolbox
-	let button = doc.createElement("toolbarbutton");
-	button.setAttribute("id", "personaswitcher-button");
-	button.setAttribute("label", stringBundle.GetStringFromName('personaswitcher-button.label'));
-	button.setAttribute("class", "toolbarbutton-1");
-	button.setAttribute("tooltiptext", stringBundle.GetStringFromName('personaswitcher.tooltip'));
-	button.setAttribute("type", "menu");
-	let button_PSPopup = doc.createElement("menupopup");
-	button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
-	button_PSPopup.addEventListener
+function injectButton(window) 
+{
+    let doc = window.document;
+    let toolbox;
+    switch (PersonaSwitcher.XULAppInfo.name)
+    {
+        case 'Icedove':
+        case 'Thunderbird':
+            toolbox = doc.getElementById("mail-toolbox");
+            break;
+        case 'SeaMonkey':
+        case 'Firefox':
+        default:
+            toolbox = doc.getElementById("navigator-toolbox");
+            break;
+    }
+
+    function openOptions() 
+        {        
+            var features = "chrome,titlebar,toolbar,centerscreen,modal";
+            window.openDialog("chrome://personaswitcher/content/options.xul", "Preferences", features);
+            event.stopImmediatePropagation();
+        }
+
+    //PersonaSwitcher button added to the customize toolbox
+    let button = doc.createElement("toolbarbutton");
+    button.setAttribute("id", "personaswitcher-button");
+    button.setAttribute("label", 
+        stringBundle.GetStringFromName('personaswitcher-button.label'));
+    button.setAttribute("class", "toolbarbutton-1");
+    button.setAttribute("tooltiptext", 
+        stringBundle.GetStringFromName('personaswitcher.tooltip'));
+    button.setAttribute("type", "menu");
+    button.setAttribute("context", "");
+    button.addEventListener("contextmenu", openOptions, true);
+    let button_PSPopup = doc.createElement("menupopup");
+    button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
+    button_PSPopup.addEventListener
     (
         'popuphidden',
         function() { PersonaSwitcher.popupHidden(); },
         false
     );
-	button.appendChild(button_PSPopup);
-	toolbox.palette.appendChild(button);
+    button.appendChild(button_PSPopup);
+    toolbox.palette.appendChild(button);
 
-	moveButtonToToolbar(doc);
+    moveButtonToToolbar(doc);
 }
 
 function moveButtonToToolbar(doc) {
