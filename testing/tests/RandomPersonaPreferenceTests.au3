@@ -70,7 +70,7 @@ Func Test_SwitchToRandomEnabledRotate()
 	  $sDescription = "After enabling the 'switch to random " & _
 		 "persona' preference, rotating through personas was not random." & _
 		 @CRLF & "  Resulting order of persona indices:  " & _
-		 _ArrayToString($themeArrays)
+		 _ArrayToString($themeIndices)
    ElseIf ArrayIsCycle($themeIndices) Then
 	  $sDescription = "After enabling the 'switch to random " & _
 		 "persona' preference, rotating through personas followed a cycle." & _

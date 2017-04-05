@@ -126,8 +126,8 @@ Func RotatePersona_RotateAll($themeList)
    Local $sDescription
    Local $testPassed = False
 
-   ; Select the first theme
-   SelectTheme()
+   ;ResetToDefaultTheme()
+   ;ResetRotateCurrentPref(UBound($themeList))
 
    Local $firstTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
@@ -149,7 +149,7 @@ Func RotatePersona_RotateAll($themeList)
 		 ResetRotateCurrentPref(UBound($themeList))
 		 ExitLoop
 	  Else
-		 ;MsgBox(0, "", $currentTheme & @CRLF & $nextThemeId & @CRLF & GePsOption("current"))
+		 ;MsgBox(0, "", $currentTheme & @CRLF & $nextThemeId)
 		 $result = False
 		 ExitLoop
 	  EndIf
@@ -171,8 +171,7 @@ Func RotatePersona_DifferentKeyAndChar($themeList)
    Local $sDescription
    Local $testPassed = False
 
-   ; Select the first theme
-   SelectTheme()
+   ResetRotateCurrentPref(UBound($themeList))
 
    ; grabbing the id of the next theme
    Local $nextThemeId = GetNextThemeId($themeList)
@@ -184,7 +183,7 @@ Func RotatePersona_DifferentKeyAndChar($themeList)
    ; use the new key combination to change to the next theme
    WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+!w")
-   Sleep(500)
+   Sleep(1000)
 
    Local $currentTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
@@ -193,13 +192,13 @@ Func RotatePersona_DifferentKeyAndChar($themeList)
 	  $sDescription = "the rotate persona shortcut changed the theme to the next theme on the list with the new combination : Shift + Alt + W"
 	  $testPassed = True
    Else
+	  ;MsgBox(0, "", $currentTheme & @CRLF & $nextThemeId)
       $sDescription = "the rotate persona shortcut did not change the theme to the next theme on the list with the new combination : Shift + Alt + W"
    EndIF
 
    ResetPsOption("rotcontrol") ;ctrl
    ResetPsOption("rotshift") ;shift
    ResetPsOption("rotkey") ;key
-   ResetRotateCurrentPref(UBound($themeList))
 
    Return FormatTestString($testPassed, $sDescription)
 
@@ -212,8 +211,7 @@ Func RotatePersona_ExtraKey($themeList)
    Local $sDescription
    Local $testPassed = False
 
-   ; Select the first theme
-   SelectTheme()
+   ResetRotateCurrentPref(UBound($themeList))
 
    ; grabbing the id of the next theme
    Local $nextThemeId = GetNextThemeId($themeList)
@@ -221,14 +219,11 @@ Func RotatePersona_ExtraKey($themeList)
    SetPsOption("rotshift", True)
 
    ; use the new key combination to change to the next theme
-   WinWaitActive("[CLASS:MozillaWindowClass]")
    Send("+^!r")
-   Sleep(500)
-
-   Local $currentTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
+   Sleep(1500)
 
    ; ensure the current theme is actually the next theme in the list
-   If $currentTheme == $nextThemeId Then
+   If ($nextThemeId == _FFPrefGet("lightweightThemes.selectedThemeID")) Then
 	  $sDescription = "the rotate persona shortcut changed the theme to the next theme on the list with the new combination : Shift + Ctrl + Alt + R"
 	  $testPassed = True
    Else
@@ -236,7 +231,6 @@ Func RotatePersona_ExtraKey($themeList)
    EndIf
 
    ResetPsOption("rotshift") ;shift
-   ResetRotateCurrentPref(UBound($themeList))
 
    Return FormatTestString($testPassed, $sDescription)
 EndFunc
@@ -374,7 +368,7 @@ EndFunc
 ; Helper function to grab the next theme id in the rotate persona list
 Func GetNextThemeId($themeList)
    Local $rotateCurrentIndex = GetPsOption("current")
-   Local $arrayIndex = Mod($rotateCurrentIndex + 1, UBound($themeList) - 1)
+   Local $arrayIndex = Mod($rotateCurrentIndex + 1, UBound($themeList))
 
    Return $themeList[$arrayIndex]
 EndFunc
