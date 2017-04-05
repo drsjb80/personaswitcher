@@ -108,6 +108,11 @@
 	"message": "PSwitcher Menu:",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_kbshortcuts_tools": {
+  "message": "Persona Switcher tools menu shortcut key:",
+  "description": "Test displayed in the options pane"
+  },
   
   "options_kbshortcuts_key": {
 	"message": "Tasto",
@@ -143,6 +148,11 @@
 	"message": "OS",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_menuShortcuts_hint": {
+  "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
+  "description": "Text displayed in the options pane"
+  },
   
   "options_options_title": {
 	"message": "Opzioni",
@@ -157,6 +167,11 @@
   "options_autoevery_minutes": {
 	"message": "Minuti/o.",
 	"description": "Text displayed in the options pane"
+  },
+
+  "options_autoevery_hint":{
+  "message": "Values between 0 and 999",
+  "description": "Text displayed in the options pane"
   },
   
   "options_random_desc": {
@@ -173,6 +188,11 @@
 	"message": "Altezza minima della Toolbox superiore (in Firefox e SeaMonkey):",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_toolboxMinHeight_hint": {
+  "message": "Values between 0 and 200",
+  "description": "Text displayed in the options pane"
+  },
   
   "options_preview_desc": {
 	"message": "Anteprima del Tema selezionato nella lista          Ritardata di:",
@@ -183,14 +203,14 @@
 	"message": "(ms)",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_previewDelay_hint": {
+  "message": "Values between 0 and 10000",
+  "description": "Text displayed in the options pane"
+  },
   
   "options_iconPreview_desc": {
 	"message": "Aggiungi icona di Anteprima nel listato.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_notificationWorkaround_desc": {
-	"message": "Rimuovi notifiche di Personas Plus.",
 	"description": "Text displayed in the options pane"
   },
   
@@ -207,5 +227,55 @@
   "options_mainMenuBar": {
 	"message": "Nella Menu-Bar Principale.",
 	"description": "Text displayed in the options pane"
+  },
+
+  "options_advanced_button": {
+  "message": "Advanced Options...",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_advanced_options": {
+  "message": "Advanced Options",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_debug": {
+  "message": "Debug",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_fast_switch": {
+  "message": "Quickly switch through personas",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_menuLoading": {
+  "message": "Menu loading:",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_menuLoading_static": {
+  "message": "Static",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_menuLoading_dynamic": {
+  "message": "Dynamic",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_toolboxMaxHeight_desc": {
+  "message": "Maximum height of top toolbox:",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_ok_button": {
+  "message": "Ok",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_reset_button": {
+  "message": "Reset",
+  "description": "Text displayed in the options pane"
   }
 }

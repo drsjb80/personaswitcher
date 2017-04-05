@@ -108,6 +108,11 @@
 	"message": "第二種快捷鍵：",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_kbshortcuts_tools": {
+  "message": "Persona Switcher tools menu shortcut key:",
+  "description": "Test displayed in the options pane"
+  },
   
   "options_kbshortcuts_key": {
 	"message": "按鍵",
@@ -143,6 +148,11 @@
 	"message": "OS",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_menuShortcuts_hint": {
+  "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
+  "description": "Text displayed in the options pane"
+  },
   
   "options_options_title": {
 	"message": "選項",
@@ -157,6 +167,11 @@
   "options_autoevery_minutes": {
 	"message": "分鐘時輪換",
 	"description": "Text displayed in the options pane"
+  },
+
+  "options_autoevery_hint":{
+  "message": "Values between 0 and 999",
+  "description": "Text displayed in the options pane"
   },
   
   "options_random_desc": {
@@ -173,6 +188,11 @@
 	"message": "限制上方工具列最低總高度至：",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_toolboxMinHeight_hint": {
+  "message": "Values between 0 and 200",
+  "description": "Text displayed in the options pane"
+  },
   
   "options_preview_desc": {
 	"message": "游標停留於選單選項經過一千分之",
@@ -183,14 +203,14 @@
 	"message": "秒後預覽。",
 	"description": "Text displayed in the options pane"
   },
+
+  "options_previewDelay_hint": {
+  "message": "Values between 0 and 10000",
+  "description": "Text displayed in the options pane"
+  },
   
   "options_iconPreview_desc": {
 	"message": "在選單中顯示縮圖圖示。",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_notificationWorkaround_desc": {
-	"message": "隱藏 Personas Plus 在面板更換時顯示的提示。",
 	"description": "Text displayed in the options pane"
   },
   
@@ -207,5 +227,55 @@
   "options_mainMenuBar": {
 	"message": "選單列　　　　（適用一、二種快捷鍵）",
 	"description": "Text displayed in the options pane"
+  },
+
+  "options_advanced_button": {
+  "message": "Advanced Options...",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_advanced_options": {
+  "message": "Advanced Options",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_debug": {
+  "message": "Debug",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_fast_switch": {
+  "message": "Quickly switch through personas",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_menuLoading": {
+  "message": "Menu loading:",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_menuLoading_static": {
+  "message": "Static",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_menuLoading_dynamic": {
+  "message": "Dynamic",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_toolboxMaxHeight_desc": {
+  "message": "Maximum height of top toolbox:",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_ok_button": {
+  "message": "Ok",
+  "description": "Text displayed in the options pane"
+  },
+
+  "options_reset_button": {
+  "message": "Reset",
+  "description": "Text displayed in the options pane"
   }
 }
