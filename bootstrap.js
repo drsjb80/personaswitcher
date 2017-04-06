@@ -201,7 +201,7 @@ function injectButton(window)
 
     function openOptions() 
         {        
-            var features = "chrome,titlebar,toolbar,centerscreen,modal";
+            var features = "chrome,titlebar,toolbar,centerscreen";
             window.openDialog("chrome://personaswitcher/content/options.xul", "Preferences", features);
             event.stopImmediatePropagation();
         }
