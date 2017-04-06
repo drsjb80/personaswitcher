@@ -8,6 +8,7 @@
 ; Opens Persona Switcher's options page. Ends calling script on failure
 ; ==============================================================================
 Func OpenPersonaSwitcherPrefs()
+   WinActivate("[CLASS:MozillaWindowClass]")
    WinWaitActive("[CLASS:MozillaWindowClass]")
 
    If Not (_FFTabGetSelected("label") == "Add-ons Manager") Then
@@ -117,8 +118,6 @@ Func SetPsOption(Const $sOption, Const $value, $copyToClipboard = False)
 		 Send("{SPACE}")
 		 Sleep(500)
 	  Else
-		 Send("{DELETE}")
-		 Sleep(250)
 		 Send($value, 1)
 		 Sleep(500)
 	  EndIf
