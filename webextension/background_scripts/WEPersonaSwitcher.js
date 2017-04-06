@@ -396,9 +396,12 @@ function reactToPrefChange(prefName, prefData)
             stopRotateAlarm();
             startRotateAlarm();
             break;
+        case 'fastSwitch':
         case 'auto':
             //When the shortcuts are migrated to the WebExtension code, 
             //turn off/on the rotate timer here.
+            stopRotateAlarm();
+            startRotateAlarm();
         case 'toolboxMinHeight':
         case 'startupSwitch':
         case 'random':
@@ -441,7 +444,6 @@ function reactToPrefChange(prefName, prefData)
         case 'toolsKeyOs':
         case 'toolsKey':
         case 'current':
-        case 'fastSwitch':
             browser.runtime.sendMessage({
                                             command: "Set-Preference",
                                              preference: prefName,
