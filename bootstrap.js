@@ -110,7 +110,7 @@ var WindowListener = {
   },
   onWindowTitleChange: function (xulWindow, newTitle) {
   }
-} 
+};
 
 //UI Injection
 function injectMainMenu(doc) {
@@ -199,7 +199,7 @@ function injectButton(window)
 			break;
 	}
 	
-	  function openOptions() 
+	  function openOptions(event) 
         {        
             var features = "chrome,titlebar,toolbar,centerscreen";
             window.openDialog("chrome://personaswitcher/content/options.xul", "Preferences", features);
@@ -266,7 +266,7 @@ function addKeyset(doc) {
 	}
 	
 	let keyset = doc.createElement ('keyset');
-	keyset.setAttribute("id", "personaSwitcherKeyset")
+	keyset.setAttribute("id", "personaSwitcherKeyset");
 	mainWindow.appendChild(keyset);	
 }
 
@@ -326,7 +326,7 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
   string.data = text;
   branch = branch ? branch : Services.prefs;
   branch.setComplexValue(prefName, Components.interfaces.nsISupportsString, string);
-};
+}
 
 function removeUserPrefs() 
 {
@@ -393,3 +393,4 @@ function removeUserPrefs()
 
 	userBranch.clearUserPref("current");
 }
+

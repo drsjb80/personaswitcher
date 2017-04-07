@@ -104,14 +104,18 @@ EndFunc
 ; Returns - Theme changed to default	True
 ;           Theme unchanged				False
 ; ==============================================================================
-Func ResetToDefaultThemeFF()
+Func ResetToDefaultTheme()
+   WinActivate("[CLASS:MozillaWindowClass]")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return False
    EndIf
 
-   ; open addons page
-   _FFTabAdd("about:addons")
-   _FFLoadWait()
+   If Not (_FFTabGetSelected("label") == "Add-ons Manager") Then
+	  _FFTabAdd("about:addons")
+	  _FFLoadWait()
+   EndIf
 
    ; get to the appearences menu on the sidebar
    _FFClick("category-theme", "id", 0)
@@ -126,10 +130,6 @@ Func ResetToDefaultThemeFF()
 		 "window.content.document" & _
 		 ".getElementsByAttribute('active', 'true').length - 1" & _
 	  "].userDisabled = true", 0)
-
-   _FFTabClose()
-   _FFLoadWait()
-   Sleep(1000)
 
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return True
@@ -180,5 +180,17 @@ Func GetDisplayedThemeBackground()
 		 '.getMostRecentWindow("navigator:browser").document' & _
 		 '.getElementsByAttribute("id", "main-window")[0]' & _
 	  ').backgroundImage', 0)
-   return StringTrimRight(StringTrimLeft($Cmd, 5), 2)
+      Local $Cmd = _FFCmd('getComputedStyle(' & _
+		 'Components.classes["@mozilla.org/appshell/window-mediator;1"]' & _
+		 '.getService(Components.interfaces.nsIWindowMediator)' & _
+		 '.getMostRecentWindow("navigator:browser").document' & _
+		 '.getElementsByAttribute("id", "main-window")[0]' & _
+	  ').backgroundImage', 0)
+   If StringLen($Cmd) > 1 Then
+	  return StringTrimRight(StringTrimLeft($Cmd, 5), 2)
+   Else
+	  $Cmd = _FFCmd("document.getElementById('main-window').style.cssText")
+	  $Cmd = StringRegExp($jsonThemeList, '(lwt-header-image:url\("[^\"]*")', 3)
+	  return StringTrimRight(StringTrimLeft($Cmd, 22), 1)
+   EndIf
 EndFunc

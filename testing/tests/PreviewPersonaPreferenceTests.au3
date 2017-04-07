@@ -215,5 +215,4 @@ Func EnablePreviewPersonaWithTime()
    ;Set preference value to 10000ms (10 sec)
    SetPsOption('preview', True)
    SetPsOption('preview-delay', "10000")
-   RestartFirefox()
 EndFunc

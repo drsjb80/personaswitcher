@@ -29,7 +29,7 @@ EndFunc
 ; Returns - ThemeID is empty string			True
 ;           ThemeID is not empty string		False
 ; ==============================================================================
-Func ResetToDefaultTheme()
+Func ResetToDefaultThemePS()
    _FFCmd("PersonaSwitcher.setDefault()")
    Sleep(500)
 
