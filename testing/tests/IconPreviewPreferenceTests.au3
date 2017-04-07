@@ -5,15 +5,18 @@
 ; to menu items" preference
 
 Local $testName = "Icon Preview Preference Tests"
-Local $tests[4]
+Local $tests[2]
 
 InitializeFirefox()
 SetPsOption("main-menubar", True)
 
 $tests[0] = Test_IconPreviewEnabledNoRestart()
 $tests[1] = Test_IconPreviewDisabledNoRestart()
-$tests[2] = Test_IconPreviewEnabledWithRestart()
-$tests[3] = Test_IconPreviewDisabledWithRestart()
+If Not($tests[0] And $tests[1]) Then
+   ReDim $tests[4]
+   $tests[2] = Test_IconPreviewEnabledWithRestart()
+   $tests[3] = Test_IconPreviewDisabledWithRestart()
+EndIf
 
 SaveResultsToFile($tests, $testName)
 EndFirefox()
@@ -31,8 +34,11 @@ Func Test_IconPreviewEnabledNoRestart()
    Local $testPassed = False
 
    ; disable the icon-preview pref and restart firefox before testing enabling it
-   SetPsOption("icon-preview", False)
-   RestartFirefox()
+   If GetPsOption("icon-preview") Then
+	  SetPsOption("icon-preview", False)
+	  RestartFirefox()
+   EndIf
+
    SetPsOption("icon-preview", True)
 
    ; check ps button, tools, and menubar for icons, store as booleans
@@ -70,8 +76,10 @@ Func Test_IconPreviewDisabledNoRestart()
    Local $testPassed = False
 
    ; enable the icon-preview pref and restart firefox before testing disabling it
-   SetPsOption("icon-preview", True)
-   RestartFirefox()
+   If Not GetPsOption("icon-preview") Then
+	  SetPsOption("icon-preview", False)
+	  RestartFirefox()
+   EndIf
    SetPsOption("icon-preview", False)
 
    ; check ps button, tools, and menubar for icons, store as booleans
