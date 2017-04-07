@@ -63,7 +63,7 @@ function loadIntoWindow(window) {
 	
 	injectMainMenu(doc);
 	injectSubMenu(doc);
-	injectButton(doc);
+	injectButton(window);
 	addKeyset(doc);	
 	PersonaSwitcher.onWindowLoad(doc);
 }
@@ -182,7 +182,9 @@ function injectSubMenu(doc) {
 	menuPopup.appendChild(subMenu_personaswitcher);
 }
 
-function injectButton(doc) {
+function injectButton(window) 
+{
+    let doc = window.document;
 	let toolbox;
 	switch (PersonaSwitcher.XULAppInfo.name)
 	{
@@ -196,13 +198,26 @@ function injectButton(doc) {
 			toolbox = doc.getElementById("navigator-toolbox");
 			break;
 	}
+	
+	  function openOptions() 
+        {        
+            var features = "chrome,titlebar,toolbar,centerscreen";
+            window.openDialog("chrome://personaswitcher/content/options.xul", "Preferences", features);
+            event.stopImmediatePropagation();
+        }
+        
 	//PersonaSwitcher button added to the customize toolbox
 	let button = doc.createElement("toolbarbutton");
 	button.setAttribute("id", "personaswitcher-button");
-	button.setAttribute("label", stringBundle.GetStringFromName('personaswitcher-button.label'));
+	button.setAttribute("label", 
+	    stringBundle.GetStringFromName('personaswitcher-button.label'));
 	button.setAttribute("class", "toolbarbutton-1");
-	button.setAttribute("tooltiptext", stringBundle.GetStringFromName('personaswitcher.tooltip'));
+	button.setAttribute("tooltiptext",
+	    stringBundle.GetStringFromName('personaswitcher.tooltip'));
 	button.setAttribute("type", "menu");
+	button.setAttribute("context", "");
+    button.addEventListener("contextmenu", openOptions, true);
+
 	let button_PSPopup = doc.createElement("menupopup");
 	button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
 	button_PSPopup.addEventListener
