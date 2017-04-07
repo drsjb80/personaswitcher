@@ -305,7 +305,7 @@ PersonaSwitcher.themeMonitor = function()
             PersonaSwitcher.logger.log('completely failed');
         }
     }
-}
+};
 
 PersonaSwitcher.previewTimer = Components.classes['@mozilla.org/timer;1'].
     createInstance(Components.interfaces.nsITimer);
@@ -447,7 +447,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 	//if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
     //{
         item = PersonaSwitcher.createMenuItem
-            (doc, PersonaSwitcher.defaultTheme);
+            (doc, PersonaSwitcher.defaultTheme, arr.length);
         if (item)
         {
             menupopup.appendChild (item);
@@ -496,8 +496,6 @@ PersonaSwitcher.createMenuPopup = function (event)
 
     PersonaSwitcher.logger.log(menupopup);
     PersonaSwitcher.logger.log(doc);
-
-    var menupopup = event.target;
     
     PersonaSwitcher.createMenuPopupWithDoc(doc, menupopup);
 };
@@ -518,7 +516,7 @@ PersonaSwitcher.popupShowing = function (event)
     var item = doc.createElementNS(PersonaSwitcher.XULNS, 'menuitem');
     menupopup.appendChild(item);
     menupopup.removeChild(item);
-}
+};
 
 PersonaSwitcher.popupHidden = function()
 {
@@ -587,6 +585,11 @@ PersonaSwitcher.setDefaultTheme = function (doc)
                     PersonaSwitcher.defaultTheme = theme;
                 }
                 PersonaSwitcher.createStaticPopups(doc);
+                PersonaSwitcher.currentIndex =
+                    PersonaSwitcher.prefs.getIntPref ("current");
+                PersonaSwitcher.switchTo 
+                    (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+                     PersonaSwitcher.currentIndex);
             }
         );
     }
@@ -601,8 +604,13 @@ PersonaSwitcher.setDefaultTheme = function (doc)
         }
         
         PersonaSwitcher.createStaticPopups(doc);
+        PersonaSwitcher.currentIndex =
+            PersonaSwitcher.prefs.getIntPref ("current");
+        PersonaSwitcher.switchTo 
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+             PersonaSwitcher.currentIndex);
     }
-}
+};
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/window
 PersonaSwitcher.onWindowLoad = function (doc)
@@ -618,17 +626,12 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.getPersonas();
         PersonaSwitcher.themeMonitor();
 
-        // this also sets up the menus as there is an asynchronous call to
-        // addon manager. bleah.
+       // Due to the asynchronous call to the addon manager, this also sets up
+        // the menus, assigns the current index and switches to the current 
+        // theme. bleah.
         PersonaSwitcher.setDefaultTheme(doc);
 
-        PersonaSwitcher.currentIndex =
-            PersonaSwitcher.prefs.getIntPref("current");
-        PersonaSwitcher.switchTo 
-            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-             PersonaSwitcher.currentIndex);
-
-        if (PersonaSwitcher.prefs.getBoolPref('startup-switch'))
+        if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
         {
             PersonaSwitcher.rotate();
         }
@@ -637,9 +640,14 @@ PersonaSwitcher.onWindowLoad = function (doc)
     {
         // we already should have the default theme at this point, crosses
         // fingers
-        PersonaSwitcher.createStaticPopups(doc);
+        PersonaSwitcher.createStaticPopups (doc); 
+        PersonaSwitcher.currentIndex =
+            PersonaSwitcher.prefs.getIntPref ("current");
+        PersonaSwitcher.switchTo 
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+             PersonaSwitcher.currentIndex);
     }
-
+    
     PersonaSwitcher.setKeyset(doc);
     PersonaSwitcher.setAccessKey(doc);
     PersonaSwitcher.setToolboxMinheight(doc);
