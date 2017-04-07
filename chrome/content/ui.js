@@ -447,7 +447,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
 	//if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
     //{
         item = PersonaSwitcher.createMenuItem
-            (doc, PersonaSwitcher.defaultTheme);
+            (doc, PersonaSwitcher.defaultTheme, arr.length);
         if (item)
         {
             menupopup.appendChild (item);
