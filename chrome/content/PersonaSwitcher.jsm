@@ -523,11 +523,6 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         {
             var themes =  menu.children;
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-			menu.childNodes[PersonaSwitcher.currentIndex].style.MozAppearance = "";
-			//menu.childNodes[PersonaSwitcher.currentIndex].style.color = "black";
-			menu.childNodes[index].style.MozAppearance = "white";
-			menu.childNodes[index].style.backgroundColor = "LightSteelBlue";
-			//menu.childNodes[index].style.color = "white";
 			themes[index].setAttribute("checked", "true"); 
         }
     }
