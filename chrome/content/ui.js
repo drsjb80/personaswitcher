@@ -539,7 +539,10 @@ PersonaSwitcher.setAccessKey = function (doc)
     if (accesskey !== '')
     {
         var menu = doc.getElementById('personaswitcher-main-menubar');
-        menu.setAttribute('accesskey', accesskey.toUpperCase().charAt(0));
+        if(menu)
+        {
+            menu.setAttribute('accesskey', accesskey.toUpperCase().charAt(0));
+        }
     }
 };
 
@@ -652,7 +655,7 @@ PersonaSwitcher.onWindowLoad = function (doc)
     PersonaSwitcher.setAccessKey(doc);
     PersonaSwitcher.setToolboxMinheight(doc);
         
-        var mainMenu = PersonaSwitcher.prefs.getBoolPref('main-menubar');
+    var mainMenu = PersonaSwitcher.prefs.getBoolPref('main-menubar');
 
     if (! PersonaSwitcher.prefs.getBoolPref('main-menubar'))
     {

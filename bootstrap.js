@@ -1,8 +1,9 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
-Cu.import("resource://gre/modules/Console.jsm");
 
 var stringBundle = Services.strings.createBundle('chrome://personaswitcher/locale/personaswitcher.properties?' + Math.random());
+var styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
+var uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
 
 function startup(data, reason) {
   //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
@@ -19,8 +20,6 @@ function startup(data, reason) {
 
   //https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
   //Loading the stylesheet into all windows is a noticable hit on performance but is necessary for Thunderbird compatibility
-  styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
-  uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css", null, null);
   styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
   
   forEachOpenWindow(loadIntoWindow);
@@ -36,7 +35,7 @@ function shutdown(data, reason) {
   }
 	
   forEachOpenWindow(unloadFromWindow);
-	PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
+  PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
   Services.wm.removeListener(WindowListener);
 	Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');	
   
@@ -133,7 +132,12 @@ function injectMainMenu(doc) {
 			menu_tools = doc.getElementById("tools-menu");
 			break;
 	}
-		
+	
+    if (null === menuBar)
+    {
+        return;
+    }
+
 	//PersonaSwitcher menu that is added to the main menubar
 	let menu_personaswitcher = doc.createElement("menu");
 	menu_personaswitcher.setAttribute("id", "personaswitcher-main-menubar");
@@ -165,7 +169,12 @@ function injectSubMenu(doc) {
 			menuPopup = doc.getElementById("menu_ToolsPopup");
 			break;
 	}
-	
+
+	if (null === menuPopup)
+    {
+        return;
+    }
+
 	//SubMenu that is insterted into the Tools Menu
 	let subMenu_personaswitcher = doc.createElement("menu");
 	subMenu_personaswitcher.setAttribute("id", "personaswitcher-tools-submenu");
@@ -198,13 +207,18 @@ function injectButton(window)
 			toolbox = doc.getElementById("navigator-toolbox");
 			break;
 	}
-	
-	  function openOptions(event) 
-        {        
-            var features = "chrome,titlebar,toolbar,centerscreen";
-            window.openDialog("chrome://personaswitcher/content/options.xul", "Preferences", features);
-            event.stopImmediatePropagation();
-        }
+
+    if (null === toolbox)
+    {
+        return;
+    }
+
+    function openOptions(event) 
+    {        
+        var features = "chrome,titlebar,toolbar,centerscreen";
+        window.openDialog("chrome://personaswitcher/content/options.xul", "Preferences", features);
+        event.stopImmediatePropagation();
+    }
         
 	//PersonaSwitcher button added to the customize toolbox
 	let button = doc.createElement("toolbarbutton");
@@ -265,6 +279,11 @@ function addKeyset(doc) {
 			break;
 	}
 	
+    if (null === mainWindow)
+    {
+        return;
+    }
+
 	let keyset = doc.createElement ('keyset');
 	keyset.setAttribute("id", "personaSwitcherKeyset");
 	mainWindow.appendChild(keyset);	

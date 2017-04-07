@@ -5,7 +5,6 @@
 /*global Components*/
 /*jslint vars: false*/
 
-Components.utils.import("resource://gre/modules/Console.jsm");
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
@@ -117,7 +116,7 @@ if (null === PersonaSwitcher.consoleLogger ||
 
 PersonaSwitcher.nullLogger = {};
 PersonaSwitcher.nullLogger.log = function (s) { 'use strict'; return; };
-PersonaSwitcher.logger = console;
+PersonaSwitcher.logger = null;
 
 // ---------------------------------------------------------------------------
 
@@ -494,7 +493,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     }
     PersonaSwitcher.logger.log ('using currentTheme');
 
-    if (toWhich === null)
+    if (undefined === toWhich || null === toWhich)
     {
         LightweightThemeManager.currentTheme = null;
     } 
@@ -522,8 +521,11 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if (menu)
         {
             var themes =  menu.children;
-            themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-			themes[index].setAttribute("checked", "true"); 
+            if(themes[PersonaSwitcher.currentIndex])
+            {
+                themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
+	            themes[index].setAttribute("checked", "true"); 
+            }
         }
     }
 };
