@@ -104,18 +104,14 @@ EndFunc
 ; Returns - Theme changed to default	True
 ;           Theme unchanged				False
 ; ==============================================================================
-Func ResetToDefaultTheme()
-   WinActivate("[CLASS:MozillaWindowClass]")
-   WinWaitActive("[CLASS:MozillaWindowClass]")
-
+Func ResetToDefaultThemeFF()
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return False
    EndIf
 
-   If Not (_FFTabGetSelected("label") == "Add-ons Manager") Then
-	  _FFTabAdd("about:addons")
-	  _FFLoadWait()
-   EndIf
+   ; open addons page
+   _FFTabAdd("about:addons")
+   _FFLoadWait()
 
    ; get to the appearences menu on the sidebar
    _FFClick("category-theme", "id", 0)
@@ -130,6 +126,10 @@ Func ResetToDefaultTheme()
 		 "window.content.document" & _
 		 ".getElementsByAttribute('active', 'true').length - 1" & _
 	  "].userDisabled = true", 0)
+
+   _FFTabClose()
+   _FFLoadWait()
+   Sleep(1000)
 
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return True

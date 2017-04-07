@@ -85,7 +85,7 @@ Func SwitchThemeOneMin()
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; wait one minute (5 second window)
-   SleepWithMsgBox(57500)
+   Sleep(57500)
    If $startTheme <> _FFPrefGet("lightweightThemes.selectedThemeID") Then
 	  $sDescription = "After setting 'switch ever _ minutes' to one minute, the theme changed in under a minute."
    Else
@@ -113,7 +113,7 @@ Func SwitchThemeOneMinWithKeys()
    Local $noThemeChange = false
 
    ; Enable switch theme preference and to 1 min
-   SetPsOption("auto", False)
+   SetPsOption("auto", True)
    SetPsOption("autominutes", "1")
 
    ; get the current theme
@@ -125,24 +125,21 @@ Func SwitchThemeOneMinWithKeys()
    ; get the current theme
    Local $secondTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
-   If $firstTheme == $secondTheme Then
-	  $sDescription = "Theme was not rotated by pressing 'ctrl + alt + a' to enable the 'switch every _ minutes' preference."
+   If $firstTheme <> $secondTheme Then
+	  $sDescription = "Theme was not rotated by pressing 'ctrl + alt + a' with the 'switch every _ minutes' preference enabled."
    Else
-	  ; wait one minute (10 second window)
-	  SleepWithMsgBox(55000)
+	  ; wait one minute (5 second window)
+	  Sleep(57000)
 
 	  If $secondTheme <> _FFPrefGet("lightweightThemes.selectedThemeID") Then
-		 $sDescription = "After pressing 'ctrl + alt + a' to enable the 'switch every _ minutes'" & _
-			" preference, the theme automatically changed in under a minute."
+		 $sDescription = "After rotating to a new theme, the theme automatically changed in under a minute."
 	  Else
-		 Sleep(10000)
+		 Sleep(5000)
 		 If $secondTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
-			$sDescription = "After pressing 'ctrl + alt + a' to enable the 'switch every _ minutes'" & _
-			   " preference, the theme was not automatically changed after a minute."
+			$sDescription = "After rotating to a new theme, the theme was not automatically changed in a minute."
 		 Else
 			$testPassed = True
-			$sDescription = "After pressing 'ctrl + alt + a' to enable the 'switch every _ minutes'" & _
-			   " preference, the theme was automatically changed in a minute."
+			$sDescription = "After rotating to a new theme, the theme was automatically changed in a minute."
 		 EndIf
 	  EndIf
    EndIf
@@ -190,14 +187,4 @@ Func SwitchThemeMaxValue()
 
    ResetPsOption("autominutes")
    Return FormatTestString($testPassed, $sDescription)
-EndFunc
-
-
-Func SleepWithMsgBox(byRef $time)
-   Local $cmd = "MsgBox(0, ' Please Wait...', ' Waiting one minute for theme " & _
-	  "to switch.' & @CRLF & ' This mesage will automatically close.', 55)"
-   Run(@AutoItExe & ' /AutoIt3ExecuteLine "' & $cmd & '"')
-   Sleep($time)
-   WinActivate("[CLASS:MozillaWindowClass]")
-   WinWaitActive("[CLASS:MozillaWindowClass]")
 EndFunc
