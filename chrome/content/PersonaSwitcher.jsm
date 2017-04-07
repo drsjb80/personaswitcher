@@ -270,7 +270,7 @@ PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 PersonaSwitcher.allDocuments = function (func, index)
 {    
     var enumerator = PersonaSwitcher.windowMediator.
-                        getEnumerator ("navigator:browser");
+                        getEnumerator (null);
     var aWindow;
     while (enumerator.hasMoreElements())
     {
@@ -291,7 +291,7 @@ PersonaSwitcher.allDocuments = function (func, index)
 PersonaSwitcher.allWindows = function (func)
 {
     var enumerator = PersonaSwitcher.windowMediator.
-                        getEnumerator ("navigator:browser");
+                        getEnumerator (null);
     while (enumerator.hasMoreElements())
     {
         func(enumerator.getNext());
