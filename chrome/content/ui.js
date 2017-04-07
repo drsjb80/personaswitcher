@@ -585,6 +585,11 @@ PersonaSwitcher.setDefaultTheme = function (doc)
                     PersonaSwitcher.defaultTheme = theme;
                 }
                 PersonaSwitcher.createStaticPopups(doc);
+                PersonaSwitcher.currentIndex =
+                    PersonaSwitcher.prefs.getIntPref ("current");
+                PersonaSwitcher.switchTo 
+                    (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+                     PersonaSwitcher.currentIndex);
             }
         );
     }
@@ -599,6 +604,11 @@ PersonaSwitcher.setDefaultTheme = function (doc)
         }
         
         PersonaSwitcher.createStaticPopups(doc);
+        PersonaSwitcher.currentIndex =
+            PersonaSwitcher.prefs.getIntPref ("current");
+        PersonaSwitcher.switchTo 
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+             PersonaSwitcher.currentIndex);
     }
 };
 
@@ -616,17 +626,12 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.getPersonas();
         PersonaSwitcher.themeMonitor();
 
-        // this also sets up the menus as there is an asynchronous call to
-        // addon manager. bleah.
+       // Due to the asynchronous call to the addon manager, this also sets up
+        // the menus, assigns the current index and switches to the current 
+        // theme. bleah.
         PersonaSwitcher.setDefaultTheme(doc);
 
-        PersonaSwitcher.currentIndex =
-            PersonaSwitcher.prefs.getIntPref("current");
-        PersonaSwitcher.switchTo 
-            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-             PersonaSwitcher.currentIndex);
-
-        if (PersonaSwitcher.prefs.getBoolPref('startup-switch'))
+        if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
         {
             PersonaSwitcher.rotate();
         }
@@ -635,9 +640,14 @@ PersonaSwitcher.onWindowLoad = function (doc)
     {
         // we already should have the default theme at this point, crosses
         // fingers
-        PersonaSwitcher.createStaticPopups(doc);
+        PersonaSwitcher.createStaticPopups (doc); 
+        PersonaSwitcher.currentIndex =
+            PersonaSwitcher.prefs.getIntPref ("current");
+        PersonaSwitcher.switchTo 
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+             PersonaSwitcher.currentIndex);
     }
-
+    
     PersonaSwitcher.setKeyset(doc);
     PersonaSwitcher.setAccessKey(doc);
     PersonaSwitcher.setToolboxMinheight(doc);
