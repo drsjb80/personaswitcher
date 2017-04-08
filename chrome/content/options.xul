@@ -194,32 +194,41 @@
                 <checkbox
                     id="default-key-shift"
                     preference="default-key-shift"
-                    label="&options.kbshortcuts.shift;"/>
+                    label="&options.kbshortcuts.shift;"
+					tabindex = "1"/>
                 <checkbox
                     id="default-key-control"
                     preference="default-key-control"
-                    label="&options.kbshortcuts.control;"/>
+                    label="&options.kbshortcuts.control;"
+					tabindex = "2"/>
                 <checkbox
                     id="default-key-alt"
                     preference="default-key-alt"
-                    label="&options.kbshortcuts.alt;"/>
+                    label="&options.kbshortcuts.alt;"
+					tabindex = "3"/>
                 <checkbox
                     id="default-key-meta"
                     preference="default-key-meta"
-                    label="&options.kbshortcuts.meta;"/>
+                    label="&options.kbshortcuts.meta;"
+					tabindex = "4"/>
                 <checkbox
                     id="default-key-accel"
                     preference="default-key-accel"
-                    label="&options.kbshortcuts.accel;"/>
+                    label="&options.kbshortcuts.accel;"
+					tabindex = "5"/>
                 <checkbox
                     id="default-key-os"
                     preference="default-key-os"
-                    label="&options.kbshortcuts.os;"/>
+                    label="&options.kbshortcuts.os;"
+					tabindex = "6"/>
                 <label>&options.kbshortcuts.key;</label>
                 <textbox
                     id="default-key"
                     size="1"
-                    preference="default-key"/>
+                    preference="default-key"
+					maxlength="1"					
+					clickSelectsAll = "true"
+					tabindex = "7"/>
             </hbox>
 
             <hbox align="center">
@@ -229,32 +238,41 @@
                 <checkbox
                     id="rotate-key-shift"
                     preference="rotate-key-shift"
-                    label="&options.kbshortcuts.shift;"/>
+                    label="&options.kbshortcuts.shift;"
+					tabindex = "8"/>
                 <checkbox
                     id="rotate-key-control"
                     preference="rotate-key-control"
-                    label="&options.kbshortcuts.control;"/>
+                    label="&options.kbshortcuts.control;"
+					tabindex = "9"/>
                 <checkbox
                     id="rotate-key-alt"
                     preference="rotate-key-alt"
-                    label="&options.kbshortcuts.alt;"/>
+                    label="&options.kbshortcuts.alt;"
+					tabindex = "10"/>
                 <checkbox
                     id="rotate-key-meta"
                     preference="rotate-key-meta"
-                    label="&options.kbshortcuts.meta;"/>
+                    label="&options.kbshortcuts.meta;"
+					tabindex = "11"/>
                 <checkbox
                     id="rotate-key-accel"
                     preference="rotate-key-accel"
-                    label="&options.kbshortcuts.accel;"/>
+                    label="&options.kbshortcuts.accel;"
+					tabindex = "12"/>
                 <checkbox
                     id="rotate-key-os"
                     preference="rotate-key-os"
-                    label="&options.kbshortcuts.os;"/>
+                    label="&options.kbshortcuts.os;"
+					tabindex = "13"/>
                 <label>&options.kbshortcuts.key;</label>
                 <textbox
                     id="rotate-key"
                     size="1"
-                    preference="rotate-key"/>
+                    preference="rotate-key"
+					maxlength="1"
+					clickSelectsAll = "true"
+					tabindex = "14"/>
             </hbox>
 
             <hbox align="center">
@@ -264,32 +282,41 @@
                 <checkbox
                     id="auto-key-shift"
                     preference="auto-key-shift"
-                    label="&options.kbshortcuts.shift;"/>
+                    label="&options.kbshortcuts.shift;"
+					tabindex = "15"/>
                 <checkbox
                     id="auto-key-control"
                     preference="auto-key-control"
-                    label="&options.kbshortcuts.control;"/>
+                    label="&options.kbshortcuts.control;"
+					tabindex = "16"/>
                 <checkbox
                     id="auto-key-alt"
                     preference="auto-key-alt"
-                    label="&options.kbshortcuts.alt;"/>
+                    label="&options.kbshortcuts.alt;"
+					tabindex = "17"/>
                 <checkbox
                     id="auto-key-meta"
                     preference="auto-key-meta"
-                    label="&options.kbshortcuts.meta;"/>
+                    label="&options.kbshortcuts.meta;"
+					tabindex = "18"/>
                 <checkbox
                     id="auto-key-accel"
                     preference="auto-key-accel"
-                    label="&options.kbshortcuts.accel;"/>
+                    label="&options.kbshortcuts.accel;"
+					tabindex = "19"/>
                 <checkbox
                     id="auto-key-os"
                     preference="auto-key-os"
-                    label="&options.kbshortcuts.os;"/>
+                    label="&options.kbshortcuts.os;"
+					tabindex = "20"/>
                 <label>&options.kbshortcuts.key;</label>
                 <textbox
                     id="auto-key"
                     size="1"
-                    preference="auto-key"/>
+                    preference="auto-key"
+					maxlength="1"
+					clickSelectsAll = "true"
+					tabindex = "21"/>
             </hbox>
 
         </groupbox>
@@ -301,7 +328,10 @@
                 <textbox
                     id="access-key"
                     size="1"
-                    preference="access-key"/>
+                    preference="access-key"
+					maxlength="1"
+					clickSelectsAll = "true"
+					tabindex = "22"/>
             </hbox>
 
             <hbox align="center">
@@ -309,32 +339,41 @@
                 <checkbox
                     id="activate-key-shift"
                     preference="activate-key-shift"
-                    label="&options.kbshortcuts.shift;"/>
+                    label="&options.kbshortcuts.shift;"
+					tabindex = "23"/>
                 <checkbox
                     id="activate-key-control"
                     preference="activate-key-control"
-                    label="&options.kbshortcuts.control;"/>
+                    label="&options.kbshortcuts.control;"
+					tabindex = "24"/>
                 <checkbox
                     id="activate-key-alt"
                     preference="activate-key-alt"
-                    label="&options.kbshortcuts.alt;"/>
+                    label="&options.kbshortcuts.alt;"
+					tabindex = "25"/>
                 <checkbox
                     id="activate-key-meta"
                     preference="activate-key-meta"
-                    label="&options.kbshortcuts.meta;"/>
+                    label="&options.kbshortcuts.meta;"
+					tabindex = "26"/>
                 <checkbox
                     id="activate-key-accel"
                     preference="activate-key-accel"
-                    label="&options.kbshortcuts.accel;"/>
+                    label="&options.kbshortcuts.accel;"
+					tabindex = "27"/>
                 <checkbox
                     id="activate-key-os"
                     preference="activate-key-os"
-                    label="&options.kbshortcuts.os;"/>
+                    label="&options.kbshortcuts.os;"
+					tabindex = "28"/>
                 <label>&options.kbshortcuts.key;</label>
                 <textbox
                     id="activate-key"
                     size="1"
-                    preference="activate-key"/>
+                    preference="activate-key"
+					maxlength="1"
+					clickSelectsAll = "true"
+					tabindex = "29"/>
             </hbox>
         </groupbox>
 
@@ -345,10 +384,15 @@
                     id="auto"
                     preference="auto"
                     label="&options.autoevery.switch;"
-                />
+					tabindex = "30"/>
                 <textbox
                     size="3"
                     preference="auto-minutes"
+					clickSelectsAll = "true"
+					type="number"
+					min="1"
+					max="999"
+					tabindex = "31"
                 />
                 <label value="&options.autoevery.minutes;"/>
             </hbox>
@@ -358,6 +402,7 @@
                     id="random"
                     preference="random"
                     label="&options.random.desc;"
+					tabindex = "32"
                 />
             </hbox>
 
@@ -366,6 +411,7 @@
                     id="startup-switch"
                     preference="startup-switch"
                     label="&options.startup-switch.desc;"
+					tabindex = "33"
                     />
             </hbox>
 
@@ -374,11 +420,20 @@
                     id="preview"
                     preference="preview"
                     label="&options.preview.desc;"
+					tabindex = "34"
                 />
+				
+				<!-- If these number change, they need to be changed in prefs.js as well -->
                 <textbox
-                    size="4"
+                    size="5"
                     id="preview-delay"
                     preference="preview-delay"
+					type="number"
+					min="0"
+					max="10000"
+					increment="10"
+					clickSelectsAll = "true"
+					tabindex = "35"
                 />
                 <label value="&options.preview-delay.desc;"/>
             </hbox>
@@ -388,6 +443,7 @@
                     id="icon-preview"
                     preference="icon-preview"
                     label="&options.icon-preview.desc;"
+					tabindex = "36"
                 />
             </hbox>
 
@@ -396,15 +452,22 @@
                     id="notification-workaround"
                     preference="notification-workaround"
                     label="&options.notification-workaround.desc;"
+					tabindex = "37"
                 />
             </hbox>
 
+			<!-- If these number change, they need to be changed in prefs.js as well -->
             <hbox align="center">
                 <label value="&options.toolbox-minheight.desc;"/>
                 <textbox
                     size="3"
                     id="toolbox-minheight"
                     preference="toolbox-minheight"
+					clickSelectsAll = "true"
+					type="number"
+					min="0"
+					max="200"
+					tabindex = "38"
                 />
             </hbox>
 
@@ -417,6 +480,7 @@
                     id="tools-submenu"
                     preference="tools-submenu"
                     label="&options.tools-submenu;"
+					tabindex = "39"
                 />
             </hbox>
 
@@ -425,6 +489,7 @@
                     id="main-menubar"
                     preference="main-menubar"
                     label="&options.main-menubar;"
+					tabindex = "40"
                 />
             </hbox>
 

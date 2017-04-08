@@ -7,9 +7,8 @@ toolbar[iconsize="small"]
     list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher16.png");
 }
 
-toolbarpaletteitem[place="palette"] > 
-    #personaswitcher-button,
-    #personaswitcher-button[cui-areatype="menu-panel"]{
+toolbarpaletteitem[place="palette"] > #personaswitcher-button,
+    #personaswitcher-button[cui-areatype="menu-panel"] {
     list-style-image:
         url("chrome://personaswitcher/skin/PersonaSwitcher32.png");
 }
