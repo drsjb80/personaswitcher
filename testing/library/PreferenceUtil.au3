@@ -7,7 +7,7 @@
 ; ==========================================================
 ; Opens Persona Switcher's options page. Ends calling script on failure
 ; ==============================================================================
-Func OpenPersonaSwitcherPrefs()
+Func OpenPersonaSwitcherPrefs($tries = 0)
    WinActivate("[CLASS:MozillaWindowClass]")
    WinWaitActive("[CLASS:MozillaWindowClass]")
 
@@ -26,8 +26,11 @@ Func OpenPersonaSwitcherPrefs()
    ; wait at most 3 seconds for the preferences window to be open
    If WinWaitActive("Persona Switcher preferences", "", 3) Then
 	  return True
+   ElseIf $attempts == 0
+	  return OpenPersonaSwitcherPrefs(1)
    Else
-	  MsgBox(64, "", "Unable to reach Persona Switcher preferences, aborting tests")
+	  MsgBox(64, "", "An error occurred trying to reach Persona Switcher's preferences." & @CRLF & _
+		 "Aborting tests - please try again." )
 	  Exit(1)
    EndIf
 EndFunc

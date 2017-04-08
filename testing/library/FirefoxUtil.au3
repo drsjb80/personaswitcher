@@ -180,17 +180,19 @@ Func GetDisplayedThemeBackground()
 		 '.getMostRecentWindow("navigator:browser").document' & _
 		 '.getElementsByAttribute("id", "main-window")[0]' & _
 	  ').backgroundImage', 0)
-      Local $Cmd = _FFCmd('getComputedStyle(' & _
+   If (StringLen($Cmd) > 4) And (StringLower($Cmd) <> "none") Then
+	  ;MsgBox(0, "", $Cmd)
+	  return StringTrimRight(StringTrimLeft($Cmd, 5), 2)
+   Else
+
+	  $Cmd = $Cmd = _FFCmd('getComputedStyle(' & _
 		 'Components.classes["@mozilla.org/appshell/window-mediator;1"]' & _
 		 '.getService(Components.interfaces.nsIWindowMediator)' & _
 		 '.getMostRecentWindow("navigator:browser").document' & _
 		 '.getElementsByAttribute("id", "main-window")[0]' & _
-	  ').backgroundImage', 0)
-   If StringLen($Cmd) > 1 Then
-	  return StringTrimRight(StringTrimLeft($Cmd, 5), 2)
-   Else
-	  $Cmd = _FFCmd("document.getElementById('main-window').style.cssText")
-	  $Cmd = StringRegExp($jsonThemeList, '(lwt-header-image:url\("[^\"]*")', 3)
+	  ').style.cssText', 0)
+	  ;MsgBox(0, "", $Cmd)
+	  $Cmd = StringRegExp($Cmd, '(lwt-header-image:url\("[^\"]*")', 3)
 	  return StringTrimRight(StringTrimLeft($Cmd, 22), 1)
    EndIf
 EndFunc

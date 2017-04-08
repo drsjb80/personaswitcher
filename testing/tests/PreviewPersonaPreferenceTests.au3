@@ -33,19 +33,18 @@ Func PreviewThemeOnIcon($themeList)
    Local $sDescription
    Local $testPassed = False
 
-   ResetToDefaultTheme()
    Local $previewThemeId = StringRegExpReplace($themeList[0], "recommended-", "")
    Local $defaultTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
    Local $startPreview = GetDisplayedThemeBackground()
 
    OpenPersonaSwitcherButton()
    Send("{DOWN 2}")
-   Sleep(9500)
+   Sleep(9000)
 
    ; grab background right before change
    $checkPreview = GetDisplayedThemeBackground()
 
-   Sleep(1000)
+   Sleep(2000)
 
    ; grab the "preview" theme image url after change and search for the theme id
    Local $previewImageUrl = GetDisplayedThemeBackground()
@@ -82,7 +81,6 @@ Func PreviewThemeOnPSwitcherMenuBar($themeList)
    SetPsOption('main-menubar', True)
 
    ; grab default theme
-   ResetToDefaultTheme()
    Local $previewThemeId = StringRegExpReplace($themeList[0], "recommended-", "")
    Local $defaultTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
    Local $startPreview = GetDisplayedThemeBackground()
@@ -90,12 +88,12 @@ Func PreviewThemeOnPSwitcherMenuBar($themeList)
    ; select a theme from the main menu and wait 10 secs
    OpenPersonaSwitcherMenuBar()
    Send("{DOWN}")
-   Sleep(9500)
+   Sleep(9000)
 
    ; grab background right before change
    $checkPreview = GetDisplayedThemeBackground()
 
-   Sleep(1000)
+   Sleep(2000)
 
    ; grab the "preview" theme image url after change and search for the theme id
    Local $previewImageUrl = GetDisplayedThemeBackground()
@@ -131,7 +129,6 @@ Func PreviewThemeOnToolsMenu($themeList)
    SetPsOption('tools-submenu', True)
 
    ; grab default theme
-   ResetToDefaultTheme()
    Local $previewThemeId = StringRegExpReplace($themeList[0], "recommended-", "")
    Local $defaultTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
    Local $startPreview = GetDisplayedThemeBackground()
@@ -139,12 +136,12 @@ Func PreviewThemeOnToolsMenu($themeList)
    ;opening the toolbar menu and previewing a theme
    OpenPersonaSwitcherToolsMenu()
    Send("{DOWN}")
-   Sleep(9500)
+   Sleep(9000)
 
    ; grab background right before change
    $checkPreview = GetDisplayedThemeBackground()
 
-   Sleep(1000)
+   Sleep(2000)
 
    ; grab the "preview" theme image url after change and search for the theme id
    Local $previewImageUrl = GetDisplayedThemeBackground()
