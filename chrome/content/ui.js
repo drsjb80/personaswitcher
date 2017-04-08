@@ -564,7 +564,6 @@ PersonaSwitcher.createStaticPopups = function (doc)
 PersonaSwitcher.getButtonPopup =  function(doc, id) 
 {
     let toolbox;
-    let toolbar;
     switch (PersonaSwitcher.XULAppInfo.name)
     {
         case 'Icedove':
