@@ -4,7 +4,7 @@
 // LightweightThemeManager.jsm
 
 // https://addons.mozilla.org/en-US/firefox/pages/appversions/
-
+/* globals PersonaSwitcher: true, Components:false */
 "use strict";
 //Services
 Components.utils.import('resource://gre/modules/Services.jsm');
@@ -123,7 +123,10 @@ PersonaSwitcher.setKeyset = function (doc)
     for (var key in keys)
     {
         // if no character set
-        if ('' === keys[key][2]) continue;
+        if ('' === keys[key][2])
+        {
+            continue;
+        }
 
         var newKey = PersonaSwitcher.makeKey (doc,
             keys[key][0], keys[key][1], keys[key][2], keys[key][3]);
@@ -285,11 +288,11 @@ PersonaSwitcher.themeMonitor = function()
     // http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
     // https://github.com/ehsan/mozilla-cvs-history/blob/master/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
 
-// 550   const unsigned long TYPE_THEME = 0x04;
-// 559   readonly attribute long type;
+    // 550   const unsigned long TYPE_THEME = 0x04;
+    // 559   readonly attribute long type;
 
-// can we pretend add-ons aren't removed until reboot because there is no
-// listener?
+    // can we pretend add-ons aren't removed until reboot because there is no
+    // listener?
         PersonaSwitcher.logger.log('trying ExtensionManager');
         try
         {
@@ -412,6 +415,19 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     var popup = 'personaswitcher-button-popup' ===  menupopup.id;
     // PersonaSwitcher.logger.log (popup);
 
+    var item = null;
+
+    for (var i = 0; i < arr.length; i++)
+    {
+        PersonaSwitcher.logger.log (i);
+        PersonaSwitcher.logger.log (arr[i]);
+        item = PersonaSwitcher.createMenuItem(doc, arr[i], i);
+        if (item)
+        {
+            menupopup.appendChild(item);
+        }
+    }
+
     /*
     // the bad two cases when having a default messes with the menu
     // if it's thunderbird and we stretched the top
@@ -431,20 +447,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     PersonaSwitcher.logger.log (PM);
     */
 
-    var item = null;
-
-    for (var i = 0; i < arr.length; i++)
-    {
-        PersonaSwitcher.logger.log (i);
-        PersonaSwitcher.logger.log (arr[i]);
-        item = PersonaSwitcher.createMenuItem(doc, arr[i], i);
-        if (item)
-        {
-            menupopup.appendChild(item);
-        }
-    }
-	
-	//if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
+    //if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
     //{
         item = PersonaSwitcher.createMenuItem
             (doc, PersonaSwitcher.defaultTheme, arr.length);
@@ -500,24 +503,6 @@ PersonaSwitcher.createMenuPopup = function (event)
     PersonaSwitcher.createMenuPopupWithDoc(doc, menupopup);
 };
 
-//Appears to have been a Hack to get popupHidden to work in non-Firefox applications
-//Is no longer being called anywhere. Remove?
-PersonaSwitcher.popupShowing = function (event)
-{
-    PersonaSwitcher.logger.log("in popupShowing");
-    PersonaSwitcher.logger.log(event);
-    PersonaSwitcher.logger.log(event.target);
-
-    var menupopup = event.target;
-    var doc = event.target.ownerDocument;
-
-    // have to something to the menu in order for the onpopuphidden to
-    // work. don't ask me why.
-    var item = doc.createElementNS(PersonaSwitcher.XULNS, 'menuitem');
-    menupopup.appendChild(item);
-    menupopup.removeChild(item);
-};
-
 PersonaSwitcher.popupHidden = function()
 {
     PersonaSwitcher.logger.log("in popuphidden");
@@ -553,8 +538,7 @@ PersonaSwitcher.createStaticPopups = function (doc)
     PersonaSwitcher.getPersonas();
 
     var popups = ['personaswitcher-main-menubar-popup',
-        'personaswitcher-tools-submenu-popup',
-        'personaswitcher-button-popup'];
+        'personaswitcher-tools-submenu-popup'];
 
     for (var popup in popups)
     {
@@ -568,6 +552,47 @@ PersonaSwitcher.createStaticPopups = function (doc)
             PersonaSwitcher.createMenuPopupWithDoc(doc, item);
         }
     }
+
+    var buttonPopup = 
+            PersonaSwitcher.getButtonPopup(doc, 'personaswitcher-button');
+    if (null !== buttonPopup)
+    {        
+        PersonaSwitcher.createMenuPopupWithDoc(doc, buttonPopup);
+    }
+};
+
+PersonaSwitcher.getButtonPopup =  function(doc, id) 
+{
+    let toolbox;
+    let toolbar;
+    switch (PersonaSwitcher.XULAppInfo.name)
+    {
+        case 'Icedove':
+        case 'Thunderbird':
+            toolbox = doc.getElementById("mail-toolbox");
+            break;
+        case 'SeaMonkey':
+        case 'Firefox':
+        default:
+            toolbox = doc.getElementById("navigator-toolbox");
+            break;
+    }
+
+    //Check the toolbar palette first. For some reason elements in the palette
+    //cannot be retrieved from the document using getElementById, so we do it
+    //the hard way 
+    var list = toolbox.palette.children;
+    for(var index = 0; index < list.length; index++)
+    {
+        if(list[index].id === id)
+        {
+            return list[index].firstChild;
+        }
+    }
+    
+    //If it's not in the palette it should be attached to the menu and is
+    //accessible from the document
+    return doc.getElementById('personaswitcher-button-popup');
 };
 
 PersonaSwitcher.setDefaultTheme = function (doc)
@@ -629,7 +654,7 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.getPersonas();
         PersonaSwitcher.themeMonitor();
 
-       // Due to the asynchronous call to the addon manager, this also sets up
+        // Due to the asynchronous call to the addon manager, this also sets up
         // the menus, assigns the current index and switches to the current 
         // theme. bleah.
         PersonaSwitcher.setDefaultTheme(doc);
