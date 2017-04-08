@@ -231,7 +231,7 @@ function localizeHtmlPage()
 // Shows or hides the advanced options menu
 function displayAdvanced()
 {
-	var advancedOptionsObject = document.getElementById("advancedOptions")
+	var advancedOptionsObject = document.getElementById("advancedOptions");
 
 	if(advancedOptionsObject.style.display === "block")
 	{
@@ -239,8 +239,15 @@ function displayAdvanced()
 	}
 	else
 	{
-		advancedOptionsObject.style.display = "block"
+		advancedOptionsObject.style.display = "block";
 	}
+}
+
+function updateMaxHeight()
+{
+        toolboxMinHeightObject.max = toolboxMaxHeightObject.value;
+        var bleh = document.getElementById("max");
+        bleh.innerHTML = toolboxMinHeightObject.max;
 }
 
 document.addEventListener('DOMContentLoaded', loadOptions);
@@ -248,3 +255,4 @@ document.addEventListener('DOMContentLoaded', localizeHtmlPage);
 document.querySelector("form").addEventListener("submit", saveOptions);
 document.querySelector("form").addEventListener("reset", resetOptions);
 document.getElementById("advancedButton").addEventListener("click", displayAdvanced);
+document.getElementById("toolbox-maxheight").addEventListener("change", updateMaxHeight);

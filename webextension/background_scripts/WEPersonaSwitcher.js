@@ -444,6 +444,7 @@ function reactToPrefChange(prefName, prefData)
         case 'toolsKeyOs':
         case 'toolsKey':
         case 'current':
+        case 'toolboxMaxHeight':
             browser.runtime.sendMessage({
                                             command: "Set-Preference",
                                              preference: prefName,

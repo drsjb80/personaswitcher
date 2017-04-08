@@ -326,10 +326,16 @@ function setPreference(preference, value)
             break;
         case 'current':
             PersonaSwitcher.currentIndex = parseInt(value);
-            PersonaSwitcher.prefs.setIntPref ('current', parseInt(value));
+            PersonaSwitcher.prefs.setIntPref ("current", parseInt(value));
             break;
         case "fastSwitch":
             PersonaSwitcher.prefs.setBoolPref("fastswitch", value);
+            break;
+        case 'toolboxMaxHeight':
+            PersonaSwitcher.prefs.setCharPref("toolbox-maxheight", value);
+            break;
+        case 'debug':
+            PersonaSwitcher.prefs.setBoolPref("debug", value);
             break;
     }
 }
