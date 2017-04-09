@@ -1,5 +1,6 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
+const MIDDLE_BUTTON = 1;
 
 var stringBundle = 
     Services.strings.createBundle(
@@ -276,6 +277,10 @@ function injectButton(window)
     button.setAttribute("type", "menu");
     button.setAttribute("context", "");
     button.addEventListener("contextmenu", openOptions, true);
+    button.addEventListener("click", (e) => 
+        {
+            if(e.button === MIDDLE_BUTTON) PersonaSwitcher.setDefault();
+        });
 
     let button_PSPopup = doc.createElement("menupopup");
     button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
