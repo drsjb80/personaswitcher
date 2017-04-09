@@ -116,7 +116,7 @@ if (null === PersonaSwitcher.consoleLogger ||
 
 PersonaSwitcher.nullLogger = {};
 PersonaSwitcher.nullLogger.log = function (s) { 'use strict'; return; };
-PersonaSwitcher.logger = null;
+PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
 
 // ---------------------------------------------------------------------------
 

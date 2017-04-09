@@ -580,15 +580,17 @@ PersonaSwitcher.getButtonPopup =  function(doc, id)
     //Check the toolbar palette first. For some reason elements in the palette
     //cannot be retrieved from the document using getElementById, so we do it
     //the hard way 
-    var list = toolbox.palette.children;
-    for(var index = 0; index < list.length; index++)
+    if (null !== toolbox)
     {
-        if(list[index].id === id)
+        var list = toolbox.palette.children;
+        for(var index = 0; index < list.length; index++)
         {
-            return list[index].firstChild;
+            if(list[index].id === id)
+            {
+                return list[index].firstChild;
+            }
         }
     }
-    
     //If it's not in the palette it should be attached to the menu and is
     //accessible from the document
     return doc.getElementById('personaswitcher-button-popup');

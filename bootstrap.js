@@ -30,10 +30,10 @@ function startup(data, reason)
     //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
     //load preferences
     Services.scriptloader.
-        loadSubScript('chrome://personaswitcher/content/prefs.js', 
+        loadSubScript('chrome://personaswitcher/content/prefs.js',
                       { pref: setDefaultPref });
-        
-    Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
+
+    Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');    
 
     //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
     let context = this;
@@ -83,7 +83,6 @@ function install(data, reason)
 
 function uninstall(data, reason) 
 {
-    firstRun = false;
     removeUserPrefs();
 }
 
@@ -141,11 +140,7 @@ var WindowListener =
         function onWindowLoad()
         {
             window.removeEventListener('load', onWindowLoad);
-            if (window.document.documentElement.getAttribute('windowtype') == 
-                'navigator:browser')
-            {
-                loadIntoWindow(window);
-            }
+            loadIntoWindow(window);
         }
         window.addEventListener('load', onWindowLoad);
     },
@@ -302,7 +297,6 @@ function injectButton(window)
 
 function existsIn(list, desiredItem) 
 {
-    
     for(var index = 0; index < list.length; index++)
     {
         if(list[index].id === desiredItem.id)
@@ -323,10 +317,10 @@ function moveButtonToToolbar(doc, toolbar, button)
     {
         if (firstRun) 
         {
-        // No button yet so add it to the toolbar.
-        toolbar.insertItem(button.id);
-        toolbar.setAttribute("currentset", toolbar.currentSet);
-        doc.persist(toolbar.id, "currentset");
+            // No button yet so add it to the toolbar.
+            toolbar.insertItem(button.id);
+            toolbar.setAttribute("currentset", toolbar.currentSet);
+            doc.persist(toolbar.id, "currentset");
         }
     }
     else 
