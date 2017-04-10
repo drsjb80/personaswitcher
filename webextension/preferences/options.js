@@ -122,6 +122,9 @@ function saveOptions(e)
             toolboxMaxHeight: parseInt(toolboxMaxHeightObject.value)
         });
     setting.catch(onError);
+
+    //Update hint on minimum toolbox height preference
+    updateMaxHeight(toolboxMaxHeightObject.value);
 }
 
 function loadOptions()
@@ -181,6 +184,9 @@ function loadOptions()
         fastSwitchObject.checked = result.fastSwitch;
         staticMenusObject.checked = result.staticMenus;
         toolboxMaxHeightObject.value = result.toolboxMaxHeight;
+
+        //Update hint on minimum toolbox height preference
+        updateMaxHeight(result.toolboxMaxHeight);
 
         
 		//If the two auto preferences don't match, update the WebExtension's preference
@@ -243,16 +249,79 @@ function displayAdvanced()
 	}
 }
 
-function updateMaxHeight()
+function updateMaxHeight(value)
 {
-        toolboxMinHeightObject.max = toolboxMaxHeightObject.value;
-        var bleh = document.getElementById("max");
-        bleh.innerHTML = toolboxMinHeightObject.max;
+        toolboxMinHeightObject.max = value;
+        var maxHeightHintObject = document.getElementById("maxHeight");
+        maxHeightHintObject.innerHTML = toolboxMinHeightObject.max;
+}
+
+function updateToolsMenuShortcutDisplay()
+{
+    if(toolsMenuObject.checked)
+    {
+        document.getElementById("options_kbshortcuts_tools").style.color = "black";
+        document.getElementById("toolsMenuShortcutOptions").style.color = "black";
+        toolsKeyShiftObject.disabled = false;
+        toolsKeyControlObject.disabled = false;
+        toolsKeyAltObject.disabled = false;
+        toolsKeyMetaObject.disabled = false;
+        toolsKeyAccelObject.disabled = false;
+        toolsKeyOSObject.disabled = false;
+        toolsKeyObject.disabled = false;
+    }
+    else
+    {
+        document.getElementById("options_kbshortcuts_tools").style.color = "gray";
+        document.getElementById("toolsMenuShortcutOptions").style.color = "gray";
+        toolsKeyShiftObject.disabled = true;
+        toolsKeyControlObject.disabled = true;
+        toolsKeyAltObject.disabled = true;
+        toolsKeyMetaObject.disabled = true;
+        toolsKeyAccelObject.disabled = true;
+        toolsKeyOSObject.disabled = true;
+        toolsKeyObject.disabled = true;
+    }
+}
+
+function updateMenuShortcutDisplay()
+{
+    if(mainMenuBarObject.checked)
+    {
+        document.getElementById("options_kbshortcuts_access").style.color = "black";
+        document.getElementById("options_kbshortcuts_activate").style.color = "black";
+        document.getElementById("menuShortcutOptions").style.color = "black";
+        accessKeyObject.disabled = false;
+        activateKeyShiftObject.disabled = false;
+        activateKeyControlObject.disabled = false;
+        activateKeyAltObject.disabled = false;
+        activateKeyMetaObject.disabled = false;
+        activateKeyAccelObject.disabled = false;
+        activateKeyOSObject.disabled = false;
+        activateKeyObject.disabled = false;
+    }
+    else
+    {
+        document.getElementById("options_kbshortcuts_access").style.color = "gray";
+        document.getElementById("options_kbshortcuts_activate").style.color = "gray";
+        document.getElementById("menuShortcutOptions").style.color = "gray";
+        accessKeyObject.disabled = true;
+        activateKeyShiftObject.disabled = true;
+        activateKeyControlObject.disabled = true;
+        activateKeyAltObject.disabled = true;
+        activateKeyMetaObject.disabled = true;
+        activateKeyAccelObject.disabled = true;
+        activateKeyOSObject.disabled = true;
+        activateKeyObject.disabled = true;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', loadOptions);
 document.addEventListener('DOMContentLoaded', localizeHtmlPage);
+document.addEventListener('DOMContentLoaded', updateMenuShortcutDisplay);
+document.addEventListener('DOMContentLoaded', updateToolsMenuShortcutDisplay);
 document.querySelector("form").addEventListener("submit", saveOptions);
 document.querySelector("form").addEventListener("reset", resetOptions);
 document.getElementById("advancedButton").addEventListener("click", displayAdvanced);
-document.getElementById("toolbox-maxheight").addEventListener("change", updateMaxHeight);
+document.getElementById("main-menubar").addEventListener("change", updateMenuShortcutDisplay);
+document.getElementById("tools-menu").addEventListener("change", updateToolsMenuShortcutDisplay);
