@@ -60,7 +60,6 @@
         </em:localized>
 
         <em:aboutURL>chrome://personaswitcher/content/about.xul</em:aboutURL>
-        <!-- <em:optionsURL>chrome://personaswitcher/content/options.xul</em:optionsURL> -->
 
         <!-- https://developer.mozilla.org/en-US/docs/Toolkit_version_format -->
         <em:targetApplication>

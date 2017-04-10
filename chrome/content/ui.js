@@ -115,7 +115,14 @@ PersonaSwitcher.setKeyset = function (doc)
             PersonaSwitcher.findMods ('activate'),
             PersonaSwitcher.prefs.getCharPref ('activatekey').
                 toUpperCase().charAt (0),
-            PersonaSwitcher.activateMenu
+            PersonaSwitcher.activateMainMenu
+        ],
+        [
+            'PersonaSwitcher.toolsPersonaKey',
+            PersonaSwitcher.findMods ('tools'),
+            PersonaSwitcher.prefs.getCharPref ('toolskey').
+                toUpperCase().charAt (0),
+            PersonaSwitcher.activateToolsMenu
         ]
     ];
 
@@ -134,7 +141,7 @@ PersonaSwitcher.setKeyset = function (doc)
 };
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts#Assigning_a_keyboard_shortcut_on_a_menu
-PersonaSwitcher.activateMenu = function(doc)
+PersonaSwitcher.activateMainMenu = function(doc)
 {
     PersonaSwitcher.logger.log();
 
@@ -143,7 +150,17 @@ PersonaSwitcher.activateMenu = function(doc)
         var menu = doc.getElementById ('personaswitcher-main-menubar');
         menu.open = true;
     }
-    else if (PersonaSwitcher.prefs.getBoolPref ('tools-submenu'))
+    else
+    {
+        PersonaSwitcher.logger.log ('no visible main menu');
+    }
+};
+
+PersonaSwitcher.activateToolsMenu = function(doc)
+{
+    PersonaSwitcher.logger.log();
+
+    if (PersonaSwitcher.prefs.getBoolPref ('tools-submenu'))
     {
         // this is one thing i can't name
         var toolsMenu = null;
@@ -169,7 +186,7 @@ PersonaSwitcher.activateMenu = function(doc)
     }
     else
     {
-        PersonaSwitcher.logger.log ('no visible menus');
+        PersonaSwitcher.logger.log ('no visible tools menu');
     }
 };
 
