@@ -185,15 +185,19 @@ function loadOptions()
         staticMenusObject.checked = result.staticMenus;
         toolboxMaxHeightObject.value = result.toolboxMaxHeight;
 
-        //Update hint on minimum toolbox height preference
-        updateMaxHeight(result.toolboxMaxHeight);
-
         
 		//If the two auto preferences don't match, update the WebExtension's preference
         if(results[0].auto !== results[1].auto) 
         {
             browser.storage.local.set({auto: results[1].auto});
         }
+
+        //Update hint on minimum toolbox height preference
+        updateMaxHeight(result.toolboxMaxHeight);
+
+        //Update the visibility of the menu shortcut key preferences
+        updateToolsMenuShortcutDisplay();
+        updateMenuShortcutDisplay();
   }
 
     	//Because the auto preference can be toggled silently in the bootstrap code
@@ -318,8 +322,6 @@ function updateMenuShortcutDisplay()
 
 document.addEventListener('DOMContentLoaded', loadOptions);
 document.addEventListener('DOMContentLoaded', localizeHtmlPage);
-document.addEventListener('DOMContentLoaded', updateMenuShortcutDisplay);
-document.addEventListener('DOMContentLoaded', updateToolsMenuShortcutDisplay);
 document.querySelector("form").addEventListener("submit", saveOptions);
 document.querySelector("form").addEventListener("reset", resetOptions);
 document.getElementById("advancedButton").addEventListener("click", displayAdvanced);
