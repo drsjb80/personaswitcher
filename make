@@ -6,7 +6,9 @@ zip personaswitcher_bootstrap.xpi \
     chrome.manifest \
     chrome/content/about.xul \
     chrome/content/options.xul \
-    chrome/locale/ \
+    chrome/content/PersonaSwitcher.jsm \
+    chrome/content/prefs.js \
+    chrome/content/ui.js \
     chrome/locale/en-US/ \
     chrome/locale/en-US/about.dtd \
     chrome/locale/en-US/options.dtd \
@@ -32,4 +34,5 @@ zip personaswitcher_bootstrap.xpi \
     chrome/skin/PersonaSwitcher32.png \
     chrome/skin/PersonaSwitcher48.png \
     chrome/skin/PersonaSwitcher64.png \
+    chrome/skin/Thumbs.db \
     chrome/skin/toolbar-button.css
