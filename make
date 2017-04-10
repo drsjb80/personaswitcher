@@ -1,6 +1,7 @@
 rm personaswitcher_bootstrap.xpi
 
 zip personaswitcher_bootstrap.xpi \
+    bootstrap.js \
     install.rdf \
     chrome.manifest \
     chrome/content/about.xul \
