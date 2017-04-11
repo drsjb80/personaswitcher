@@ -115,14 +115,7 @@ PersonaSwitcher.setKeyset = function (doc)
             PersonaSwitcher.findMods ('activate'),
             PersonaSwitcher.prefs.getCharPref ('activatekey').
                 toUpperCase().charAt (0),
-            PersonaSwitcher.activateMainMenu
-        ],
-        [
-            'PersonaSwitcher.toolsPersonaKey',
-            PersonaSwitcher.findMods ('tools'),
-            PersonaSwitcher.prefs.getCharPref ('toolskey').
-                toUpperCase().charAt (0),
-            PersonaSwitcher.activateToolsMenu
+            PersonaSwitcher.activateMenu
         ]
     ];
 
@@ -141,7 +134,7 @@ PersonaSwitcher.setKeyset = function (doc)
 };
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts#Assigning_a_keyboard_shortcut_on_a_menu
-PersonaSwitcher.activateMainMenu = function(doc)
+PersonaSwitcher.activateMenu = function(doc)
 {
     PersonaSwitcher.logger.log();
 
@@ -150,17 +143,7 @@ PersonaSwitcher.activateMainMenu = function(doc)
         var menu = doc.getElementById ('personaswitcher-main-menubar');
         menu.open = true;
     }
-    else
-    {
-        PersonaSwitcher.logger.log ('no visible main menu');
-    }
-};
-
-PersonaSwitcher.activateToolsMenu = function(doc)
-{
-    PersonaSwitcher.logger.log();
-
-    if (PersonaSwitcher.prefs.getBoolPref ('tools-submenu'))
+    else if (PersonaSwitcher.prefs.getBoolPref ('tools-submenu'))
     {
         // this is one thing i can't name
         var toolsMenu = null;
@@ -186,7 +169,7 @@ PersonaSwitcher.activateToolsMenu = function(doc)
     }
     else
     {
-        PersonaSwitcher.logger.log ('no visible tools menu');
+        PersonaSwitcher.logger.log ('no visible menus');
     }
 };
 
@@ -586,7 +569,12 @@ PersonaSwitcher.setDefaultTheme = function (doc)
                 {
                     PersonaSwitcher.defaultTheme = theme;
                 }
-                PersonaSwitcher.createStaticPopups (doc);
+                PersonaSwitcher.createStaticPopups(doc);
+                PersonaSwitcher.currentIndex =
+                    PersonaSwitcher.prefs.getIntPref ("current");
+                PersonaSwitcher.switchTo 
+                    (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+                     PersonaSwitcher.currentIndex);
             }
         );
     }
@@ -599,8 +587,13 @@ PersonaSwitcher.setDefaultTheme = function (doc)
         {
             PersonaSwitcher.defaultTheme = theme;
         }
-        
-        PersonaSwitcher.createStaticPopups (doc);
+
+        PersonaSwitcher.createStaticPopups(doc);
+        PersonaSwitcher.currentIndex =
+            PersonaSwitcher.prefs.getIntPref ("current");
+        PersonaSwitcher.switchTo 
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+             PersonaSwitcher.currentIndex);
     }
 }
 
@@ -616,15 +609,10 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.getPersonas();
         PersonaSwitcher.themeMonitor();
 
-        // this also sets up the menus as there is an asynchronous call to
-        // addon manager. bleah.
+        // Due to the asynchronous call to the addon manager, this also sets up
+        // the menus, assigns the current index and switches to the current 
+        // theme. bleah.
         PersonaSwitcher.setDefaultTheme(doc);
-
-        PersonaSwitcher.currentIndex =
-            PersonaSwitcher.prefs.getIntPref ("current");
-        PersonaSwitcher.switchTo 
-            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-             PersonaSwitcher.currentIndex);
 
         if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
         {
@@ -635,14 +623,19 @@ PersonaSwitcher.onWindowLoad = function (doc)
     {
         // we already should have the default theme at this point, crosses
         // fingers
-        PersonaSwitcher.createStaticPopups (doc);
+        PersonaSwitcher.createStaticPopups(doc);
+        PersonaSwitcher.currentIndex =
+            PersonaSwitcher.prefs.getIntPref ("current");
+        PersonaSwitcher.switchTo 
+            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+             PersonaSwitcher.currentIndex);
     }
 
     PersonaSwitcher.setKeyset (doc);
     PersonaSwitcher.setAccessKey (doc);
     PersonaSwitcher.setToolboxMinheight (doc);
         
-        var mainMenu = PersonaSwitcher.prefs.getBoolPref ('main-menubar');
+    var mainMenu = PersonaSwitcher.prefs.getBoolPref ('main-menubar');
 
     if (! PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {

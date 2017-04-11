@@ -32,7 +32,7 @@ function loadDefaults()
 {
     var setting = browser.storage.local.set(
         {
-            defaults_loaded: true,
+            default_loaded: true,
 
             defaultKeyShift: false,
             defaultKeyControl: true,
@@ -68,14 +68,6 @@ function loadDefaults()
             activateKeyOs: false,
             activateKey: "P",
 
-            toolsKeyShift: false,
-            toolsKeyControl: true,
-            toolsKeyAlt: true,
-            toolsKeyMeta: false,
-            toolsKeyAccel: false,
-            toolsKeyOs: false,
-            toolsKey: "M",
-
             auto: false,
             autoMinutes: 30,
             random: false,
@@ -86,12 +78,12 @@ function loadDefaults()
             toolboxMinHeight: 0,
             toolsMenu: true,
             mainMenuBar: false,
-            debug: false,
-            fastSwitch: false,
-            staticMenus: true,
-            toolboxMaxHeight: 200,
 
             //hidden preferences
+            debug: false,
+            toolboxMaxHeight: 200,
+            fastSwitch: false,
+            staticMenus: true,
             current: 0
         });
     return setting.then( function() { return Promise.resolve(); }, handleError);
@@ -161,6 +153,7 @@ var clickListener = function(theTheme, theIndex)
     return function() 
     {
         stopRotateAlarm(); 
+        setCurrentTheme(theIndex);
         browser.runtime.sendMessage({command: "Switch-Themes",
                                      theme: theTheme,
                                      index: theIndex});
@@ -304,30 +297,29 @@ function rotate()
         ]);
     getRotatePref.then( results => 
     {
-        var currentIndex = results[1].current;
-        logger.log ("Current index before ", currentIndex);
+        logger.log ("Current index before ", results[1].current);
+        var newIndex = results[1].current;
         if (true === results[0].random)
         {
-            var prevIndex = currentIndex;
+            var prevIndex = newIndex;
             // pick a number between 1 and the end until a new index is found
-            while(currentIndex === prevIndex) 
+            while(newIndex === prevIndex) 
             {
-                currentIndex = Math.floor ((Math.random() *
+                newIndex = Math.floor ((Math.random() *
                         (currentThemes.length-1)) + 1);
             }
         }
         else
         {
-            currentIndex = (currentIndex + 1) %
+            newIndex = (newIndex + 1) %
                     currentThemes.length;
         }
 
-        logger.log ("Current index after ", currentIndex);
-        var updatingCurrentIndex = browser.storage.local.
-                                        set({current: currentIndex});
-        updatingCurrentIndex.catch(handleError);
+        logger.log ("Current index after ", newIndex);
+        setCurrentTheme(newIndex);
         browser.runtime.sendMessage({command: "Switch-Themes",
-                                     theme: currentThemes[currentIndex]}); 
+                                     theme: currentThemes[newIndex],
+                                     index: newIndex});
     });    
 }
 
@@ -343,6 +335,23 @@ function rotateOnStartup()
         }
     });
 }
+
+function setCurrentTheme(index)
+{
+    var themes = browserActionMenu.children;
+    var getCurrentIndex = browser.storage.local.get("current");
+    getCurrentIndex.then((result) => 
+    {
+        themes[result.current].style.backgroundColor = "inherit";
+        themes[index].style.backgroundColor = "LightSteelBlue";
+        if(index !== result.current)
+        {
+            var updatingCurrentIndex = browser.storage.local.
+                                            set({current: index});
+            updatingCurrentIndex.catch(handleError);  
+        }        
+    });
+};
 
 function handlePreferenceChange(changes, area) 
 { 
@@ -396,12 +405,9 @@ function reactToPrefChange(prefName, prefData)
             stopRotateAlarm();
             startRotateAlarm();
             break;
-        case 'fastSwitch':
         case 'auto':
             //When the shortcuts are migrated to the WebExtension code, 
             //turn off/on the rotate timer here.
-            stopRotateAlarm();
-            startRotateAlarm();
         case 'toolboxMinHeight':
         case 'startupSwitch':
         case 'random':
@@ -436,15 +442,8 @@ function reactToPrefChange(prefName, prefData)
         case 'activateKeyAccel':
         case 'activateKeyOs':
         case 'activateKey':
-        case 'toolsKeyShift':
-        case 'toolsKeyControl':
-        case 'toolsKeyAlt':
-        case 'toolsKeyMeta':
-        case 'toolsKeyAccel':
-        case 'toolsKeyOs':
-        case 'toolsKey':
         case 'current':
-        case 'toolboxMaxHeight':
+        case 'fastSwitch':
             browser.runtime.sendMessage({
                                             command: "Set-Preference",
                                              preference: prefName,

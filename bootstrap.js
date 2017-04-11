@@ -303,39 +303,12 @@ function setPreference(preference, value)
         case 'activateKey':
             PersonaSwitcher.prefs.setCharPref("activatekey", value);
             break;
-        case 'toolsKeyShift':
-            PersonaSwitcher.prefs.setBoolPref("toolsshift", value);
-            break;
-        case 'toolsKeyControl':
-            PersonaSwitcher.prefs.setBoolPref("toolscontrol", value);
-            break;
-        case 'toolsKeyAlt':
-            PersonaSwitcher.prefs.setBoolPref("toolsalt", value);
-            break;
-        case 'toolsKeyMeta':
-            PersonaSwitcher.prefs.setBoolPref("toolsmeta", value);
-            break;
-        case 'toolsKeyAccel':
-            PersonaSwitcher.prefs.setBoolPref("toolsaccel", value);
-            break;
-        case 'toolsKeyOs':
-            PersonaSwitcher.prefs.setBoolPref("toolsos", value);
-            break;
-        case 'toolsKey':
-            PersonaSwitcher.prefs.setCharPref("toolskey", value);
-            break;
         case 'current':
             PersonaSwitcher.currentIndex = parseInt(value);
-            PersonaSwitcher.prefs.setIntPref ("current", parseInt(value));
+            PersonaSwitcher.prefs.setIntPref ('current', parseInt(value));
             break;
         case "fastSwitch":
             PersonaSwitcher.prefs.setBoolPref("fastswitch", value);
-            break;
-        case 'toolboxMaxHeight':
-            PersonaSwitcher.prefs.setCharPref("toolbox-maxheight", value);
-            break;
-        case 'debug':
-            PersonaSwitcher.prefs.setBoolPref("debug", value);
             break;
     }
 }
@@ -498,10 +471,9 @@ function removeUserPrefs()
     "rotos", "rotkey", "autoshift", "autocontrol", "autoalt", "autometa", 
     "autoaccel", "autoos", "autokey", "activateshift", "activatecontrol", 
     "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
-    "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
-    "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
-    "preview", "preview-delay", "icon-preview", "tools-submenu", "main-menubar", 
-    "debug", "notification-workaround", "toolbox-minheight", "startup-switch", 
+    "accesskey", "auto", "autominutes", "random", "preview", "preview-delay", 
+    "icon-preview", "tools-submenu", "main-menubar", "debug", 
+    "notification-workaround", "toolbox-minheight", "startup-switch", 
     "fastswitch", "current"];
     
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
