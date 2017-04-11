@@ -207,7 +207,7 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.hideMenus (data);
                 }
 
-                break;
+                 break;
             case 'defshift': case 'defalt': case 'defcontrol':
             case 'defmeta': case 'defkey': case 'defaccel': case 'defos':
             case 'rotshift': case 'rotalt': case 'rotcontrol':
@@ -215,8 +215,10 @@ PersonaSwitcher.prefsObserver =
             case 'autoshift': case 'autoalt': case 'autocontrol':
             case 'autometa': case 'autokey': case 'autoaccel': case 'autoos':
             case 'activateshift': case 'activatealt': case 'activatecontrol':
-            case 'activatemeta': case 'activatekey':
-            case 'activateaccel': case 'activateos':
+            case 'activatemeta': case 'activatekey': case 'activateaccel': 
+            case 'activateos': 
+            case 'toolsshift': case 'toolsalt': case 'toolscontrol': 
+            case 'toolsmeta': case 'toolskey': case 'toolsaccel': case 'toolsos':
                 PersonaSwitcher.allDocuments (PersonaSwitcher.setKeyset);
                 break;
             case 'accesskey':
