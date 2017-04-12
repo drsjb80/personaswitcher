@@ -1,0 +1,6 @@
+plato -d report . LWTS/PersonaSwitcher.jsm chrome/content/overlay.js
+---- https://www.npmjs.org/package/jslint
+(sudo) npm install jslint
+/usr/local/lib/node_modules/.bin/jslint --vars --white LWTS/PersonaSwitcher.jsm
+----
+/usr/local/bin/node /usr/local/lib/node_modules/jshint/bin/jshint LWTS/PersonaSwitcher.jsm
