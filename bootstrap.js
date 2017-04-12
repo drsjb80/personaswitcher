@@ -399,66 +399,24 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
 }
 
 function removeUserPrefs() {
+    var userPreferences = [
+    "defshift", "defcontrol", "defalt", "defmeta", "defaccel", "defos", 
+    "defkey", "rotshift", "rotcontrol", "rotalt", "rotmeta", "rotaccel", 
+    "rotos", "rotkey", "autoshift", "autocontrol", "autoalt", "autometa", 
+    "autoaccel", "autoos", "autokey", "activateshift", "activatecontrol", 
+    "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
+    "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
+    "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
+    "preview", "preview-delay", "icon-preview", "tools-submenu", "main-menubar", 
+    "debug", "notification-workaround", "toolbox-minheight", "startup-switch", 
+    "fastswitch", "current"];
+    
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
-    getService(Components.interfaces.nsIPrefService).
-    getBranch("extensions.personaswitcher.");
-
-    userBranch.clearUserPref("defshift");
-    userBranch.clearUserPref("defcontrol");
-    userBranch.clearUserPref("defalt");
-    userBranch.clearUserPref("defmeta");
-    userBranch.clearUserPref("defaccel");
-    userBranch.clearUserPref("defos");
-    userBranch.clearUserPref("defkey");
-
-    userBranch.clearUserPref("rotshift");
-    userBranch.clearUserPref("rotcontrol");
-    userBranch.clearUserPref("rotalt");
-    userBranch.clearUserPref("rotmeta");
-    userBranch.clearUserPref("rotaccel");
-    userBranch.clearUserPref("rotos");
-    userBranch.clearUserPref("rotkey");
-
-    userBranch.clearUserPref("autoshift");
-    userBranch.clearUserPref("autocontrol");
-    userBranch.clearUserPref("autoalt");
-    userBranch.clearUserPref("autometa");
-    userBranch.clearUserPref("autoaccel");
-    userBranch.clearUserPref("autoos");
-    userBranch.clearUserPref("autokey");
-
-    userBranch.clearUserPref("activateshift");
-    userBranch.clearUserPref("activatecontrol");
-    userBranch.clearUserPref("activatealt");
-    userBranch.clearUserPref("activatemeta");
-    userBranch.clearUserPref("activateaccel");
-    userBranch.clearUserPref("activateos");
-    userBranch.clearUserPref("activatekey");
-
-    userBranch.clearUserPref("accesskey");
-
-    userBranch.clearUserPref("auto");
-    userBranch.clearUserPref("autominutes");
-
-    userBranch.clearUserPref("random");
-
-    userBranch.clearUserPref("preview");
-    userBranch.clearUserPref("preview-delay");
-    userBranch.clearUserPref("icon-preview");
-
-    userBranch.clearUserPref("tools-submenu");
-    userBranch.clearUserPref("main-menubar");
-
-    userBranch.clearUserPref("debug");
-    userBranch.clearUserPref("notification-workaround");
-
-    userBranch.clearUserPref("toolbox-minheight");
-
-    userBranch.clearUserPref("startup-switch");
-
-    userBranch.clearUserPref("fastswitch");
-
-    userBranch.clearUserPref("static-popups");
-
-    userBranch.clearUserPref("current");
+        getService(Components.interfaces.nsIPrefService).
+            getBranch ("extensions.personaswitcher.");
+    
+    for(var pref of userPreferences) 
+    {
+        userBranch.clearUserPref(pref);
+    }
 }
