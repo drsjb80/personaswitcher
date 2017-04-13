@@ -524,7 +524,11 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             if(themes[PersonaSwitcher.currentIndex])
             {
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-	            themes[index].setAttribute("checked", "true"); 
+                themes[PersonaSwitcher.currentIndex].style.MozAppearance = "";
+	            themes[index].setAttribute("checked", "true");
+                themes[index].style.MozAppearance = "none";
+                themes[index].style.backgroundColor = "lightSteelBlue";
+                themes[index].style.color = "black";
             }
         }
     }
