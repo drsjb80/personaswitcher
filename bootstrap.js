@@ -180,7 +180,12 @@ function injectMainMenu(doc) {
         false
     );
     menu_personaswitcher.appendChild(menu_PSPopup);
-    menuBar.insertBefore(menu_personaswitcher, menu_tools.nextSibling);
+    
+    if (null === menu_tools) {
+        menuBar.appendChild(menu_personaswitcher);
+    } else {
+        menuBar.insertBefore(menu_personaswitcher, menu_tools.nextSibling);        
+    }
 }
 
 function injectSubMenu(doc) {
