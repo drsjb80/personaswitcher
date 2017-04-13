@@ -3,21 +3,22 @@ const {
     interfaces: Ci,
     utils: Cu
 } = Components;
-Cu.import('resource:// gre/modules/Services.jsm');
+Cu.import('resource://gre/modules/Services.jsm');
+const MIDDLE_BUTTON = 1;
 
 var stringBundle =
     Services.strings.createBundle(
-        'chrome:// personaswitcher/locale/personaswitcher.properties?' +
+        'chrome://personaswitcher/locale/personaswitcher.properties?' +
         Math.random());
 var styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].
     getService(Ci.nsIStyleSheetService);
 
 var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
-var uri = ios.newURI("chrome:// personaswitcher/skin/toolbar-button.css",
+var uri = ios.newURI("chrome://personaswitcher/skin/toolbar-button.css",
     null, null);
 
 // var uri = Services.io.
-//              newURI("chrome:// personaswitcher/skin/toolbar-button.css", 
+//              newURI("chrome://personaswitcher/skin/toolbar-button.css", 
 //                      null, null);
 
 var firstRun = false;
@@ -34,16 +35,16 @@ function startup(data, reason) {
     // https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
     // load preferences
     Services.scriptloader.
-    loadSubScript('chrome:// personaswitcher/content/prefs.js', {
+    loadSubScript('chrome://personaswitcher/content/prefs.js', {
         pref: setDefaultPref
     });
 
-    Cu.import('chrome:// personaswitcher/content/PersonaSwitcher.jsm');
+    Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
     // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
     let context = this;
     Services.scriptloader.loadSubScript(
-        'chrome:// personaswitcher/content/ui.js',
+        'chrome://personaswitcher/content/ui.js',
         context, "UTF-8" /* The script's encoding */ );
 
     forEachOpenWindow(loadIntoWindow);
@@ -62,7 +63,7 @@ function shutdown(data, reason) {
     forEachOpenWindow(unloadFromWindow);
     PersonaSwitcher.prefs.removeObserver('', PersonaSwitcher.prefsObserver);
     Services.wm.removeListener(WindowListener);
-    Cu.unload('chrome:// personaswitcher/content/PersonaSwitcher.jsm');
+    Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
     if (styleSheetService.sheetRegistered(uri, styleSheetService.AUTHOR_SHEET)) {
         styleSheetService.unregisterSheet(uri, styleSheetService.AUTHOR_SHEET);
@@ -130,10 +131,7 @@ var WindowListener = {
 
         function onWindowLoad() {
             window.removeEventListener('load', onWindowLoad);
-            if (window.document.documentElement.getAttribute('windowtype') ==
-                'navigator:browser') {
-                loadIntoWindow(window);
-            }
+            loadIntoWindow(window);
         }
         window.addEventListener('load', onWindowLoad);
     },
@@ -245,7 +243,7 @@ function injectButton(window) {
 
     function openOptions(event) {
         var features = "chrome,titlebar,toolbar,centerscreen";
-        window.openDialog("chrome:// personaswitcher/content/options.xul",
+        window.openDialog("chrome://personaswitcher/content/options.xul",
             "Preferences", features);
         event.stopImmediatePropagation();
     }
@@ -261,6 +259,10 @@ function injectButton(window) {
     button.setAttribute("type", "menu");
     button.setAttribute("context", "");
     button.addEventListener("contextmenu", openOptions, true);
+    button.addEventListener("click", (e) => 
+        {
+            if(e.button === MIDDLE_BUTTON) PersonaSwitcher.setDefault();
+        });
 
     let button_PSPopup = doc.createElement("menupopup");
     button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
@@ -397,66 +399,24 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
 }
 
 function removeUserPrefs() {
+    var userPreferences = [
+    "defshift", "defcontrol", "defalt", "defmeta", "defaccel", "defos", 
+    "defkey", "rotshift", "rotcontrol", "rotalt", "rotmeta", "rotaccel", 
+    "rotos", "rotkey", "autoshift", "autocontrol", "autoalt", "autometa", 
+    "autoaccel", "autoos", "autokey", "activateshift", "activatecontrol", 
+    "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
+    "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
+    "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
+    "preview", "preview-delay", "icon-preview", "tools-submenu", "main-menubar", 
+    "debug", "notification-workaround", "toolbox-minheight", "startup-switch", 
+    "fastswitch", "current"];
+    
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
-    getService(Components.interfaces.nsIPrefService).
-    getBranch("extensions.personaswitcher.");
-
-    userBranch.clearUserPref("defshift");
-    userBranch.clearUserPref("defcontrol");
-    userBranch.clearUserPref("defalt");
-    userBranch.clearUserPref("defmeta");
-    userBranch.clearUserPref("defaccel");
-    userBranch.clearUserPref("defos");
-    userBranch.clearUserPref("defkey");
-
-    userBranch.clearUserPref("rotshift");
-    userBranch.clearUserPref("rotcontrol");
-    userBranch.clearUserPref("rotalt");
-    userBranch.clearUserPref("rotmeta");
-    userBranch.clearUserPref("rotaccel");
-    userBranch.clearUserPref("rotos");
-    userBranch.clearUserPref("rotkey");
-
-    userBranch.clearUserPref("autoshift");
-    userBranch.clearUserPref("autocontrol");
-    userBranch.clearUserPref("autoalt");
-    userBranch.clearUserPref("autometa");
-    userBranch.clearUserPref("autoaccel");
-    userBranch.clearUserPref("autoos");
-    userBranch.clearUserPref("autokey");
-
-    userBranch.clearUserPref("activateshift");
-    userBranch.clearUserPref("activatecontrol");
-    userBranch.clearUserPref("activatealt");
-    userBranch.clearUserPref("activatemeta");
-    userBranch.clearUserPref("activateaccel");
-    userBranch.clearUserPref("activateos");
-    userBranch.clearUserPref("activatekey");
-
-    userBranch.clearUserPref("accesskey");
-
-    userBranch.clearUserPref("auto");
-    userBranch.clearUserPref("autominutes");
-
-    userBranch.clearUserPref("random");
-
-    userBranch.clearUserPref("preview");
-    userBranch.clearUserPref("preview-delay");
-    userBranch.clearUserPref("icon-preview");
-
-    userBranch.clearUserPref("tools-submenu");
-    userBranch.clearUserPref("main-menubar");
-
-    userBranch.clearUserPref("debug");
-    userBranch.clearUserPref("notification-workaround");
-
-    userBranch.clearUserPref("toolbox-minheight");
-
-    userBranch.clearUserPref("startup-switch");
-
-    userBranch.clearUserPref("fastswitch");
-
-    userBranch.clearUserPref("static-popups");
-
-    userBranch.clearUserPref("current");
+        getService(Components.interfaces.nsIPrefService).
+            getBranch ("extensions.personaswitcher.");
+    
+    for(var pref of userPreferences) 
+    {
+        userBranch.clearUserPref(pref);
+    }
 }

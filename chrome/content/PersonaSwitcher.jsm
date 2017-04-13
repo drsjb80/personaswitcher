@@ -116,7 +116,7 @@ if (null === PersonaSwitcher.consoleLogger ||
 
 PersonaSwitcher.nullLogger = {};
 PersonaSwitcher.nullLogger.log = function (s) { 'use strict'; return; };
-PersonaSwitcher.logger = null;
+PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
 
 // ---------------------------------------------------------------------------
 
@@ -524,7 +524,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             if(themes[PersonaSwitcher.currentIndex])
             {
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-	            themes[index].setAttribute("checked", "true"); 
+	            themes[index].setAttribute("checked", "true");
             }
         }
     }
