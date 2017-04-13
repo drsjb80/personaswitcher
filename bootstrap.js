@@ -3,22 +3,22 @@ const {
     interfaces: Ci,
     utils: Cu
 } = Components;
-Cu.import('resource:// gre/modules/Services.jsm');
+Cu.import('resource://gre/modules/Services.jsm');
 const MIDDLE_BUTTON = 1;
 
 var stringBundle =
     Services.strings.createBundle(
-        'chrome:// personaswitcher/locale/personaswitcher.properties?' +
+        'chrome://personaswitcher/locale/personaswitcher.properties?' +
         Math.random());
 var styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].
     getService(Ci.nsIStyleSheetService);
 
 var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
-var uri = ios.newURI("chrome:// personaswitcher/skin/toolbar-button.css",
+var uri = ios.newURI("chrome://personaswitcher/skin/toolbar-button.css",
     null, null);
 
 // var uri = Services.io.
-//              newURI("chrome:// personaswitcher/skin/toolbar-button.css", 
+//              newURI("chrome://personaswitcher/skin/toolbar-button.css", 
 //                      null, null);
 
 var firstRun = false;
@@ -35,16 +35,16 @@ function startup(data, reason) {
     // https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
     // load preferences
     Services.scriptloader.
-    loadSubScript('chrome:// personaswitcher/content/prefs.js', {
+    loadSubScript('chrome://personaswitcher/content/prefs.js', {
         pref: setDefaultPref
     });
 
-    Cu.import('chrome:// personaswitcher/content/PersonaSwitcher.jsm');
+    Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
     // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
     let context = this;
     Services.scriptloader.loadSubScript(
-        'chrome:// personaswitcher/content/ui.js',
+        'chrome://personaswitcher/content/ui.js',
         context, "UTF-8" /* The script's encoding */ );
 
     forEachOpenWindow(loadIntoWindow);
@@ -63,7 +63,7 @@ function shutdown(data, reason) {
     forEachOpenWindow(unloadFromWindow);
     PersonaSwitcher.prefs.removeObserver('', PersonaSwitcher.prefsObserver);
     Services.wm.removeListener(WindowListener);
-    Cu.unload('chrome:// personaswitcher/content/PersonaSwitcher.jsm');
+    Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
     if (styleSheetService.sheetRegistered(uri, styleSheetService.AUTHOR_SHEET)) {
         styleSheetService.unregisterSheet(uri, styleSheetService.AUTHOR_SHEET);
@@ -243,7 +243,7 @@ function injectButton(window) {
 
     function openOptions(event) {
         var features = "chrome,titlebar,toolbar,centerscreen";
-        window.openDialog("chrome:// personaswitcher/content/options.xul",
+        window.openDialog("chrome://personaswitcher/content/options.xul",
             "Preferences", features);
         event.stopImmediatePropagation();
     }
