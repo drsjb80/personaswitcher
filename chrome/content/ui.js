@@ -333,6 +333,7 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
     var item = doc.createElementNS(PersonaSwitcher.XULNS, 'menuitem');
 
     item.setAttribute('label', which.name);
+    item.setAttribute('class', 'menuitem-iconic');
     item.addEventListener
     (
         'command',
@@ -345,7 +346,6 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
         PersonaSwitcher.logger.log (which.iconURL);
         if (null !== which.iconURL)
         {
-            item.setAttribute('class', 'menuitem-iconic');
             item.setAttribute('image', which.iconURL);
         }
     }
@@ -681,8 +681,6 @@ PersonaSwitcher.onWindowLoad = function (doc)
     PersonaSwitcher.setAccessKey(doc);
     PersonaSwitcher.setToolboxMinheight(doc);
         
-    var mainMenu = PersonaSwitcher.prefs.getBoolPref('main-menubar');
-
     if (! PersonaSwitcher.prefs.getBoolPref('main-menubar'))
     {
         PersonaSwitcher.logger.log('hiding main-menubar');
