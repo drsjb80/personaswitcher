@@ -110,8 +110,11 @@ if (null === PersonaSwitcher.consoleLogger ||
     'SeaMonkey' === PersonaSwitcher.XULAppInfo.name)
 {
     // nope, log to terminal
+    var Application = Components.classes["@mozilla.org/steel/application;1"]
+                    .getService(Components.interfaces.steelIApplication);
+
     PersonaSwitcher.consoleLogger = {};
-    PersonaSwitcher.consoleLogger.log = PersonaSwitcher.log;
+    PersonaSwitcher.consoleLogger.log = Application.console.log;
 }
 
 PersonaSwitcher.nullLogger = {};
