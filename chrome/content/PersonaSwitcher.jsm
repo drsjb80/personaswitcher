@@ -278,7 +278,7 @@ PersonaSwitcher.allDocuments = function (func, index)
     {
         aWindow = enumerator.getNext();
         PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
-        if (undefined !== index) 
+        if ('undefined' !== typeof(index)) 
         {
             func(aWindow.document, index);
         }
@@ -466,7 +466,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     PersonaSwitcher.logger.log (toWhich);
     PersonaSwitcher.allDocuments(PersonaSwitcher.setCurrentTheme, index);
 
-    PersonaSwitcher.currentIndex = undefined !== index ? 
+    PersonaSwitcher.currentIndex = 'undefined' !== typeof(index) ? 
                                             index :
                                             PersonaSwitcher.currentIndex;
     
@@ -502,7 +502,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
             LightweightThemeManager.themeChanged(null);
         } else {
             LightweightThemeManager.themeChanged(toWhich);
-    } 
+        }
     }
    
 };
