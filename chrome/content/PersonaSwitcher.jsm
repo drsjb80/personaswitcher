@@ -105,16 +105,18 @@ catch (e) {}
 // TBird's and SeaMonkey consoles don't log our stuff
 // this is a hack. i need to clean this up...
 // http://stackoverflow.com/questions/16686888/thunderbird-extension-console-logging
-if (null === PersonaSwitcher.consoleLogger ||
-    'Thunderbird' === PersonaSwitcher.XULAppInfo.name ||
-    'SeaMonkey' === PersonaSwitcher.XULAppInfo.name)
+if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
 {
-    // nope, log to terminal
     var Application = Components.classes["@mozilla.org/steel/application;1"]
                     .getService(Components.interfaces.steelIApplication);
 
     PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = Application.console.log;
+} else if (null === PersonaSwitcher.consoleLogger ||
+           'SeaMonkey' === PersonaSwitcher.XULAppInfo.name) {
+    // nope, log to terminal
+    PersonaSwitcher.consoleLogger = {};
+    PersonaSwitcher.consoleLogger.log = PersonaSwitcher.log;
 }
 
 PersonaSwitcher.nullLogger = {};
