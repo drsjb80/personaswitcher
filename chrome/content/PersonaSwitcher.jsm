@@ -493,21 +493,18 @@ PersonaSwitcher.switchTo = function (toWhich, index)
             PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (toWhich);
         }
-    }
-    PersonaSwitcher.logger.log ('using currentTheme');
+    } else {
+        PersonaSwitcher.logger.log ('using themeChanged');
 
-    if (undefined === toWhich || null === toWhich)
-    {
-        LightweightThemeManager.currentTheme = null;
+        if ('undefined' === typeof(toWhich) || null === toWhich) {
+            LightweightThemeManager.themeChanged(null);
+        } else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id) {
+            LightweightThemeManager.themeChanged(null);
+        } else {
+            LightweightThemeManager.themeChanged(toWhich);
     } 
-    else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
-    {
-        LightweightThemeManager.currentTheme = null;
     }
-    else
-    {
-        LightweightThemeManager.currentTheme = toWhich;
-    }
+   
 };
 
 PersonaSwitcher.setCurrentTheme = function (doc, index)
