@@ -535,11 +535,22 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
     if (null !== buttonMenu)
     {        
         var themes =  buttonMenu.children;
-            if(themes[PersonaSwitcher.currentIndex])
-            {
-                themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-	            themes[index].setAttribute("checked", "true");
-            }
+
+        PersonaSwitcher.logger.log(PersonaSwitcher.currentIndex);
+        if(themes[PersonaSwitcher.currentIndex])
+        {
+            PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
+            themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
+        }
+        if(themes[index])
+        {
+            PersonaSwitcher.logger.log(themes[index]);
+            theme = themes[index];
+            theme.setAttribute("checked", "true");
+            nextTheme = theme.nextSibling;
+            buttonMenu.removeChild(theme);
+            buttonMenu.insertBefore(theme, nextTheme);
+        }
     }
 };
 
