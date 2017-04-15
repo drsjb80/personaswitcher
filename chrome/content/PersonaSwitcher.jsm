@@ -547,6 +547,9 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             PersonaSwitcher.logger.log(themes[index]);
             theme = themes[index];
             theme.setAttribute("checked", "true");
+            // This is a simple hack to ensure that the theme is redrawn in
+            // certain versions of Thunderbird while being run on a Mac.
+            //http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
             nextTheme = theme.nextSibling;
             buttonMenu.removeChild(theme);
             buttonMenu.insertBefore(theme, nextTheme);
