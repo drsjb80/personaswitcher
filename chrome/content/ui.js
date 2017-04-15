@@ -180,8 +180,6 @@ PersonaSwitcher.activateMenu = function(doc)
 
 PersonaSwitcher.setToolboxMinheight = function(doc)
 {
-    PersonaSwitcher.logger.log();
-
     var minheight =
         parseInt (PersonaSwitcher.prefs.getCharPref('toolbox-minheight'));
     var maxheight =

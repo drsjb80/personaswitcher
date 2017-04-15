@@ -265,7 +265,7 @@ function injectButton(window) {
     button.setAttribute("type", "menu");
     button.setAttribute("context", "");
     button.addEventListener("contextmenu", openOptions, true);
-    button.addEventListener("click", (e) => 
+    button.addEventListener("click", function(e) 
         {
             if(e.button === MIDDLE_BUTTON) PersonaSwitcher.setDefault();
         });

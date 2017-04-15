@@ -1,16 +1,17 @@
 #personaswitcher-button {
-  list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher24.png");
+  list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher24.png") !important;
 }
 
 toolbar[iconsize="small"] 
     #personaswitcher-button {
-    list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher16.png");
+    list-style-image: url("chrome://personaswitcher/skin/PersonaSwitcher16.png") !important;
 }
 
 toolbarpaletteitem[place="palette"] > #personaswitcher-button,
-    #personaswitcher-button[cui-areatype="menu-panel"] {
+    #personaswitcher-button[cui-areatype="menu-panel"],
+    #personaswitcher-button[cui-areatype="toolbar"] {
     list-style-image:
-        url("chrome://personaswitcher/skin/PersonaSwitcher32.png");
+        url("chrome://personaswitcher/skin/PersonaSwitcher32.png") !important;
 }
 
 toolbarpaletteitem[place="palette"] > 
