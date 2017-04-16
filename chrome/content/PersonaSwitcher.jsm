@@ -142,6 +142,7 @@ PersonaSwitcher.extensionManager = null;
 
 PersonaSwitcher.currentThemes = null;
 PersonaSwitcher.currentIndex = 0;
+PersonaSwitcher.prevThemeIcon = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -527,14 +528,15 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 // Because Linux is layering the icon on top of the checkmark,
                 // another form of indication for the currently selected theme
                 // needs to be provided for Linux users.  
-                // Setting MozAppearance to "none" does not seem to allow the
-                // backgroundColor to be changed in Linux like it does in Mac
-                // and Windows. Until a fix for this can be found, changing the
-                // color of the text is the only available option.
-                
+                // To remain as consistent as possible, the icon for the
+                // currently selected theme is turned off allowing the check
+                // mark to be displayed. This is similar to Windows which simply
+                // displays the check mark over the theme's icon.
+
                 if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                    themes[PersonaSwitcher.currentIndex].style.color = "inherit";
-                    themes[index].style.color = "DeepSkyBlue";
+                    themes[PersonaSwitcher.currentIndex].setAttribute('image', PersonaSwitcher.prevThemeIcon);
+                    PersonaSwitcher.prevThemeIcon = themes[index].getAttribute('image');
+                    themes[index].removeAttribute('image');
                 }
 
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
@@ -554,7 +556,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
             if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                themes[PersonaSwitcher.currentIndex].style.color = "inherit";
+                themes[PersonaSwitcher.currentIndex].setAttribute('image', PersonaSwitcher.prevThemeIcon);
             }
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
         }
@@ -563,7 +565,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             PersonaSwitcher.logger.log(themes[index]);
             theme = themes[index];
             if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                theme.style.color = "DeepSkyBlue";
+                theme.removeAttribute('image');
             }
             theme.setAttribute("checked", "true");
             // This is a simple hack to ensure that the theme is redrawn in
