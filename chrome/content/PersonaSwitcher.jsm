@@ -525,17 +525,18 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             var themes =  menu.children;
             if(themes[PersonaSwitcher.currentIndex])
             {
-                // Because Linux is layering the icon on top of the checkmark,
-                // another form of indication for the currently selected theme
-                // needs to be provided for Linux users.  
+                // Because Linux is layering the icon on top of the check mark,
+                // special handling needs to be provided for Linux users.  
                 // To remain as consistent as possible, the icon for the
-                // currently selected theme is turned off allowing the check
-                // mark to be displayed. This is similar to Windows which simply
-                // displays the check mark over the theme's icon.
+                // currently selected theme is turned off in Linux allowing the 
+                // check mark to be displayed. This is similar to Windows which
+                // simply displays the check mark over the theme's icon.
 
                 if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                    themes[PersonaSwitcher.currentIndex].setAttribute('image', PersonaSwitcher.prevThemeIcon);
-                    PersonaSwitcher.prevThemeIcon = themes[index].getAttribute('image');
+                    themes[PersonaSwitcher.currentIndex].
+                        setAttribute('image', PersonaSwitcher.prevThemeIcon);
+                    PersonaSwitcher.prevThemeIcon = 
+                        themes[index].getAttribute('image');
                     themes[index].removeAttribute('image');
                 }
 
@@ -556,7 +557,8 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
             if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                themes[PersonaSwitcher.currentIndex].setAttribute('image', PersonaSwitcher.prevThemeIcon);
+                themes[PersonaSwitcher.currentIndex].
+                    setAttribute('image', PersonaSwitcher.prevThemeIcon);
             }
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
         }
