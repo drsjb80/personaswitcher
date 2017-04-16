@@ -524,6 +524,19 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             var themes =  menu.children;
             if(themes[PersonaSwitcher.currentIndex])
             {
+                // Because Linux is layering the icon on top of the checkmark,
+                // another form of indication for the currently selected theme
+                // needs to be provided for Linux users.  
+                // Setting MozAppearance to "none" does not seem to allow the
+                // backgroundColor to be changed in Linux like it does in Mac
+                // and Windows. Until a fix for this can be found, changing the
+                // color of the text is the only available option.
+                
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                    themes[PersonaSwitcher.currentIndex].style.color = "inherit";
+                    themes[index].style.color = "DeepSkyBlue";
+                }
+
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
 	            themes[index].setAttribute("checked", "true");
             }
@@ -540,12 +553,18 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if(themes[PersonaSwitcher.currentIndex])
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                themes[PersonaSwitcher.currentIndex].style.color = "inherit";
+            }
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
         }
         if(themes[index])
         {
             PersonaSwitcher.logger.log(themes[index]);
             theme = themes[index];
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                theme.style.color = "DeepSkyBlue";
+            }
             theme.setAttribute("checked", "true");
             // This is a simple hack to ensure that the theme is redrawn in
             // certain versions of Thunderbird while being run on a Mac.
