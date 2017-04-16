@@ -105,10 +105,15 @@ catch (e) {}
 // TBird's and SeaMonkey consoles don't log our stuff
 // this is a hack. i need to clean this up...
 // http://stackoverflow.com/questions/16686888/thunderbird-extension-console-logging
-if (null === PersonaSwitcher.consoleLogger ||
-    'Thunderbird' === PersonaSwitcher.XULAppInfo.name ||
-    'SeaMonkey' === PersonaSwitcher.XULAppInfo.name)
+if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
 {
+    var Application = Components.classes["@mozilla.org/steel/application;1"]
+                    .getService(Components.interfaces.steelIApplication);
+
+    PersonaSwitcher.consoleLogger = {};
+    PersonaSwitcher.consoleLogger.log = Application.console.log;
+} else if (null === PersonaSwitcher.consoleLogger ||
+           'SeaMonkey' === PersonaSwitcher.XULAppInfo.name) {
     // nope, log to terminal
     PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = PersonaSwitcher.log;
@@ -275,7 +280,7 @@ PersonaSwitcher.allDocuments = function (func, index)
     {
         aWindow = enumerator.getNext();
         PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
-        if (undefined !== index) 
+        if ('undefined' !== typeof(index)) 
         {
             func(aWindow.document, index);
         }
@@ -463,7 +468,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     PersonaSwitcher.logger.log (toWhich);
     PersonaSwitcher.allDocuments(PersonaSwitcher.setCurrentTheme, index);
 
-    PersonaSwitcher.currentIndex = undefined !== index ? 
+    PersonaSwitcher.currentIndex = 'undefined' !== typeof(index) ? 
                                             index :
                                             PersonaSwitcher.currentIndex;
     
@@ -490,28 +495,24 @@ PersonaSwitcher.switchTo = function (toWhich, index)
             PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (toWhich);
         }
-    }
-    PersonaSwitcher.logger.log ('using currentTheme');
+    } else {
+        PersonaSwitcher.logger.log ('using themeChanged');
 
-    if (undefined === toWhich || null === toWhich)
-    {
-        LightweightThemeManager.currentTheme = null;
-    } 
-    else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
-    {
-        LightweightThemeManager.currentTheme = null;
+        if ('undefined' === typeof(toWhich) || null === toWhich) {
+            LightweightThemeManager.themeChanged(null);
+        } else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id) {
+            LightweightThemeManager.themeChanged(null);
+        } else {
+            LightweightThemeManager.themeChanged(toWhich);
+        }
     }
-    else
-    {
-        LightweightThemeManager.currentTheme = toWhich;
-    }
+   
 };
 
 PersonaSwitcher.setCurrentTheme = function (doc, index)
 {
     var menus = ['personaswitcher-main-menubar-popup',
-        'personaswitcher-tools-submenu-popup',
-		'personaswitcher-button-popup'];
+        'personaswitcher-tools-submenu-popup'];
 
     for (var aMenu in menus)
     {
@@ -524,8 +525,34 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             if(themes[PersonaSwitcher.currentIndex])
             {
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-	            themes[index].setAttribute("checked", "true"); 
+	            themes[index].setAttribute("checked", "true");
             }
+        }
+    }
+
+    var buttonMenu = 
+            PersonaSwitcher.getButtonPopup(doc, 'personaswitcher-button');
+    if (null !== buttonMenu)
+    {        
+        var themes =  buttonMenu.children;
+
+        PersonaSwitcher.logger.log(PersonaSwitcher.currentIndex);
+        if(themes[PersonaSwitcher.currentIndex])
+        {
+            PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
+            themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
+        }
+        if(themes[index])
+        {
+            PersonaSwitcher.logger.log(themes[index]);
+            theme = themes[index];
+            theme.setAttribute("checked", "true");
+            // This is a simple hack to ensure that the theme is redrawn in
+            // certain versions of Thunderbird while being run on a Mac.
+            //http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
+            nextTheme = theme.nextSibling;
+            buttonMenu.removeChild(theme);
+            buttonMenu.insertBefore(theme, nextTheme);
         }
     }
 };
