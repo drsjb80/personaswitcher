@@ -389,7 +389,7 @@ PersonaSwitcher.removeNotification = function (win)
 PersonaSwitcher.switchTo = function (toWhich, index)
 {
     PersonaSwitcher.logger.log (toWhich);
-    PersonaSwitcher.currentIndex = undefined !== index ? 
+    PersonaSwitcher.currentIndex = 'undefined' !== typeof(index) ? 
                                             index :
                                             PersonaSwitcher.currentIndex;
     
