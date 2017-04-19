@@ -24,7 +24,7 @@ Func OpenPersonaSwitcherPrefs()
    ; send JavaScript to open prefs
    _FFCmd('window.content.document.getElementsByAttribute("name", "Persona Switcher")[0].showPreferences();', 0)
    _FFLoadWait()
-   Sleep(1000)
+   Sleep(500)
    return True
 
 EndFunc
@@ -71,14 +71,22 @@ Func SetPsOption(Const $sOption, Const $value, $copyToClipboard = False)
 
 	  If isBool($value) Then
 		 Local $sValue = $value ? "true" : "false"
+		 Sleep(500)
 		 _FFCmd('window.content.document.getElementsByClassName("inline-options-browser")[0]._contentWindow.document.getElementById("' & $sOptionId & '").checked = ' & $sValue)
 		 Sleep(500)
 	  Else
+		 Sleep(500)
 		 _FFCmd('window.content.document.getElementsByClassName("inline-options-browser")[0]._contentWindow.document.getElementById("' & $sOptionId & '").value = ' & '"' & $value & '"')
 		 Sleep(500)
 	  EndIf
 
+	  _FFCmd('window.content.document.getElementsByClassName("inline-options-browser")[0]._contentWindow.document.getElementById("options_ok_button").click()')
+	  Sleep(500)
+
 	  If $copyToClipboard Then
+		 _FFTabClose()
+		 _FFLoadWait()
+		 OpenPersonaSwitcherPrefs()
 		 Return _FFCmd('window.content.document.getElementsByClassName("inline-options-browser")[0]._contentWindow.document.getElementById("' & $sOptionId & '").value')
 	  EndIf
 
