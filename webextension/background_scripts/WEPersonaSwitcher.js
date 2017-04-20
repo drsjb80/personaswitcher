@@ -67,6 +67,14 @@ function loadDefaults()
             activateKeyAccel: false,
             activateKeyOs: false,
             activateKey: "P",
+            
+            toolsKeyShift: false,
+            toolsKeyControl: true,
+            toolsKeyAlt: true,
+            toolsKeyMeta: false,
+            toolsKeyAccel: false,
+            toolsKeyOs: false,
+            toolsKey: "M",
 
             auto: false,
             autoMinutes: 30,
@@ -78,12 +86,12 @@ function loadDefaults()
             toolboxMinHeight: 0,
             toolsMenu: true,
             mainMenuBar: false,
-
-            //hidden preferences
             debug: false,
-            toolboxMaxHeight: 200,
             fastSwitch: false,
             staticMenus: true,
+            toolboxMaxHeight: 200,
+
+            //hidden preferences
             current: 0
         });
     return setting.then( function() { return Promise.resolve(); }, handleError);
@@ -405,9 +413,12 @@ function reactToPrefChange(prefName, prefData)
             stopRotateAlarm();
             startRotateAlarm();
             break;
+         case 'fastSwitch':
         case 'auto':
             //When the shortcuts are migrated to the WebExtension code, 
             //turn off/on the rotate timer here.
+            stopRotateAlarm();
+            startRotateAlarm();
         case 'toolboxMinHeight':
         case 'startupSwitch':
         case 'random':
@@ -442,8 +453,15 @@ function reactToPrefChange(prefName, prefData)
         case 'activateKeyAccel':
         case 'activateKeyOs':
         case 'activateKey':
+        case 'toolsKeyShift':
+        case 'toolsKeyControl':
+        case 'toolsKeyAlt':
+        case 'toolsKeyMeta':
+        case 'toolsKeyAccel':
+        case 'toolsKeyOs':
+        case 'toolsKey':
         case 'current':
-        case 'fastSwitch':
+        case 'toolboxMaxHeight':
             browser.runtime.sendMessage({
                                             command: "Set-Preference",
                                              preference: prefName,

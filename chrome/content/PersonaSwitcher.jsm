@@ -262,7 +262,7 @@ PersonaSwitcher.allDocuments = function (func, index)
     {
         aWindow = enumerator.getNext();
         PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
-        if (undefined !== index) 
+        if ('undefined' !== typeof(index)) 
         {
             func(aWindow.document, index);
         }
@@ -357,7 +357,6 @@ PersonaSwitcher.rotate = function()
     PersonaSwitcher.logger.log (newIndex);
     PersonaSwitcher.switchTo(PersonaSwitcher.currentThemes[newIndex], newIndex);
 };
-
 
 PersonaSwitcher.toggleAuto = function()
 {
