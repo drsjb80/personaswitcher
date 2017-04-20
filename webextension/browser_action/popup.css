@@ -1,6 +1,6 @@
 html, body {
   width: auto;
-  background-color: #FFFFF;
+  background-color: #FFFFFF;
 }
 
 .button {
@@ -17,7 +17,7 @@ html, body {
 
 .theme{
 	border: none;
- background-color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 
 .button:hover{
