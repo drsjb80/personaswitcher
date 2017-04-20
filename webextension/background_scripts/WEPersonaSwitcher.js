@@ -18,7 +18,7 @@ function handleStartup()
 // Verify if we need to load the default preferences by checking if the 
 // default_loaded flag is undefined. 
 function loadDefaultsIfNeeded(prefs) {
-        if (undefined === prefs.defaults_loaded) 
+        if ('undefined' === typeof(prefs.defaults_loaded)) 
         {
             return loadDefaults();
         } 
@@ -251,7 +251,7 @@ function startRotateAlarm() {
 
 function stopRotateAlarm() 
 {
-    if (undefined !== rotateAlarmListener) 
+    if ('undefined' !== typeof(rotateAlarmListener)) 
     {
         browser.alarms.clear("rotateAlarm");
         browser.alarms.onAlarm.removeListener(rotateAlarmListener);        
@@ -367,7 +367,7 @@ function handlePreferenceChange(changes, area)
  
       for (var pref of changedPrefs) 
       {
-        if (undefined !== changes[pref].newValue && 
+        if ('undefined' !== typeof(changes[pref].newValue) && 
             changes[pref].oldValue !== changes[pref].newValue) 
         {
             reactToPrefChange(pref, changes[pref]);
