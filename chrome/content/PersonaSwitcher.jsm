@@ -138,6 +138,7 @@ PersonaSwitcher.extensionManager = null;
 
 PersonaSwitcher.currentThemes = null;
 PersonaSwitcher.currentIndex = 0;
+PersonaSwitcher.prevThemeIcon = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -416,15 +417,15 @@ PersonaSwitcher.switchTo = function (toWhich, index)
 
     if (toWhich === null)
     {
-        LightweightThemeManager.currentTheme = null;
+        LightweightThemeManager.themeChanged(null);
     } 
     else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
     {
-        LightweightThemeManager.currentTheme = null;
+        LightweightThemeManager.themeChanged(null);
     }
     else
     {
-        LightweightThemeManager.currentTheme = toWhich;
+        LightweightThemeManager.themeChanged(toWhich);
     }
 };
 
