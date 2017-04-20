@@ -184,10 +184,16 @@ PersonaSwitcher.prefsObserver =
             case 'preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+                    PersonaSwitcher.setCurrentTheme, 
+                    PersonaSwitcher.currentIndex);
                 break;
             case 'icon-preview':
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+                    PersonaSwitcher.setCurrentTheme, 
+                    PersonaSwitcher.currentIndex);
                 break;            
             case 'startup-switch':
                 break; // nothing to do as the value is queried elsewhere
@@ -201,7 +207,7 @@ PersonaSwitcher.prefsObserver =
                     PersonaSwitcher.hideMenus (data);
                 }
 
-                break;
+                 break;
             case 'defshift': case 'defalt': case 'defcontrol':
             case 'defmeta': case 'defkey': case 'defaccel': case 'defos':
             case 'rotshift': case 'rotalt': case 'rotcontrol':
@@ -231,6 +237,9 @@ PersonaSwitcher.prefsObserver =
 
                 PersonaSwitcher.allDocuments
                     (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+                    PersonaSwitcher.setCurrentTheme, 
+                    PersonaSwitcher.currentIndex);
                 break;
             default:
                 PersonaSwitcher.logger.log (data);
@@ -244,16 +253,23 @@ PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 
 
 // call a function passed as a parameter with one document of each window
-PersonaSwitcher.allDocuments = function (func)
+PersonaSwitcher.allDocuments = function (func, index)
 {    
     var enumerator = PersonaSwitcher.windowMediator.
                         getEnumerator ("navigator:browser");
     var aWindow;
     while (enumerator.hasMoreElements())
     {
-            aWindow = enumerator.getNext();
-            PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
+        aWindow = enumerator.getNext();
+        PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
+        if ('undefined' !== typeof(index)) 
+        {
+            func(aWindow.document, index);
+        }
+        else
+        {
             func(aWindow.document);
+        }
     }
 };
 
@@ -319,30 +335,28 @@ PersonaSwitcher.rotate = function()
 {
     PersonaSwitcher.logger.log("in rotate");
 
+    var newIndex = PersonaSwitcher.currentIndex;
     if (PersonaSwitcher.currentThemes.length <= 1) return;
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
-        var prevIndex = PersonaSwitcher.currentIndex;
+        var prevIndex = newIndex;
         // pick a number between 1 and the end until a new index is found
-        while(PersonaSwitcher.currentIndex === prevIndex) 
+        while(newIndex === prevIndex) 
         {
-            PersonaSwitcher.currentIndex = Math.floor ((Math.random() *
+            newIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
         }
     }
     else
     {
-        PersonaSwitcher.currentIndex = (PersonaSwitcher.currentIndex + 1) %
+        newIndex = (PersonaSwitcher.currentIndex + 1) %
             PersonaSwitcher.currentThemes.length;
     }
-
-    PersonaSwitcher.logger.log (PersonaSwitcher.currentIndex);
-    PersonaSwitcher.switchTo
-        (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-         PersonaSwitcher.currentIndex);
+    
+    PersonaSwitcher.logger.log (newIndex);
+    PersonaSwitcher.switchTo(PersonaSwitcher.currentThemes[newIndex], newIndex);
 };
-
 
 PersonaSwitcher.toggleAuto = function()
 {
@@ -391,34 +405,13 @@ PersonaSwitcher.removeNotification = function (win)
 PersonaSwitcher.switchTo = function (toWhich, index)
 {
     PersonaSwitcher.logger.log (toWhich);
+    PersonaSwitcher.allDocuments(PersonaSwitcher.setCurrentTheme, index);
+
     PersonaSwitcher.currentIndex = undefined !== index ? 
                                             index :
                                             PersonaSwitcher.currentIndex;
     
     PersonaSwitcher.prefs.setIntPref ('current', PersonaSwitcher.currentIndex);
-
-    /*
-    ** if it's there, use it
-    */
-    if (PersonaSwitcher.PersonasPlusPresent)
-    {
-        PersonaSwitcher.logger.log ('using PP');
-
-        if ('{gh y972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
-        {
-            PersonaService.changeToDefaultPersona();
-        }
-        else if (1 === toWhich.id)
-        {
-            PersonaSwitcher.logger.log();
-            PersonaService.changeToPersona (PersonaService.customPersona);
-        }
-        else
-        {
-            PersonaSwitcher.logger.log();
-            PersonaService.changeToPersona (toWhich);
-        }
-    }
     PersonaSwitcher.logger.log ('using currentTheme');
 
     if (toWhich === null)
@@ -432,6 +425,28 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     else
     {
         LightweightThemeManager.currentTheme = toWhich;
+    }
+};
+
+PersonaSwitcher.setCurrentTheme = function (doc, index)
+{
+    var menus = ['personaswitcher-main-menubar-popup',
+        'personaswitcher-tools-submenu-popup'];
+
+    for (var aMenu in menus)
+    {
+        var menu = doc.getElementById(menus[aMenu]);
+
+        // not all windows have this menu
+        if (menu)
+        {
+            var themes =  menu.children;
+            if(themes[PersonaSwitcher.currentIndex])
+            {
+                themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
+                themes[index].setAttribute("checked", "true"); 
+            }
+        }
     }
 };
 

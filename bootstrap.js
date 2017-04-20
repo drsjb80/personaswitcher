@@ -300,7 +300,7 @@ function setPreference(preference, value)
         case 'activateKeyOs':
             PersonaSwitcher.prefs.setBoolPref("activateos", value);
             break;
-        case 'activateKey':
+       case 'activateKey':
             PersonaSwitcher.prefs.setCharPref("activatekey", value);
             break;
         case 'toolsKeyShift':
