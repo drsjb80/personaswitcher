@@ -125,12 +125,13 @@ function buildMenu(data)
 
 function buildMenuItem(theme, prefs, theIndex) 
 {
-    var themeChoice = document.createElement("div");
+    var themeChoice = document.createElement("option");
     themeChoice.setAttribute("class", "button theme");
     var textNode = document.createTextNode(theme.name);
     themeChoice.appendChild(textNode);
     themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview),
                              textNode);
+
     if (true === prefs.preview) 
     {
         themeChoice.addEventListener('mouseover',
@@ -350,8 +351,8 @@ function setCurrentTheme(index)
     var getCurrentIndex = browser.storage.local.get("current");
     getCurrentIndex.then((result) => 
     {
-        themes[result.current].style.backgroundColor = "inherit";
-        themes[index].style.backgroundColor = "LightSteelBlue";
+        themes[result.current].selected = false
+        themes[index].selected = true;
         if(index !== result.current)
         {
             var updatingCurrentIndex = browser.storage.local.
