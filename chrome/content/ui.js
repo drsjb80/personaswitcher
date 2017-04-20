@@ -143,7 +143,6 @@ PersonaSwitcher.setKeyset = function (doc)
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Keyboard_Shortcuts#Assigning_a_keyboard_shortcut_on_a_menu
 PersonaSwitcher.activateMainMenu = function(doc)
 {
-    PersonaSwitcher.logger.log();
 
     if (PersonaSwitcher.prefs.getBoolPref ('main-menubar'))
     {
@@ -158,8 +157,6 @@ PersonaSwitcher.activateMainMenu = function(doc)
 
 PersonaSwitcher.activateToolsMenu = function(doc)
 {
-    PersonaSwitcher.logger.log();
-
     if (PersonaSwitcher.prefs.getBoolPref ('tools-submenu'))
     {
         // this is one thing i can't name
@@ -192,7 +189,6 @@ PersonaSwitcher.activateToolsMenu = function(doc)
 
 PersonaSwitcher.setToolboxMinheight = function (doc)
 {
-    PersonaSwitcher.logger.log();
 
     var minheight =
         parseInt (PersonaSwitcher.prefs.getCharPref ('toolbox-minheight'));
@@ -330,7 +326,6 @@ PersonaSwitcher.previewObserver =
 {
     observe: function (subject, topic, data)
     {
-        PersonaSwitcher.logger.log();
         LightweightThemeManager.previewTheme (PersonaSwitcher.previewWhich);
     }
 };
@@ -486,8 +481,6 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
 
 PersonaSwitcher.createMenuPopup = function (event)
 {
-    PersonaSwitcher.logger.log();
-
     var menupopup = event.target;
     var doc = event.target.ownerDocument;
 
