@@ -443,6 +443,22 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             var themes =  menu.children;
             if(themes[PersonaSwitcher.currentIndex])
             {
+                 // Because Linux is layering the icon on top of the check mark,
+                // special handling needs to be provided for Linux users.  
+                // To remain as consistent as possible, the icon for the
+                // currently selected theme is turned off in Linux allowing the 
+                // check mark to be displayed. This is similar to Windows which
+                // simply displays the check mark over the theme's icon.
+
+
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                    themes[PersonaSwitcher.currentIndex].
+                        setAttribute('image', PersonaSwitcher.prevThemeIcon);
+                    PersonaSwitcher.prevThemeIcon = 
+                        themes[index].getAttribute('image');
+                    themes[index].removeAttribute('image');
+                }
+                
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
                 themes[index].setAttribute("checked", "true"); 
             }
