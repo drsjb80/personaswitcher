@@ -43,7 +43,7 @@ Func Test_IconPreviewEnabled()
    If $psButtonMenuHasIcons And $psToolsMenuHasIcons And $psMenubarMenuHasIcons Then
 	  $testPassed = True
 	  $sDescription = "After enabling the icon-preview preference," & _
-		 " all menus have icons without restarting Firefox."
+		 " all menus have icons."
    Else
 	  $sDescription = "After enabling the icon-preview preference," & _
 		 " the following menus were missing icons:"
@@ -106,10 +106,12 @@ EndFunc
 
 ; checks that an element (by id) has icons next its menu items
 Func MenuHasIcons(ByRef $sElementId)
-   Local $themeCount = Int(_FFCmd('document.getElementById("' & $sElementId & '").childElementCount'))
+   Local $themeCount = Int(_FFCmd('document.getElementById("' & _
+	  $sElementId & '").childElementCount'))
 
    For $i = 0 To $themeCount - 1
-	  If StringLen(_FFCmd('document.getElementById("' & $sElementId & '").childNodes[' & String($i) & '].attributes.image')) == 0 Then
+	  If StringLen(_FFCmd('document.getElementById("' & $sElementId & _
+			'").childNodes[' & String($i) & '].attributes.image')) == 0 Then
 		 Return False
 	  EndIf
    Next
