@@ -142,7 +142,6 @@ PersonaSwitcher.extensionManager = null;
 
 PersonaSwitcher.currentThemes = null;
 PersonaSwitcher.currentIndex = 0;
-PersonaSwitcher.prevThemeIcon = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -413,8 +412,6 @@ PersonaSwitcher.startTimer = function()
 
 PersonaSwitcher.stopTimer = function()
 {
-    PersonaSwitcher.logger.log();
-
     PersonaSwitcher.timer.cancel();
 };
 
@@ -488,12 +485,10 @@ PersonaSwitcher.switchTo = function (toWhich, index)
         }
         else if (1 === toWhich.id)
         {
-            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (PersonaService.customPersona);
         }
         else
         {
-            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (toWhich);
         }
     } else {
@@ -533,10 +528,13 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 // simply displays the check mark over the theme's icon.
 
                 if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                    themes[PersonaSwitcher.currentIndex].
-                        setAttribute('image', PersonaSwitcher.prevThemeIcon);
-                    PersonaSwitcher.prevThemeIcon = 
-                        themes[index].getAttribute('image');
+                    var value = themes[PersonaSwitcher.currentIndex].value;
+                    if('undefined' !== typeof(value) && null !== value) {
+                        themes[PersonaSwitcher.currentIndex].
+                            setAttribute('image', value);
+                    }
+                    value = themes[index].getAttribute('image');
+                    themes[index].setAttribute('value', value);
                     themes[index].removeAttribute('image');
                 }
 
@@ -557,8 +555,14 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
             if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                themes[PersonaSwitcher.currentIndex].
-                    setAttribute('image', PersonaSwitcher.prevThemeIcon);
+                var value = themes[PersonaSwitcher.currentIndex].value;
+                if('undefined' !== typeof(value) && null !== value) {
+                    themes[PersonaSwitcher.currentIndex].
+                        setAttribute('image', value);
+                }
+                value = themes[index].getAttribute('image');
+                themes[index].setAttribute('value', value);
+                themes[index].removeAttribute('image');
             }
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
         }
