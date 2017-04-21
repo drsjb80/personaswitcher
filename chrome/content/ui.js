@@ -358,6 +358,9 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
         if (null !== which.iconURL)
         {
             item.setAttribute ('image', which.iconURL);
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                item.setAttribute('value', which.iconURL);
+            }
         }
     }
 

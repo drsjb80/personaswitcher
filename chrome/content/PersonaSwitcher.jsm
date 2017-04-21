@@ -451,12 +451,12 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 // check mark to be displayed. This is similar to Windows which
                 // simply displays the check mark over the theme's icon.
 
-
                 if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                    themes[PersonaSwitcher.currentIndex].
-                        setAttribute('image', PersonaSwitcher.prevThemeIcon);
-                    PersonaSwitcher.prevThemeIcon = 
-                        themes[index].getAttribute('image');
+                    var value = themes[PersonaSwitcher.currentIndex].value;
+                    if('undefined' !== typeof(value) && null !== value) {
+                        themes[PersonaSwitcher.currentIndex].
+                            setAttribute('image', value);
+                    }
                     themes[index].removeAttribute('image');
                 }
                 
