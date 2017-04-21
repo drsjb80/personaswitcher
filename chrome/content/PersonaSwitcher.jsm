@@ -533,8 +533,6 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                         themes[PersonaSwitcher.currentIndex].
                             setAttribute('image', value);
                     }
-                    value = themes[index].getAttribute('image');
-                    themes[index].setAttribute('value', value);
                     themes[index].removeAttribute('image');
                 }
 
@@ -560,8 +558,6 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                     themes[PersonaSwitcher.currentIndex].
                         setAttribute('image', value);
                 }
-                value = themes[index].getAttribute('image');
-                themes[index].setAttribute('value', value);
                 themes[index].removeAttribute('image');
             }
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
