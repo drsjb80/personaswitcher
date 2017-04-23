@@ -138,6 +138,7 @@ PersonaSwitcher.extensionManager = null;
 
 PersonaSwitcher.currentThemes = null;
 PersonaSwitcher.currentIndex = 0;
+PersonaSwitcher.prevThemeIcon = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -407,7 +408,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     PersonaSwitcher.logger.log (toWhich);
     PersonaSwitcher.allDocuments(PersonaSwitcher.setCurrentTheme, index);
 
-    PersonaSwitcher.currentIndex = undefined !== index ? 
+    PersonaSwitcher.currentIndex = 'undefined' !== typeof(index) ? 
                                             index :
                                             PersonaSwitcher.currentIndex;
     
@@ -416,15 +417,15 @@ PersonaSwitcher.switchTo = function (toWhich, index)
 
     if (toWhich === null)
     {
-        LightweightThemeManager.currentTheme = null;
+        LightweightThemeManager.themeChanged(null);
     } 
     else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
     {
-        LightweightThemeManager.currentTheme = null;
+        LightweightThemeManager.themeChanged(null);
     }
     else
     {
-        LightweightThemeManager.currentTheme = toWhich;
+        LightweightThemeManager.themeChanged(toWhich);
     }
 };
 
@@ -443,6 +444,22 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             var themes =  menu.children;
             if(themes[PersonaSwitcher.currentIndex])
             {
+                 // Because Linux is layering the icon on top of the check mark,
+                // special handling needs to be provided for Linux users.  
+                // To remain as consistent as possible, the icon for the
+                // currently selected theme is turned off in Linux allowing the 
+                // check mark to be displayed. This is similar to Windows which
+                // simply displays the check mark over the theme's icon.
+
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                    var value = themes[PersonaSwitcher.currentIndex].value;
+                    if('undefined' !== typeof(value) && null !== value) {
+                        themes[PersonaSwitcher.currentIndex].
+                            setAttribute('image', value);
+                    }
+                    themes[index].removeAttribute('image');
+                }
+                
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
                 themes[index].setAttribute("checked", "true"); 
             }

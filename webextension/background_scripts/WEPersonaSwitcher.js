@@ -18,7 +18,7 @@ function handleStartup()
 // Verify if we need to load the default preferences by checking if the 
 // default_loaded flag is undefined. 
 function loadDefaultsIfNeeded(prefs) {
-        if (undefined === prefs.defaults_loaded) 
+        if ('undefined' === typeof(prefs.defaults_loaded)) 
         {
             return loadDefaults();
         } 
@@ -125,12 +125,13 @@ function buildMenu(data)
 
 function buildMenuItem(theme, prefs, theIndex) 
 {
-    var themeChoice = document.createElement("div");
+    var themeChoice = document.createElement("option");
     themeChoice.setAttribute("class", "button theme");
     var textNode = document.createTextNode(theme.name);
     themeChoice.appendChild(textNode);
     themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview),
                              textNode);
+
     if (true === prefs.preview) 
     {
         themeChoice.addEventListener('mouseover',
@@ -251,7 +252,7 @@ function startRotateAlarm() {
 
 function stopRotateAlarm() 
 {
-    if (undefined !== rotateAlarmListener) 
+    if ('undefined' !== typeof(rotateAlarmListener)) 
     {
         browser.alarms.clear("rotateAlarm");
         browser.alarms.onAlarm.removeListener(rotateAlarmListener);        
@@ -350,8 +351,8 @@ function setCurrentTheme(index)
     var getCurrentIndex = browser.storage.local.get("current");
     getCurrentIndex.then((result) => 
     {
-        themes[result.current].style.backgroundColor = "inherit";
-        themes[index].style.backgroundColor = "LightSteelBlue";
+        themes[result.current].selected = false
+        themes[index].selected = true;
         if(index !== result.current)
         {
             var updatingCurrentIndex = browser.storage.local.
@@ -367,7 +368,7 @@ function handlePreferenceChange(changes, area)
  
       for (var pref of changedPrefs) 
       {
-        if (undefined !== changes[pref].newValue && 
+        if ('undefined' !== typeof(changes[pref].newValue) && 
             changes[pref].oldValue !== changes[pref].newValue) 
         {
             reactToPrefChange(pref, changes[pref]);
