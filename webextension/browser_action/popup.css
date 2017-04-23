@@ -1,6 +1,8 @@
 html, body {
   width: auto;
   background-color: #FFFFFF;
+  overflow-x: hidden;
+  max-height: 100%;
 }
 
 .button {
@@ -19,9 +21,3 @@ html, body {
 	border: none;
     background-color: #FFFFFF;
 }
-
-.button:hover{
-	border: 1px solid black;
-	background-color: #EEEEEE;
-}
-
