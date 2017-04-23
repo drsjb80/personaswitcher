@@ -412,8 +412,6 @@ PersonaSwitcher.startTimer = function()
 
 PersonaSwitcher.stopTimer = function()
 {
-    PersonaSwitcher.logger.log();
-
     PersonaSwitcher.timer.cancel();
 };
 
@@ -487,12 +485,10 @@ PersonaSwitcher.switchTo = function (toWhich, index)
         }
         else if (1 === toWhich.id)
         {
-            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (PersonaService.customPersona);
         }
         else
         {
-            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (toWhich);
         }
     } else {
@@ -524,6 +520,22 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             var themes =  menu.children;
             if(themes[PersonaSwitcher.currentIndex])
             {
+                // Because Linux is layering the icon on top of the check mark,
+                // special handling needs to be provided for Linux users.  
+                // To remain as consistent as possible, the icon for the
+                // currently selected theme is turned off in Linux allowing the 
+                // check mark to be displayed. This is similar to Windows which
+                // simply displays the check mark over the theme's icon.
+
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                    var value = themes[PersonaSwitcher.currentIndex].value;
+                    if('undefined' !== typeof(value) && null !== value) {
+                        themes[PersonaSwitcher.currentIndex].
+                            setAttribute('image', value);
+                    }
+                    themes[index].removeAttribute('image');
+                }
+
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
 	            themes[index].setAttribute("checked", "true");
             }
@@ -540,12 +552,23 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if(themes[PersonaSwitcher.currentIndex])
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                var value = themes[PersonaSwitcher.currentIndex].value;
+                if('undefined' !== typeof(value) && null !== value) {
+                    themes[PersonaSwitcher.currentIndex].
+                        setAttribute('image', value);
+                }
+                themes[index].removeAttribute('image');
+            }
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
         }
         if(themes[index])
         {
             PersonaSwitcher.logger.log(themes[index]);
             theme = themes[index];
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                theme.removeAttribute('image');
+            }
             theme.setAttribute("checked", "true");
             // This is a simple hack to ensure that the theme is redrawn in
             // certain versions of Thunderbird while being run on a Mac.
