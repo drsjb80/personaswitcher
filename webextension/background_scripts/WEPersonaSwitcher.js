@@ -32,7 +32,7 @@ function loadDefaults()
 {
     var setting = browser.storage.local.set(
         {
-            default_loaded: true,
+            defaults_loaded: true,
 
             defaultKeyShift: false,
             defaultKeyControl: true,
@@ -89,6 +89,7 @@ function loadDefaults()
             debug: false,
             fastSwitch: false,
             staticMenus: true,
+            dynamicMenus: false,
             toolboxMaxHeight: 200,
 
             //hidden preferences
