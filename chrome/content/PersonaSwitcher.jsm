@@ -136,6 +136,7 @@ PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
 PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
 
+PersonaSwitcher.themeListChanged = false;
 PersonaSwitcher.currentThemes = null;
 PersonaSwitcher.currentIndex = 0;
 PersonaSwitcher.prevThemeIcon = null;
@@ -255,9 +256,16 @@ PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
 
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func, index)
-{    
+{       
+    // Defensive check to see if it is being called from a context where 
+    // PersonaSwitcher.jsm is not loaded. Since we don't care
+    // about these calls we just ignore them. 
+    if('undefined' === typeof(PersonaSwitcher)) {
+        return;
+    }
+
     var enumerator = PersonaSwitcher.windowMediator.
-                        getEnumerator ("navigator:browser");
+                        getEnumerator("navigator:browser");
     var aWindow;
     while (enumerator.hasMoreElements())
     {

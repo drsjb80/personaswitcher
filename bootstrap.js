@@ -145,17 +145,19 @@ function messageHandler(message, sender, sendResponse)
 {
     switch (message.command)
     {
+        case "Check-For-Theme-List-Change":
+            if (PersonaSwitcher.themeListChanged) {
+                sendResponse({themeListChanged: true});
+                PersonaSwitcher.themeListChanged = false;
+            } else {
+                sendResponse({themeListChanged: false});
+            }
+            break;
         case "Return-Theme-List":
             PersonaSwitcher.getPersonas();
-            var themeList = PersonaSwitcher.currentThemes;
-            var defaultTheme = 
-                {
-                    id: PersonaSwitcher.defaultTheme.id, 
-                    name: PersonaSwitcher.defaultTheme.name, 
-                    iconURL: PersonaSwitcher.defaultTheme.iconURL
-                };
-            themeList.push(defaultTheme);
+            var themeList = getThemeList();
             sendResponse({themes: themeList});
+            PersonaSwitcher.themeListChanged = false;
             break;
         case "Switch-Themes":
             PersonaSwitcher.switchTo(message.theme, message.index);
@@ -179,6 +181,18 @@ function messageHandler(message, sender, sendResponse)
             setPreference(message.preference, message.value);
             break;
     }
+}
+
+function getThemeList() {
+    var themeList = PersonaSwitcher.currentThemes;
+    var defaultTheme = 
+        {
+            id: PersonaSwitcher.defaultTheme.id, 
+            name: PersonaSwitcher.defaultTheme.name, 
+            iconURL: PersonaSwitcher.defaultTheme.iconURL
+        };
+    themeList.push(defaultTheme);
+    return themeList;
 }
 
 //Handles copying the preference values from the webextension to the legacy code

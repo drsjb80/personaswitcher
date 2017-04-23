@@ -249,21 +249,6 @@
   "description": "Text displayed in the options pane"
   },
 
-  "options_menuLoading": {
-  "message": "Menu loading:",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_menuLoading_static": {
-  "message": "Static",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_menuLoading_dynamic": {
-  "message": "Dynamic",
-  "description": "Text displayed in the options pane"
-  },
-
   "options_toolboxMaxHeight_desc": {
   "message": "Maximum height of top toolbox:",
   "description": "Text displayed in the options pane"

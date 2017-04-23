@@ -243,8 +243,15 @@ PersonaSwitcher.AddonListener =
     // pane and don't need to be monitored
     onInstalled: function (addon)
     {
+        //Seems to be being called a number of times and in some cases in
+        //contexts where PersonaSwitcher.jsm is not loaded. Since we don't care
+        //about these calls we just ignore them.
+        if('undefined' === typeof(PersonaSwitcher)) {
+            return;
+        }
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
+        PersonaSwitcher.themeListChanged = true;
         
         if ('theme' === addon.type)
         {
@@ -253,8 +260,12 @@ PersonaSwitcher.AddonListener =
     },
     onUninstalled: function (addon)
     {
+        if('undefined' === typeof(PersonaSwitcher)) {
+            return;
+        }
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
+        PersonaSwitcher.themeListChanged = true;
         
         if ('theme' === addon.type)
         {

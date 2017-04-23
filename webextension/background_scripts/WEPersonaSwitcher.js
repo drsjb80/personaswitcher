@@ -88,7 +88,6 @@ function loadDefaults()
             mainMenuBar: false,
             debug: false,
             fastSwitch: false,
-            staticMenus: true,
             toolboxMaxHeight: 200,
 
             //hidden preferences
