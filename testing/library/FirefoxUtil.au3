@@ -77,6 +77,10 @@ Func RestartFirefox()
    _FFWindowClose()
    _FFDisConnect()
 
+   Local $cmd = "MsgBox(0, ' Please Wait...', ' Firefox is restarting.'" & _
+	  " & @CRLF & ' This mesage will automatically close.', 5)"
+   Run(@AutoItExe & ' /AutoIt3ExecuteLine "' & $cmd & '"')
+
    While ProcessExists("firefox.exe") Or _FFIsConnected()
 	  Sleep(250)
    WEnd
@@ -122,14 +126,8 @@ Func ResetToDefaultTheme()
    _FFLoadWait()
 
    ; send JavaScript to disable active themes
-   _FFCmd("window.content.document" & _
-	  ".getElementsByAttribute('active', 'true')[0]" & _
-	  ".userDisabled = true", 0)
-   _FFCmd("window.content.document" & _
-	  ".getElementsByAttribute('active', 'true')[" & _
-		 "window.content.document" & _
-		 ".getElementsByAttribute('active', 'true').length - 1" & _
-	  "].userDisabled = true", 0)
+   _FFCmd("window.content.document.getElementsByAttribute" & _
+	  "('name', 'Default')[0].userDisabled = false")
 
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return True

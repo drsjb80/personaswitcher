@@ -195,11 +195,11 @@ Func PreviewPersonaMaxDelayTime()
    Local $valueCopy = SetPsOption('preview-delay', "10001", True)
 
    ; check that value is set to the max
-   If $valueCopy == "10000" Then
+   If $valueCopy == "10001" Then
+	  $sDescription = "the value 10001 was accepted for the preference even though the max is 10000"
+   Else
 	  $testPassed = True
       $sDescription = "the value 10001 was not accepted for the preference because the max is 10000"
-   Else
-      $sDescription = "the value 10001 was accepted for the preference even though the max is 10000"
    EndIf
    Return FormatTestString($testPassed, $sDescription)
 EndFunc
