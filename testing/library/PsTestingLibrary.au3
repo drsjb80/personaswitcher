@@ -47,17 +47,7 @@ EndFunc
 ;           Failure			0
 ; ==============================================================================
 Func OpenPersonaSwitcherButton()
-   Local $PSDocument
-   Local $PSButton
-   Local $PSPopup
-   Local $PSmsg = 'try{PSDocument=Components.classes["@mozilla.org/appshell/window-mediator;1"]' & _
-	  '.getService(Components.interfaces.nsIWindowMediator)' & _
-	  '.getMostRecentWindow("navigator:browser").document;' & _
-	  'PSButton=PSDocument.getElementsByAttribute("id", "personaswitcher-button")[0];' & _
-	  'PSPopup=PSDocument.getElementsByAttribute("id", "personaswitcher-button-popup")[0];' & _
-	  'PSPopup.openPopup(PSButton, "after_start", 0,0,false,false,null);}' & _
-	  'catch(e){"Unable to open Persona Switcher Button";};'
-   return __FFSend($PSmsg)
+   return _FFCmd('document.getElementById("drsjb80_gmail_com-browser-action").click()')
 EndFunc
 
 

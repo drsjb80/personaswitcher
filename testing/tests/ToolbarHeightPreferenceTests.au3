@@ -62,11 +62,13 @@ Func ToolbarHeightShrinks()
 
    ; Update height to 150
    SetPsOption('toolbox-minheight', "150")
+   Sleep(1000)
 
    Local $startingHeight = GetToolbarHeight()
 
    ; Update height to 10
    SetPsOption('toolbox-minheight', "10")
+   Sleep(1000)
 
    ; grab the height of the toolbar after updating the preference
    Local $modifiedHeight = GetToolbarHeight()
@@ -119,11 +121,11 @@ Func ToolbarHeightMaxValue()
    Local $valueCopy = SetPsOption('toolbox-minheight', "201", True)
 
    ; check that value is set to the max
-   If $valueCopy == 200 Then
+   If $valueCopy == 201 Then
+	  $sDescription = "When setting the toolbox-minheight preference, 201 was accepted (max is 200)."
+   Else
 	  $testPassed = True
       $sDescription = "When setting the toolbox-minheight preference, 201 was not accepted (max is 200)."
-   Else
-      $sDescription = "When setting the toolbox-minheight preference, 201 was accepted (max is 200)."
    EndIf
 
    Return FormatTestString($testPassed, $sDescription)

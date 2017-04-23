@@ -34,11 +34,8 @@ EndFunc
 ; Resets all of Persona Switcher's preferences on the about:config page
 ; ==============================================================================
 Func ResetPersonaSwitcherPrefs()
-   Local $prefs = GetPrefKeyArray()
-
-   For $i = 0 To UBound($prefs) - 1
-	  _FFPrefReset("extensions.personaswitcher." & $prefs[$i])
-   Next
+   OpenPersonaSwitcherPrefs()
+   _FFCmd('window.content.document.getElementsByClassName("inline-options-browser")[0]._contentWindow.document.getElementById("options_reset_button").click()')
 EndFunc
 
 

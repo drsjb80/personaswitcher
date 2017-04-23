@@ -96,6 +96,7 @@ Func SpecialKeyPSwitcherMenuShortcutKey()
 
    ; changing the value of the special keys for the PSwitcher menu shortcut keys
 
+   SetPsOption('main-menubar', True)
    SetPsOption('activateshift', True)
    SetPsOption('activatecontrol', False)
    SetPsOption('activatealt', True)
@@ -131,6 +132,7 @@ Func CombinationPSwitcherMenuShortcutKey()
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; changing the value of the special keys for the PSwitcher menu shortcut keys
+   SetPsOption('main-menubar', True)
    SetPsOption('activateshift', True)
    SetPsOption('activatecontrol', True)
    SetPsOption('activatealt', True)
@@ -166,6 +168,7 @@ Func DisableMenuShortcut()
    Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    ; changing the value of the special keys for the PSwitcher menu shortcut keys
+   SetPsOption('main-menubar', True)
    SetPsOption('activateshift', False)
    SetPsOption('activatecontrol', True)
    SetPsOption('activatealt', True)
