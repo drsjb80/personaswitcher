@@ -1,3 +1,5 @@
+
+const MIDDLE_BUTTON = 1;
 var backgroundPage;
 function appendMenu(page) 
 {
