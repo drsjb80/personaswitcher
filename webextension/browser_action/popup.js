@@ -43,4 +43,6 @@ function removeMenu()
 
 var gettingBackgroundPage = browser.runtime.getBackgroundPage();
 gettingBackgroundPage.then(appendMenu);
-window.addEventListener("unload", removeMenu);
+window.addEventListener("unload", removeMenu);window.addEventListener("click", function(clickEvent) {
+    window.close();
+});
