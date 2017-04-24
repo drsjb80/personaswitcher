@@ -6,11 +6,18 @@
         <em:id>drsjb80@gmail.com</em:id>
         <em:name>Persona Switcher</em:name>
         <em:type>2</em:type>
-        <em:version>2.1.0</em:version>
+        <em:version>4.0.0</em:version>
         <em:creator>Steve Beaty</em:creator>
         <em:multiprocessCompatible>true</em:multiprocessCompatible>
         <em:bootstrap>true</em:bootstrap>
 				<em:hasEmbeddedWebExtension>true</em:hasEmbeddedWebExtension>
+        <em:contributor>Dustin Porter</em:contributor>
+        <em:contributor>Jason Gould</em:contributor>
+        <em:contributor>Jim Kim</em:contributor>
+        <em:contributor>Luz Rodriguez-Ulloa</em:contributor>
+        <em:contributor>Simeon Martinez</em:contributor>
+        <em:contributor>Stefany Segovia-Maldonado</em:contributor>
+        <em:contributor>Trever Mock</em:contributor>
         <em:contributor>Patrick Thompson (aka, Sailfish)</em:contributor>
         <em:contributor>鄭筑云 (Zheng Zhu-Yun)</em:contributor>
         <em:translator>鄭筑云 (Zheng Zhu-Yun)</em:translator>
@@ -65,32 +72,8 @@
         <em:targetApplication>
           <Description>
             <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
-            <em:minVersion>17</em:minVersion>
-            <em:maxVersion>51.*</em:maxVersion>
-          </Description>
-        </em:targetApplication>
-
-        <em:targetApplication>
-          <Description>
-            <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id> <!-- Palemoon -->
-            <em:minVersion>3.6</em:minVersion>
-            <em:maxVersion>25.*</em:maxVersion>
-          </Description>
-        </em:targetApplication>
-
-        <em:targetApplication>
-          <Description>
-            <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id> <!-- Thunderbird -->
-            <em:minVersion>10.0</em:minVersion>
-            <em:maxVersion>34.*</em:maxVersion>
-          </Description>
-        </em:targetApplication>
-
-        <em:targetApplication>
-          <Description>
-            <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id> <!-- Seamonkey -->
-            <em:minVersion>2.0</em:minVersion>
-            <em:maxVersion>2.32.*</em:maxVersion>
+            <em:minVersion>52.0</em:minVersion>
+            <em:maxVersion>54.0a2</em:maxVersion>
           </Description>
         </em:targetApplication>
     </Description>

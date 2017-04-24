@@ -32,7 +32,7 @@ function loadDefaults()
 {
     var setting = browser.storage.local.set(
         {
-            default_loaded: true,
+            defaults_loaded: true,
 
             defaultKeyShift: false,
             defaultKeyControl: true,
