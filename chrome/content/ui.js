@@ -251,11 +251,14 @@ PersonaSwitcher.AddonListener =
         }
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
-        PersonaSwitcher.themeListChanged = true;
         
         if ('theme' === addon.type)
         {
+            PersonaSwitcher.updateIndexOnAdd(addon.name, 
+                PersonaSwitcher.currentThemes[
+                    PersonaSwitcher.prefs.getIntPref('current').name]);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
+            PersonaSwitcher.themeListChanged = true;
         }
     },
     onUninstalled: function (addon)
@@ -265,11 +268,14 @@ PersonaSwitcher.AddonListener =
         }
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
-        PersonaSwitcher.themeListChanged = true;
         
         if ('theme' === addon.type)
         {
+            PersonaSwitcher.updateIndexOnRemove(addon.name, 
+                PersonaSwitcher.currentThemes[
+                    PersonaSwitcher.prefs.getIntPref('current').name]);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
+            PersonaSwitcher.themeListChanged = true;
         }
     }
 };

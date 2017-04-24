@@ -475,6 +475,48 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
     }
 };
 
+PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
+    const APPEARS_HIGHER_IN_LIST = -1;
+    const SAME = 0;
+    const APPEARS_LOWER_IN_LIST = 1;
+    switch(newTheme.localeCompare(currentTheme)) 
+    {
+        case APPEARS_HIGHER_IN_LIST:
+            var index = PersonaSwitcher.prefs.getIntPref('current');
+            index--;
+            PersonaSwitcher.prefs.setIntPref('current', index);
+            PersonaSwitcher.currentIndex = index;
+            break;
+        case SAME:
+            // If the current theme is the one that gets removed, the theme is
+            // set to the default.
+            PersonaSwitcher.prefs.setIntPref('current', PersonaSwitcher.currentThemes.length-1);
+            PersonaSwitcher.currentIndex = index;
+            break;
+        case APPEARS_LOWER_IN_LIST:
+            //No need to change,
+            break;
+        default:
+            break;
+    }
+};
+
+PersonaSwitcher.updateIndexOnAdd = function(newTheme, currentTheme) {
+    const APPEARS_HIGHER_IN_LIST = -1;
+    var index;
+    for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
+        if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(PersonaSwitcher.currentThemes[index].name)) {
+            PersonaSwitcher.prefs.setIntPref('current', index);
+            PersonaSwitcher.currentIndex = index;
+            return;
+        }
+        //Otherwise the new theme will be at the bottom of the list
+        PersonaSwitcher.prefs.setIntPref('current', index);
+        PersonaSwitcher.currentIndex = index;
+
+    }
+};
+
 PersonaSwitcher.getPersonas = function()
 {
     PersonaSwitcher.currentThemes = LightweightThemeManager.usedThemes;
