@@ -371,11 +371,9 @@ PersonaSwitcher.rotate = function()
 
 PersonaSwitcher.isBlackListed = function(index) {
     var themeName = PersonaSwitcher.currentThemes[index].name;
-    if( "Compact Dark" === themeName || "Compact Light" === themeName || "Default" === themeName) {
-        return true;
-    }
-
-    return false;
+    return  "Compact Dark"  === themeName || 
+            "Compact Light" === themeName || 
+            "Default"       === themeName;
 };
 
 PersonaSwitcher.toggleAuto = function()
