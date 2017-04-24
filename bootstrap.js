@@ -57,6 +57,7 @@ function shutdown(data, reason)
     forEachOpenWindow(unloadFromWindow);
     PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
     Services.wm.removeListener(WindowListener);
+    AddonManager.removeAddonListener(PersonaSwitcher.AddonListener);
     Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');    
   
     if (styleSheetService.sheetRegistered(uri, styleSheetService.USER_SHEET)) 

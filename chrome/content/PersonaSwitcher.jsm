@@ -490,6 +490,8 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
     const APPEARS_HIGHER_IN_LIST = -1;
     const SAME = 0;
     const APPEARS_LOWER_IN_LIST = 1;
+
+    PersonaSwitcher.logger.log(newTheme + " " + currentTheme);
     switch(newTheme.localeCompare(currentTheme)) 
     {
         case APPEARS_HIGHER_IN_LIST:
@@ -501,8 +503,9 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
         case SAME:
             // If the current theme is the one that gets removed, the theme is
             // set to the default.
-            PersonaSwitcher.prefs.setIntPref('current', PersonaSwitcher.currentThemes.length-1);
-            PersonaSwitcher.currentIndex = index;
+            PersonaSwitcher.prefs.setIntPref('current', PersonaSwitcher.currentThemes.length);
+            PersonaSwitcher.currentIndex = PersonaSwitcher.currentThemes.length;
+            PersonaSwitcher.logger.log("New Index: " + PersonaSwitcher.currentIndex);
             break;
         case APPEARS_LOWER_IN_LIST:
             //No need to change,
@@ -514,6 +517,7 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
 
 PersonaSwitcher.updateIndexOnAdd = function(newTheme, currentTheme) {
     const APPEARS_HIGHER_IN_LIST = -1;
+
     var index;
     for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
         if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(PersonaSwitcher.currentThemes[index].name)) {

@@ -243,20 +243,16 @@ PersonaSwitcher.AddonListener =
     // pane and don't need to be monitored
     onInstalled: function (addon)
     {
-        //Seems to be being called a number of times and in some cases in
-        //contexts where PersonaSwitcher.jsm is not loaded. Since we don't care
-        //about these calls we just ignore them.
-        if('undefined' === typeof(PersonaSwitcher)) {
-            return;
-        }
+        var currentThemeName = 
+            PersonaSwitcher.currentThemes[
+                                PersonaSwitcher.prefs.getIntPref('current')
+                            ].name;
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if ('theme' === addon.type)
         {
-            PersonaSwitcher.updateIndexOnAdd(addon.name, 
-                PersonaSwitcher.currentThemes[
-                    PersonaSwitcher.prefs.getIntPref('current').name]);
+            PersonaSwitcher.updateIndexOnAdd(addon.name, currentThemeName);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
             PersonaSwitcher.themeListChanged = true;
         }
@@ -266,14 +262,17 @@ PersonaSwitcher.AddonListener =
         if('undefined' === typeof(PersonaSwitcher)) {
             return;
         }
+        var currentThemeName = 
+            PersonaSwitcher.currentThemes[
+                                PersonaSwitcher.prefs.getIntPref('current')
+                            ].name;
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if ('theme' === addon.type)
         {
-            PersonaSwitcher.updateIndexOnRemove(addon.name, 
-                PersonaSwitcher.currentThemes[
-                    PersonaSwitcher.prefs.getIntPref('current').name]);
+            PersonaSwitcher.getPersonas();
+            PersonaSwitcher.updateIndexOnRemove(addon.name, currentThemeName);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
             PersonaSwitcher.themeListChanged = true;
         }
