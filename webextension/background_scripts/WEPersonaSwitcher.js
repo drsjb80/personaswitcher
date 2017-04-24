@@ -1,3 +1,6 @@
+/* global browser */
+/* eslint no-constant-condition: 0 */
+
 function handleStartup() 
 {
     var checkDefaultsLoaded = browser.storage.local.get("defaults_loaded");
@@ -17,15 +20,13 @@ function handleStartup()
 
 // Verify if we need to load the default preferences by checking if the 
 // default_loaded flag is undefined. 
-function loadDefaultsIfNeeded(prefs) {
+function loadDefaultsIfNeeded(prefs) 
+{
         if ('undefined' === typeof(prefs.defaults_loaded)) 
         {
             return loadDefaults();
         } 
-        else 
-        {
-            return Promise.resolve();
-        }
+        return Promise.resolve();
 }
 
 function loadDefaults()
@@ -94,7 +95,12 @@ function loadDefaults()
             //hidden preferences
             current: 0
         });
-    return setting.then( function() { return Promise.resolve(); }, handleError);
+    return setting.then(
+		function() 
+		{ 
+			return Promise.resolve();
+		}, 
+		handleError);
 }
 
 function getMenuData() 
@@ -163,12 +169,16 @@ var clickListener = function(theTheme, theIndex)
     {
         stopRotateAlarm(); 
         setCurrentTheme(theIndex);
-        browser.runtime.sendMessage({command: "Switch-Themes",
-                                     theme: theTheme,
-                                     index: theIndex});
+        browser.runtime.sendMessage(
+			{
+				command: "Switch-Themes",
+                theme: theTheme,
+                index: theIndex
+			}
+		);
         startRotateAlarm(); 
     };
-}
+};
 
 var previewAlarmListener;
 var mouseOverListener = function(theTheme, previewDelay) 
@@ -179,8 +189,12 @@ var mouseOverListener = function(theTheme, previewDelay)
         const delayInMinutes = previewDelay/MS_TO_MINUTE_CONVERSION;
         var innerAlarmListener = function(alarmInfo) 
         {
-            browser.runtime.sendMessage({command: "Preview-Theme",
-                                         theme: theTheme}); 
+            browser.runtime.sendMessage(
+				{
+					command: "Preview-Theme",
+                    theme: theTheme
+				}
+			); 
         };
         previewAlarmListener = innerAlarmListener;
         browser.alarms.create("previewAlarm", {delayInMinutes});
@@ -194,7 +208,12 @@ var mouseOutListener = function(theTheme)
     { 
         browser.alarms.clear("previewAlarm");
         browser.alarms.onAlarm.removeListener(previewAlarmListener);
-        browser.runtime.sendMessage({command: "End-Preview", theme: theTheme}); 
+        browser.runtime.sendMessage(
+			{
+				command: "End-Preview", 
+				theme: theTheme
+			}
+		); 
     };
 };
 
@@ -219,12 +238,13 @@ function toggleMenuIcons(iconsShown)
 }
 
 var rotateAlarmListener;
-function startRotateAlarm() {    
+function startRotateAlarm() 
+{    
     const ONE_SECOND = (1.0/60.0);
     logger.log("In Rotate Alarm");
     var checkRotatePref = browser.storage.local.
                             get(["auto", "autoMinutes", "fastSwitch"]);
-    return checkRotatePref.then(results => 
+    return checkRotatePref.then((results) => 
     { 
         //Because the WebExtension can't be notified to turn on/off the rotate
         //when the associated shortcut is pressed and processed in the bootstrap 
@@ -277,7 +297,7 @@ function autoRotate()
             browser.runtime.sendMessage({command: "Return-Pref-Auto"})
         ]);    
         
-    checkRotatePref.then(results => 
+    checkRotatePref.then((results) => 
     {
         if (true === results[1].auto) 
         {
@@ -304,7 +324,7 @@ function rotate()
             browser.storage.local.get("random"),
             browser.runtime.sendMessage({command: "Get-Current-Index"})
         ]);
-    getRotatePref.then( results => 
+    getRotatePref.then((results) => 
     {
         logger.log ("Current index before ", results[1].current);
         var newIndex = results[1].current;
@@ -326,9 +346,12 @@ function rotate()
 
         logger.log ("Current index after ", newIndex);
         setCurrentTheme(newIndex);
-        browser.runtime.sendMessage({command: "Switch-Themes",
-                                     theme: currentThemes[newIndex],
-                                     index: newIndex});
+        browser.runtime.sendMessage(
+		{
+			command: "Switch-Themes",
+            theme: currentThemes[newIndex],
+            index: newIndex
+		});
     });    
 }
 
@@ -336,7 +359,7 @@ function rotateOnStartup()
 {
     logger.log("Rotate on Startup");
     var checkRotateOnStartup = browser.storage.local.get("startupSwitch");
-    checkRotateOnStartup.then( prefs => 
+    checkRotateOnStartup.then((prefs) => 
     {
         if(true === prefs.startupSwitch) 
         {
@@ -351,7 +374,7 @@ function setCurrentTheme(index)
     var getCurrentIndex = browser.storage.local.get("current");
     getCurrentIndex.then((result) => 
     {
-        themes[result.current].selected = false
+        themes[result.current].selected = false;
         themes[index].selected = true;
         if(index !== result.current)
         {
@@ -360,7 +383,7 @@ function setCurrentTheme(index)
             updatingCurrentIndex.catch(handleError);  
         }        
     });
-};
+}
 
 function handlePreferenceChange(changes, area) 
 { 
@@ -414,12 +437,13 @@ function reactToPrefChange(prefName, prefData)
             stopRotateAlarm();
             startRotateAlarm();
             break;
-         case 'fastSwitch':
+        case 'fastSwitch':
         case 'auto':
             //When the shortcuts are migrated to the WebExtension code, 
             //turn off/on the rotate timer here.
             stopRotateAlarm();
             startRotateAlarm();
+			// falls through
         case 'toolboxMinHeight':
         case 'startupSwitch':
         case 'random':
@@ -488,11 +512,15 @@ browser.contextMenus.onClicked.addListener((info) =>
 
 var logger;
 var nullLogger = {};
-nullLogger.log = function (s) { 'use strict'; return; };
+nullLogger.log = function (s) 
+{ 
+	'use strict'; 
+	return; 
+};
 function setLogger() 
 {
     var checkIfDebugging = browser.storage.local.get("debug");
-    return checkIfDebugging.then(result => 
+    return checkIfDebugging.then((result) => 
     {
         if (true === result.debug) 
         {
