@@ -1,3 +1,4 @@
+/* global browser */
 
 const MIDDLE_BUTTON = 1;
 var backgroundPage;
@@ -10,7 +11,8 @@ function appendMenu(page)
         ]);
     getPreferences.then((results) => 
     {
-        backgroundPage.logger.log("Creating a new menu:" + !results[0].staticMenus);
+        backgroundPage.logger.log(
+			"Creating a new menu:" + !results[0].staticMenus);
         if(false === results[0].staticMenus) 
         {
             var gettingMenuData = backgroundPage.getMenuData();
