@@ -163,6 +163,9 @@ function messageHandler(message, sender, sendResponse)
                 sendResponse({themes: themeList});
                 PersonaSwitcher.themeListChanged = false;
             });
+            //Because we are leaving the message handler before sendResponse is
+            //is called due to the aSync nature of promises, we have to return 
+            //true to indicate we are going to send a response.
             //http://stackoverflow.com/questions/40772929/promise-from-browser-runtime-sendmessage-fulfilling-prior-to-asynchronous-call
             return true;
             break;
