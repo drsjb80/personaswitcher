@@ -452,7 +452,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             var themes =  menu.children;
             if(themes[PersonaSwitcher.currentIndex])
             {
-                 // Because Linux is layering the icon on top of the check mark,
+                // Because Linux is layering the icon on top of the check mark,
                 // special handling needs to be provided for Linux users.  
                 // To remain as consistent as possible, the icon for the
                 // currently selected theme is turned off in Linux allowing the 
