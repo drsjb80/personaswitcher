@@ -1,9 +1,10 @@
+/* global Components, PersonaService, LightweightThemeManager, nextTheme, 
+theme, dump */
+
 //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 // no space between comment delimiters. really.
-/*global Components*/
-/*jslint vars: false*/
 
 Components.utils.import("resource://gre/modules/Console.jsm");
 Components.utils.
@@ -12,7 +13,7 @@ Components.utils.
 "use strict";
 //If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
-var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
+var EXPORTED_SYMBOLS = ["PersonaSwitcher"];
 
 var PersonaSwitcher = {};
 
@@ -51,12 +52,18 @@ PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 
 PersonaSwitcher.log = function()
 {
-    if (! PersonaSwitcher.prefs.getBoolPref ('debug')) { return; }
+    if (! PersonaSwitcher.prefs.getBoolPref ('debug')) 
+	{ 
+		return; 
+	}
 
     var message = "";
 
     // create a stack frame via an exception
-    try { this.undef(); }
+    try 
+	{ 
+		this.undef(); 
+	}
     catch (e)
     {
         var frames = e.stack.split ('\n');
@@ -88,20 +95,26 @@ PersonaSwitcher.consoleLogger = null;
 
 try
 {
-    PersonaSwitcher.consoleLogger = Components.utils["import"]
-        ("resource://devtools/Console.jsm", {}).console;
+    PersonaSwitcher.consoleLogger = Components.utils.import(
+		"resource://devtools/Console.jsm", {}).console;
     dump ("using devtools\n");
 
 }
-catch (e) {}
+catch (e) 
+{
+	
+}
 
 try
 {
-    PersonaSwitcher.consoleLogger = Components.utils["import"]
-        ("resource://gre/modules/devtools/Console.jsm", {}).console;
+    PersonaSwitcher.consoleLogger = Components.utils.import(
+		"resource://gre/modules/devtools/Console.jsm", {}).console;
     dump ("using gre\n");
 }
-catch (e) {}
+catch (e) 
+{
+	
+}
 
 // TBird's and SeaMonkey consoles don't log our stuff
 // this is a hack. i need to clean this up...
@@ -116,7 +129,11 @@ if (null === PersonaSwitcher.consoleLogger ||
 }
 
 PersonaSwitcher.nullLogger = {};
-PersonaSwitcher.nullLogger.log = function (s) { 'use strict'; return; };
+PersonaSwitcher.nullLogger.log = function (s) 
+{ 
+	'use strict'; 
+	return; 
+};
 PersonaSwitcher.logger = console;
 
 // ---------------------------------------------------------------------------
@@ -130,7 +147,7 @@ PersonaSwitcher.previewWhich = null;
 //default theme id is not the same, and thus cannot be found using the same 
 //defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
 //can be set back to null and the correct id can be queried instead.
-PersonaSwitcher.defaultTheme = {id:'{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
+PersonaSwitcher.defaultTheme = {id: '{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
 PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
 
 PersonaSwitcher.addonManager = false;
@@ -171,7 +188,10 @@ PersonaSwitcher.prefsObserver =
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
 
-        if ('nsPref:changed' !== topic) { return; }
+        if ('nsPref:changed' !== topic) 
+		{ 
+			return; 
+		}
 
         switch (data)
         {
@@ -179,19 +199,19 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.setLogger();
                 break;
             case 'toolbox-minheight':
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.setToolboxMinheight);
+                PersonaSwitcher.allDocuments(
+					PersonaSwitcher.setToolboxMinheight);
                 break;
             case 'preview':
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+					PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
                 break;
             case 'icon-preview':
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+					PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
@@ -219,7 +239,8 @@ PersonaSwitcher.prefsObserver =
             case 'activatemeta': case 'activatekey': case 'activateaccel': 
             case 'activateos': 
             case 'toolsshift': case 'toolsalt': case 'toolscontrol': 
-            case 'toolsmeta': case 'toolskey': case 'toolsaccel': case 'toolsos':
+            case 'toolsmeta': case 'toolskey': case 'toolsaccel': 
+			case 'toolsos':
                 PersonaSwitcher.allDocuments (PersonaSwitcher.setKeyset);
                 break;
             case 'accesskey':
@@ -236,8 +257,8 @@ PersonaSwitcher.prefsObserver =
                                 delay;
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
 
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+					PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
@@ -250,8 +271,6 @@ PersonaSwitcher.prefsObserver =
 };
 
 PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
-
-
 
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func, index)
@@ -361,9 +380,7 @@ PersonaSwitcher.rotate = function()
 
 PersonaSwitcher.toggleAuto = function()
 {
-    /*
-    ** just set the pref, the prefs observer does the work.
-    */
+    // just set the pref, the prefs observer does the work.
     PersonaSwitcher.prefs.setBoolPref ('auto',
         ! PersonaSwitcher.prefs.getBoolPref ('auto'));
 };
@@ -393,8 +410,8 @@ PersonaSwitcher.removeNotification = function (win)
 
     if (null !== notificationBox)
     {
-        var notification = notificationBox.getNotificationWithValue
-            ('lwtheme-install-notification');
+        var notification = notificationBox.getNotificationWithValue(
+			'lwtheme-install-notification');
 
         if (null !== notification)
         {
@@ -451,9 +468,11 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 // check mark to be displayed. This is similar to Windows which
                 // simply displays the check mark over the theme's icon.
 
-                if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
+				{
                     var value = themes[PersonaSwitcher.currentIndex].value;
-                    if('undefined' !== typeof(value) && null !== value) {
+                    if('undefined' !== typeof(value) && null !== value) 
+					{
                         themes[PersonaSwitcher.currentIndex].
                             setAttribute('image', value);
                     }
@@ -482,7 +501,10 @@ PersonaSwitcher.getPersonas = function()
         }
     }
     PersonaSwitcher.currentThemes.
-        sort(function (a, b) { return a.name.localeCompare(b.name); });
+        sort(function (a, b) 
+		{ 
+			return a.name.localeCompare(b.name); 
+		});
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 };
 
