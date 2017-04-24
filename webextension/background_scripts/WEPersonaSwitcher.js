@@ -134,7 +134,7 @@ function buildMenuItem(theme, prefs, theIndex)
     if (theIndex === prefs.current) {
         themeChoice.selected = true;
     }
-    
+
     if (true === prefs.preview) 
     {
         themeChoice.addEventListener('mouseover',
@@ -307,7 +307,7 @@ function rotate()
     //the currentIndex stored in the Webextension due to use of the rotate 
     //shortcut. 
     var getRotatePref = Promise.all([
-            browser.storage.local.get("random"),
+            browser.storage.local.get(["random", "current"]),
             browser.runtime.sendMessage({command: "Get-Current-Index"})
         ]);
     getRotatePref.then( results => 
@@ -318,7 +318,7 @@ function rotate()
         {
             var prevIndex = newIndex;
             // pick a number between 1 and the end until a new index is found
-            while(newIndex === prevIndex) 
+            while(newIndex === prevIndex || isBlacklisted(newIndex)) 
             {
                 newIndex = Math.floor ((Math.random() *
                         (currentThemes.length-1)) + 1);
@@ -326,16 +326,26 @@ function rotate()
         }
         else
         {
-            newIndex = (newIndex + 1) %
-                    currentThemes.length;
+            do {
+                newIndex = (newIndex + 1) % currentThemes.length;
+            } while (isBlackListed(newIndex));
         }
 
         logger.log ("Current index after ", newIndex);
-        setCurrentTheme(newIndex);
+        setCurrentTheme(newIndex, results[0].current);
         browser.runtime.sendMessage({command: "Switch-Themes",
                                      theme: currentThemes[newIndex],
                                      index: newIndex});
     });    
+}
+
+function isBlackListed(index) {
+    var themeName = currentThemes[index].name;
+    if( "Compact Dark" === themeName || "Compact Light" === themeName || "Default" === themeName) {
+        return true;
+    }
+
+    return false;
 }
 
 function rotateOnStartup() 

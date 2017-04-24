@@ -351,7 +351,7 @@ PersonaSwitcher.rotate = function()
     {
         var prevIndex = newIndex;
         // pick a number between 1 and the end until a new index is found
-        while(newIndex === prevIndex) 
+        while(newIndex === prevIndex || PersonaSwitcher.isBlackListed(newIndex)) 
         {
             newIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
@@ -359,12 +359,23 @@ PersonaSwitcher.rotate = function()
     }
     else
     {
-        newIndex = (PersonaSwitcher.currentIndex + 1) %
-            PersonaSwitcher.currentThemes.length;
+        do {
+            newIndex = (newIndex + 1) %
+                PersonaSwitcher.currentThemes.length;
+        } while (PersonaSwitcher.isBlackListed(newIndex));
     }
     
     PersonaSwitcher.logger.log (newIndex);
     PersonaSwitcher.switchTo(PersonaSwitcher.currentThemes[newIndex], newIndex);
+};
+
+PersonaSwitcher.isBlackListed = function(index) {
+    var themeName = PersonaSwitcher.currentThemes[index].name;
+    if( "Compact Dark" === themeName || "Compact Light" === themeName || "Default" === themeName) {
+        return true;
+    }
+
+    return false;
 };
 
 PersonaSwitcher.toggleAuto = function()
