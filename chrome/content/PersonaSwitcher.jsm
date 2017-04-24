@@ -423,7 +423,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     PersonaSwitcher.prefs.setIntPref ('current', PersonaSwitcher.currentIndex);
     PersonaSwitcher.logger.log ('using currentTheme');
 
-    if (toWhich === null)
+    if ('undefined' === typeof(toWhich) || toWhich === null)
     {
         LightweightThemeManager.themeChanged(null);
     } 

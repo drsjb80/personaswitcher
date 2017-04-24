@@ -355,6 +355,9 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
 
     item.setAttribute ('label', which.name);
     item.setAttribute ('class', 'menuitem-iconic');
+    if(PersonaSwitcher.prefs.getIntPref('current') === index) {
+        item.setAttribute("checked", "true"); 
+    }
 
     item.addEventListener
     (
