@@ -98,7 +98,7 @@ function loadDefaults()
 
 function getMenuData() 
 {
-    var menuPreferences = ["iconPreview", "preview", "previewDelay"];
+    var menuPreferences = ["iconPreview", "preview", "previewDelay", "current"];
     var getData = Promise.all([
         browser.storage.local.get(menuPreferences),
         browser.runtime.sendMessage({command: "Return-Theme-List"})
@@ -131,6 +131,10 @@ function buildMenuItem(theme, prefs, theIndex)
     themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview),
                              textNode);
 
+    if (theIndex === prefs.current) {
+        themeChoice.selected = true;
+    }
+    
     if (true === prefs.preview) 
     {
         themeChoice.addEventListener('mouseover',
