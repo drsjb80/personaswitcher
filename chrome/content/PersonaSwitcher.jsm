@@ -1,5 +1,4 @@
-/* global Components, PersonaService, LightweightThemeManager, nextTheme, 
-theme, dump */
+/* global Components, PersonaService, LightweightThemeManager, dump */
 
 //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules

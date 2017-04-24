@@ -1,3 +1,6 @@
+/* global Components, Services, PersonaSwitcher, ADDON_DISABLE, 
+LightweightThemeManager */
+
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import("resource://gre/modules/Console.jsm");
@@ -32,7 +35,7 @@ function startup(data, reason)
     //but is necessary for Thunderbird compatibility
     styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
                                                                         
-    data.webExtension.startup().then(api => 
+    data.webExtension.startup().then((api) => 
     {
         const {browser} = api;
         browser.runtime.onMessage.addListener(messageHandler);
@@ -104,7 +107,8 @@ function unloadFromWindow(window)
     }
     if (submenuPersonaSwitcher !== null) 
     {
-        submenuPersonaSwitcher.parentNode.removeChild(submenuPersonaSwitcher);        
+        submenuPersonaSwitcher.parentNode.removeChild(
+			submenuPersonaSwitcher);        
     }
     if(keySet !== null) 
     {
@@ -136,8 +140,14 @@ var WindowListener =
         }
         window.addEventListener('load', onWindowLoad);
     },
-    onCloseWindow: function (xulWindow) {},
-    onWindowTitleChange: function (xulWindow, newTitle) {}
+    onCloseWindow: function (xulWindow) 
+	{
+		
+	},
+    onWindowTitleChange: function (xulWindow, newTitle) 
+	{
+		
+	}
 };
 
 //Message handler for communication with embedded WebExtension
@@ -367,10 +377,11 @@ function injectMainMenu(doc)
                 stringBundle.GetStringFromName('personaswitcher-menu.label'));
     let menuPSPopup = doc.createElement("menupopup");
     menuPSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
-    menuPSPopup.addEventListener
-    (
-        'popuphidden',
-        function() { PersonaSwitcher.popupHidden(); },
+    menuPSPopup.addEventListener('popuphidden',
+        function() 
+		{ 
+			PersonaSwitcher.popupHidden(); 
+		},
         false
     );
     menuPersonaSwitcher.appendChild(menuPSPopup);
@@ -400,10 +411,11 @@ function injectSubMenu(doc)
         stringBundle.GetStringFromName('personaswitcher-menu.label'));
     let submenuPSPopup = doc.createElement("menupopup");
     submenuPSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
-    submenuPSPopup.addEventListener
-    (
-        'popuphidden',
-        function() { PersonaSwitcher.popupHidden(); },
+    submenuPSPopup.addEventListener('popuphidden',
+        function() 
+		{ 
+			PersonaSwitcher.popupHidden(); 
+		},
         false
     );
     submenuPersonaSwitcher.appendChild(submenuPSPopup);
@@ -485,7 +497,7 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
         createInstance(Components.interfaces.nsISupportsString);
     string.data = text;
     branch = branch ? branch : Services.prefs;
-    branch.setComplexValue( prefName, 
+    branch.setComplexValue(prefName, 
                             Components.interfaces.nsISupportsString,
                             string);
 }
@@ -500,9 +512,9 @@ function removeUserPrefs()
     "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
     "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
     "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
-    "preview", "preview-delay", "icon-preview", "tools-submenu", "main-menubar", 
-    "debug", "notification-workaround", "toolbox-minheight", "startup-switch", 
-    "fastswitch", "current"];
+    "preview", "preview-delay", "icon-preview", "tools-submenu", 
+	"main-menubar", "debug", "notification-workaround", 
+	"toolbox-minheight", "startup-switch", "fastswitch", "current"];
     
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService).
