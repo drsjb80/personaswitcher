@@ -104,7 +104,7 @@ try
 }
 catch (e)
 {
-	console.error(e);
+	
 }
 
 try
@@ -113,9 +113,9 @@ try
 		"resource://gre/modules/devtools/Console.jsm", {}).console;
     dump ("using gre\n");
 }
-catch (e) 
+catch (e)
 {
-	console.error(e);
+
 }
 
 // TBird's and SeaMonkey consoles don't log our stuff
