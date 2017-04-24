@@ -232,21 +232,35 @@ PersonaSwitcher.AddonListener =
     // pane and don't need to be monitored
     onInstalled: function (addon)
     {
-        PersonaSwitcher.logger.log(addon.type);
-        PersonaSwitcher.logger.log(addon.name);
-        
-        if ('theme' === addon.type)
-        {
-            PersonaSwitcher.allDocuments(PersonaSwitcher.createStaticPopups);
-        }
-    },
-    onUninstalled: function (addon)
-    {
+        var currentThemeName = 
+            PersonaSwitcher.currentThemes[
+                                PersonaSwitcher.prefs.getIntPref('current')
+                            ].name;
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if ('theme' === addon.type)
         {
+            PersonaSwitcher.updateIndexOnAdd(addon.name, currentThemeName);
+            PersonaSwitcher.allDocuments(PersonaSwitcher.createStaticPopups);
+        }
+    },
+    onUninstalled: function (addon)
+    {
+        if('undefined' === typeof(PersonaSwitcher)) {
+            return;
+        }
+        var currentThemeName = 
+            PersonaSwitcher.currentThemes[
+                                PersonaSwitcher.prefs.getIntPref('current')
+                            ].name;
+        PersonaSwitcher.logger.log (addon.type);
+        PersonaSwitcher.logger.log (addon.name);
+        
+        if ('theme' === addon.type)
+        {
+            PersonaSwitcher.getPersonas();
+            PersonaSwitcher.updateIndexOnRemove(addon.name, currentThemeName);
             PersonaSwitcher.allDocuments(PersonaSwitcher.createStaticPopups);
         }
     }
