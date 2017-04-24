@@ -1,3 +1,5 @@
+/* global pref */
+
 // used to test the migration code:
 // pref ("extensions.themeswitcher.defshift", false);
 
@@ -74,4 +76,5 @@ pref ("extensions.personaswitcher.current", 0);
 
 // https://developer.mozilla.org/en/Localizing_extension_descriptions
 
-pref ("extensions.drsjb80@gmail.com.description", "chrome://personaswitcher/locale/overlay.properties");
+pref ("extensions.drsjb80@gmail.com.description", 
+	"chrome://personaswitcher/locale/overlay.properties");
