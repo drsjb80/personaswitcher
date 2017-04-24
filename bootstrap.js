@@ -15,24 +15,24 @@ var uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css",
 
 function startup(data, reason) 
 {    
-    //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
-    //load preferences
+    // https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
+    // load preferences
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/prefs.js',
             { pref: setDefaultPref });
         
     Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
     
-    //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
+    // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
     let context = this;
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/ui.js',
                       context, "UTF-8" /* The script's encoding */);
 
 
-    //https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
-    //Loading the stylesheet into all windows is a noticeable hit on performance 
-    //but is necessary for Thunderbird compatibility
+    // https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
+    // Loading the stylesheet into all windows is a noticeable hit on performance 
+    // but is necessary for Thunderbird compatibility
     styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
                                                                         
     data.webExtension.startup().then((api) => 
@@ -47,9 +47,9 @@ function startup(data, reason)
 
 function shutdown(data, reason) 
 {
-    //Clears the cache on disable so reloading the addon when debugging works
-    //properly
-    //http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
+    // Clears the cache on disable so reloading the addon when debugging works
+    // properly
+    // http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
     if (reason == ADDON_DISABLE) 
     {
         Services.obs.notifyObservers(null, "startupcache-invalidate", null);
@@ -65,7 +65,7 @@ function shutdown(data, reason)
         styleSheetService.unregisterSheet(uri, styleSheetService.USER_SHEET);
     }
   
-    //https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_10_Bypass_cache_when_loading_properties_files/
+    // https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_10_Bypass_cache_when_loading_properties_files/
     // HACK WARNING: The Addon Manager does not properly clear all addon related
     //               caches on update; in order to fully update images and 
     //               locales, their caches need clearing here
@@ -74,7 +74,7 @@ function shutdown(data, reason)
 
 function install(data, reason) 
 {
-    //install stuff here
+    // install stuff here
 }
 
 function uninstall(data, reason) 
@@ -108,7 +108,7 @@ function unloadFromWindow(window)
     if (submenuPersonaSwitcher !== null) 
     {
         submenuPersonaSwitcher.parentNode.removeChild(
-			submenuPersonaSwitcher);        
+            submenuPersonaSwitcher);        
     }
     if(keySet !== null) 
     {
@@ -141,16 +141,16 @@ var WindowListener =
         window.addEventListener('load', onWindowLoad);
     },
     onCloseWindow: function (xulWindow) 
-	{
-		
-	},
+    {
+        
+    },
     onWindowTitleChange: function (xulWindow, newTitle) 
-	{
-		
-	}
+    {
+        
+    }
 };
 
-//Message handler for communication with embedded WebExtension
+// Message handler for communication with embedded WebExtension
 function messageHandler(message, sender, sendResponse) 
 {
     switch (message.command)
@@ -191,7 +191,7 @@ function messageHandler(message, sender, sendResponse)
     }
 }
 
-//Handles copying the preference values from the webextension to the legacy code
+// Handles copying the preference values from the webextension to the legacy code
 function setPreference(preference, value) 
 {
     switch(preference) 
@@ -350,7 +350,7 @@ function setPreference(preference, value)
     }
 }
 
-//UI Injection
+// UI Injection
 function injectMainMenu(doc) 
 {
     let menuBar;
@@ -370,7 +370,7 @@ function injectMainMenu(doc)
             break;
     }
         
-    //PersonaSwitcher menu that is added to the main menubar
+    // PersonaSwitcher menu that is added to the main menubar
     let menuPersonaSwitcher = doc.createElement("menu");
     menuPersonaSwitcher.setAttribute("id", "personaswitcher-main-menubar");
     menuPersonaSwitcher.setAttribute("label",
@@ -379,9 +379,9 @@ function injectMainMenu(doc)
     menuPSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
     menuPSPopup.addEventListener('popuphidden',
         function() 
-		{ 
-			PersonaSwitcher.popupHidden(); 
-		},
+        { 
+            PersonaSwitcher.popupHidden(); 
+        },
         false
     );
     menuPersonaSwitcher.appendChild(menuPSPopup);
@@ -404,7 +404,7 @@ function injectSubMenu(doc)
             break;
     }
     
-    //SubMenu that is inserted into the Tools Menu
+    // SubMenu that is inserted into the Tools Menu
     let submenuPersonaSwitcher = doc.createElement("menu");
     submenuPersonaSwitcher.setAttribute("id", "personaswitcher-tools-submenu");
     submenuPersonaSwitcher.setAttribute("label", 
@@ -413,9 +413,9 @@ function injectSubMenu(doc)
     submenuPSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
     submenuPSPopup.addEventListener('popuphidden',
         function() 
-		{ 
-			PersonaSwitcher.popupHidden(); 
-		},
+        { 
+            PersonaSwitcher.popupHidden(); 
+        },
         false
     );
     submenuPersonaSwitcher.appendChild(submenuPSPopup);
@@ -424,7 +424,7 @@ function injectSubMenu(doc)
 
 function addKeyset(doc) 
 {
-    //http://forums.mozillazine.org/viewtopic.php?t=2711165
+    // http://forums.mozillazine.org/viewtopic.php?t=2711165
     var mainWindow;
     switch (PersonaSwitcher.XULAppInfo.name)
     {
@@ -444,8 +444,8 @@ function addKeyset(doc)
     mainWindow.appendChild(keyset);    
 }
 
-//https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences
-//Default Preferences Setup
+// https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences
+// Default Preferences Setup
 function getGenericPref(branch, prefName)
 {
     switch (branch.getPrefType(prefName))
@@ -513,8 +513,8 @@ function removeUserPrefs()
     "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
     "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
     "preview", "preview-delay", "icon-preview", "tools-submenu", 
-	"main-menubar", "debug", "notification-workaround", 
-	"toolbox-minheight", "startup-switch", "fastswitch", "current"];
+    "main-menubar", "debug", "notification-workaround", 
+    "toolbox-minheight", "startup-switch", "fastswitch", "current"];
     
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService).
