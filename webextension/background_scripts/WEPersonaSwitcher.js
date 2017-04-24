@@ -103,7 +103,7 @@ function getMenuData()
         browser.storage.local.get(menuPreferences),
         browser.runtime.sendMessage({command: "Return-Theme-List"})
     ]);
-    return getData;
+    return Promise.resolve(getData);
 }
 
 var currentThemes;
@@ -161,7 +161,10 @@ var clickListener = function(theTheme, theIndex)
     return function() 
     {
         stopRotateAlarm(); 
-        setCurrentTheme(theIndex);
+        browser.storage.local.get("current").then((result) => 
+            {
+                setCurrentTheme(theIndex, result.current);
+            });
         browser.runtime.sendMessage({command: "Switch-Themes",
                                      theme: theTheme,
                                      index: theIndex});
@@ -344,21 +347,18 @@ function rotateOnStartup()
     });
 }
 
-function setCurrentTheme(index)
+function setCurrentTheme(newIndex, oldIndex)
 {
     var themes = browserActionMenu.children;
-    var getCurrentIndex = browser.storage.local.get("current");
-    getCurrentIndex.then((result) => 
+    themes[oldIndex].selected = false
+    themes[newIndex].selected = true;
+
+    if(newIndex !== oldIndex)
     {
-        themes[result.current].selected = false
-        themes[index].selected = true;
-        if(index !== result.current)
-        {
-            var updatingCurrentIndex = browser.storage.local.
-                                            set({current: index});
-            updatingCurrentIndex.catch(handleError);  
-        }        
-    });
+        var updatingCurrentIndex = browser.storage.local.
+                                        set({current: newIndex});
+        updatingCurrentIndex.catch(handleError);  
+    }
 };
 
 function handlePreferenceChange(changes, area) 
