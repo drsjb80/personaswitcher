@@ -89,7 +89,6 @@ function loadDefaults()
             mainMenuBar: false,
             debug: false,
             fastSwitch: false,
-            staticMenus: true,
             toolboxMaxHeight: 200,
 
             // hidden preferences
@@ -105,12 +104,12 @@ function loadDefaults()
 
 function getMenuData() 
 {
-    var menuPreferences = ["iconPreview", "preview", "previewDelay"];
+    var menuPreferences = ["iconPreview", "preview", "previewDelay", "current"];
     var getData = Promise.all([
         browser.storage.local.get(menuPreferences),
         browser.runtime.sendMessage({command: "Return-Theme-List"})
     ]);
-    return getData;
+    return Promise.resolve(getData);
 }
 
 var currentThemes;
@@ -137,6 +136,11 @@ function buildMenuItem(theme, prefs, theIndex)
     themeChoice.appendChild(textNode);
     themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview),
                              textNode);
+
+    if (theIndex === prefs.current) 
+    {
+        themeChoice.selected = true;
+    }
 
     if (prefs.preview === true) 
     {
@@ -168,14 +172,13 @@ var clickListener = function(theTheme, theIndex)
     return function() 
     {
         stopRotateAlarm(); 
-        setCurrentTheme(theIndex);
-        browser.runtime.sendMessage(
+        browser.storage.local.get("current").then((result) => 
             {
-                command: "Switch-Themes",
-                theme: theTheme,
-                index: theIndex
-            }
-        );
+                setCurrentTheme(theIndex, result.current);
+            });
+        browser.runtime.sendMessage({command: "Switch-Themes",
+                                     theme: theTheme,
+                                     index: theIndex});
         startRotateAlarm(); 
     };
 };
@@ -321,7 +324,7 @@ function rotate()
     // the currentIndex stored in the Webextension due to use of the rotate 
     // shortcut. 
     var getRotatePref = Promise.all([
-            browser.storage.local.get("random"),
+            browser.storage.local.get(["random", "current"]),
             browser.runtime.sendMessage({command: "Get-Current-Index"})
         ]);
     getRotatePref.then((results) => 
@@ -332,7 +335,7 @@ function rotate()
         {
             var prevIndex = newIndex;
             // pick a number between 1 and the end until a new index is found
-            while(newIndex === prevIndex) 
+            while(newIndex === prevIndex || isBlacklisted(newIndex)) 
             {
                 newIndex = Math.floor ((Math.random() *
                         (currentThemes.length-1)) + 1);
@@ -340,19 +343,26 @@ function rotate()
         }
         else
         {
-            newIndex = (newIndex + 1) %
-                    currentThemes.length;
+            do {
+                newIndex = (newIndex + 1) % currentThemes.length;
+            } while (isBlackListed(newIndex));
         }
 
         logger.log ("Current index after ", newIndex);
-        setCurrentTheme(newIndex);
-        browser.runtime.sendMessage(
-        {
-            command: "Switch-Themes",
-            theme: currentThemes[newIndex],
-            index: newIndex
-        });
+        setCurrentTheme(newIndex, results[0].current);
+        browser.runtime.sendMessage({command: "Switch-Themes",
+                                     theme: currentThemes[newIndex],
+                                     index: newIndex});
     });    
+}
+
+function isBlackListed(index) {
+    var themeName = currentThemes[index].name;
+    if( "Compact Dark" === themeName || "Compact Light" === themeName || "Default" === themeName) {
+        return true;
+    }
+
+    return false;
 }
 
 function rotateOnStartup() 
@@ -368,22 +378,19 @@ function rotateOnStartup()
     });
 }
 
-function setCurrentTheme(index)
+function setCurrentTheme(newIndex, oldIndex)
 {
     var themes = browserActionMenu.children;
-    var getCurrentIndex = browser.storage.local.get("current");
-    getCurrentIndex.then((result) => 
+    themes[oldIndex].selected = false
+    themes[newIndex].selected = true;
+
+    if(newIndex !== oldIndex)
     {
-        themes[result.current].selected = false;
-        themes[index].selected = true;
-        if(index !== result.current)
-        {
-            var updatingCurrentIndex = browser.storage.local.
-                                            set({current: index});
-            updatingCurrentIndex.catch(handleError);  
-        }        
-    });
-}
+        var updatingCurrentIndex = browser.storage.local.
+                                        set({current: newIndex});
+        updatingCurrentIndex.catch(handleError);  
+    }
+};
 
 function handlePreferenceChange(changes, area) 
 { 

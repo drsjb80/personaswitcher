@@ -244,22 +244,38 @@ PersonaSwitcher.AddonListener =
     // pane and don't need to be monitored
     onInstalled: function (addon)
     {
+        var currentThemeName = 
+            PersonaSwitcher.currentThemes[
+                                PersonaSwitcher.prefs.getIntPref('current')
+                            ].name;
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if (addon.type === 'theme')
         {
+            PersonaSwitcher.updateIndexOnAdd(addon.name, currentThemeName);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
+            PersonaSwitcher.themeListChanged = true;
         }
     },
     onUninstalled: function (addon)
     {
+        if('undefined' === typeof(PersonaSwitcher)) {
+            return;
+        }
+        var currentThemeName = 
+            PersonaSwitcher.currentThemes[
+                                PersonaSwitcher.prefs.getIntPref('current')
+                            ].name;
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if (addon.type === 'theme')
         {
+            PersonaSwitcher.getPersonas();
+            PersonaSwitcher.updateIndexOnRemove(addon.name, currentThemeName);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
+            PersonaSwitcher.themeListChanged = true;
         }
     }
 };
@@ -345,6 +361,9 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
 
     item.setAttribute ('label', which.name);
     item.setAttribute ('class', 'menuitem-iconic');
+    if(PersonaSwitcher.prefs.getIntPref('current') === index) {
+        item.setAttribute("checked", "true"); 
+    }
 
     item.addEventListener('command',
         function() 

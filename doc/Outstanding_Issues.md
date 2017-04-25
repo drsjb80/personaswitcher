@@ -5,3 +5,4 @@
  ### Future Scheduled Updates ###
  * **Testing:**  Finish converting the automated testing for web extension and test run.
  * **Lint:**     Integrating ESLint to the project is complete. Going to clean up code based on ESLint recommendations.
+ * **Compact Themes:**     Moving the Compact Dark and Compact Light Firefox themes to the end of the theme list.

@@ -15,7 +15,7 @@ var preferences = ["defaultKeyShift", "defaultKeyControl", "defaultKeyAlt",
                     "auto", "autoMinutes", "random", "startupSwitch", "preview",
                     "previewDelay", "iconPreview", "toolboxMinHeight", 
                     "toolsMenu", "mainMenuBar", "debug", "fastSwitch", 
-                    "staticMenus", "toolboxMaxHeight"];
+                    "toolboxMaxHeight"];
 
 var defaultKeyShiftObject = document.querySelector("#default-key-shift");
 var defaultKeyControlObject = document.querySelector("#default-key-control");
@@ -65,7 +65,6 @@ var toolsMenuObject = document.querySelector("#tools-menu");
 var mainMenuBarObject = document.querySelector("#main-menubar");
 var debugObject = document.querySelector("#debug");
 var fastSwitchObject = document.querySelector("#fast-switch");
-var staticMenusObject = document.querySelector("#static-menus");
 var toolboxMaxHeightObject = document.querySelector("#toolbox-maxheight");
 
 function saveOptions(e)
@@ -121,7 +120,6 @@ function saveOptions(e)
             mainMenuBar: mainMenuBarObject.checked,
             debug: debugObject.checked,
             fastSwitch: fastSwitchObject.checked,
-            staticMenus: staticMenusObject.checked,
             toolboxMaxHeight: parseInt(toolboxMaxHeightObject.value)
         });
     setting.catch(onError);
@@ -185,7 +183,6 @@ function loadOptions()
         mainMenuBarObject.checked = result.mainMenuBar;
         debugObject.checked = result.debug;
         fastSwitchObject.checked = result.fastSwitch;
-        staticMenusObject.checked = result.staticMenus;
         toolboxMaxHeightObject.value = result.toolboxMaxHeight;
 
         

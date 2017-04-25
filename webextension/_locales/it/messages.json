@@ -170,7 +170,7 @@
   },
 
   "options_autoevery_hint":{
-  "message": "Values between 0 and 999",
+  "message": "Values between 1 and 999",
   "description": "Text displayed in the options pane"
   },
   
@@ -246,21 +246,6 @@
 
   "options_fast_switch": {
   "message": "Quickly switch through personas",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_menuLoading": {
-  "message": "Menu loading:",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_menuLoading_static": {
-  "message": "Static",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_menuLoading_dynamic": {
-  "message": "Dynamic",
   "description": "Text displayed in the options pane"
   },
 

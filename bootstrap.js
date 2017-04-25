@@ -4,6 +4,7 @@ LightweightThemeManager */
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import("resource://gre/modules/Console.jsm");
+Cu.import('resource://gre/modules/AddonManager.jsm');
 
 var stringBundle = Services.strings.createBundle(
     'chrome://personaswitcher/locale/personaswitcher.properties?' + 
@@ -34,15 +35,16 @@ function startup(data, reason)
     // Loading the stylesheet into all windows is a noticeable hit on performance 
     // but is necessary for Thunderbird compatibility
     styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
-                                                                        
-    data.webExtension.startup().then((api) => 
+
+    forEachOpenWindow(loadIntoWindow);
+    Services.wm.addListener(WindowListener);
+
+    data.webExtension.startup().then(api => 
+
     {
         const {browser} = api;
         browser.runtime.onMessage.addListener(messageHandler);
-    });
-  
-    forEachOpenWindow(loadIntoWindow);
-    Services.wm.addListener(WindowListener);    
+    });    
 }
 
 function shutdown(data, reason) 
@@ -58,6 +60,7 @@ function shutdown(data, reason)
     forEachOpenWindow(unloadFromWindow);
     PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
     Services.wm.removeListener(WindowListener);
+    AddonManager.removeAddonListener(PersonaSwitcher.AddonListener);
     Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');    
   
     if (styleSheetService.sheetRegistered(uri, styleSheetService.USER_SHEET)) 
@@ -155,17 +158,27 @@ function messageHandler(message, sender, sendResponse)
 {
     switch (message.command)
     {
+        case "Check-For-Theme-List-Change":
+            if (PersonaSwitcher.themeListChanged) {
+                sendResponse({themeListChanged: true});
+                PersonaSwitcher.themeListChanged = false;
+            } else {
+                sendResponse({themeListChanged: false});
+            }
+            break;
         case "Return-Theme-List":
             PersonaSwitcher.getPersonas();
-            var themeList = PersonaSwitcher.currentThemes;
-            var defaultTheme = 
-                {
-                    id: PersonaSwitcher.defaultTheme.id, 
-                    name: PersonaSwitcher.defaultTheme.name, 
-                    iconURL: PersonaSwitcher.defaultTheme.iconURL
-                };
-            themeList.push(defaultTheme);
-            sendResponse({themes: themeList});
+            let themeListPromise = new Promise(getThemeList);
+
+            themeListPromise.then( (themeList) => {
+                sendResponse({themes: themeList});
+                PersonaSwitcher.themeListChanged = false;
+            });
+            //Because we are leaving the message handler before sendResponse is
+            //is called due to the aSync nature of promises, we have to return 
+            //true to indicate we are going to send a response.
+            //http://stackoverflow.com/questions/40772929/promise-from-browser-runtime-sendmessage-fulfilling-prior-to-asynchronous-call
+            return true;
             break;
         case "Switch-Themes":
             PersonaSwitcher.switchTo(message.theme, message.index);
@@ -191,7 +204,46 @@ function messageHandler(message, sender, sendResponse)
     }
 }
 
-// Handles copying the preference values from the webextension to the legacy code
+function getThemeList(resolve, reject) {
+    var themeList = PersonaSwitcher.currentThemes;
+
+    if(typeof(PersonaSwitcher.defaultTheme.name) === 'undefined') 
+    {
+        AddonManager.getAddonByID
+        (
+            PersonaSwitcher.defaultThemeId,
+            function (theme)
+            {
+                if (theme !== null)
+                {
+                    PersonaSwitcher.defaultTheme = theme;
+                    var defaultTheme = 
+                    {
+                        id: PersonaSwitcher.defaultTheme.id, 
+                        name: PersonaSwitcher.defaultTheme.name, 
+                        iconURL: PersonaSwitcher.defaultTheme.iconURL
+                    };
+                }
+            
+                themeList.push(defaultTheme);
+                resolve(themeList);
+            }
+        );
+    } else {
+        var defaultTheme = 
+            {
+                id: PersonaSwitcher.defaultTheme.id, 
+                name: PersonaSwitcher.defaultTheme.name, 
+                iconURL: PersonaSwitcher.defaultTheme.iconURL
+            };
+    
+        themeList.push(defaultTheme);
+        resolve(themeList);
+    }
+}
+
+//Handles copying the preference values from the webextension to the legacy code
+
 function setPreference(preference, value) 
 {
     switch(preference) 
