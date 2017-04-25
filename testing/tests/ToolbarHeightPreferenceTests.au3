@@ -62,11 +62,13 @@ Func ToolbarHeightShrinks()
 
    ; Update height to 150
    SetPsOption('toolbox-minheight', "150")
+   Sleep(1000)
 
    Local $startingHeight = GetToolbarHeight()
 
    ; Update height to 10
    SetPsOption('toolbox-minheight', "10")
+   Sleep(1000)
 
    ; grab the height of the toolbar after updating the preference
    Local $modifiedHeight = GetToolbarHeight()
