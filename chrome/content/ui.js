@@ -334,6 +334,11 @@ PersonaSwitcher.previewObserver =
     }
 };
 
+PersonaSwitcher.insertSeparator = function(doc, menupopup) {
+    var separator = doc.createElement("menuseparator");
+    menupopup.appendChild(separator);
+};
+
 /*
 ** create a menuitem, possibly creating a preview
 */
@@ -428,12 +433,12 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
     return (item);
 };
 
-PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
+PersonaSwitcher.createMenuItems = function (doc, menupopup, arr, indexOffset)
 {
     PersonaSwitcher.logger.log(menupopup.id);
+    indexOffset = 'undefined' === typeof(indexOffset) ? 0 : indexOffset;
 
     var popup = 'personaswitcher-button-popup' ===  menupopup.id;
-    // PersonaSwitcher.logger.log (popup);
 
     var item = null;
 
@@ -441,41 +446,12 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     {
         PersonaSwitcher.logger.log (i);
         PersonaSwitcher.logger.log (arr[i]);
-        item = PersonaSwitcher.createMenuItem(doc, arr[i], i);
+        item = PersonaSwitcher.createMenuItem(doc, arr[i], i + indexOffset);
         if (item)
         {
             menupopup.appendChild(item);
         }
     }
-
-    /*
-    // the bad two cases when having a default messes with the menu
-    // if it's thunderbird and we stretched the top
-    var TBird = 'Thunderbird' === PersonaSwitcher.XULAppInfo.name;
-    var chars = PersonaSwitcher.prefs.getCharPref ('toolbox-minheight');
-    var height = parseInt (chars);
-    height = isNaN (height) ? 0 : height;
-    var stretched = 0 !== height;
-
-    var TB = TBird && stretched && popup;
-    PersonaSwitcher.logger.log (TB);
-
-    // it's pale moon, a menubar, and preview is set
-    var PM = 'personaswitcher-button-popup' ===  menupopup.id &&
-        'Pale Moon' === PersonaSwitcher.XULAppInfo.name &&
-        PersonaSwitcher.prefs.getBoolPref ('preview');
-    PersonaSwitcher.logger.log (PM);
-    */
-
-    //if (!PM && !TB && null !== PersonaSwitcher.defaultTheme)
-    //{
-        item = PersonaSwitcher.createMenuItem
-            (doc, PersonaSwitcher.defaultTheme, arr.length);
-        if (item)
-        {
-            menupopup.appendChild (item);
-        }
-    //}
 };
 
 PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
@@ -489,9 +465,11 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
         menupopup.removeChild(menupopup.firstChild);
     }
 
-    var arr = PersonaSwitcher.currentThemes;
+    var themes = PersonaSwitcher.currentThemes;
+    var defaults = PersonaSwitcher.defaultThemes;
+    var indexOffset = PersonaSwitcher.currentThemes.length+1;
 
-    if (0 === arr.length)
+    if (0 === themes.length)
     {
         PersonaSwitcher.logger.log('no themes');
 
@@ -506,7 +484,9 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
     }
     else
     {
-        PersonaSwitcher.createMenuItems(doc, menupopup, arr);
+        PersonaSwitcher.createMenuItems(doc, menupopup, themes);
+        PersonaSwitcher.insertSeparator(doc, menupopup);
+        PersonaSwitcher.createMenuItems(doc, menupopup, defaults, indexOffset);
     }
 };
 
