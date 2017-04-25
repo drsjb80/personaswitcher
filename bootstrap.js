@@ -31,8 +31,8 @@ function startup(data, reason)
     // Loading the stylesheet into all windows is a noticeable hit on
     // performance but is necessary for Thunderbird compatibility
     if (!styleSheetService.sheetRegistered(uri, 
-		styleSheetService.AUTHOR_SHEET)) 
-	{
+        styleSheetService.AUTHOR_SHEET)) 
+    {
         styleSheetService.
         loadAndRegisterSheet(uri, styleSheetService.AUTHOR_SHEET);
     }
@@ -41,7 +41,7 @@ function startup(data, reason)
     // load preferences
     Services.scriptloader.
     loadSubScript('chrome://personaswitcher/content/prefs.js', 
-		{pref: setDefaultPref});
+        {pref: setDefaultPref});
 
     Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
@@ -62,7 +62,7 @@ function shutdown(data, reason)
     // properly
     // http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
     if (reason == ADDON_DISABLE) 
-	{
+    {
         Services.obs.notifyObservers(null, "startupcache-invalidate", null);
     }
 
@@ -72,7 +72,7 @@ function shutdown(data, reason)
     Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
     if (styleSheetService.sheetRegistered(uri, styleSheetService.AUTHOR_SHEET)) 
-	{
+    {
         styleSheetService.unregisterSheet(uri, styleSheetService.AUTHOR_SHEET);
     }
 
@@ -92,7 +92,7 @@ function install(data, reason)
 function uninstall(data, reason) 
 {
     if(ADDON_UNINSTALL === reason) 
-	{
+    {
         removeUserPrefs();
     }
 }
@@ -119,19 +119,19 @@ function unloadFromWindow(window)
     let keySet = doc.getElementById("personaSwitcherKeyset");
 
     if (menu_personaswitcher !== null) 
-	{
+    {
         menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);
     }
     if (subMenu_personaswitcher !== null) 
-	{
+    {
         subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);
     }
     if (button !== null) 
-	{
+    {
         button.parentNode.removeChild(button);
     }
     if (keySet !== null) 
-	{
+    {
         keySet.parentNode.removeChild(keySet);
     }
 }
@@ -144,26 +144,26 @@ function forEachOpenWindow(applyThisFunc)
 var WindowListener = 
 {
     onOpenWindow: function(xulWindow) 
-	{
+    {
         var window = xulWindow.
         QueryInterface(Components.interfaces.nsIInterfaceRequestor).
         getInterface(Components.interfaces.nsIDOMWindow);
 
         function onWindowLoad() 
-		{
+        {
             window.removeEventListener('load', onWindowLoad);
             loadIntoWindow(window);
         }
         window.addEventListener('load', onWindowLoad);
     },
     onCloseWindow: function(xulWindow) 
-	{
-		
-	},
+    {
+        
+    },
     onWindowTitleChange: function(xulWindow, newTitle) 
-	{
-		
-	}
+    {
+        
+    }
 };
 
 // UI Injection
@@ -172,7 +172,7 @@ function injectMainMenu(doc)
     let menuBar;
     let menu_tools;
     switch (PersonaSwitcher.XULAppInfo.name) 
-	{
+    {
         case 'Icedove':
         case 'Thunderbird':
             menuBar = doc.getElementById("mail-menubar");
@@ -189,8 +189,8 @@ function injectMainMenu(doc)
             break;
     }
 
-    if (null === menuBar) 
-	{
+    if (menuBar === null) 
+    {
         return;
     }
 
@@ -204,21 +204,21 @@ function injectMainMenu(doc)
     menu_PSPopup.addEventListener(
         'popuphidden',
         function() 
-		{
+        {
             PersonaSwitcher.popupHidden();
         },
         false
     );
     menu_personaswitcher.appendChild(menu_PSPopup);
     
-    if (null === menu_tools) 
-	{
+    if (menu_tools === null) 
+    {
         menuBar.appendChild(menu_personaswitcher);
     } 
-	else 
-	{
+    else 
+    {
         menuBar.insertBefore(
-			menu_personaswitcher, menu_tools.nextSibling);        
+            menu_personaswitcher, menu_tools.nextSibling);        
     }
 }
 
@@ -227,7 +227,7 @@ function injectSubMenu(doc)
     let menuPopup;
     let subMenu_prefs;
     switch (PersonaSwitcher.XULAppInfo.name) 
-	{
+    {
         case 'Icedove':
         case 'Thunderbird':
         case 'SeaMonkey':
@@ -239,8 +239,8 @@ function injectSubMenu(doc)
             break;
     }
 
-    if (null === menuPopup) 
-	{
+    if (menuPopup === null) 
+    {
         return;
     }
 
@@ -254,7 +254,7 @@ function injectSubMenu(doc)
     subMenu_PSPopup.addEventListener(
         'popuphidden',
         function() 
-		{
+        {
             PersonaSwitcher.popupHidden();
         },
         false
@@ -269,7 +269,7 @@ function injectButton(window)
     let toolbox;
     let toolbar;
     switch (PersonaSwitcher.XULAppInfo.name) 
-	{
+    {
         case 'Icedove':
         case 'Thunderbird':
             toolbox = doc.getElementById("mail-toolbox");
@@ -283,13 +283,13 @@ function injectButton(window)
             break;
     }
 
-    if (null === toolbox) 
-	{
+    if (toolbox === null) 
+    {
         return;
     }
 
     function openOptions(event) 
-	{
+    {
         var features = "chrome,titlebar,toolbar,centerscreen";
         window.openDialog("chrome://personaswitcher/content/options.xul",
             "Preferences", features);
@@ -317,7 +317,7 @@ function injectButton(window)
     button_PSPopup.addEventListener(
         'popuphidden',
         function() 
-		{
+        {
             PersonaSwitcher.popupHidden();
         },
         false
@@ -325,7 +325,7 @@ function injectButton(window)
     button.appendChild(button_PSPopup);
 
     if (!existsIn(toolbox.palette.children, button)) 
-	{
+    {
         toolbox.palette.appendChild(button);
     }
 
@@ -335,9 +335,9 @@ function injectButton(window)
 function existsIn(list, desiredItem) 
 {
     for (var index = 0; index < list.length; index++) 
-	{
+    {
         if (list[index].id === desiredItem.id) 
-		{
+        {
             return true;
         }
     }
@@ -351,33 +351,33 @@ function moveButtonToToolbar(doc, toolbar, button)
     var currentset = toolbar.getAttribute("currentset").split(",");
     var index = currentset.indexOf(button.id);
     if (index == -1) 
-	{
+    {
         if (firstRun) 
-		{
+        {
             // No button yet so add it to the toolbar.
             toolbar.insertItem(button.id);
             toolbar.setAttribute("currentset", toolbar.currentSet);
             doc.persist(toolbar.id, "currentset");
         }
     } 
-	else 
-	{
+    else 
+    {
         // The id is in the currentset, so find the position and
         // insert the button there.
         var before = null;
 
         for (var i = index + 1; i < currentset.length; i++) 
-		{
+        {
             before = doc.getElementById(currentset[i]);
             if (before) 
-			{
+            {
                 toolbar.insertItem(button.id, before);
                 break;
             }
         }
 
         if (!before) 
-		{
+        {
             toolbar.insertItem(button.id);
         }
     }
@@ -388,7 +388,7 @@ function addKeyset(doc)
     // http://forums.mozillazine.org/viewtopic.php?t=2711165
     var mainWindow;
     switch (PersonaSwitcher.XULAppInfo.name) 
-	{
+    {
         case 'Icedove':
         case 'Thunderbird':
             mainWindow = doc.getElementById('messengerWindow');
@@ -400,8 +400,8 @@ function addKeyset(doc)
             break;
     }
 
-    if (null === mainWindow) 
-	{
+    if (mainWindow === null) 
+    {
         return;
     }
 
@@ -415,7 +415,7 @@ function addKeyset(doc)
 function getGenericPref(branch, prefName) 
 {
     switch (branch.getPrefType(prefName)) 
-	{
+    {
         default:
             case 0:
             return undefined; // PREF_INVALID
@@ -431,7 +431,7 @@ function getGenericPref(branch, prefName)
 function setGenericPref(branch, prefName, prefValue) 
 {
     switch (typeof prefValue) 
-	{
+    {
         case 'string':
             setUCharPref(prefName, prefValue, branch);
             return;
@@ -454,7 +454,7 @@ function getUCharPref(prefName, branch) // Unicode getCharPref
 {
     branch = branch ? branch : Services.prefs;
     return branch.getComplexValue(
-		prefName, Components.interfaces.nsISupportsString).data;
+        prefName, Components.interfaces.nsISupportsString).data;
 }
 
 function setUCharPref(prefName, text, branch) // Unicode setCharPref
@@ -478,8 +478,8 @@ function removeUserPrefs()
     "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
     "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
     "preview", "preview-delay", "icon-preview", "tools-submenu",
-	"main-menubar", "debug", "notification-workaround", "toolbox-minheight",
-	"startup-switch", "fastswitch", "current"];
+    "main-menubar", "debug", "notification-workaround", "toolbox-minheight",
+    "startup-switch", "fastswitch", "current"];
     
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService).

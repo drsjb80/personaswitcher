@@ -1,10 +1,12 @@
+"use strict";
+
 /* global Components, PersonaService, LightweightThemeManager, nextTheme, 
 theme, dump */
 /* eslint block-scoped-var: 0 */
 /* eslint no-global-assign: 0 */
 /* eslint no-native-reassign: 0 */
 
-//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
+// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 // no space between comment delimiters. really.
@@ -12,8 +14,7 @@ theme, dump */
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
-"use strict";
-//If this value is changed, it needs to be changed in options.xul as well
+// If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
 var EXPORTED_SYMBOLS = ["PersonaSwitcher"];
 
@@ -55,17 +56,17 @@ PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 PersonaSwitcher.log = function()
 {
     if (! PersonaSwitcher.prefs.getBoolPref ('debug')) 
-	{ 
-		return; 
-	}
+    { 
+        return; 
+    }
 
     var message = "";
 
     // create a stack frame via an exception
     try 
-	{ 
-		this.undef(); 
-	}
+    { 
+        this.undef(); 
+    }
     catch (e)
     {
         var frames = e.stack.split ('\n');
@@ -98,19 +99,19 @@ PersonaSwitcher.consoleLogger = null;
 try
 {
     PersonaSwitcher.consoleLogger = Components.utils.import(
-		"resource://devtools/Console.jsm", {}).console;
+        "resource://devtools/Console.jsm", {}).console;
     dump ("using devtools\n");
 
 }
 catch (e)
 {
-	
+    
 }
 
 try
 {
     PersonaSwitcher.consoleLogger = Components.utils.import(
-		"resource://gre/modules/devtools/Console.jsm", {}).console;
+        "resource://gre/modules/devtools/Console.jsm", {}).console;
     dump ("using gre\n");
 }
 catch (e)
@@ -121,7 +122,7 @@ catch (e)
 // TBird's and SeaMonkey consoles don't log our stuff
 // this is a hack. i need to clean this up...
 // http://stackoverflow.com/questions/16686888/thunderbird-extension-console-logging
-if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
+if (PersonaSwitcher.XULAppInfo.name === 'Thunderbird')
 {
     var Application = Components.classes["@mozilla.org/steel/application;1"]
                     .getService(Components.interfaces.steelIApplication);
@@ -129,8 +130,8 @@ if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
     PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = Application.console.log;
 } 
-else if (null === PersonaSwitcher.consoleLogger ||
-           'SeaMonkey' === PersonaSwitcher.XULAppInfo.name) 
+else if (PersonaSwitcher.consoleLogger === null ||
+            PersonaSwitcher.XULAppInfo.name === 'SeaMonkey') 
 {
     // nope, log to terminal
     PersonaSwitcher.consoleLogger = {};
@@ -140,8 +141,8 @@ else if (null === PersonaSwitcher.consoleLogger ||
 PersonaSwitcher.nullLogger = {};
 PersonaSwitcher.nullLogger.log = function (s) 
 { 
-	'use strict'; 
-	return; 
+    'use strict'; 
+    return; 
 };
 PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
 
@@ -151,11 +152,11 @@ PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
 
-//Default theme set to an object with an id property equal to the hard coded 
-//default theme id value. Necessary for Icedove compatibility as Icedove's 
-//default theme id is not the same, and thus cannot be found using the same 
-//defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
-//can be set back to null and the correct id can be queried instead.
+// Default theme set to an object with an id property equal to the hard coded 
+// default theme id value. Necessary for Icedove compatibility as Icedove's 
+// default theme id is not the same, and thus cannot be found using the same 
+// defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
+// can be set back to null and the correct id can be queried instead.
 PersonaSwitcher.defaultTheme = {id: '{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
 PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
 
@@ -196,10 +197,10 @@ PersonaSwitcher.prefsObserver =
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
 
-        if ('nsPref:changed' !== topic) 
-		{ 
-			return; 
-		}
+        if (topic !== 'nsPref:changed') 
+        { 
+            return; 
+        }
 
         switch (data)
         {
@@ -208,18 +209,18 @@ PersonaSwitcher.prefsObserver =
                 break;
             case 'toolbox-minheight':
                 PersonaSwitcher.allDocuments(
-					PersonaSwitcher.setToolboxMinheight);
+                    PersonaSwitcher.setToolboxMinheight);
                 break;
             case 'preview':
                 PersonaSwitcher.allDocuments(
-					PersonaSwitcher.createStaticPopups);
+                    PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
                 break;
             case 'icon-preview':
                 PersonaSwitcher.allDocuments(
-					PersonaSwitcher.createStaticPopups);
+                    PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
@@ -279,7 +280,7 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
 
                 PersonaSwitcher.allDocuments(
-					PersonaSwitcher.createStaticPopups);
+                    PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
@@ -303,7 +304,7 @@ PersonaSwitcher.allDocuments = function (func, index)
     {
         aWindow = enumerator.getNext();
         PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
-        if ('undefined' !== typeof(index)) 
+        if (typeof(index) !== 'undefined') 
         {
             func(aWindow.document, index);
         }
@@ -424,7 +425,7 @@ PersonaSwitcher.startTimer = function()
     if (minutes > 0)
     {
         PersonaSwitcher.timer.init(
-			PersonaSwitcher.timerObserver,
+            PersonaSwitcher.timerObserver,
             PersonaSwitcher.prefs.getBoolPref ('fastswitch') ? 10000 :
                 1000 * 60 * minutes,
             Components.interfaces.nsITimer.TYPE_REPEATING_SLACK
@@ -452,9 +453,9 @@ PersonaSwitcher.removeNotification = function (win)
     var notificationBox = null;
     var name = PersonaSwitcher.XULAppInfo.name;
 
-    if ('Firefox' === name || 'SeaMonkey' === name || 'Pale Moon' === name)
+    if (name === 'Firefox' || name === 'SeaMonkey' || name === 'Pale Moon')
     {
-        if ('function' === typeof (win.getBrowser))
+        if (typeof (win.getBrowser) === 'function')
         {
             var browser = win.getBrowser();
             if (browser)
@@ -463,18 +464,18 @@ PersonaSwitcher.removeNotification = function (win)
             }
         }
     }
-    else if ('Thunderbird' === name)
+    else if (name === 'Thunderbird')
     {
         notificationBox = 
             win.document.getElementById ('mail-notification-box');
     }
 
-    if (null !== notificationBox)
+    if (notificationBox !== null)
     {
         var notification = notificationBox.getNotificationWithValue(
-			'lwtheme-install-notification');
+            'lwtheme-install-notification');
 
-        if (null !== notification)
+        if (notification !== null)
         {
             notificationBox.removeNotification (notification);
         }
@@ -486,7 +487,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     PersonaSwitcher.logger.log (toWhich);
     PersonaSwitcher.allDocuments(PersonaSwitcher.setCurrentTheme, index);
 
-    PersonaSwitcher.currentIndex = 'undefined' !== typeof(index) ? 
+    PersonaSwitcher.currentIndex = typeof(index) !== 'undefined' ? 
                                             index :
                                             PersonaSwitcher.currentIndex;
     
@@ -499,11 +500,11 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     {
         PersonaSwitcher.logger.log ('using PP');
 
-        if ('{gh y972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
+        if (toWhich.id === '{gh y972ce4c6-7e08-4474-a285-3208198ce6fd}')
         {
             PersonaService.changeToDefaultPersona();
         }
-        else if (1 === toWhich.id)
+        else if (toWhich.id === 1)
         {
             PersonaService.changeToPersona (PersonaService.customPersona);
         }
@@ -512,20 +513,20 @@ PersonaSwitcher.switchTo = function (toWhich, index)
             PersonaService.changeToPersona (toWhich);
         }
     } 
-	else 
-	{
+    else 
+    {
         PersonaSwitcher.logger.log ('using themeChanged');
 
-        if ('undefined' === typeof(toWhich) || null === toWhich) 
-		{
+        if (typeof(toWhich) === 'undefined' || toWhich === null) 
+        {
             LightweightThemeManager.themeChanged(null);
         } 
-		else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id) 
-		{
+        else if(toWhich.id === '{972ce4c6-7e08-4474-a285-3208198ce6fd}') 
+        {
             LightweightThemeManager.themeChanged(null);
         } 
-		else 
-		{
+        else 
+        {
             LightweightThemeManager.themeChanged(toWhich);
         }
     }
@@ -553,11 +554,11 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 // check mark to be displayed. This is similar to Windows which
                 // simply displays the check mark over the theme's icon.
 
-                if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
-				{
+                if (PersonaSwitcher.XULRuntime.OS === "Linux") 
+                {
                     var value = themes[PersonaSwitcher.currentIndex].value;
-                    if('undefined' !== typeof(value) && null !== value) 
-					{
+                    if(typeof(value) !== 'undefined' && value !== null) 
+                    {
                         themes[PersonaSwitcher.currentIndex].
                             setAttribute('image', value);
                     }
@@ -565,14 +566,14 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 }
 
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-				themes[index].setAttribute("checked", "true");
+                themes[index].setAttribute("checked", "true");
             }
         }
     }
 
     var buttonMenu = 
             PersonaSwitcher.getButtonPopup(doc, 'personaswitcher-button');
-    if (null !== buttonMenu)
+    if (buttonMenu !== null)
     {        
         themes =  buttonMenu.children;
 
@@ -580,11 +581,11 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if(themes[PersonaSwitcher.currentIndex])
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
-            if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
-			{
+            if (PersonaSwitcher.XULRuntime.OS === "Linux") 
+            {
                 value = themes[PersonaSwitcher.currentIndex].value;
-                if('undefined' !== typeof(value) && null !== value) 
-				{
+                if(typeof(value) !== 'undefined' && value !== null) 
+                {
                     themes[PersonaSwitcher.currentIndex].
                         setAttribute('image', value);
                 }
@@ -596,14 +597,14 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         {
             PersonaSwitcher.logger.log(themes[index]);
             theme = themes[index];
-            if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
-			{
+            if (PersonaSwitcher.XULRuntime.OS === "Linux") 
+            {
                 theme.removeAttribute('image');
             }
             theme.setAttribute("checked", "true");
             // This is a simple hack to ensure that the theme is redrawn in
             // certain versions of Thunderbird while being run on a Mac.
-            //http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
+            // http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
             nextTheme = theme.nextSibling;
             buttonMenu.removeChild(theme);
             buttonMenu.insertBefore(theme, nextTheme);
@@ -626,10 +627,10 @@ PersonaSwitcher.getPersonas = function()
         }
     }
     PersonaSwitcher.currentThemes.sort(
-		function (a, b) 
-		{ 
-			return a.name.localeCompare(b.name); 
-		});
+        function (a, b) 
+        { 
+            return a.name.localeCompare(b.name); 
+        });
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 };
 
@@ -665,12 +666,12 @@ PersonaSwitcher.onMenuItemCommand = function (which, index)
 */
 PersonaSwitcher.dump = function (object, max)
 {
-    if ('undefined' === typeof max) 
+    if (typeof max === 'undefined') 
     {
         max = 1;
     }
 
-    if (0 === max) 
+    if (max === 0) 
     {
         return;
     }
@@ -681,8 +682,8 @@ PersonaSwitcher.dump = function (object, max)
         {
             PersonaSwitcher.logger.log (property + '=' + object[property]);
 
-            if (null !== object[property] &&
-                'object' === typeof object[property])
+            if (object[property] !== null &&
+                typeof object[property] === 'object')
             {
                 PersonaSwitcher.dump (object[property], max-1);
             }
