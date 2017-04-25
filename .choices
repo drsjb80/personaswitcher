@@ -15,3 +15,7 @@ cp personaswitcher.xpi personaswitcher-`cat VERSION`.xpi
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
+----
+open https://addons.mozilla.org/en-US/developers/addon/personaswitcher/versions
+open https://hg.mozilla.org/mozilla-central/tags
+open https://www.mozilla.org/en-US/about/forums/
