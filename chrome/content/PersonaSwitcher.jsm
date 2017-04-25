@@ -593,6 +593,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
 
 PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
     PersonaSwitcher.logger.log(newTheme + " " + currentTheme);
+
     switch(newTheme.localeCompare(currentTheme)) 
     {
         case APPEARS_HIGHER_IN_LIST:
@@ -604,19 +605,26 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
         case SAME:
             // If the current theme is the one that gets removed, the theme is
             // set to the default.
-            PersonaSwitcher.prefs.setIntPref('current', PersonaSwitcher.currentThemes.length);
-            PersonaSwitcher.currentIndex = PersonaSwitcher.currentThemes.length;
-            PersonaSwitcher.logger.log("New Index: " + PersonaSwitcher.currentIndex);
+            var newIndex = PersonaSwitcher.currentThemes.length + 
+                                PersonaSwitcher.defaultThemes.length - 1;
+            PersonaSwitcher.prefs.setIntPref('current', newIndex);
+            PersonaSwitcher.currentIndex = newIndex;
+            PersonaSwitcher.logger.log("New Index: " + newIndex);
             break;
-        case APPEARS_LOWER_IN_LIST:
-            //No need to change,
+        case APPEARS_LOWER_IN_LIST:            
+            if(isDefaultTheme(currentTheme)) {
+                var index = PersonaSwitcher.prefs.getIntPref('current');
+                index--;
+                PersonaSwitcher.prefs.setIntPref('current', index);
+                PersonaSwitcher.currentIndex = index;
+            }
             break;
         default:
             break;
     }
 };
 
-PersonaSwitcher.updateIndexOnAdd = function(newTheme, currentTheme) {
+PersonaSwitcher.updateIndexOnAdd = function(newTheme) {
     var index;
     for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
         if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(PersonaSwitcher.currentThemes[index].name)) {
@@ -624,11 +632,11 @@ PersonaSwitcher.updateIndexOnAdd = function(newTheme, currentTheme) {
             PersonaSwitcher.currentIndex = index;
             return;
         }
-        //Otherwise the new theme will be at the bottom of the list
-        PersonaSwitcher.prefs.setIntPref('current', index);
-        PersonaSwitcher.currentIndex = index;
-
     }
+    
+    //Otherwise the new theme will be at the bottom of the list
+    PersonaSwitcher.prefs.setIntPref('current', index);
+    PersonaSwitcher.currentIndex = index;
 };
 
 PersonaSwitcher.getPersonas = function()

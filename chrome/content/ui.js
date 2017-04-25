@@ -232,16 +232,16 @@ PersonaSwitcher.AddonListener =
     // pane and don't need to be monitored
     onInstalled: function (addon)
     {
-        var currentThemeName = 
-            PersonaSwitcher.currentThemes[
-                                PersonaSwitcher.prefs.getIntPref('current')
-                            ].name;
+        if('undefined' === typeof(PersonaSwitcher)) {
+            return;
+        }
+        
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if ('theme' === addon.type)
         {
-            PersonaSwitcher.updateIndexOnAdd(addon.name, currentThemeName);
+            PersonaSwitcher.updateIndexOnAdd(addon.name);
             PersonaSwitcher.allDocuments(PersonaSwitcher.createStaticPopups);
         }
     },
@@ -250,16 +250,21 @@ PersonaSwitcher.AddonListener =
         if('undefined' === typeof(PersonaSwitcher)) {
             return;
         }
-        var currentThemeName = 
-            PersonaSwitcher.currentThemes[
-                                PersonaSwitcher.prefs.getIntPref('current')
-                            ].name;
+
+        var currentThemeName;
+        var currentIndex = PersonaSwitcher.prefs.getIntPref('current');
+
+        if(PersonaSwitcher.currentThemes.length > currentIndex) { 
+            currentThemeName = PersonaSwitcher.currentThemes[currentIndex].name;
+        } else {
+            currentIndex -= PersonaSwitcher.currentThemes.length;
+            currentThemeName = PersonaSwitcher.defaultThemes[currentIndex].name;
+        }
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if ('theme' === addon.type)
         {
-            PersonaSwitcher.getPersonas();
             PersonaSwitcher.updateIndexOnRemove(addon.name, currentThemeName);
             PersonaSwitcher.allDocuments(PersonaSwitcher.createStaticPopups);
         }
