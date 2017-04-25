@@ -706,7 +706,8 @@ PersonaSwitcher.rotateKey = function()
 PersonaSwitcher.setDefault = function()
 {
     PersonaSwitcher.logger.log("in setDefault");
-    var indexOfDefault = PersonaSwitcher.currentThemes.length;
+    var indexOfDefault = PersonaSwitcher.currentThemes.length + 
+                            PersonaSwitcher.defaultThemes.length;
     PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme, indexOfDefault);
     PersonaSwitcher.stopTimer();
 };
