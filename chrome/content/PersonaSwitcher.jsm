@@ -1,5 +1,3 @@
-"use strict";
-
 /* global Components, PersonaService, LightweightThemeManager, nextTheme, 
 theme, dump */
 /* eslint block-scoped-var: 0 */
@@ -14,6 +12,7 @@ theme, dump */
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
+"use strict";
 // If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
 var EXPORTED_SYMBOLS = ["PersonaSwitcher"];
