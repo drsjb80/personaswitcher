@@ -360,7 +360,7 @@ PersonaSwitcher.rotate = function()
     {
         var prevIndex = newIndex;
         // pick a number between 1 and the end until a new index is found
-        while(newIndex === prevIndex) 
+        while(newIndex === prevIndex || PersonaSwitcher.isBlackListed(newIndex)) 
         {
             newIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
@@ -368,13 +368,22 @@ PersonaSwitcher.rotate = function()
     }
     else
     {
-        newIndex = (PersonaSwitcher.currentIndex + 1) %
-            PersonaSwitcher.currentThemes.length;
+        do {
+            newIndex = (newIndex + 1) % PersonaSwitcher.currentThemes.length;
+        } while (PersonaSwitcher.isBlackListed(newIndex));
     }
     
     PersonaSwitcher.logger.log (newIndex);
     PersonaSwitcher.switchTo(PersonaSwitcher.currentThemes[newIndex], newIndex);
 };
+
+PersonaSwitcher.isBlackListed = function(index) {
+    var themeName = PersonaSwitcher.currentThemes[index].name;
+    return  "Compact Dark"  === themeName || 
+            "Compact Light" === themeName || 
+            "Default"       === themeName;
+};
+
 // ---------------------------------------------------------------------------
 
 PersonaSwitcher.timer = Components.classes['@mozilla.org/timer;1'].
@@ -412,8 +421,6 @@ PersonaSwitcher.startTimer = function()
 
 PersonaSwitcher.stopTimer = function()
 {
-    PersonaSwitcher.logger.log();
-
     PersonaSwitcher.timer.cancel();
 };
 
@@ -487,12 +494,10 @@ PersonaSwitcher.switchTo = function (toWhich, index)
         }
         else if (1 === toWhich.id)
         {
-            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (PersonaService.customPersona);
         }
         else
         {
-            PersonaSwitcher.logger.log();
             PersonaService.changeToPersona (toWhich);
         }
     } else {
@@ -524,6 +529,22 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             var themes =  menu.children;
             if(themes[PersonaSwitcher.currentIndex])
             {
+                // Because Linux is layering the icon on top of the check mark,
+                // special handling needs to be provided for Linux users.  
+                // To remain as consistent as possible, the icon for the
+                // currently selected theme is turned off in Linux allowing the 
+                // check mark to be displayed. This is similar to Windows which
+                // simply displays the check mark over the theme's icon.
+
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                    var value = themes[PersonaSwitcher.currentIndex].value;
+                    if('undefined' !== typeof(value) && null !== value) {
+                        themes[PersonaSwitcher.currentIndex].
+                            setAttribute('image', value);
+                    }
+                    themes[index].removeAttribute('image');
+                }
+
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
 	            themes[index].setAttribute("checked", "true");
             }
@@ -540,12 +561,23 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if(themes[PersonaSwitcher.currentIndex])
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                var value = themes[PersonaSwitcher.currentIndex].value;
+                if('undefined' !== typeof(value) && null !== value) {
+                    themes[PersonaSwitcher.currentIndex].
+                        setAttribute('image', value);
+                }
+                themes[index].removeAttribute('image');
+            }
             themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
         }
         if(themes[index])
         {
             PersonaSwitcher.logger.log(themes[index]);
             theme = themes[index];
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                theme.removeAttribute('image');
+            }
             theme.setAttribute("checked", "true");
             // This is a simple hack to ensure that the theme is redrawn in
             // certain versions of Thunderbird while being run on a Mac.
@@ -554,6 +586,52 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             buttonMenu.removeChild(theme);
             buttonMenu.insertBefore(theme, nextTheme);
         }
+    }
+};
+
+PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
+    const APPEARS_HIGHER_IN_LIST = -1;
+    const SAME = 0;
+    const APPEARS_LOWER_IN_LIST = 1;
+
+    PersonaSwitcher.logger.log(newTheme + " " + currentTheme);
+    switch(newTheme.localeCompare(currentTheme)) 
+    {
+        case APPEARS_HIGHER_IN_LIST:
+            var index = PersonaSwitcher.prefs.getIntPref('current');
+            index--;
+            PersonaSwitcher.prefs.setIntPref('current', index);
+            PersonaSwitcher.currentIndex = index;
+            break;
+        case SAME:
+            // If the current theme is the one that gets removed, the theme is
+            // set to the default.
+            PersonaSwitcher.prefs.setIntPref('current', PersonaSwitcher.currentThemes.length);
+            PersonaSwitcher.currentIndex = PersonaSwitcher.currentThemes.length;
+            PersonaSwitcher.logger.log("New Index: " + PersonaSwitcher.currentIndex);
+            break;
+        case APPEARS_LOWER_IN_LIST:
+            //No need to change,
+            break;
+        default:
+            break;
+    }
+};
+
+PersonaSwitcher.updateIndexOnAdd = function(newTheme, currentTheme) {
+    const APPEARS_HIGHER_IN_LIST = -1;
+
+    var index;
+    for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
+        if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(PersonaSwitcher.currentThemes[index].name)) {
+            PersonaSwitcher.prefs.setIntPref('current', index);
+            PersonaSwitcher.currentIndex = index;
+            return;
+        }
+        //Otherwise the new theme will be at the bottom of the list
+        PersonaSwitcher.prefs.setIntPref('current', index);
+        PersonaSwitcher.currentIndex = index;
+
     }
 };
 
