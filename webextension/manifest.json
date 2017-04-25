@@ -1,0 +1,52 @@
+{
+	"manifest_version": 2,
+  "name": "__MSG_extensionName__",
+	"short_name": "__MSG_extensionShortName__",
+  "description": "__MSG_extensionDescription__",
+  "version": "4.0.0",
+  "default_locale": "en_US",
+	
+	"developer": {
+    "name": "Steve Beaty",
+    "url": "https://github.com/drsjb80/personaswitcher"
+	},
+
+  "background": {
+    "scripts": ["background_scripts/WEPersonaSwitcher.js"]
+  },
+	
+	"options_ui": {
+		"page": "preferences/options.html"
+	},
+	
+  "browser_action": {
+	  "browser_style": true,
+    "default_icon": {
+      "16": "icons/PersonaSwitcher16.png",
+      "32": "icons/PersonaSwitcher32.png",
+      "64": "icons/PersonaSwitcher64.png"
+    },
+    "default_title": "PersonaSwitcherMenu",
+    "default_popup": "browser_action/popup.html"
+  },
+
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+P"
+      }
+    }
+  },
+
+  "icons": {
+    "48": "icons/PersonaSwitcher48.png"
+  },
+
+  "permissions": [
+		"activeTab",
+		"tabs",
+		"storage",
+		"alarms",
+		"contextMenus"
+  ]
+}
