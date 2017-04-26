@@ -601,7 +601,7 @@ PersonaSwitcher.getButtonPopup =  function(doc, id)
     return doc.getElementById('personaswitcher-button-popup');
 };
 
-PersonaSwitcher.setDefaultTheme = function (doc)
+PersonaSwitcher.setDefaultTheme = function (resolve, reject)
 {
     PersonaSwitcher.logger.log('in setDefaultTheme');
 
@@ -618,12 +618,7 @@ PersonaSwitcher.setDefaultTheme = function (doc)
                 {
                     PersonaSwitcher.defaultTheme = theme;
                 }
-                PersonaSwitcher.createStaticPopups(doc);
-                PersonaSwitcher.currentIndex =
-                    PersonaSwitcher.prefs.getIntPref ("current");
-                PersonaSwitcher.switchTo 
-                    (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-                     PersonaSwitcher.currentIndex);
+                resolve();
             }
         );
     }
@@ -636,13 +631,7 @@ PersonaSwitcher.setDefaultTheme = function (doc)
         {
             PersonaSwitcher.defaultTheme = theme;
         }
-        
-        PersonaSwitcher.createStaticPopups(doc);
-        PersonaSwitcher.currentIndex =
-            PersonaSwitcher.prefs.getIntPref ("current");
-        PersonaSwitcher.switchTo 
-            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-             PersonaSwitcher.currentIndex);
+        resolve();
     }
 };
 
@@ -659,15 +648,22 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.startTimer();
         PersonaSwitcher.themeMonitor();
 
-        // Due to the asynchronous call to the addon manager, this also sets up
-        // the menus, assigns the current index and switches to the current 
-        // theme. bleah.
-        PersonaSwitcher.setDefaultTheme(doc);
+        var retrieveDefaultTheme = new Promise(PersonaSwitcher.setDefaultTheme);
 
-        if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
-        {
-            PersonaSwitcher.rotate();
-        }
+        retrieveDefaultTheme.then(() => {
+            PersonaSwitcher.createStaticPopups(doc);
+            PersonaSwitcher.currentIndex =
+                PersonaSwitcher.prefs.getIntPref ("current");
+
+            if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
+            {
+                PersonaSwitcher.rotate();
+            } else {
+                PersonaSwitcher.switchTo 
+                    (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+                     PersonaSwitcher.currentIndex);
+            }
+        });
     }
     else
     {
