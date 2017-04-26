@@ -51,4 +51,3 @@ zip personaswitcher.xpi \
 	webextension/icons/PersonaSwitcher64.png \
 	webextension/preferences/options.html \
 	webextension/preferences/options.js
-
