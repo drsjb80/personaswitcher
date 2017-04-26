@@ -158,10 +158,13 @@ function messageHandler(message, sender, sendResponse)
             break;
         case "Return-Theme-List":
             PersonaSwitcher.getPersonas();
-            let themeListPromise = new Promise(getThemeList);
+            let checkForDefault = new Promise(loadDefaultIfNeeded);
 
-            themeListPromise.then( (themeList) => {
-                sendResponse({themes: themeList});
+            checkForDefault.then( () => {
+                sendResponse({
+                    themes: PersonaSwitcher.currentThemes, 
+                    defaults: PersonaSwitcher.defaultThemes
+                });
                 PersonaSwitcher.themeListChanged = false;
             });
             //Because we are leaving the message handler before sendResponse is
@@ -194,40 +197,41 @@ function messageHandler(message, sender, sendResponse)
     }
 }
 
-function getThemeList(resolve, reject) {
-    var themeList = PersonaSwitcher.currentThemes;
+function loadDefaultIfNeeded(resolve, reject) {
+    var defaults = PersonaSwitcher.defaultThemes;
+    var defaultName = defaults[defaults.length-1].name;
 
-    if('undefined' === typeof(PersonaSwitcher.defaultTheme.name)) {
+    if('undefined' === typeof(defaultName)) {
         AddonManager.getAddonByID
         (
             PersonaSwitcher.defaultThemeId,
             function (theme)
             {
                 if (null !== theme)
-                {
-                    PersonaSwitcher.defaultTheme = theme;
+                {                
                     var defaultTheme = 
                     {
-                        id: PersonaSwitcher.defaultTheme.id, 
-                        name: PersonaSwitcher.defaultTheme.name, 
-                        iconURL: PersonaSwitcher.defaultTheme.iconURL
+                        id: theme.id,
+                        name: theme.name,
+                        iconURL: theme.iconURL
                     };
+                    PersonaSwitcher.defaultTheme = defaultTheme;
                 }
             
-                themeList.push(defaultTheme);
-                resolve(themeList);
+                defaults[defaults.length-1] = PersonaSwitcher.defaultTheme;
+                resolve();
             }
         );
     } else {
         var defaultTheme = 
-            {
-                id: PersonaSwitcher.defaultTheme.id, 
-                name: PersonaSwitcher.defaultTheme.name, 
-                iconURL: PersonaSwitcher.defaultTheme.iconURL
-            };
-    
-        themeList.push(defaultTheme);
-        resolve(themeList);
+        {
+            id: PersonaSwitcher.defaultTheme.id,
+            name: PersonaSwitcher.defaultTheme.name,
+            iconURL: PersonaSwitcher.defaultTheme.iconURL
+        };
+        PersonaSwitcher.defaultTheme = defaultTheme;
+        defaults[defaults.length-1] = PersonaSwitcher.defaultTheme;
+        resolve();        
     }
 }
 

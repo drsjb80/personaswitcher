@@ -243,16 +243,12 @@ PersonaSwitcher.AddonListener =
     // pane and don't need to be monitored
     onInstalled: function (addon)
     {
-        var currentThemeName = 
-            PersonaSwitcher.currentThemes[
-                                PersonaSwitcher.prefs.getIntPref('current')
-                            ].name;
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if ('theme' === addon.type)
         {
-            PersonaSwitcher.updateIndexOnAdd(addon.name, currentThemeName);
+            PersonaSwitcher.updateIndexOnAdd(addon.name);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
             PersonaSwitcher.themeListChanged = true;
         }
@@ -262,16 +258,20 @@ PersonaSwitcher.AddonListener =
         if('undefined' === typeof(PersonaSwitcher)) {
             return;
         }
-        var currentThemeName = 
-            PersonaSwitcher.currentThemes[
-                                PersonaSwitcher.prefs.getIntPref('current')
-                            ].name;
+        var currentThemeName;
+        var currentIndex = PersonaSwitcher.prefs.getIntPref('current');
+
+        if(PersonaSwitcher.currentThemes.length > currentIndex) { 
+            currentThemeName = PersonaSwitcher.currentThemes[currentIndex].name;
+        } else {
+            currentIndex -= PersonaSwitcher.currentThemes.length;
+            currentThemeName = PersonaSwitcher.defaultThemes[currentIndex].name;
+        }
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
         if ('theme' === addon.type)
         {
-            PersonaSwitcher.getPersonas();
             PersonaSwitcher.updateIndexOnRemove(addon.name, currentThemeName);
             PersonaSwitcher.allDocuments (PersonaSwitcher.createStaticPopups);
             PersonaSwitcher.themeListChanged = true;
@@ -344,6 +344,11 @@ PersonaSwitcher.previewObserver =
     {
         LightweightThemeManager.previewTheme (PersonaSwitcher.previewWhich);
     }
+};
+
+PersonaSwitcher.insertSeparator = function(doc, menupopup) {
+    var separator = doc.createElement("menuseparator");
+    menupopup.appendChild(separator);
 };
 
 /*
@@ -441,12 +446,12 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
     return (item);
 };
 
-PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
+PersonaSwitcher.createMenuItems = function (doc, menupopup, arr, indexOffset)
 {
     PersonaSwitcher.logger.log (menupopup.id);
+    indexOffset = 'undefined' === typeof(indexOffset) ? 0 : indexOffset;
 
-    var popup = 'personaswitcher-button-popup' ===  menupopup.id;
- 
+    var popup = 'personaswitcher-button-popup' ===  menupopup.id; 
 
     var item = null;
 
@@ -454,18 +459,11 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr)
     {
         PersonaSwitcher.logger.log (i);
         PersonaSwitcher.logger.log (arr[i]);
-        item = PersonaSwitcher.createMenuItem (doc, arr[i], i);
+        item = PersonaSwitcher.createMenuItem (doc, arr[i], i + indexOffset);
         if (item)
         {
             menupopup.appendChild (item);
         }
-    }
-    
-    item = PersonaSwitcher.createMenuItem(doc, PersonaSwitcher.defaultTheme, 
-                                          arr.length);
-    if (item)
-    {
-        menupopup.appendChild (item);
     }
 };
 
@@ -480,9 +478,11 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
         menupopup.removeChild (menupopup.firstChild);
     }
 
-    var arr = PersonaSwitcher.currentThemes;
+    var themes = PersonaSwitcher.currentThemes;
+    var defaults = PersonaSwitcher.defaultThemes;
+    var indexOffset = PersonaSwitcher.currentThemes.length+1;
 
-    if (0 === arr.length)
+    if (0 === themes.length)
     {
         PersonaSwitcher.logger.log ('no themes');
 
@@ -497,7 +497,9 @@ PersonaSwitcher.createMenuPopupWithDoc = function (doc, menupopup)
     }
     else
     {
-        PersonaSwitcher.createMenuItems (doc, menupopup, arr);
+        PersonaSwitcher.createMenuItems (doc, menupopup, themes);
+        PersonaSwitcher.insertSeparator (doc, menupopup);
+        PersonaSwitcher.createMenuItems (doc, menupopup, defaults, indexOffset);
     }
 };
 
@@ -639,7 +641,6 @@ PersonaSwitcher.onWindowLoad = function (doc)
 
         PersonaSwitcher.setLogger();
         PersonaSwitcher.logger.log ('first time');
-        PersonaSwitcher.getPersonas();
         PersonaSwitcher.themeMonitor();
 
         // Due to the asynchronous call to the addon manager, this also sets up
