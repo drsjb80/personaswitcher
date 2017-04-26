@@ -235,7 +235,7 @@ PersonaSwitcher.AddonListener =
         if('undefined' === typeof(PersonaSwitcher)) {
             return;
         }
-        
+
         PersonaSwitcher.logger.log (addon.type);
         PersonaSwitcher.logger.log (addon.name);
         
@@ -657,7 +657,6 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.setLogger();
         PersonaSwitcher.logger.log ('first time');
         PersonaSwitcher.startTimer();
-        PersonaSwitcher.getPersonas();
         PersonaSwitcher.themeMonitor();
 
         // Due to the asynchronous call to the addon manager, this also sets up
