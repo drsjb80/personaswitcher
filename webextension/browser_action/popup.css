@@ -21,3 +21,8 @@ html, body {
 	border: none;
     background-color: #FFFFFF;
 }
+
+.menu-separator{
+  display: inline-block;
+  width: 102%;
+}
