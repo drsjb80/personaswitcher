@@ -8,6 +8,7 @@ Local $testName = "Preview Persona Preferences Tests" ;
 Local $tests[5]
 
 InitializeFirefox()
+ResetToDefaultTheme()
 Local $themeList = GetInstalledThemeIds()
 
 ; run tests and store results
@@ -15,7 +16,8 @@ $tests[0] = PreviewPersonaMinDelayTime()
 $tests[1] = PreviewPersonaMaxDelayTime()
 ; Enable the Preview Persona preference with 10000 ms for rest of tests
 EnablePreviewPersonaWithTime()
-$tests[2] = PreviewThemeOnIcon($themeList)
+; !!! OpenPersonaSwitcherButton() function in PsTestingLibrary not currently working, test omitted
+$tests[2] = "ERROR - test must be updated for webextension" ; PreviewThemeOnIcon($themeList)
 $tests[3] = PreviewThemeOnPSwitcherMenuBar($themeList)
 $tests[4] = PreviewThemeOnToolsMenu($themeList)
 
@@ -177,7 +179,7 @@ Func PreviewPersonaMinDelayTime()
    Local $zeroValueCopy = SetPsOption('preview-delay', "0", True)
 
    ; check that value is set to the min
-   If $zeroValueCopy == "0" AND $negativeValueCopy <> "-1" Then
+   If $zeroValueCopy = "0" And Not $negativeValueCopy == "-1" Then
 	  $testPassed = True
       $sDescription = "value -1 for the preference was not accepted, but value 0 was accepted because the min is 0"
    Else

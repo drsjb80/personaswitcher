@@ -29,8 +29,10 @@ EndFunc
 ; Returns - ThemeID is empty string			True
 ;           ThemeID is not empty string		False
 ; ==============================================================================
-Func ResetToDefaultThemePS()
-   _FFCmd("PersonaSwitcher.setDefault()")
+Func ResetToDefaultTheme()
+   WinActivate("[CLASS:MozillaWindowClass]")
+   WinWaitActive("[CLASS:MozillaWindowClass]")
+   Send("^!d")
    Sleep(500)
 
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
