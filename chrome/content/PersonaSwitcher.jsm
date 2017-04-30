@@ -4,12 +4,12 @@
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 // no space between comment delimiters. really.
+"use strict";
 
 Components.utils.import("resource://gre/modules/Console.jsm");
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
-// "use strict";
 	
 // If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
@@ -571,7 +571,7 @@ PersonaSwitcher.extractDefaults = function() {
     // necessitate evaluation of a majority of the array and we want to make
     // this as quick as possible. As such, we account for the removal of items
     // while iterating over the array by decrementing the index to compensate.
-    for(index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
+    for(var index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
         theme = PersonaSwitcher.currentThemes[index];
         if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) {
             continue;

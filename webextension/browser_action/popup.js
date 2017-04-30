@@ -1,4 +1,5 @@
 /* global browser */
+'use strict';
 
 var backgroundPage;
 function appendMenu(page) 
