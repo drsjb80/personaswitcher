@@ -1,17 +1,21 @@
-var preferences = [ "defaultKeyShift", "defaultKeyControl", "defaultKeyAlt",
+/* global browser */
+
+var preferences = ["defaultKeyShift", "defaultKeyControl", "defaultKeyAlt",
                     "defaultKeyMeta", "defaultKeyAccel", "defaultKeyOS",
                     "defaultKey", "rotateKeyShift", "rotateKeyControl",
                     "rotateKeyAlt", "rotateKeyMeta", "rotateKeyAccel",
-                    "rotateKeyOS", "rotateKey", "autoKeyShift", "autoKeyControl",
-                    "autoKeyAlt", "autoKeyMeta", "autoKeyAccel", "autoKeyOS",
-                    "autoKey", "accessKey", "activateKeyShift", 
-                    "activateKeyControl", "activateKeyAlt", "activateKeyMeta",
+                    "rotateKeyOS", "rotateKey", "autoKeyShift", 
+                    "autoKeyControl", "autoKeyAlt", "autoKeyMeta", 
+                    "autoKeyAccel", "autoKeyOS", "autoKey", "accessKey", 
+                    "activateKeyShift", "activateKeyControl", 
+                    "activateKeyAlt", "activateKeyMeta",
                     "activateKeyAccel", "activateKeyOs", "activateKey",
                     "toolsKeyShift", "toolsKeyControl", "toolsKeyAlt",
                     "toolsKeyMeta", "toolsKeyAccel", "toolsKeyOs", "toolsKey",
                     "auto", "autoMinutes", "random", "startupSwitch", "preview",
-                    "previewDelay", "iconPreview", "toolboxMinHeight", "toolsMenu",
-                    "mainMenuBar", "debug", "fastSwitch", "toolboxMaxHeight"];
+                    "previewDelay", "iconPreview", "toolboxMinHeight", 
+                    "toolsMenu", "mainMenuBar", "debug", "fastSwitch", 
+                    "toolboxMaxHeight"];
 
 var defaultKeyShiftObject = document.querySelector("#default-key-shift");
 var defaultKeyControlObject = document.querySelector("#default-key-control");
@@ -120,7 +124,7 @@ function saveOptions(e)
         });
     setting.catch(onError);
 
-    //Update hint on minimum toolbox height preference
+    // Update hint on minimum toolbox height preference
     updateMaxHeight(toolboxMaxHeightObject.value);
 }
 
@@ -166,7 +170,7 @@ function loadOptions()
         toolsKeyAccelObject.checked = result.toolsKeyAccel;
         toolsKeyOSObject.checked = result.toolsKeyOs;
         toolsKeyObject.value = result.toolsKey;
-		//Load the auto value from the bootstrap pref until shortcuts are migrated
+        // Load the auto value from the bootstrap pref until shortcuts are migrated
         autoObject.checked = results[1].auto;
         autoMinutesObject.value = result.autoMinutes;
         randomObject.checked = result.random;
@@ -182,34 +186,34 @@ function loadOptions()
         toolboxMaxHeightObject.value = result.toolboxMaxHeight;
 
         
-		//If the two auto preferences don't match, update the WebExtension's preference
+        // If the two auto preferences don't match, update the WebExtension's preference
         if(results[0].auto !== results[1].auto) 
         {
             browser.storage.local.set({auto: results[1].auto});
         }
 
-        //Update hint on minimum toolbox height preference
+        // Update hint on minimum toolbox height preference
         updateMaxHeight(result.toolboxMaxHeight);
 
-        //Update the visibility of the menu shortcut key preferences
+        // Update the visibility of the menu shortcut key preferences
         updateToolsMenuShortcutDisplay();
         updateMenuShortcutDisplay();
   }
 
-    	//Because the auto preference can be toggled silently in the bootstrap code
-    	//we need to load the preference from there instead of the WebExtension, and 
-    	//update the WebExtension's auto preference if necessary.
-  		var getting = Promise.all([
-        	browser.storage.local.get(preferences),
-        	browser.runtime.sendMessage({command: "Return-Pref-Auto"})
+        // Because the auto preference can be toggled silently in the bootstrap code
+        // we need to load the preference from there instead of the WebExtension, and 
+        // update the WebExtension's auto preference if necessary.
+        var getting = Promise.all([
+            browser.storage.local.get(preferences),
+            browser.runtime.sendMessage({command: "Return-Pref-Auto"})
         ]);
 
-  		getting.then(getCurrentPrefs, onError);
+        getting.then(getCurrentPrefs, onError);
 }
 
 // Send a request message to the background script to reload and store the  
 // default prefs. After a response message is received, reload the prefs on the 
-//menu.
+// menu.
 function resetOptions()
 {
     var backgroundPage = browser.extension.getBackgroundPage();
@@ -237,16 +241,16 @@ function localizeHtmlPage()
 // Shows or hides the advanced options menu
 function displayAdvanced()
 {
-	var advancedOptionsObject = document.getElementById("advancedOptions");
+    var advancedOptionsObject = document.getElementById("advancedOptions");
 
-	if(advancedOptionsObject.style.display === "block")
-	{
-		advancedOptionsObject.style.display = "none";
-	}
-	else
-	{
-		advancedOptionsObject.style.display = "block";
-	}
+    if(advancedOptionsObject.style.display === "block")
+    {
+        advancedOptionsObject.style.display = "none";
+    }
+    else
+    {
+        advancedOptionsObject.style.display = "block";
+    }
 }
 
 function updateMaxHeight(value)
@@ -260,8 +264,10 @@ function updateToolsMenuShortcutDisplay()
 {
     if(toolsMenuObject.checked)
     {
-        document.getElementById("options_kbshortcuts_tools").style.color = "black";
-        document.getElementById("toolsMenuShortcutOptions").style.color = "black";
+        document.getElementById("options_kbshortcuts_tools").
+            style.color = "black";
+        document.getElementById("toolsMenuShortcutOptions").
+            style.color = "black";
         toolsKeyShiftObject.disabled = false;
         toolsKeyControlObject.disabled = false;
         toolsKeyAltObject.disabled = false;
@@ -272,8 +278,10 @@ function updateToolsMenuShortcutDisplay()
     }
     else
     {
-        document.getElementById("options_kbshortcuts_tools").style.color = "gray";
-        document.getElementById("toolsMenuShortcutOptions").style.color = "gray";
+        document.getElementById("options_kbshortcuts_tools").
+            style.color = "gray";
+        document.getElementById("toolsMenuShortcutOptions").
+            style.color = "gray";
         toolsKeyShiftObject.disabled = true;
         toolsKeyControlObject.disabled = true;
         toolsKeyAltObject.disabled = true;
@@ -288,9 +296,12 @@ function updateMenuShortcutDisplay()
 {
     if(mainMenuBarObject.checked)
     {
-        document.getElementById("options_kbshortcuts_access").style.color = "black";
-        document.getElementById("options_kbshortcuts_activate").style.color = "black";
-        document.getElementById("menuShortcutOptions").style.color = "black";
+        document.getElementById("options_kbshortcuts_access").
+            style.color = "black";
+        document.getElementById("options_kbshortcuts_activate").
+            style.color = "black";
+        document.getElementById("menuShortcutOptions").
+            style.color = "black";
         accessKeyObject.disabled = false;
         activateKeyShiftObject.disabled = false;
         activateKeyControlObject.disabled = false;
@@ -302,9 +313,12 @@ function updateMenuShortcutDisplay()
     }
     else
     {
-        document.getElementById("options_kbshortcuts_access").style.color = "gray";
-        document.getElementById("options_kbshortcuts_activate").style.color = "gray";
-        document.getElementById("menuShortcutOptions").style.color = "gray";
+        document.getElementById("options_kbshortcuts_access").
+            style.color = "gray";
+        document.getElementById("options_kbshortcuts_activate").
+            style.color = "gray";
+        document.getElementById("menuShortcutOptions").
+            style.color = "gray";
         accessKeyObject.disabled = true;
         activateKeyShiftObject.disabled = true;
         activateKeyControlObject.disabled = true;
@@ -320,6 +334,9 @@ document.addEventListener('DOMContentLoaded', loadOptions);
 document.addEventListener('DOMContentLoaded', localizeHtmlPage);
 document.querySelector("form").addEventListener("submit", saveOptions);
 document.querySelector("form").addEventListener("reset", resetOptions);
-document.getElementById("advancedButton").addEventListener("click", displayAdvanced);
-document.getElementById("main-menubar").addEventListener("change", updateMenuShortcutDisplay);
-document.getElementById("tools-menu").addEventListener("change", updateToolsMenuShortcutDisplay);
+document.getElementById("advancedButton").addEventListener(
+    "click", displayAdvanced);
+document.getElementById("main-menubar").addEventListener(
+    "change", updateMenuShortcutDisplay);
+document.getElementById("tools-menu").addEventListener(
+    "change", updateToolsMenuShortcutDisplay);
