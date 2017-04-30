@@ -1,5 +1,6 @@
 /* global Components, Services, PersonaSwitcher, ADDON_DISABLE, 
 LightweightThemeManager */
+'use strict';
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
@@ -9,10 +10,6 @@ Cu.import('resource://gre/modules/AddonManager.jsm');
 var stringBundle = Services.strings.createBundle(
     'chrome://personaswitcher/locale/personaswitcher.properties?' + 
         Math.random());
-var styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].
-                            getService(Ci.nsIStyleSheetService);
-var uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css",
-                             null, null);
 
 function startup(data, reason) 
 {    
@@ -29,12 +26,6 @@ function startup(data, reason)
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/ui.js',
                       context, "UTF-8" /* The script's encoding */);
-
-
-    // https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
-    // Loading the stylesheet into all windows is a noticeable hit on performance 
-    // but is necessary for Thunderbird compatibility
-    styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
 
     forEachOpenWindow(loadIntoWindow);
     Services.wm.addListener(WindowListener);
@@ -61,12 +52,7 @@ function shutdown(data, reason)
     PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
     Services.wm.removeListener(WindowListener);
     AddonManager.removeAddonListener(PersonaSwitcher.AddonListener);
-    Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');    
-  
-    if (styleSheetService.sheetRegistered(uri, styleSheetService.USER_SHEET)) 
-    {
-        styleSheetService.unregisterSheet(uri, styleSheetService.USER_SHEET);
-    }
+    Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');   
   
     // https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_10_Bypass_cache_when_loading_properties_files/
     // HACK WARNING: The Addon Manager does not properly clear all addon related
