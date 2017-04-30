@@ -8,11 +8,12 @@ LightweightThemeManager, TYPE_THEME*/
 
 // https://addons.mozilla.org/en-US/firefox/pages/appversions/
 
-"use strict";
 // Services
 Components.utils.import('resource://gre/modules/Services.jsm');
 // 'import' for jslint
 Components.utils.import('resource://gre/modules/LightweightThemeManager.jsm');
+
+// "use strict";
 
 PersonaSwitcher.XULNS =
     'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';

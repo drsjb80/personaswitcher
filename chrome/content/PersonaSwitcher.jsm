@@ -1,5 +1,3 @@
-"use strict";
-
 /* global Components, PersonaService, LightweightThemeManager, dump */
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
@@ -11,6 +9,8 @@ Components.utils.import("resource://gre/modules/Console.jsm");
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
+// "use strict";
+	
 // If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
 const APPEARS_HIGHER_IN_LIST = -1;
