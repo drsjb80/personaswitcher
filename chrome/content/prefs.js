@@ -1,3 +1,5 @@
+/* global pref */
+
 // used to test the migration code:
 // pref ("extensions.themeswitcher.defshift", false);
 
@@ -53,7 +55,7 @@ pref ("extensions.personaswitcher.debug", false);
 pref ("extensions.personaswitcher.notification-workaround", true);
 
 pref ("extensions.personaswitcher.toolbox-minheight", "");
-//If this changes, change it in the options.xul as well
+// If this changes, change it in the options.xul as well
 pref ("extensions.personaswitcher.toolbox-maxheight", "200");
 
 pref ("extensions.personaswitcher.startup-switch", false);
@@ -64,4 +66,5 @@ pref ("extensions.personaswitcher.current", 0);
 
 // https://developer.mozilla.org/en/Localizing_extension_descriptions
 
-pref ("extensions.drsjb80@gmail.com.description", "chrome://personaswitcher/locale/overlay.properties");
+pref ("extensions.drsjb80@gmail.com.description", 
+    "chrome://personaswitcher/locale/overlay.properties");
