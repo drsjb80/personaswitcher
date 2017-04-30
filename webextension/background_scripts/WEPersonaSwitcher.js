@@ -113,6 +113,7 @@ function getMenuData()
 }
 
 var currentThemes;
+var defaultThemes;
 var browserActionMenu;
 function buildMenu(data) 
 {
@@ -120,10 +121,21 @@ function buildMenu(data)
     browserActionMenu = document.createElement("div");
     browserActionMenu.setAttribute("class", "menu");
     currentThemes = data[1].themes;
+    defaultThemes = data[1].defaults;
+    var indexOffset = currentThemes.length+1;
     for (var index = 0; index < currentThemes.length; index++) 
     {        
         browserActionMenu.
             appendChild(buildMenuItem(currentThemes[index], data[0], index));
+    }
+
+    insertSeparator();
+
+    for (var index = 0; index < defaultThemes.length; index++) 
+    {        
+        browserActionMenu.
+            appendChild(buildMenuItem(defaultThemes[index], data[0],
+                                                    index + indexOffset));
     }
     logger.log("Menu ", browserActionMenu);
 }
@@ -166,6 +178,12 @@ function createIcon(iconURL, iconPreview)
     }    
     return themeImg;
 }
+
+function insertSeparator() {
+    var separator = document.createElement("hr");
+    separator.setAttribute("class", "menu-separator");
+    browserActionMenu.appendChild(separator);
+};
 
 var clickListener = function(theTheme, theIndex) 
 { 
@@ -335,7 +353,7 @@ function rotate()
         {
             var prevIndex = newIndex;
             // pick a number between 1 and the end until a new index is found
-            while(newIndex === prevIndex || isBlacklisted(newIndex)) 
+            while(newIndex === prevIndex) 
             {
                 newIndex = Math.floor ((Math.random() *
                         (currentThemes.length-1)) + 1);
@@ -343,9 +361,13 @@ function rotate()
         }
         else
         {
-            do {
+            // If a default theme is active, rotate to the first non-default 
+            // theme
+            if(newIndex > currentThemes.length-1) {
+                newIndex = 0;
+            } else {
                 newIndex = (newIndex + 1) % currentThemes.length;
-            } while (isBlackListed(newIndex));
+            }
         }
 
         logger.log ("Current index after ", newIndex);
@@ -354,15 +376,6 @@ function rotate()
                                      theme: currentThemes[newIndex],
                                      index: newIndex});
     });    
-}
-
-function isBlackListed(index) {
-    var themeName = currentThemes[index].name;
-    if( "Compact Dark" === themeName || "Compact Light" === themeName || "Default" === themeName) {
-        return true;
-    }
-
-    return false;
 }
 
 function rotateOnStartup() 

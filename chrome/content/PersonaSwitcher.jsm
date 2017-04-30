@@ -13,6 +13,10 @@ Components.utils.
 
 // If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
+const APPEARS_HIGHER_IN_LIST = -1;
+const SAME = 0;
+const APPEARS_LOWER_IN_LIST = 1;
+
 var EXPORTED_SYMBOLS = ["PersonaSwitcher"];
 
 var PersonaSwitcher = {};
@@ -149,6 +153,7 @@ PersonaSwitcher.previewWhich = null;
 // can be set back to null and the correct id can be queried instead.
 PersonaSwitcher.defaultTheme = {id: '{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
 PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
+PersonaSwitcher.defaultThemes = [];
 
 PersonaSwitcher.addonManager = false;
 PersonaSwitcher.extensionManager = null;
@@ -156,7 +161,6 @@ PersonaSwitcher.extensionManager = null;
 PersonaSwitcher.themeListChanged = false;
 PersonaSwitcher.currentThemes = null;
 PersonaSwitcher.currentIndex = 0;
-PersonaSwitcher.prevThemeIcon = null;
 
 PersonaSwitcher.PersonasPlusPresent = true;
 try
@@ -370,7 +374,7 @@ PersonaSwitcher.rotate = function()
     {
         var prevIndex = newIndex;
         // pick a number between 1 and the end until a new index is found
-        while(newIndex === prevIndex || PersonaSwitcher.isBlackListed(newIndex)) 
+        while(newIndex === prevIndex) 
         {
             newIndex = Math.floor ((Math.random() *
             (PersonaSwitcher.currentThemes.length-1)) + 1);
@@ -378,21 +382,16 @@ PersonaSwitcher.rotate = function()
     }
     else
     {
-        do {
-            newIndex = (newIndex + 1) %
-                PersonaSwitcher.currentThemes.length;
-        } while (PersonaSwitcher.isBlackListed(newIndex));
+        //If a default theme is active, rotate to the first non-default theme
+        if(newIndex > PersonaSwitcher.currentThemes.length-1) {
+            newIndex = 0;
+        } else {
+            newIndex = (newIndex + 1) % PersonaSwitcher.currentThemes.length;
+        }
     }
     
     PersonaSwitcher.logger.log (newIndex);
     PersonaSwitcher.switchTo(PersonaSwitcher.currentThemes[newIndex], newIndex);
-};
-
-PersonaSwitcher.isBlackListed = function(index) {
-    var themeName = PersonaSwitcher.currentThemes[index].name;
-    return  "Compact Dark"  === themeName || 
-            "Compact Light" === themeName || 
-            "Default"       === themeName;
 };
 
 PersonaSwitcher.toggleAuto = function()
@@ -504,11 +503,8 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
 };
 
 PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
-    const APPEARS_HIGHER_IN_LIST = -1;
-    const SAME = 0;
-    const APPEARS_LOWER_IN_LIST = 1;
-
     PersonaSwitcher.logger.log(newTheme + " " + currentTheme);
+
     switch(newTheme.localeCompare(currentTheme)) 
     {
         case APPEARS_HIGHER_IN_LIST:
@@ -520,21 +516,26 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
         case SAME:
             // If the current theme is the one that gets removed, the theme is
             // set to the default.
-            PersonaSwitcher.prefs.setIntPref('current', PersonaSwitcher.currentThemes.length);
-            PersonaSwitcher.currentIndex = PersonaSwitcher.currentThemes.length;
-            PersonaSwitcher.logger.log("New Index: " + PersonaSwitcher.currentIndex);
+            var newIndex = PersonaSwitcher.currentThemes.length + 
+                                PersonaSwitcher.defaultThemes.length - 1;
+            PersonaSwitcher.prefs.setIntPref('current', newIndex);
+            PersonaSwitcher.currentIndex = newIndex;
+            PersonaSwitcher.logger.log("New Index: " + newIndex);
             break;
         case APPEARS_LOWER_IN_LIST:
-            //No need to change,
+            if(isDefaultTheme(currentTheme)) {
+                var index = PersonaSwitcher.prefs.getIntPref('current');
+                index--;
+                PersonaSwitcher.prefs.setIntPref('current', index);
+                PersonaSwitcher.currentIndex = index;
+            }
             break;
         default:
             break;
     }
 };
 
-PersonaSwitcher.updateIndexOnAdd = function(newTheme, currentTheme) {
-    const APPEARS_HIGHER_IN_LIST = -1;
-
+PersonaSwitcher.updateIndexOnAdd = function(newTheme) {
     var index;
     for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
         if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(PersonaSwitcher.currentThemes[index].name)) {
@@ -545,7 +546,6 @@ PersonaSwitcher.updateIndexOnAdd = function(newTheme, currentTheme) {
         //Otherwise the new theme will be at the bottom of the list
         PersonaSwitcher.prefs.setIntPref('current', index);
         PersonaSwitcher.currentIndex = index;
-
     }
 };
 
@@ -554,21 +554,54 @@ PersonaSwitcher.getPersonas = function()
     PersonaSwitcher.currentThemes = LightweightThemeManager.usedThemes;
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 
-    if (PersonaSwitcher.PersonasPlusPresent)
-    {
-        PersonaSwitcher.logger.log (PersonaService.favorites);
-        if (PersonaService.favorites)
-        {
-            PersonaSwitcher.currentThemes = PersonaSwitcher.currentThemes.
-                concat (PersonaService.favorites);
-        }
-    }
     PersonaSwitcher.currentThemes.
         sort(function (a, b) 
         { 
             return a.name.localeCompare(b.name); 
         });
+    PersonaSwitcher.extractDefaults();
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
+};
+
+PersonaSwitcher.extractDefaults = function() {
+    PersonaSwitcher.defaultThemes = [];
+    var defaultNotFound = true;
+    var theme;
+    // We do not want to iterate over the array backwards as that would
+    // necessitate evaluation of a majority of the array and we want to make
+    // this as quick as possible. As such, we account for the removal of items
+    // while iterating over the array by decrementing the index to compensate.
+    for(index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
+        theme = PersonaSwitcher.currentThemes[index];
+        if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) {
+            continue;
+        }else if(PersonaSwitcher.isDefaultTheme(theme.name)) {
+            PersonaSwitcher.defaultThemes.push(theme);
+            PersonaSwitcher.currentThemes.splice(index, 1);
+            index--;
+            // Currently the if is not needed as Default is the last of the
+            // defaults to check for. However, in case we expand the list of
+            // defaults in the future to include a default that appears lower in
+            // the list we need to make sure we don't override this flag once
+            // Default has been found. Note: the last if will have to be changed
+            // in such a case as well.
+            if(defaultNotFound) {
+                defaultNotFound = SAME !== theme.name.localeCompare("Default");
+            }
+        }else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Default")) {
+            break;
+        }
+    }
+
+    if(defaultNotFound) {
+        PersonaSwitcher.defaultThemes.push(PersonaSwitcher.defaultTheme);
+    }
+};
+
+PersonaSwitcher.isDefaultTheme = function(themeName) {
+    return  "Compact Dark"  === themeName || 
+            "Compact Light" === themeName || 
+            "Default"       === themeName;
 };
 
 /*
@@ -584,7 +617,8 @@ PersonaSwitcher.rotateKey = function()
 PersonaSwitcher.setDefault = function()
 {
     PersonaSwitcher.logger.log("in setDefault");
-    var indexOfDefault = PersonaSwitcher.currentThemes.length-1;
+    var indexOfDefault = PersonaSwitcher.currentThemes.length + 
+                            PersonaSwitcher.defaultThemes.length;
     PersonaSwitcher.switchTo (PersonaSwitcher.defaultTheme, indexOfDefault);
 };
 

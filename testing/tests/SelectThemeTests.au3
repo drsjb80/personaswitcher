@@ -15,7 +15,8 @@ $tests[1] = SelectThemeCaseTwo()	; 'CTRL' + 'ALT' + 'R' rotates through all pers
 $tests[2] = SelectThemeCaseThree()	; PSwitcher Menu ('CTRL' + 'ALT' + 'P')
 $tests[3] = SelectThemeCaseFour()	; PSwitcher Menu (by F10 Shortcut)
 $tests[4] = SelectThemeCaseFive()	; Firefox toolbar (by F10 Shortcut)
-$tests[5] = SelectThemeCaseSix()	; PSwitcher icon button
+; OpenPersonaSwitcherButton() function in PsTestingLibrary not currently working, test omitted
+$tests[5] = "ERROR - test must be updated for webextension" ; SelectThemeCaseSix() ; PSwitcher icon button
 
 SaveResultsToFile($tests, $testName)
 EndFirefox()
@@ -35,16 +36,8 @@ Func SelectThemeCaseOne()
    _FFPrefSet("lightweightThemes.selectedThemeID", GetInstalledThemeIds()[0])
 
    ; change back to default
-   Send("{CTRLDOWN}")
-   Sleep(500)
-   Send("{ALTDOWN}")
-   Sleep(500)
-   Send("{d}")
-   Sleep(500)
-   Send("{CTRLUP}")
-   Sleep(500)
-   Send("{ALTUP}")
-   Sleep(500)
+   Sleep(1000)
+   Send("^!d")
 
    ; check that theme at the start of the test has been changed
    If $defaultTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
@@ -65,40 +58,23 @@ Func SelectThemeCaseTwo()
    Local $sDescription
    Local $testPassed = False
 
-   ; Copied from PS Testing Library 'GetListOfThemeIds' function to get size of list
-   Local $jsonThemeList = _FFPrefGet("lightweightThemes.usedThemes")
-   Local $size = Ubound(GetAllThemeIds())
-
-   Send("{CTRLDOWN}")
-   Sleep(500)
-   Send("{ALTDOWN}")
-   Sleep(500)
-   Send("{r}")
-   Sleep(500)
-
+   Send("^!r")
+   Sleep(1000)
+   Local $size = Ubound(GetInstalledThemeIds())
    Local $originalTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    For $i = 1 To $size - 1
-	  Send("{r}")
-	  Sleep(750)
+	  Send("^!r")
+	  Sleep(1000)
 	  if $originalTheme == _FFPrefGet("lightweightThemes.selectedThemeID") Then
 		 $sDescription = "'CTRL' + 'ALT' + 'R' did not rotate through all personas before returning to starting persona."
-		 Send("{CTRLUP}")
-		 Sleep(500)
-		 Send("{ALTUP}")
-		 Sleep(500)
 		 Return FormatTestString($testPassed, $sDescription)
 	  EndIf
    Next
 
    ; rotate theme to different theme
-   Send("{r}")
-   Sleep(500)
-   Send("{CTRLUP}")
-   Sleep(500)
-   Send("{ALTUP}")
-   Sleep(500)
-
+   Send("^!r")
+   Sleep(750)
    Local $endingTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
    If $originalTheme == $endingTheme Then
