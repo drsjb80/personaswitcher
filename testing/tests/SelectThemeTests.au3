@@ -15,7 +15,7 @@ $tests[1] = SelectThemeCaseTwo()	; 'CTRL' + 'ALT' + 'R' rotates through all pers
 $tests[2] = SelectThemeCaseThree()	; PSwitcher Menu ('CTRL' + 'ALT' + 'P')
 $tests[3] = SelectThemeCaseFour()	; PSwitcher Menu (by F10 Shortcut)
 $tests[4] = SelectThemeCaseFive()	; Firefox toolbar (by F10 Shortcut)
-; OpenPersonaSwitcherButton() function in PsTestingLibrary not currently working, test omitted
+; !!! OpenPersonaSwitcherButton() function in PsTestingLibrary not currently working, test omitted
 $tests[5] = "ERROR - test must be updated for webextension" ; SelectThemeCaseSix() ; PSwitcher icon button
 
 SaveResultsToFile($tests, $testName)
