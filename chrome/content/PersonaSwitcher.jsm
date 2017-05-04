@@ -1,5 +1,5 @@
 /* global Components, PersonaService, LightweightThemeManager, nextTheme, 
-theme, dump */
+theme, dump, index, isDefaultTheme */
 /* eslint block-scoped-var: 0 */
 /* eslint no-global-assign: 0 */
 /* eslint no-native-reassign: 0 */
@@ -125,7 +125,7 @@ catch (e)
 // TBird's and SeaMonkey consoles don't log our stuff
 // this is a hack. i need to clean this up...
 // http://stackoverflow.com/questions/16686888/thunderbird-extension-console-logging
-if (PersonaSwitcher.XULAppInfo.name === 'Thunderbird')
+if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
 {
     var Application = Components.classes["@mozilla.org/steel/application;1"]
                     .getService(Components.interfaces.steelIApplication);
@@ -133,8 +133,8 @@ if (PersonaSwitcher.XULAppInfo.name === 'Thunderbird')
     PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = Application.console.log;
 } 
-else if (PersonaSwitcher.consoleLogger === null ||
-            PersonaSwitcher.XULAppInfo.name === 'SeaMonkey') 
+else if (null === PersonaSwitcher.consoleLogger ||
+            'SeaMonkey' === PersonaSwitcher.XULAppInfo.name) 
 {
     // nope, log to terminal
     PersonaSwitcher.consoleLogger = {};
@@ -201,7 +201,7 @@ PersonaSwitcher.prefsObserver =
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
 
-        if (topic !== 'nsPref:changed') 
+        if ('nsPref:changed' !== topic) 
         { 
             return; 
         }
@@ -276,7 +276,7 @@ PersonaSwitcher.prefsObserver =
                 var delay = 
                     parseInt(PersonaSwitcher.prefs.getIntPref("preview-delay"));
 
-                delay = delay < 0 ? 
+                delay = 0 > delay ? 
                             0 : 
                             delay > MAX_PREVIEW_DELAY ? 
                                 MAX_PREVIEW_DELAY : 
@@ -308,7 +308,7 @@ PersonaSwitcher.allDocuments = function (func, index)
     {
         aWindow = enumerator.getNext();
         PersonaSwitcher.logger.log ('In allDocuments with ' + aWindow);
-        if (typeof(index) !== 'undefined') 
+        if ('undefined' !== typeof(index)) 
         {
             func(aWindow.document, index);
         }
@@ -382,7 +382,7 @@ PersonaSwitcher.rotate = function()
     PersonaSwitcher.logger.log("in rotate");
 
     var newIndex = PersonaSwitcher.currentIndex;
-    if (PersonaSwitcher.currentThemes.length <= 1) return;
+    if (1 >= PersonaSwitcher.currentThemes.length) return;
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
@@ -391,15 +391,18 @@ PersonaSwitcher.rotate = function()
         while(newIndex === prevIndex) 
         {
             newIndex = Math.floor ((Math.random() *
-            (PersonaSwitcher.currentThemes.length-1)) + 1);
+                (PersonaSwitcher.currentThemes.length-1)) + 1);
         }
     }
     else
     {
-        //If a default theme is active, rotate to the first non-default theme
-        if(newIndex > PersonaSwitcher.currentThemes.length-1) {
+        // If a default theme is active, rotate to the first non-default theme
+        if(newIndex > PersonaSwitcher.currentThemes.length - 1) 
+        {
             newIndex = 0;
-        } else {
+        } 
+        else 
+        {
             newIndex = (newIndex + 1) % PersonaSwitcher.currentThemes.length;
         }
     }
@@ -431,7 +434,7 @@ PersonaSwitcher.startTimer = function()
     var minutes = PersonaSwitcher.prefs.getIntPref ('autominutes');
     PersonaSwitcher.logger.log (minutes);
 
-    if (minutes > 0)
+    if (0 < minutes)
     {
         PersonaSwitcher.timer.init(
             PersonaSwitcher.timerObserver,
@@ -462,9 +465,9 @@ PersonaSwitcher.removeNotification = function (win)
     var notificationBox = null;
     var name = PersonaSwitcher.XULAppInfo.name;
 
-    if (name === 'Firefox' || name === 'SeaMonkey' || name === 'Pale Moon')
+    if ('Firefox' === name || 'SeaMonkey' === name || 'Pale Moon' === name)
     {
-        if (typeof (win.getBrowser) === 'function')
+        if ('function' === typeof (win.getBrowser))
         {
             var browser = win.getBrowser();
             if (browser)
@@ -473,18 +476,18 @@ PersonaSwitcher.removeNotification = function (win)
             }
         }
     }
-    else if (name === 'Thunderbird')
+    else if ('Thunderbird' === name)
     {
         notificationBox = 
             win.document.getElementById ('mail-notification-box');
     }
 
-    if (notificationBox !== null)
+    if (null !== notificationBox)
     {
         var notification = notificationBox.getNotificationWithValue(
             'lwtheme-install-notification');
 
-        if (notification !== null)
+        if (null !== notification)
         {
             notificationBox.removeNotification (notification);
         }
@@ -496,7 +499,7 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     PersonaSwitcher.logger.log (toWhich);
     PersonaSwitcher.allDocuments(PersonaSwitcher.setCurrentTheme, index);
 
-    PersonaSwitcher.currentIndex = typeof(index) !== 'undefined' ? 
+    PersonaSwitcher.currentIndex = 'undefined' !== typeof(index) ? 
                                             index :
                                             PersonaSwitcher.currentIndex;
     
@@ -509,11 +512,11 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     {
         PersonaSwitcher.logger.log ('using PP');
 
-        if (toWhich.id === '{gh y972ce4c6-7e08-4474-a285-3208198ce6fd}')
+        if ('{gh y972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id)
         {
             PersonaService.changeToDefaultPersona();
         }
-        else if (toWhich.id === 1)
+        else if (1 === toWhich.id)
         {
             PersonaService.changeToPersona (PersonaService.customPersona);
         }
@@ -526,11 +529,11 @@ PersonaSwitcher.switchTo = function (toWhich, index)
     {
         PersonaSwitcher.logger.log ('using themeChanged');
 
-        if (typeof(toWhich) === 'undefined' || toWhich === null) 
+        if ('undefined' === typeof(toWhich) || null === toWhich) 
         {
             LightweightThemeManager.themeChanged(null);
         } 
-        else if(toWhich.id === '{972ce4c6-7e08-4474-a285-3208198ce6fd}') 
+        else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id) 
         {
             LightweightThemeManager.themeChanged(null);
         } 
@@ -564,10 +567,10 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 // check mark to be displayed. This is similar to Windows which
                 // simply displays the check mark over the theme's icon.
 
-                if (PersonaSwitcher.XULRuntime.OS === "Linux") 
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
                 {
                     var value = themes[PersonaSwitcher.currentIndex].value;
-                    if(typeof(value) !== 'undefined' && value !== null) 
+                    if('undefined' !== typeof(value) && null !== value) 
                     {
                         themes[PersonaSwitcher.currentIndex].
                             setAttribute('image', value);
@@ -583,7 +586,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
 
     var buttonMenu = 
             PersonaSwitcher.getButtonPopup(doc, 'personaswitcher-button');
-    if (buttonMenu !== null)
+    if (null !== buttonMenu)
     {        
         themes =  buttonMenu.children;
 
@@ -591,10 +594,10 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if(themes[PersonaSwitcher.currentIndex])
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
-            if (PersonaSwitcher.XULRuntime.OS === "Linux") 
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
             {
                 value = themes[PersonaSwitcher.currentIndex].value;
-                if(typeof(value) !== 'undefined' && value !== null) 
+                if('undefined' !== typeof(value) && null !== value) 
                 {
                     themes[PersonaSwitcher.currentIndex].
                         setAttribute('image', value);
@@ -607,7 +610,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         {
             PersonaSwitcher.logger.log(themes[index]);
             theme = themes[index];
-            if (PersonaSwitcher.XULRuntime.OS === "Linux") 
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
             {
                 theme.removeAttribute('image');
             }
@@ -622,7 +625,8 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
     }
 };
 
-PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
+PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) 
+{
     PersonaSwitcher.logger.log(newTheme + " " + currentTheme);
 
     switch(newTheme.localeCompare(currentTheme)) 
@@ -643,8 +647,9 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
             PersonaSwitcher.logger.log("New Index: " + newIndex);
             break;
         case APPEARS_LOWER_IN_LIST:            
-            if(isDefaultTheme(currentTheme)) {
-                var index = PersonaSwitcher.prefs.getIntPref('current');
+            if(isDefaultTheme(currentTheme)) 
+            {
+                index = PersonaSwitcher.prefs.getIntPref('current');
                 index--;
                 PersonaSwitcher.prefs.setIntPref('current', index);
                 PersonaSwitcher.currentIndex = index;
@@ -655,17 +660,21 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
     }
 };
 
-PersonaSwitcher.updateIndexOnAdd = function(newTheme) {
+PersonaSwitcher.updateIndexOnAdd = function(newTheme) 
+{
     var index;
-    for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
-        if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(PersonaSwitcher.currentThemes[index].name)) {
+    for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
+    {
+        if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(
+            PersonaSwitcher.currentThemes[index].name)) 
+        {
             PersonaSwitcher.prefs.setIntPref('current', index);
             PersonaSwitcher.currentIndex = index;
             return;
         }
     }
     
-    //Otherwise the new theme will be at the bottom of the list
+    // Otherwise the new theme will be at the bottom of the list
     PersonaSwitcher.prefs.setIntPref('current', index);
     PersonaSwitcher.currentIndex = index;
 };
@@ -693,7 +702,8 @@ PersonaSwitcher.getPersonas = function()
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 };
 
-PersonaSwitcher.extractDefaults = function() {
+PersonaSwitcher.extractDefaults = function() 
+{
     PersonaSwitcher.defaultThemes = [];
     var defaultNotFound = true;
     var theme;
@@ -701,11 +711,15 @@ PersonaSwitcher.extractDefaults = function() {
     // necessitate evaluation of a majority of the array and we want to make
     // this as quick as possible. As such we account for the removal of items
     // while iterating over the array by decrementing the index to compensate.
-    for(index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
+    for(index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
+    {
         theme = PersonaSwitcher.currentThemes[index];
-        if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) {
+        if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) 
+        {
             continue;
-        }else if(PersonaSwitcher.isDefaultTheme(theme.name)) {
+        } 
+        else if(PersonaSwitcher.isDefaultTheme(theme.name)) 
+        {
             PersonaSwitcher.defaultThemes.push(theme);
             PersonaSwitcher.currentThemes.splice(index, 1);
             index--;
@@ -715,20 +729,25 @@ PersonaSwitcher.extractDefaults = function() {
             // the list we need to make sure we don't override this flag once
             // Default has been found. Note: the last if will have to be changed
             // in such a case as well.
-            if(defaultNotFound) {
+            if(defaultNotFound) 
+            {
                 defaultNotFound = SAME !== theme.name.localeCompare("Default");
             }
-        }else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Default")) {
+        } 
+        else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Default")) 
+        {
             break;
         }
     }
 
-    if(defaultNotFound) {
+    if(defaultNotFound) 
+    {
         PersonaSwitcher.defaultThemes.push(PersonaSwitcher.defaultTheme);
     }
 };
 
-PersonaSwitcher.isDefaultTheme = function(themeName) {
+PersonaSwitcher.isDefaultTheme = function(themeName) 
+{
     return  "Compact Dark"  === themeName || 
             "Compact Light" === themeName || 
             "Default"       === themeName;
@@ -767,12 +786,12 @@ PersonaSwitcher.onMenuItemCommand = function (which, index)
 */
 PersonaSwitcher.dump = function (object, max)
 {
-    if (typeof max === 'undefined') 
+    if ('undefined' === typeof max) 
     {
         max = 1;
     }
 
-    if (max === 0) 
+    if (0 === max) 
     {
         return;
     }
@@ -783,8 +802,8 @@ PersonaSwitcher.dump = function (object, max)
         {
             PersonaSwitcher.logger.log (property + '=' + object[property]);
 
-            if (object[property] !== null &&
-                typeof object[property] === 'object')
+            if (null !== object[property] &&
+                'object' === typeof object[property])
             {
                 PersonaSwitcher.dump (object[property], max-1);
             }
