@@ -244,7 +244,7 @@ function displayAdvanced()
 {
     var advancedOptionsObject = document.getElementById("advancedOptions");
 
-    if(advancedOptionsObject.style.display === "block")
+    if("block" === advancedOptionsObject.style.display)
     {
         advancedOptionsObject.style.display = "none";
     }

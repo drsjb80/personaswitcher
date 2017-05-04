@@ -12,7 +12,8 @@ function appendMenu(page)
         ]);
     getPreferences.then((results) => 
     {
-        backgroundPage.logger.log("Creating a new menu: " + results[2].themeListChanged);
+        backgroundPage.logger.log(
+            "Creating a new menu: " + results[2].themeListChanged);
         if(results[2].themeListChanged) 
         {
             var gettingMenuData = backgroundPage.getMenuData();
@@ -21,8 +22,10 @@ function appendMenu(page)
             .then(() => 
             {
                 document.body.appendChild(backgroundPage.browserActionMenu);
-                if(results[1].current !== results[0].current) {
-                    backgroundPage.setCurrentTheme(results[1].current, results[0].current);
+                if(results[1].current !== results[0].current) 
+                {
+                    backgroundPage.setCurrentTheme(
+                        results[1].current, results[0].current);
                 }
             })
             .catch(backgroundPage.handleError);
@@ -30,8 +33,10 @@ function appendMenu(page)
         else 
         {
             document.body.appendChild(backgroundPage.browserActionMenu);
-            if(results[1].current !== results[0].current) {
-                backgroundPage.setCurrentTheme(results[1].current, results[0].current);
+            if(results[1].current !== results[0].current) 
+            {
+                backgroundPage.setCurrentTheme(
+                    results[1].current, results[0].current);
             }
         }
     });
@@ -50,6 +55,7 @@ function removeMenu()
 var gettingBackgroundPage = browser.runtime.getBackgroundPage();
 gettingBackgroundPage.then(appendMenu);
 window.addEventListener("unload", removeMenu);
-window.addEventListener("click", function(clickEvent) {
+window.addEventListener("click", function(clickEvent) 
+{
     window.close();
 });
