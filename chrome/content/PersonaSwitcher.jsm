@@ -582,7 +582,7 @@ PersonaSwitcher.extractDefaults = function()
     // necessitate evaluation of a majority of the array and we want to make
     // this as quick as possible. As such, we account for the removal of items
     // while iterating over the array by decrementing the index to compensate.
-    for(index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
+    for(let index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
     {
         theme = PersonaSwitcher.currentThemes[index];
         if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) 
