@@ -22,7 +22,7 @@ function handleStartup()
 // default_loaded flag is undefined. 
 function loadDefaultsIfNeeded(prefs) 
 {
-        if (typeof(prefs.defaults_loaded) === 'undefined') 
+        if ('undefined' === typeof(prefs.defaults_loaded)) 
         {
             return loadDefaults();
         } 
@@ -131,7 +131,7 @@ function buildMenu(data)
 
     insertSeparator();
 
-    for (var index = 0; index < defaultThemes.length; index++) 
+    for (index = 0; index < defaultThemes.length; index++) 
     {        
         browserActionMenu.
             appendChild(buildMenuItem(defaultThemes[index], data[0],
@@ -154,7 +154,7 @@ function buildMenuItem(theme, prefs, theIndex)
         themeChoice.selected = true;
     }
 
-    if (prefs.preview === true) 
+    if (true === prefs.preview) 
     {
         themeChoice.addEventListener('mouseover',
                         mouseOverListener(theme, prefs.previewDelay));
@@ -172,18 +172,19 @@ function createIcon(iconURL, iconPreview)
     themeImg.setAttribute("class", "button icon");
     themeImg.setAttribute("src", iconURL);
 
-    if (iconPreview === false) 
+    if (false === iconPreview) 
     {
         themeImg.style.display = "none";
     }    
     return themeImg;
 }
 
-function insertSeparator() {
+function insertSeparator() 
+{
     var separator = document.createElement("hr");
     separator.setAttribute("class", "menu-separator");
     browserActionMenu.appendChild(separator);
-};
+}
 
 var clickListener = function(theTheme, theIndex) 
 { 
@@ -194,9 +195,12 @@ var clickListener = function(theTheme, theIndex)
             {
                 setCurrentTheme(theIndex, result.current);
             });
-        browser.runtime.sendMessage({command: "Switch-Themes",
-                                     theme: theTheme,
-                                     index: theIndex});
+        browser.runtime.sendMessage(
+        {
+            command: "Switch-Themes",
+            theme: theTheme,
+            index: theIndex
+        });
         startRotateAlarm(); 
     };
 };
@@ -241,7 +245,7 @@ var mouseOutListener = function(theTheme)
 function toggleMenuIcons(iconsShown) 
 {
     var displayValue;
-    if (iconsShown === true) 
+    if (true === iconsShown) 
     {
         displayValue = "inline";
     } 
@@ -278,7 +282,7 @@ function startRotateAlarm()
                                                          results.autoMinutes;
             var innerAlarmListener = function(alarmInfo) 
             {
-                if (alarmInfo.name === "rotateAlarm") 
+                if ("rotateAlarm" === alarmInfo.name) 
                 {
                     autoRotate();
                 } 
@@ -293,7 +297,7 @@ function startRotateAlarm()
 
 function stopRotateAlarm() 
 {
-    if (typeof(rotateAlarmListener) !== 'undefined') 
+    if ('undefined' !== typeof(rotateAlarmListener)) 
     {
         browser.alarms.clear("rotateAlarm");
         browser.alarms.onAlarm.removeListener(rotateAlarmListener);        
@@ -320,7 +324,7 @@ function autoRotate()
         
     checkRotatePref.then((results) => 
     {
-        if (results[1].auto === true) 
+        if (true === results[1].auto) 
         {
             rotate();
         }
@@ -335,7 +339,7 @@ function autoRotate()
 
 function rotate() 
 {
-    if (currentThemes.length <= 1) return;
+    if (1 >= currentThemes.length) return;
 
     // Because the shortcuts are still handled by the bootstrap code the  
     // currentIndex in the bootstrap code is always as (or more) accurate than 
@@ -349,7 +353,7 @@ function rotate()
     {
         logger.log ("Current index before ", results[1].current);
         var newIndex = results[1].current;
-        if (results[0].random === true)
+        if (true === results[0].random)
         {
             var prevIndex = newIndex;
             // pick a number between 1 and the end until a new index is found
@@ -363,18 +367,24 @@ function rotate()
         {
             // If a default theme is active, rotate to the first non-default 
             // theme
-            if(newIndex > currentThemes.length-1) {
+            if(newIndex > currentThemes.length-1) 
+            {
                 newIndex = 0;
-            } else {
+            } 
+            else 
+            {
                 newIndex = (newIndex + 1) % currentThemes.length;
             }
         }
 
         logger.log ("Current index after ", newIndex);
         setCurrentTheme(newIndex, results[0].current);
-        browser.runtime.sendMessage({command: "Switch-Themes",
-                                     theme: currentThemes[newIndex],
-                                     index: newIndex});
+        browser.runtime.sendMessage(
+        {
+            command: "Switch-Themes",
+            theme: currentThemes[newIndex],
+            index: newIndex
+        });
     });    
 }
 
@@ -384,7 +394,7 @@ function rotateOnStartup()
     var checkRotateOnStartup = browser.storage.local.get("startupSwitch");
     checkRotateOnStartup.then((prefs) => 
     {
-        if(prefs.startupSwitch === true) 
+        if(true === prefs.startupSwitch) 
         {
             rotate();
         }
@@ -394,7 +404,7 @@ function rotateOnStartup()
 function setCurrentTheme(newIndex, oldIndex)
 {
     var themes = browserActionMenu.children;
-    themes[oldIndex].selected = false
+    themes[oldIndex].selected = false;
     themes[newIndex].selected = true;
 
     if(newIndex !== oldIndex)
@@ -403,7 +413,7 @@ function setCurrentTheme(newIndex, oldIndex)
                                         set({current: newIndex});
         updatingCurrentIndex.catch(handleError);  
     }
-};
+}
 
 function handlePreferenceChange(changes, area) 
 { 
@@ -411,7 +421,7 @@ function handlePreferenceChange(changes, area)
  
       for (var pref of changedPrefs) 
       {
-        if (typeof(changes[pref].newValue) !== 'undefined' && 
+        if ('undefined' !== typeof(changes[pref].newValue) && 
             changes[pref].oldValue !== changes[pref].newValue) 
         {
             reactToPrefChange(pref, changes[pref]);
@@ -542,7 +552,7 @@ function setLogger()
     var checkIfDebugging = browser.storage.local.get("debug");
     return checkIfDebugging.then((result) => 
     {
-        if (result.debug === true) 
+        if (true === result.debug) 
         {
             logger = console;
         } 
