@@ -118,19 +118,19 @@ function unloadFromWindow(window)
     let button = doc.getElementById("personaswitcher-button");
     let keySet = doc.getElementById("personaSwitcherKeyset");
 
-    if (menu_personaswitcher !== null) 
+    if (null !== menu_personaswitcher) 
     {
         menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);
     }
-    if (subMenu_personaswitcher !== null) 
+    if (null !== subMenu_personaswitcher) 
     {
         subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);
     }
-    if (button !== null) 
+    if (null !== button) 
     {
         button.parentNode.removeChild(button);
     }
-    if (keySet !== null) 
+    if (null !== keySet) 
     {
         keySet.parentNode.removeChild(keySet);
     }
@@ -189,7 +189,7 @@ function injectMainMenu(doc)
             break;
     }
 
-    if (menuBar === null) 
+    if (null === menuBar) 
     {
         return;
     }
@@ -211,7 +211,7 @@ function injectMainMenu(doc)
     );
     menu_personaswitcher.appendChild(menu_PSPopup);
     
-    if (menu_tools === null) 
+    if (null === menu_tools) 
     {
         menuBar.appendChild(menu_personaswitcher);
     } 
@@ -239,7 +239,7 @@ function injectSubMenu(doc)
             break;
     }
 
-    if (menuPopup === null) 
+    if (null === menuPopup) 
     {
         return;
     }
@@ -283,7 +283,7 @@ function injectButton(window)
             break;
     }
 
-    if (toolbox === null) 
+    if (null === toolbox) 
     {
         return;
     }
@@ -350,7 +350,7 @@ function moveButtonToToolbar(doc, toolbar, button)
 {
     var currentset = toolbar.getAttribute("currentset").split(",");
     var index = currentset.indexOf(button.id);
-    if (index == -1) 
+    if (-1 == index) 
     {
         if (firstRun) 
         {
@@ -400,7 +400,7 @@ function addKeyset(doc)
             break;
     }
 
-    if (mainWindow === null) 
+    if (null === mainWindow) 
     {
         return;
     }
