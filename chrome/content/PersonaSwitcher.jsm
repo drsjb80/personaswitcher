@@ -1,21 +1,25 @@
-//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
+/* global Components, PersonaService, LightweightThemeManager, nextTheme, 
+theme, dump, index, isDefaultTheme */
+/* eslint block-scoped-var: 0 */
+/* eslint no-global-assign: 0 */
+/* eslint no-native-reassign: 0 */
+
+// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/XUL_Reference
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 // no space between comment delimiters. really.
-/*global Components*/
-/*jslint vars: false*/
+"use strict";
 
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
-"use strict";
-//If this value is changed, it needs to be changed in options.xul as well
+// If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
 const APPEARS_HIGHER_IN_LIST = -1;
 const SAME = 0;
 const APPEARS_LOWER_IN_LIST = 1;
 
-var EXPORTED_SYMBOLS = [ "PersonaSwitcher" ];
+var EXPORTED_SYMBOLS = ["PersonaSwitcher"];
 
 var PersonaSwitcher = {};
 
@@ -54,12 +58,18 @@ PersonaSwitcher.prefs.QueryInterface (Components.interfaces.nsIPrefBranch2);
 
 PersonaSwitcher.log = function()
 {
-    if (! PersonaSwitcher.prefs.getBoolPref ('debug')) { return; }
+    if (! PersonaSwitcher.prefs.getBoolPref ('debug')) 
+    { 
+        return; 
+    }
 
     var message = "";
 
     // create a stack frame via an exception
-    try { this.undef(); }
+    try 
+    { 
+        this.undef(); 
+    }
     catch (e)
     {
         var frames = e.stack.split ('\n');
@@ -91,20 +101,26 @@ PersonaSwitcher.consoleLogger = null;
 
 try
 {
-    PersonaSwitcher.consoleLogger = Components.utils["import"]
-        ("resource://devtools/Console.jsm", {}).console;
+    PersonaSwitcher.consoleLogger = Components.utils.import(
+        "resource://devtools/Console.jsm", {}).console;
     dump ("using devtools\n");
 
 }
-catch (e) {}
+catch (e)
+{
+    
+}
 
 try
 {
-    PersonaSwitcher.consoleLogger = Components.utils["import"]
-        ("resource://gre/modules/devtools/Console.jsm", {}).console;
+    PersonaSwitcher.consoleLogger = Components.utils.import(
+        "resource://gre/modules/devtools/Console.jsm", {}).console;
     dump ("using gre\n");
 }
-catch (e) {}
+catch (e)
+{
+
+}
 
 // TBird's and SeaMonkey consoles don't log our stuff
 // this is a hack. i need to clean this up...
@@ -116,15 +132,21 @@ if ('Thunderbird' === PersonaSwitcher.XULAppInfo.name)
 
     PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = Application.console.log;
-} else if (null === PersonaSwitcher.consoleLogger ||
-           'SeaMonkey' === PersonaSwitcher.XULAppInfo.name) {
+} 
+else if (null === PersonaSwitcher.consoleLogger ||
+            'SeaMonkey' === PersonaSwitcher.XULAppInfo.name) 
+{
     // nope, log to terminal
     PersonaSwitcher.consoleLogger = {};
     PersonaSwitcher.consoleLogger.log = PersonaSwitcher.log;
 }
 
 PersonaSwitcher.nullLogger = {};
-PersonaSwitcher.nullLogger.log = function (s) { 'use strict'; return; };
+PersonaSwitcher.nullLogger.log = function (s) 
+{ 
+    'use strict'; 
+    return; 
+};
 PersonaSwitcher.logger = PersonaSwitcher.nullLogger;
 
 // ---------------------------------------------------------------------------
@@ -133,12 +155,12 @@ PersonaSwitcher.firstTime = true;
 PersonaSwitcher.activeWindow = null;
 PersonaSwitcher.previewWhich = null;
 
-//Default theme set to an object with an id property equal to the hard coded 
-//default theme id value. Necessary for Icedove compatibility as Icedove's 
-//default theme id is not the same, and thus cannot be found using the same 
-//defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
-//can be set back to null and the correct id can be queried instead.
-PersonaSwitcher.defaultTheme = {id:'{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
+// Default theme set to an object with an id property equal to the hard coded 
+// default theme id value. Necessary for Icedove compatibility as Icedove's 
+// default theme id is not the same, and thus cannot be found using the same 
+// defaultThemeId. If Icedove's default theme id can be acquired, defaultTheme
+// can be set back to null and the correct id can be queried instead.
+PersonaSwitcher.defaultTheme = {id: '{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
 PersonaSwitcher.defaultThemeId = '{972ce4c6-7e08-4474-a285-3208198ce6fd}';
 PersonaSwitcher.defaultThemes = [];
 
@@ -179,7 +201,10 @@ PersonaSwitcher.prefsObserver =
         PersonaSwitcher.logger.log (topic);
         PersonaSwitcher.logger.log (data);
 
-        if ('nsPref:changed' !== topic) { return; }
+        if ('nsPref:changed' !== topic) 
+        { 
+            return; 
+        }
 
         switch (data)
         {
@@ -187,19 +212,19 @@ PersonaSwitcher.prefsObserver =
                 PersonaSwitcher.setLogger();
                 break;
             case 'toolbox-minheight':
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.setToolboxMinheight);
+                PersonaSwitcher.allDocuments(
+                    PersonaSwitcher.setToolboxMinheight);
                 break;
             case 'preview':
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+                    PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
                 break;
             case 'icon-preview':
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+                    PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
@@ -251,15 +276,15 @@ PersonaSwitcher.prefsObserver =
                 var delay = 
                     parseInt(PersonaSwitcher.prefs.getIntPref("preview-delay"));
 
-                delay = delay < 0 ? 
+                delay = 0 > delay ? 
                             0 : 
                             delay > MAX_PREVIEW_DELAY ? 
                                 MAX_PREVIEW_DELAY : 
                                 delay;
                 PersonaSwitcher.prefs.setIntPref ("preview-delay", delay);
 
-                PersonaSwitcher.allDocuments
-                    (PersonaSwitcher.createStaticPopups);
+                PersonaSwitcher.allDocuments(
+                    PersonaSwitcher.createStaticPopups);
                 PersonaSwitcher.allDocuments(
                     PersonaSwitcher.setCurrentTheme, 
                     PersonaSwitcher.currentIndex);
@@ -272,8 +297,6 @@ PersonaSwitcher.prefsObserver =
 };
 
 PersonaSwitcher.prefs.addObserver ('', PersonaSwitcher.prefsObserver, false);
-
-
 
 // call a function passed as a parameter with one document of each window
 PersonaSwitcher.allDocuments = function (func, index)
@@ -359,7 +382,7 @@ PersonaSwitcher.rotate = function()
     PersonaSwitcher.logger.log("in rotate");
 
     var newIndex = PersonaSwitcher.currentIndex;
-    if (PersonaSwitcher.currentThemes.length <= 1) return;
+    if (1 >= PersonaSwitcher.currentThemes.length) return;
 
     if (PersonaSwitcher.prefs.getBoolPref ('random'))
     {
@@ -368,15 +391,18 @@ PersonaSwitcher.rotate = function()
         while(newIndex === prevIndex) 
         {
             newIndex = Math.floor ((Math.random() *
-            (PersonaSwitcher.currentThemes.length-1)) + 1);
+                (PersonaSwitcher.currentThemes.length-1)) + 1);
         }
     }
     else
     {
-        //If a default theme is active, rotate to the first non-default theme
-        if(newIndex > PersonaSwitcher.currentThemes.length-1) {
+        // If a default theme is active, rotate to the first non-default theme
+        if(newIndex > PersonaSwitcher.currentThemes.length - 1) 
+        {
             newIndex = 0;
-        } else {
+        } 
+        else 
+        {
             newIndex = (newIndex + 1) % PersonaSwitcher.currentThemes.length;
         }
     }
@@ -408,10 +434,9 @@ PersonaSwitcher.startTimer = function()
     var minutes = PersonaSwitcher.prefs.getIntPref ('autominutes');
     PersonaSwitcher.logger.log (minutes);
 
-    if (minutes > 0)
+    if (0 < minutes)
     {
-        PersonaSwitcher.timer.init
-        (
+        PersonaSwitcher.timer.init(
             PersonaSwitcher.timerObserver,
             PersonaSwitcher.prefs.getBoolPref ('fastswitch') ? 10000 :
                 1000 * 60 * minutes,
@@ -429,9 +454,7 @@ PersonaSwitcher.stopTimer = function()
 
 PersonaSwitcher.toggleAuto = function()
 {
-    /*
-    ** just set the pref, the prefs observer does the work.
-    */
+    // just set the pref, the prefs observer does the work.
     PersonaSwitcher.prefs.setBoolPref ('auto',
         ! PersonaSwitcher.prefs.getBoolPref ('auto'));
 };
@@ -461,8 +484,8 @@ PersonaSwitcher.removeNotification = function (win)
 
     if (null !== notificationBox)
     {
-        var notification = notificationBox.getNotificationWithValue
-            ('lwtheme-install-notification');
+        var notification = notificationBox.getNotificationWithValue(
+            'lwtheme-install-notification');
 
         if (null !== notification)
         {
@@ -501,18 +524,24 @@ PersonaSwitcher.switchTo = function (toWhich, index)
         {
             PersonaService.changeToPersona (toWhich);
         }
-    } else {
+    } 
+    else 
+    {
         PersonaSwitcher.logger.log ('using themeChanged');
 
-        if ('undefined' === typeof(toWhich) || null === toWhich) {
+        if ('undefined' === typeof(toWhich) || null === toWhich) 
+        {
             LightweightThemeManager.themeChanged(null);
-        } else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id) {
+        } 
+        else if('{972ce4c6-7e08-4474-a285-3208198ce6fd}' === toWhich.id) 
+        {
             LightweightThemeManager.themeChanged(null);
-        } else {
+        } 
+        else 
+        {
             LightweightThemeManager.themeChanged(toWhich);
         }
     }
-   
 };
 
 PersonaSwitcher.setCurrentTheme = function (doc, index)
@@ -538,9 +567,11 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 // check mark to be displayed. This is similar to Windows which
                 // simply displays the check mark over the theme's icon.
 
-                if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+                if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
+                {
                     var value = themes[PersonaSwitcher.currentIndex].value;
-                    if('undefined' !== typeof(value) && null !== value) {
+                    if('undefined' !== typeof(value) && null !== value) 
+                    {
                         themes[PersonaSwitcher.currentIndex].
                             setAttribute('image', value);
                     }
@@ -548,7 +579,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
                 }
 
                 themes[PersonaSwitcher.currentIndex].removeAttribute("checked");
-	            themes[index].setAttribute("checked", "true");
+                themes[index].setAttribute("checked", "true");
             }
         }
     }
@@ -557,15 +588,17 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             PersonaSwitcher.getButtonPopup(doc, 'personaswitcher-button');
     if (null !== buttonMenu)
     {        
-        var themes =  buttonMenu.children;
+        themes =  buttonMenu.children;
 
         PersonaSwitcher.logger.log(PersonaSwitcher.currentIndex);
         if(themes[PersonaSwitcher.currentIndex])
         {
             PersonaSwitcher.logger.log(themes[PersonaSwitcher.currentIndex]);
-            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
-                var value = themes[PersonaSwitcher.currentIndex].value;
-                if('undefined' !== typeof(value) && null !== value) {
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
+            {
+                value = themes[PersonaSwitcher.currentIndex].value;
+                if('undefined' !== typeof(value) && null !== value) 
+                {
                     themes[PersonaSwitcher.currentIndex].
                         setAttribute('image', value);
                 }
@@ -576,22 +609,24 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if(themes[index])
         {
             PersonaSwitcher.logger.log(themes[index]);
-            theme = themes[index];
-            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+            var theme = themes[index];
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
+            {
                 theme.removeAttribute('image');
             }
             theme.setAttribute("checked", "true");
             // This is a simple hack to ensure that the theme is redrawn in
             // certain versions of Thunderbird while being run on a Mac.
-            //http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
-            nextTheme = theme.nextSibling;
+            // http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
+            var nextTheme = theme.nextSibling;
             buttonMenu.removeChild(theme);
             buttonMenu.insertBefore(theme, nextTheme);
         }
     }
 };
 
-PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
+PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) 
+{
     PersonaSwitcher.logger.log(newTheme + " " + currentTheme);
 
     switch(newTheme.localeCompare(currentTheme)) 
@@ -612,8 +647,9 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
             PersonaSwitcher.logger.log("New Index: " + newIndex);
             break;
         case APPEARS_LOWER_IN_LIST:            
-            if(isDefaultTheme(currentTheme)) {
-                var index = PersonaSwitcher.prefs.getIntPref('current');
+            if(isDefaultTheme(currentTheme)) 
+            {
+                index = PersonaSwitcher.prefs.getIntPref('current');
                 index--;
                 PersonaSwitcher.prefs.setIntPref('current', index);
                 PersonaSwitcher.currentIndex = index;
@@ -624,17 +660,21 @@ PersonaSwitcher.updateIndexOnRemove = function(newTheme, currentTheme) {
     }
 };
 
-PersonaSwitcher.updateIndexOnAdd = function(newTheme) {
+PersonaSwitcher.updateIndexOnAdd = function(newTheme) 
+{
     var index;
-    for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
-        if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(PersonaSwitcher.currentThemes[index].name)) {
+    for (index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
+    {
+        if(APPEARS_HIGHER_IN_LIST === newTheme.localeCompare(
+            PersonaSwitcher.currentThemes[index].name)) 
+        {
             PersonaSwitcher.prefs.setIntPref('current', index);
             PersonaSwitcher.currentIndex = index;
             return;
         }
     }
     
-    //Otherwise the new theme will be at the bottom of the list
+    // Otherwise the new theme will be at the bottom of the list
     PersonaSwitcher.prefs.setIntPref('current', index);
     PersonaSwitcher.currentIndex = index;
 };
@@ -653,13 +693,17 @@ PersonaSwitcher.getPersonas = function()
                 concat (PersonaService.favorites);
         }
     }
-    PersonaSwitcher.currentThemes.
-        sort(function (a, b) { return a.name.localeCompare(b.name); });
+    PersonaSwitcher.currentThemes.sort(
+        function (a, b) 
+        { 
+            return a.name.localeCompare(b.name); 
+        });
     PersonaSwitcher.extractDefaults();
     PersonaSwitcher.logger.log (PersonaSwitcher.currentThemes.length);
 };
 
-PersonaSwitcher.extractDefaults = function() {
+PersonaSwitcher.extractDefaults = function() 
+{
     PersonaSwitcher.defaultThemes = [];
     var defaultNotFound = true;
     var theme;
@@ -667,11 +711,15 @@ PersonaSwitcher.extractDefaults = function() {
     // necessitate evaluation of a majority of the array and we want to make
     // this as quick as possible. As such we account for the removal of items
     // while iterating over the array by decrementing the index to compensate.
-    for(index = 0; index < PersonaSwitcher.currentThemes.length; index++) {
+    for(let index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
+    {
         theme = PersonaSwitcher.currentThemes[index];
-        if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) {
+        if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) 
+        {
             continue;
-        }else if(PersonaSwitcher.isDefaultTheme(theme.name)) {
+        } 
+        else if(PersonaSwitcher.isDefaultTheme(theme.name)) 
+        {
             PersonaSwitcher.defaultThemes.push(theme);
             PersonaSwitcher.currentThemes.splice(index, 1);
             index--;
@@ -681,20 +729,25 @@ PersonaSwitcher.extractDefaults = function() {
             // the list we need to make sure we don't override this flag once
             // Default has been found. Note: the last if will have to be changed
             // in such a case as well.
-            if(defaultNotFound) {
+            if(defaultNotFound) 
+            {
                 defaultNotFound = SAME !== theme.name.localeCompare("Default");
             }
-        }else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Default")) {
+        } 
+        else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Default")) 
+        {
             break;
         }
     }
 
-    if(defaultNotFound) {
+    if(defaultNotFound) 
+    {
         PersonaSwitcher.defaultThemes.push(PersonaSwitcher.defaultTheme);
     }
 };
 
-PersonaSwitcher.isDefaultTheme = function(themeName) {
+PersonaSwitcher.isDefaultTheme = function(themeName) 
+{
     return  "Compact Dark"  === themeName || 
             "Compact Light" === themeName || 
             "Default"       === themeName;

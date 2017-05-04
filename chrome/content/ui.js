@@ -1,12 +1,14 @@
+/* global PersonaSwitcher: true, Components: false, AddonManager,
+LightweightThemeManager, TYPE_THEME*/
+
 // https://developer.mozilla.org/en/JavaScript_code_modules
 // http://hg.mozdev.org/jsmodules/summary
 // https://developer.mozilla.org/en/Code_snippets/Preferences
 // LightweightThemeManager.jsm
 
 // https://addons.mozilla.org/en-US/firefox/pages/appversions/
-/* globals PersonaSwitcher: true, Components:false */
 "use strict";
-//Services
+// Services
 Components.utils.import('resource://gre/modules/Services.jsm');
 // 'import' for jslint
 Components.utils.import('resource://gre/modules/LightweightThemeManager.jsm');
@@ -48,16 +50,14 @@ PersonaSwitcher.makeKey = function (doc, id, mods, which, command)
     var key = doc.createElementNS(PersonaSwitcher.XULNS, 'key');
 
     key.setAttribute('id', id); 
-    if (mods !== '')
+    if ('' !== mods)
     {
         key.setAttribute('modifiers', mods);
     }
     key.setAttribute ('key', which);
-    //http://stackoverflow.com/questions/16779316/how-to-set-an-xul-key-dynamically-and-securely
+    // http://stackoverflow.com/questions/16779316/how-to-set-an-xul-key-dynamically-and-securely
     key.setAttribute('oncommand', "void(0);");
-    key.addEventListener
-    (
-        'command',
+    key.addEventListener('command',
         function(aEvent) 
         { 
             let doc = aEvent.target.ownerDocument; 
@@ -189,7 +189,7 @@ PersonaSwitcher.setToolboxMinheight = function(doc)
     {
         minheight = 0; 
     } 
-    else if (minheight < 0) 
+    else if (0 > minheight) 
     {
         minheight = 0;
     }
@@ -232,7 +232,8 @@ PersonaSwitcher.AddonListener =
     // pane and don't need to be monitored
     onInstalled: function (addon)
     {
-        if('undefined' === typeof(PersonaSwitcher)) {
+        if('undefined' === typeof(PersonaSwitcher)) 
+        {
             return;
         }
 
@@ -247,16 +248,20 @@ PersonaSwitcher.AddonListener =
     },
     onUninstalled: function (addon)
     {
-        if('undefined' === typeof(PersonaSwitcher)) {
+        if('undefined' === typeof(PersonaSwitcher)) 
+        {
             return;
         }
 
         var currentThemeName;
         var currentIndex = PersonaSwitcher.prefs.getIntPref('current');
 
-        if(PersonaSwitcher.currentThemes.length > currentIndex) { 
+        if(PersonaSwitcher.currentThemes.length > currentIndex) 
+        { 
             currentThemeName = PersonaSwitcher.currentThemes[currentIndex].name;
-        } else {
+        } 
+        else 
+        {
             currentIndex -= PersonaSwitcher.currentThemes.length;
             currentThemeName = PersonaSwitcher.defaultThemes[currentIndex].name;
         }
@@ -317,8 +322,8 @@ PersonaSwitcher.themeMonitor = function()
                 Components.classes['@mozilla.org/extensions/manager;1']
                     .getService(Components.interfaces.nsIExtensionManager);
             PersonaSwitcher.logger.log('using ExtensionManager');
-            PersonaSwitcher.extensionManager.addInstallListener
-                (PersonaSwitcher.ExtensionListener);
+            PersonaSwitcher.extensionManager.addInstallListener(
+                PersonaSwitcher.ExtensionListener);
         }
         catch (e2)
         {
@@ -339,7 +344,8 @@ PersonaSwitcher.previewObserver =
     }
 };
 
-PersonaSwitcher.insertSeparator = function(doc, menupopup) {
+PersonaSwitcher.insertSeparator = function(doc, menupopup) 
+{
     var separator = doc.createElement("menuseparator");
     menupopup.appendChild(separator);
 };
@@ -356,15 +362,18 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
 
     item.setAttribute('label', which.name);
     item.setAttribute('class', 'menuitem-iconic');
-
-    if(PersonaSwitcher.prefs.getIntPref('current') === index) {
+  
+    if(PersonaSwitcher.prefs.getIntPref('current') === index) 
+    {
         item.setAttribute("checked", "true"); 
     }
 
-    item.addEventListener
-    (
+    item.addEventListener(
         'command',
-        function() { PersonaSwitcher.onMenuItemCommand(which, index); },
+        function() 
+        { 
+            PersonaSwitcher.onMenuItemCommand(which, index); 
+        },
         false
     );
 
@@ -374,7 +383,8 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
         if (null !== which.iconURL)
         {
             item.setAttribute('image', which.iconURL);
-            if ("Linux" === PersonaSwitcher.XULRuntime.OS) {
+            if ("Linux" === PersonaSwitcher.XULRuntime.OS)
+            {
                 item.setAttribute('value', which.iconURL);
             }
         }
@@ -393,9 +403,7 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
 
         if (0 === delay)
         {
-            item.addEventListener
-            (
-                'DOMMenuItemActive',
+            item.addEventListener('DOMMenuItemActive',
                 function (event)
                 {
                     PersonaSwitcher.logger.log(which.name + ' Active');
@@ -407,15 +415,12 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
         else
         {
             // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Events
-            item.addEventListener
-            (
-                'DOMMenuItemActive',
+            item.addEventListener('DOMMenuItemActive',
                 function (event)
                 {
                     PersonaSwitcher.previewTimer.cancel();
                     PersonaSwitcher.previewWhich = which;
-                    PersonaSwitcher.previewTimer.init
-                    (
+                    PersonaSwitcher.previewTimer.init(
                         PersonaSwitcher.previewObserver, delay,
                         Components.interfaces.nsITimer.TYPE_ONE_SHOT
                     );
@@ -424,9 +429,7 @@ PersonaSwitcher.createMenuItem = function (doc, which, index)
             );
         }
         // 'DOMMenuItemInactive' doesn't work, who knew?
-        item.addEventListener
-        (
-            'DOMMenuItemInactive',
+        item.addEventListener('DOMMenuItemInactive',
             function (event)
             {
                 PersonaSwitcher.logger.log(which.name + ' Inactive');
@@ -443,7 +446,7 @@ PersonaSwitcher.createMenuItems = function (doc, menupopup, arr, indexOffset)
     PersonaSwitcher.logger.log(menupopup.id);
     indexOffset = 'undefined' === typeof(indexOffset) ? 0 : indexOffset;
 
-    var popup = 'personaswitcher-button-popup' ===  menupopup.id;
+    var popup = 'personaswitcher-button-popup' === menupopup.id;
 
     var item = null;
 
@@ -514,7 +517,7 @@ PersonaSwitcher.popupHidden = function()
 
     if (PersonaSwitcher.prefs.getBoolPref('preview'))
     {
-        if (PersonaSwitcher.prefs.getIntPref('preview-delay') > 0)
+        if (0 < PersonaSwitcher.prefs.getIntPref('preview-delay'))
         {
             PersonaSwitcher.previewTimer.cancel();
         }
@@ -526,7 +529,7 @@ PersonaSwitcher.popupHidden = function()
 PersonaSwitcher.setAccessKey = function (doc)
 {
     var accesskey = PersonaSwitcher.prefs.getCharPref('accesskey');
-    if (accesskey !== '')
+    if ('' !== accesskey)
     {
         var menu = doc.getElementById('personaswitcher-main-menubar');
         if(menu)
@@ -582,9 +585,9 @@ PersonaSwitcher.getButtonPopup =  function(doc, id)
             break;
     }
 
-    //Check the toolbar palette first. For some reason elements in the palette
-    //cannot be retrieved from the document using getElementById, so we do it
-    //the hard way 
+    // Check the toolbar palette first. For some reason elements in the palette
+    // cannot be retrieved from the document using getElementById, so we do it
+    // the hard way 
     if (null !== toolbox)
     {
         var list = toolbox.palette.children;
@@ -596,8 +599,8 @@ PersonaSwitcher.getButtonPopup =  function(doc, id)
             }
         }
     }
-    //If it's not in the palette it should be attached to the menu and is
-    //accessible from the document
+    // If it's not in the palette it should be attached to the menu and is
+    // accessible from the document
     return doc.getElementById('personaswitcher-button-popup');
 };
 
@@ -608,8 +611,7 @@ PersonaSwitcher.setDefaultTheme = function (resolve, reject)
     if (PersonaSwitcher.addonManager)
     {
         PersonaSwitcher.logger.log(PersonaSwitcher.defaultThemeId);
-        AddonManager.getAddonByID
-        (
+        AddonManager.getAddonByID(
             PersonaSwitcher.defaultThemeId,
             function (theme)
             {
@@ -624,8 +626,8 @@ PersonaSwitcher.setDefaultTheme = function (resolve, reject)
     }
     else if (null !== PersonaSwitcher.extensionManager)
     {
-        var theme = PersonaSwitcher.extensionManager.getItemForID
-            (PersonaSwitcher.defaultThemeId);
+        var theme = PersonaSwitcher.extensionManager.getItemForID(
+            PersonaSwitcher.defaultThemeId);
 
         if (null !== theme)
         {
@@ -650,7 +652,8 @@ PersonaSwitcher.onWindowLoad = function (doc)
 
         var retrieveDefaultTheme = new Promise(PersonaSwitcher.setDefaultTheme);
 
-        retrieveDefaultTheme.then(() => {
+        retrieveDefaultTheme.then(() => 
+        {
             PersonaSwitcher.createStaticPopups(doc);
             PersonaSwitcher.currentIndex =
                 PersonaSwitcher.prefs.getIntPref ("current");
@@ -658,10 +661,12 @@ PersonaSwitcher.onWindowLoad = function (doc)
             if (PersonaSwitcher.prefs.getBoolPref ('startup-switch'))
             {
                 PersonaSwitcher.rotate();
-            } else {
-                PersonaSwitcher.switchTo 
-                    (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-                     PersonaSwitcher.currentIndex);
+            } 
+            else 
+            {
+                PersonaSwitcher.switchTo(
+                    PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+                    PersonaSwitcher.currentIndex);
             }
         });
     }
@@ -672,9 +677,9 @@ PersonaSwitcher.onWindowLoad = function (doc)
         PersonaSwitcher.createStaticPopups (doc); 
         PersonaSwitcher.currentIndex =
             PersonaSwitcher.prefs.getIntPref ("current");
-        PersonaSwitcher.switchTo 
-            (PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-             PersonaSwitcher.currentIndex);
+        PersonaSwitcher.switchTo(
+            PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
+            PersonaSwitcher.currentIndex);
     }
     
     PersonaSwitcher.setKeyset(doc);

@@ -1,3 +1,6 @@
+/* global Components, Services, PersonaSwitcher, ADDON_UNINSTALL, ADDON_DISABLE */
+'use strict';
+
 const {
     classes: Cc,
     interfaces: Ci,
@@ -23,11 +26,14 @@ var uri = ios.newURI("chrome://personaswitcher/skin/toolbar-button.css",
 
 var firstRun = false;
 
-function startup(data, reason) {
+function startup(data, reason) 
+{
     // https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
     // Loading the stylesheet into all windows is a noticeable hit on
     // performance but is necessary for Thunderbird compatibility
-    if (!styleSheetService.sheetRegistered(uri, styleSheetService.AUTHOR_SHEET)) {
+    if (!styleSheetService.sheetRegistered(uri, 
+        styleSheetService.AUTHOR_SHEET)) 
+    {
         styleSheetService.
         loadAndRegisterSheet(uri, styleSheetService.AUTHOR_SHEET);
     }
@@ -35,9 +41,8 @@ function startup(data, reason) {
     // https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
     // load preferences
     Services.scriptloader.
-    loadSubScript('chrome://personaswitcher/content/prefs.js', {
-        pref: setDefaultPref
-    });
+    loadSubScript('chrome://personaswitcher/content/prefs.js', 
+        {pref: setDefaultPref});
 
     Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
@@ -45,18 +50,20 @@ function startup(data, reason) {
     let context = this;
     Services.scriptloader.loadSubScript(
         'chrome://personaswitcher/content/ui.js',
-        context, "UTF-8" /* The script's encoding */ );
+        context, "UTF-8" /* The script's encoding */);
 
     forEachOpenWindow(loadIntoWindow);
     Services.wm.addListener(WindowListener);
     firstRun = false;
 }
 
-function shutdown(data, reason) {
+function shutdown(data, reason) 
+{
     // Clears the cache on disable so reloading the addon when debugging works 
     // properly
     // http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
-    if (reason == ADDON_DISABLE) {
+    if (reason == ADDON_DISABLE) 
+    {
         Services.obs.notifyObservers(null, "startupcache-invalidate", null);
     }
 
@@ -65,7 +72,8 @@ function shutdown(data, reason) {
     Services.wm.removeListener(WindowListener);
     Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');
 
-    if (styleSheetService.sheetRegistered(uri, styleSheetService.AUTHOR_SHEET)) {
+    if (styleSheetService.sheetRegistered(uri, styleSheetService.AUTHOR_SHEET)) 
+    {
         styleSheetService.unregisterSheet(uri, styleSheetService.AUTHOR_SHEET);
     }
 
@@ -77,17 +85,21 @@ function shutdown(data, reason) {
     Services.obs.notifyObservers(null, 'chrome-flush-caches', null);
 }
 
-function install(data, reason) {
+function install(data, reason) 
+{
     firstRun = true;
 }
 
-function uninstall(data, reason) {
-    if( ADDON_UNINSTALL === reason ) {
+function uninstall(data, reason) 
+{
+    if(ADDON_UNINSTALL === reason) 
+    {
         removeUserPrefs();
     }
 }
 
-function loadIntoWindow(window) {
+function loadIntoWindow(window) 
+{
     let doc = window.document;
 
     injectMainMenu(doc);
@@ -97,7 +109,8 @@ function loadIntoWindow(window) {
     PersonaSwitcher.onWindowLoad(doc);
 }
 
-function unloadFromWindow(window) {
+function unloadFromWindow(window) 
+{
     let doc = window.document;
     let menu_personaswitcher =
         doc.getElementById("personaswitcher-main-menubar");
@@ -106,45 +119,61 @@ function unloadFromWindow(window) {
     let button = doc.getElementById("personaswitcher-button");
     let keySet = doc.getElementById("personaSwitcherKeyset");
 
-    if (menu_personaswitcher !== null) {
+    if (null !== menu_personaswitcher) 
+    {
         menu_personaswitcher.parentNode.removeChild(menu_personaswitcher);
     }
-    if (subMenu_personaswitcher !== null) {
+    if (null !== subMenu_personaswitcher) 
+    {
         subMenu_personaswitcher.parentNode.removeChild(subMenu_personaswitcher);
     }
-    if (button !== null) {
+    if (null !== button) 
+    {
         button.parentNode.removeChild(button);
     }
-    if (keySet !== null) {
+    if (null !== keySet) 
+    {
         keySet.parentNode.removeChild(keySet);
     }
 }
 
-function forEachOpenWindow(applyThisFunc) {
+function forEachOpenWindow(applyThisFunc) 
+{
     PersonaSwitcher.allWindows(applyThisFunc);
 }
 
-var WindowListener = {
-    onOpenWindow: function(xulWindow) {
+var WindowListener = 
+{
+    onOpenWindow: function(xulWindow) 
+    {
         var window = xulWindow.
         QueryInterface(Components.interfaces.nsIInterfaceRequestor).
         getInterface(Components.interfaces.nsIDOMWindow);
 
-        function onWindowLoad() {
+        function onWindowLoad() 
+        {
             window.removeEventListener('load', onWindowLoad);
             loadIntoWindow(window);
         }
         window.addEventListener('load', onWindowLoad);
     },
-    onCloseWindow: function(xulWindow) {},
-    onWindowTitleChange: function(xulWindow, newTitle) {}
+    onCloseWindow: function(xulWindow) 
+    {
+        
+    },
+    onWindowTitleChange: function(xulWindow, newTitle) 
+    {
+        
+    }
 };
 
 // UI Injection
-function injectMainMenu(doc) {
+function injectMainMenu(doc) 
+{
     let menuBar;
     let menu_tools;
-    switch (PersonaSwitcher.XULAppInfo.name) {
+    switch (PersonaSwitcher.XULAppInfo.name) 
+    {
         case 'Icedove':
         case 'Thunderbird':
             menuBar = doc.getElementById("mail-menubar");
@@ -161,7 +190,8 @@ function injectMainMenu(doc) {
             break;
     }
 
-    if (null === menuBar) {
+    if (null === menuBar) 
+    {
         return;
     }
 
@@ -174,24 +204,31 @@ function injectMainMenu(doc) {
     menu_PSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
     menu_PSPopup.addEventListener(
         'popuphidden',
-        function() {
+        function() 
+        {
             PersonaSwitcher.popupHidden();
         },
         false
     );
     menu_personaswitcher.appendChild(menu_PSPopup);
     
-    if (null === menu_tools) {
+    if (null === menu_tools) 
+    {
         menuBar.appendChild(menu_personaswitcher);
-    } else {
-        menuBar.insertBefore(menu_personaswitcher, menu_tools.nextSibling);        
+    } 
+    else 
+    {
+        menuBar.insertBefore(
+            menu_personaswitcher, menu_tools.nextSibling);        
     }
 }
 
-function injectSubMenu(doc) {
+function injectSubMenu(doc) 
+{
     let menuPopup;
     let subMenu_prefs;
-    switch (PersonaSwitcher.XULAppInfo.name) {
+    switch (PersonaSwitcher.XULAppInfo.name) 
+    {
         case 'Icedove':
         case 'Thunderbird':
         case 'SeaMonkey':
@@ -203,7 +240,8 @@ function injectSubMenu(doc) {
             break;
     }
 
-    if (null === menuPopup) {
+    if (null === menuPopup) 
+    {
         return;
     }
 
@@ -216,7 +254,8 @@ function injectSubMenu(doc) {
     subMenu_PSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
     subMenu_PSPopup.addEventListener(
         'popuphidden',
-        function() {
+        function() 
+        {
             PersonaSwitcher.popupHidden();
         },
         false
@@ -225,11 +264,13 @@ function injectSubMenu(doc) {
     menuPopup.appendChild(subMenu_personaswitcher);
 }
 
-function injectButton(window) {
+function injectButton(window) 
+{
     let doc = window.document;
     let toolbox;
     let toolbar;
-    switch (PersonaSwitcher.XULAppInfo.name) {
+    switch (PersonaSwitcher.XULAppInfo.name) 
+    {
         case 'Icedove':
         case 'Thunderbird':
             toolbox = doc.getElementById("mail-toolbox");
@@ -243,11 +284,13 @@ function injectButton(window) {
             break;
     }
 
-    if (null === toolbox) {
+    if (null === toolbox) 
+    {
         return;
     }
 
-    function openOptions(event) {
+    function openOptions(event) 
+    {
         var features = "chrome,titlebar,toolbar,centerscreen";
         window.openDialog("chrome://personaswitcher/content/options.xul",
             "Preferences", features);
@@ -274,24 +317,28 @@ function injectButton(window) {
     button_PSPopup.setAttribute("id", "personaswitcher-button-popup");
     button_PSPopup.addEventListener(
         'popuphidden',
-        function() {
+        function() 
+        {
             PersonaSwitcher.popupHidden();
         },
         false
     );
     button.appendChild(button_PSPopup);
 
-    if (!existsIn(toolbox.palette.children, button)) {
+    if (!existsIn(toolbox.palette.children, button)) 
+    {
         toolbox.palette.appendChild(button);
     }
 
     moveButtonToToolbar(doc, toolbar, button);
 }
 
-function existsIn(list, desiredItem) {
-
-    for (var index = 0; index < list.length; index++) {
-        if (list[index].id === desiredItem.id) {
+function existsIn(list, desiredItem) 
+{
+    for (var index = 0; index < list.length; index++) 
+    {
+        if (list[index].id === desiredItem.id) 
+        {
             return true;
         }
     }
@@ -300,39 +347,49 @@ function existsIn(list, desiredItem) {
 }
 
 // http://blog.salsitasoft.com/adding-a-toolbar-button-in-a-bootstrapped-firefox-extension/
-function moveButtonToToolbar(doc, toolbar, button) {
+function moveButtonToToolbar(doc, toolbar, button) 
+{
     var currentset = toolbar.getAttribute("currentset").split(",");
     var index = currentset.indexOf(button.id);
-    if (index == -1) {
-        if (firstRun) {
+    if (-1 == index) 
+    {
+        if (firstRun) 
+        {
             // No button yet so add it to the toolbar.
             toolbar.insertItem(button.id);
             toolbar.setAttribute("currentset", toolbar.currentSet);
             doc.persist(toolbar.id, "currentset");
         }
-    } else {
+    } 
+    else 
+    {
         // The id is in the currentset, so find the position and
         // insert the button there.
         var before = null;
 
-        for (var i = index + 1; i < currentset.length; i++) {
+        for (var i = index + 1; i < currentset.length; i++) 
+        {
             before = doc.getElementById(currentset[i]);
-            if (before) {
+            if (before) 
+            {
                 toolbar.insertItem(button.id, before);
                 break;
             }
         }
 
-        if (!before) {
+        if (!before) 
+        {
             toolbar.insertItem(button.id);
         }
     }
 }
 
-function addKeyset(doc) {
+function addKeyset(doc) 
+{
     // http://forums.mozillazine.org/viewtopic.php?t=2711165
     var mainWindow;
-    switch (PersonaSwitcher.XULAppInfo.name) {
+    switch (PersonaSwitcher.XULAppInfo.name) 
+    {
         case 'Icedove':
         case 'Thunderbird':
             mainWindow = doc.getElementById('messengerWindow');
@@ -344,7 +401,8 @@ function addKeyset(doc) {
             break;
     }
 
-    if (null === mainWindow) {
+    if (null === mainWindow) 
+    {
         return;
     }
 
@@ -355,8 +413,10 @@ function addKeyset(doc) {
 
 // https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences
 // Default Preferences Setup
-function getGenericPref(branch, prefName) {
-    switch (branch.getPrefType(prefName)) {
+function getGenericPref(branch, prefName) 
+{
+    switch (branch.getPrefType(prefName)) 
+    {
         default:
             case 0:
             return undefined; // PREF_INVALID
@@ -369,8 +429,10 @@ function getGenericPref(branch, prefName) {
     }
 }
 
-function setGenericPref(branch, prefName, prefValue) {
-    switch (typeof prefValue) {
+function setGenericPref(branch, prefName, prefValue) 
+{
+    switch (typeof prefValue) 
+    {
         case 'string':
             setUCharPref(prefName, prefValue, branch);
             return;
@@ -383,7 +445,8 @@ function setGenericPref(branch, prefName, prefValue) {
     }
 }
 
-function setDefaultPref(prefName, prefValue) {
+function setDefaultPref(prefName, prefValue) 
+{
     var defaultBranch = Services.prefs.getDefaultBranch(null);
     setGenericPref(defaultBranch, prefName, prefValue);
 }
@@ -391,7 +454,8 @@ function setDefaultPref(prefName, prefValue) {
 function getUCharPref(prefName, branch) // Unicode getCharPref
 {
     branch = branch ? branch : Services.prefs;
-    return branch.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
+    return branch.getComplexValue(
+        prefName, Components.interfaces.nsISupportsString).data;
 }
 
 function setUCharPref(prefName, text, branch) // Unicode setCharPref
@@ -404,7 +468,8 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
         string);
 }
 
-function removeUserPrefs() {
+function removeUserPrefs() 
+{
     var userPreferences = [
     "defshift", "defcontrol", "defalt", "defmeta", "defaccel", "defos", 
     "defkey", "rotshift", "rotcontrol", "rotalt", "rotmeta", "rotaccel", 
@@ -413,9 +478,9 @@ function removeUserPrefs() {
     "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
     "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
     "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
-    "preview", "preview-delay", "icon-preview", "tools-submenu", "main-menubar", 
-    "debug", "notification-workaround", "toolbox-minheight", "startup-switch", 
-    "fastswitch", "current"];
+    "preview", "preview-delay", "icon-preview", "tools-submenu",
+    "main-menubar", "debug", "notification-workaround", "toolbox-minheight",
+    "startup-switch", "fastswitch", "current"];
     
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService).

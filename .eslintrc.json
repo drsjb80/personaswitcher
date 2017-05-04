@@ -48,7 +48,7 @@
             "error",
             "last"
         ],
-        "complexity": "error",
+        "complexity": "warn",
         "computed-property-spacing": [
             "error",
             "never"
@@ -77,10 +77,7 @@
             "error",
             "never"
         ],
-        "func-style": [
-            "error",
-            "declaration"
-        ],
+        "func-style": "off",
         "generator-star-spacing": "error",
         "global-require": "error",
         "guard-for-in": "off",
@@ -100,8 +97,8 @@
         ],
         "lines-around-comment": "error",
         "lines-around-directive": "off",
-        "max-depth": "error",
-        "max-len": ["error", 80, 4],
+        "max-depth": "warn",
+        "max-len": ["error", {"ignoreComments": true}],
         "max-lines": "off",
         "max-nested-callbacks": "error",
         "max-params": "off",
@@ -120,6 +117,7 @@
         "no-catch-shadow": "error",
         "no-compare-neg-zero": "error",
         "no-confusing-arrow": "error",
+		"no-console": "off",
         "no-continue": "off",
         "no-div-regex": "error",
         "no-duplicate-imports": "error",
@@ -155,9 +153,9 @@
         "no-multi-str": "error",
         "no-multiple-empty-lines": "error",
         "no-native-reassign": "error",
-        "no-negated-condition": "error",
+        "no-negated-condition": "off",
         "no-negated-in-lhs": "error",
-        "no-nested-ternary": "error",
+        "no-nested-ternary": "off",
         "no-new": "error",
         "no-new-func": "error",
         "no-new-object": "error",
@@ -241,11 +239,11 @@
         "padded-blocks": "off",
         "prefer-arrow-callback": "off",
         "prefer-const": "off",
-        "prefer-destructuring": "error",
+        "prefer-destructuring": "off",
         "prefer-numeric-literals": "error",
         "prefer-promise-reject-errors": "error",
         "prefer-reflect": "error",
-        "prefer-rest-params": "error",
+        "prefer-rest-params": "off",
         "prefer-spread": "error",
         "prefer-template": "off",
         "quote-props": "off",
@@ -276,8 +274,8 @@
         ],
         "space-infix-ops": "off",
         "space-unary-ops": "off",
-        "spaced-comment": "off",
-        "strict": "off",
+        "spaced-comment": "error",
+        "strict": "error",
         "symbol-description": "error",
         "template-curly-spacing": "error",
         "template-tag-spacing": "error",
@@ -290,6 +288,6 @@
         "wrap-iife": "error",
         "wrap-regex": "error",
         "yield-star-spacing": "error",
-        "yoda": "off"
+        "yoda": ["error", "always"]
     }
 }
