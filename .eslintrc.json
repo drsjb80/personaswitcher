@@ -77,10 +77,7 @@
             "error",
             "never"
         ],
-        "func-style": [
-            "error",
-            "declaration"
-        ],
+        "func-style": "off",
         "generator-star-spacing": "error",
         "global-require": "error",
         "guard-for-in": "off",
@@ -191,7 +188,7 @@
         "no-shadow-restricted-names": "error",
         "no-spaced-func": "off",
         "no-sync": "error",
-        "no-tabs": "off",
+        "no-tabs": "error",
         "no-template-curly-in-string": "error",
         "no-ternary": "off",
         "no-throw-literal": "error",
@@ -277,8 +274,8 @@
         ],
         "space-infix-ops": "off",
         "space-unary-ops": "off",
-        "spaced-comment": "off",
-        "strict": "off",
+        "spaced-comment": "error",
+        "strict": "error",
         "symbol-description": "error",
         "template-curly-spacing": "error",
         "template-tag-spacing": "error",
@@ -291,6 +288,6 @@
         "wrap-iife": "error",
         "wrap-regex": "error",
         "yield-star-spacing": "error",
-        "yoda": "off"
+        "yoda": ["error", "always"]
     }
 }

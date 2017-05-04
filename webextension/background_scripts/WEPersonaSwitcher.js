@@ -1,3 +1,7 @@
+/* global browser */
+/* eslint no-constant-condition: 0 */
+'use strict';
+
 function handleStartup() 
 {
     var checkDefaultsLoaded = browser.storage.local.get("defaults_loaded");
@@ -17,15 +21,13 @@ function handleStartup()
 
 // Verify if we need to load the default preferences by checking if the 
 // default_loaded flag is undefined. 
-function loadDefaultsIfNeeded(prefs) {
+function loadDefaultsIfNeeded(prefs) 
+{
         if ('undefined' === typeof(prefs.defaults_loaded)) 
         {
             return loadDefaults();
         } 
-        else 
-        {
-            return Promise.resolve();
-        }
+        return Promise.resolve();
 }
 
 function loadDefaults()
@@ -90,10 +92,15 @@ function loadDefaults()
             fastSwitch: false,
             toolboxMaxHeight: 200,
 
-            //hidden preferences
+            // hidden preferences
             current: 0
         });
-    return setting.then( function() { return Promise.resolve(); }, handleError);
+    return setting.then(
+        function() 
+        { 
+            return Promise.resolve();
+        }, 
+        handleError);
 }
 
 function getMenuData() 
@@ -125,7 +132,7 @@ function buildMenu(data)
 
     insertSeparator();
 
-    for (var index = 0; index < defaultThemes.length; index++) 
+    for (index = 0; index < defaultThemes.length; index++) 
     {        
         browserActionMenu.
             appendChild(buildMenuItem(defaultThemes[index], data[0],
@@ -143,7 +150,8 @@ function buildMenuItem(theme, prefs, theIndex)
     themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview),
                              textNode);
 
-    if (theIndex === prefs.current) {
+    if (theIndex === prefs.current) 
+    {
         themeChoice.selected = true;
     }
 
@@ -172,11 +180,12 @@ function createIcon(iconURL, iconPreview)
     return themeImg;
 }
 
-function insertSeparator() {
+function insertSeparator() 
+{
     var separator = document.createElement("hr");
     separator.setAttribute("class", "menu-separator");
     browserActionMenu.appendChild(separator);
-};
+}
 
 var clickListener = function(theTheme, theIndex) 
 { 
@@ -187,12 +196,15 @@ var clickListener = function(theTheme, theIndex)
             {
                 setCurrentTheme(theIndex, result.current);
             });
-        browser.runtime.sendMessage({command: "Switch-Themes",
-                                     theme: theTheme,
-                                     index: theIndex});
+        browser.runtime.sendMessage(
+        {
+            command: "Switch-Themes",
+            theme: theTheme,
+            index: theIndex
+        });
         startRotateAlarm(); 
     };
-}
+};
 
 var previewAlarmListener;
 var mouseOverListener = function(theTheme, previewDelay) 
@@ -203,8 +215,12 @@ var mouseOverListener = function(theTheme, previewDelay)
         const delayInMinutes = previewDelay/MS_TO_MINUTE_CONVERSION;
         var innerAlarmListener = function(alarmInfo) 
         {
-            browser.runtime.sendMessage({command: "Preview-Theme",
-                                         theme: theTheme}); 
+            browser.runtime.sendMessage(
+                {
+                    command: "Preview-Theme",
+                    theme: theTheme
+                }
+            ); 
         };
         previewAlarmListener = innerAlarmListener;
         browser.alarms.create("previewAlarm", {delayInMinutes});
@@ -218,7 +234,12 @@ var mouseOutListener = function(theTheme)
     { 
         browser.alarms.clear("previewAlarm");
         browser.alarms.onAlarm.removeListener(previewAlarmListener);
-        browser.runtime.sendMessage({command: "End-Preview", theme: theTheme}); 
+        browser.runtime.sendMessage(
+            {
+                command: "End-Preview", 
+                theme: theTheme
+            }
+        ); 
     };
 };
 
@@ -243,18 +264,19 @@ function toggleMenuIcons(iconsShown)
 }
 
 var rotateAlarmListener;
-function startRotateAlarm() {    
+function startRotateAlarm() 
+{    
     const ONE_SECOND = (1.0/60.0);
     logger.log("In Rotate Alarm");
     var checkRotatePref = browser.storage.local.
                             get(["auto", "autoMinutes", "fastSwitch"]);
-    return checkRotatePref.then(results => 
+    return checkRotatePref.then((results) => 
     { 
-        //Because the WebExtension can't be notified to turn on/off the rotate
-        //when the associated shortcut is pressed and processed in the bootstrap 
-        //code, we have to run the alarm constantly. When the shortcuts are
-        //migrated over to the WebExtension replace the if(true) with 
-        //if(true === results.auto)
+        // Because the WebExtension can't be notified to turn on/off the rotate
+        // when the associated shortcut is pressed and processed in the bootstrap 
+        // code, we have to run the alarm constantly. When the shortcuts are
+        // migrated over to the WebExtension replace the if(true) with 
+        // if(true === results.auto)
         if (true) 
         {    
             const periodInMinutes = results.fastSwitch ? ONE_SECOND :
@@ -283,17 +305,17 @@ function stopRotateAlarm()
     }
 }
 
-//Because the legacy bootstrap code cannot initiate contact with the embedded 
-//WebExtension, and because the shortcuts are still handled by the bootstrap 
-//code, when the shortcut to toggle autoswitching is pressed the WebExtension is 
-//unable to react. Thus, we have to check the bootstrap autoswitch preference 
-//before we rotate to make sure that the preference is still true. Likewise, 
-//even if the preference in the WebExtension code is false, it may have been 
-//toggled on by a shortcut key press in the bootstrap code. Thus we have to 
-//leave the periodic timer continually running and only respond when the 
-//bootstrap code's auto preference is true. This is not optimal from a 
-//performance standpoint but is necessary until the shortcuts can be migrated to 
-//the WebExtension code.
+// Because the legacy bootstrap code cannot initiate contact with the embedded 
+// WebExtension, and because the shortcuts are still handled by the bootstrap 
+// code, when the shortcut to toggle autoswitching is pressed the WebExtension is 
+// unable to react. Thus, we have to check the bootstrap autoswitch preference 
+// before we rotate to make sure that the preference is still true. Likewise, 
+// even if the preference in the WebExtension code is false, it may have been 
+// toggled on by a shortcut key press in the bootstrap code. Thus we have to 
+// leave the periodic timer continually running and only respond when the 
+// bootstrap code's auto preference is true. This is not optimal from a 
+// performance standpoint but is necessary until the shortcuts can be migrated to 
+// the WebExtension code.
 function autoRotate() 
 {
     var checkRotatePref = Promise.all([
@@ -301,14 +323,14 @@ function autoRotate()
             browser.runtime.sendMessage({command: "Return-Pref-Auto"})
         ]);    
         
-    checkRotatePref.then(results => 
+    checkRotatePref.then((results) => 
     {
         if (true === results[1].auto) 
         {
             rotate();
         }
         
-        //If the two preferences don't match, update the WebExtension's pref
+        // If the two preferences don't match, update the WebExtension's pref
         if(results[0].auto !== results[1].auto) 
         {
             browser.storage.local.set({auto: results[1].auto});
@@ -318,17 +340,17 @@ function autoRotate()
 
 function rotate() 
 {
-    if (currentThemes.length <= 1) return;
+    if (1 >= currentThemes.length) return;
 
-    //Because the shortcuts are still handled by the bootstrap code the  
-    //currentIndex in the bootstrap code is always as (or more) accurate than 
-    //the currentIndex stored in the Webextension due to use of the rotate 
-    //shortcut. 
+    // Because the shortcuts are still handled by the bootstrap code the  
+    // currentIndex in the bootstrap code is always as (or more) accurate than 
+    // the currentIndex stored in the Webextension due to use of the rotate 
+    // shortcut. 
     var getRotatePref = Promise.all([
             browser.storage.local.get(["random", "current"]),
             browser.runtime.sendMessage({command: "Get-Current-Index"})
         ]);
-    getRotatePref.then( results => 
+    getRotatePref.then((results) => 
     {
         logger.log ("Current index before ", results[1].current);
         var newIndex = results[1].current;
@@ -346,18 +368,24 @@ function rotate()
         {
             // If a default theme is active, rotate to the first non-default 
             // theme
-            if(newIndex > currentThemes.length-1) {
+            if(newIndex > currentThemes.length-1) 
+            {
                 newIndex = 0;
-            } else {
+            } 
+            else 
+            {
                 newIndex = (newIndex + 1) % currentThemes.length;
             }
         }
 
         logger.log ("Current index after ", newIndex);
         setCurrentTheme(newIndex, results[0].current);
-        browser.runtime.sendMessage({command: "Switch-Themes",
-                                     theme: currentThemes[newIndex],
-                                     index: newIndex});
+        browser.runtime.sendMessage(
+        {
+            command: "Switch-Themes",
+            theme: currentThemes[newIndex],
+            index: newIndex
+        });
     });    
 }
 
@@ -365,7 +393,7 @@ function rotateOnStartup()
 {
     logger.log("Rotate on Startup");
     var checkRotateOnStartup = browser.storage.local.get("startupSwitch");
-    checkRotateOnStartup.then( prefs => 
+    checkRotateOnStartup.then((prefs) => 
     {
         if(true === prefs.startupSwitch) 
         {
@@ -377,7 +405,7 @@ function rotateOnStartup()
 function setCurrentTheme(newIndex, oldIndex)
 {
     var themes = browserActionMenu.children;
-    themes[oldIndex].selected = false
+    themes[oldIndex].selected = false;
     themes[newIndex].selected = true;
 
     if(newIndex !== oldIndex)
@@ -386,7 +414,7 @@ function setCurrentTheme(newIndex, oldIndex)
                                         set({current: newIndex});
         updatingCurrentIndex.catch(handleError);  
     }
-};
+}
 
 function handlePreferenceChange(changes, area) 
 { 
@@ -440,12 +468,13 @@ function reactToPrefChange(prefName, prefData)
             stopRotateAlarm();
             startRotateAlarm();
             break;
-         case 'fastSwitch':
+        case 'fastSwitch':
         case 'auto':
-            //When the shortcuts are migrated to the WebExtension code, 
-            //turn off/on the rotate timer here.
+            // When the shortcuts are migrated to the WebExtension code, 
+            // turn off/on the rotate timer here.
             stopRotateAlarm();
             startRotateAlarm();
+            // falls through
         case 'toolboxMinHeight':
         case 'startupSwitch':
         case 'random':
@@ -514,11 +543,15 @@ browser.contextMenus.onClicked.addListener((info) =>
 
 var logger;
 var nullLogger = {};
-nullLogger.log = function (s) { 'use strict'; return; };
+nullLogger.log = function (s) 
+{ 
+    'use strict'; 
+    return; 
+};
 function setLogger() 
 {
     var checkIfDebugging = browser.storage.local.get("debug");
-    return checkIfDebugging.then(result => 
+    return checkIfDebugging.then((result) => 
     {
         if (true === result.debug) 
         {
