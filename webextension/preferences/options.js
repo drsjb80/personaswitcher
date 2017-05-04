@@ -1,4 +1,5 @@
 /* global browser */
+'use strict';
 
 var preferences = ["defaultKeyShift", "defaultKeyControl", "defaultKeyAlt",
                     "defaultKeyMeta", "defaultKeyAccel", "defaultKeyOS",

@@ -1,5 +1,6 @@
 /* global browser */
 /* eslint no-constant-condition: 0 */
+'use strict';
 
 function handleStartup() 
 {

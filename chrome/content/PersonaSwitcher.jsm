@@ -5,13 +5,12 @@ index, isDefaultTheme */
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 // no space between comment delimiters. really.
+"use strict";
 
 Components.utils.import("resource://gre/modules/Console.jsm");
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
-// "use strict";
-    
 // If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
 const APPEARS_HIGHER_IN_LIST = -1;
