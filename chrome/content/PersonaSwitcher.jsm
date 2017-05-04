@@ -8,11 +8,11 @@ theme, dump, index, isDefaultTheme */
 // https://developer.mozilla.org/en/JavaScript_code_modules/Using_JavaScript_code_modules
 
 // no space between comment delimiters. really.
+"use strict";
 
 Components.utils.
     import("resource://gre/modules/LightweightThemeManager.jsm");
 
-"use strict";
 // If this value is changed, it needs to be changed in options.xul as well
 const MAX_PREVIEW_DELAY = 10000;
 const APPEARS_HIGHER_IN_LIST = -1;
@@ -609,7 +609,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
         if(themes[index])
         {
             PersonaSwitcher.logger.log(themes[index]);
-            theme = themes[index];
+            var theme = themes[index];
             if ("Linux" === PersonaSwitcher.XULRuntime.OS) 
             {
                 theme.removeAttribute('image');
@@ -618,7 +618,7 @@ PersonaSwitcher.setCurrentTheme = function (doc, index)
             // This is a simple hack to ensure that the theme is redrawn in
             // certain versions of Thunderbird while being run on a Mac.
             // http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
-            nextTheme = theme.nextSibling;
+            var nextTheme = theme.nextSibling;
             buttonMenu.removeChild(theme);
             buttonMenu.insertBefore(theme, nextTheme);
         }
@@ -711,7 +711,7 @@ PersonaSwitcher.extractDefaults = function()
     // necessitate evaluation of a majority of the array and we want to make
     // this as quick as possible. As such we account for the removal of items
     // while iterating over the array by decrementing the index to compensate.
-    for(index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
+    for(let index = 0; index < PersonaSwitcher.currentThemes.length; index++) 
     {
         theme = PersonaSwitcher.currentThemes[index];
         if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) 

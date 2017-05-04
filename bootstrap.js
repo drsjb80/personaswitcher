@@ -1,4 +1,5 @@
 /* global Components, Services, PersonaSwitcher, ADDON_UNINSTALL, ADDON_DISABLE */
+'use strict';
 
 const {
     classes: Cc,
