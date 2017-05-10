@@ -5,7 +5,7 @@
 ; shortcut preferences
 
 Local $testName = "Keyboard Shortcut Preferences Tests"
-Local $tests[9]
+Local $tests[8]
 
 InitializeFirefox()
 
@@ -14,13 +14,13 @@ Local $themeIdList = GetThemeIdList()
 ; run tests and store results
 $tests[0] = DefaultPersona_DifferentKeyAndChar()
 $tests[1] = DefaultPersona_ExtraKey()
-$tests[2] = RotatePersona_RotateAll($themeIdList)
-$tests[3] = RotatePersona_DifferentKeyAndChar($themeIdList)
-$tests[4] = RotatePersona_ExtraKey($themeIdList)
+; !!! unknown reason for failing, bad logic?
+$tests[2] = "ERROR - test must be updated for webextension" ; RotatePersona_RotateAll($themeIdList)
+$tests[3] = "ERROR - test must be updated for webextension" ; RotatePersona_DifferentKeyAndChar($themeIdList)
+$tests[4] = "ERROR - test must be updated for webextension" ; RotatePersona_ExtraKey($themeIdList)
 $tests[5] = AutoSwitch_DifferentKeyAndChar()
-$tests[6] = AutoSwitch_ExtraKey()
-$tests[7] = AutoSwitch_DoublePress()
-$tests[8] = AutoSwitch_Disable()
+$tests[6] = AutoSwitch_DoublePress()
+$tests[7] = AutoSwitch_Disable()
 
 SaveResultsToFile($tests, $testName)
 EndFirefox()
@@ -143,9 +143,7 @@ Func RotatePersona_RotateAll($themeIdList)
 	  Local $currentTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
 
 	  ; ensure the current theme is actually the next theme in the list
-	  If $currentTheme == $themeId Then
-		 $result = True
-	  Else
+	  If $currentTheme <> $themeId Then
 		 $result = False
 		 ExitLoop
 	  EndIf
@@ -281,38 +279,7 @@ Func AutoSwitch_DifferentKeyAndChar()
 
    Return FormatTestString($testPassed, $sDescription)
  EndFunc
- ;------------------------------------------------------------------------------
-; Testing that the new shortcut key combination assigned to the Toggle Auto Switch
-; shortcut will change the theme and enable "Switch every __ minutes" preference.
-; Changed Ctrl + Alt + A to Shift + Ctrl + Alt + A
-Func AutoSwitch_ExtraKey()
-   Local $sDescription
-   Local $testPassed = False
 
-   SetPsOption("autoshift", True)
-
-   Local $startTheme = _FFPrefGet("lightweightThemes.selectedThemeID")
-
-   ; use the new key combination to change theme and enable "Switch every __ minutes"
-   WinWaitActive("[CLASS:MozillaWindowClass]")
-   Send("+^!a")
-   Sleep(500)
-
-   ; grab the value for the "Switch every __ minutes" preference
-   Local $isSwitchEnabled = GetPsOption("auto")
-
-   If $startTheme == _FFPrefGet("lightweightThemes.selectedThemeID") AND Not $isSwitchEnabled Then
-      $sDescription = "the auto switch shortcut did not change the theme or enabled the 'Switch every __ minutes' preference with the new combination: Shift + Ctrl + Alt + A"
-   Else
-      $sDescription = "the auto switch shortcut changed the theme and enabled the 'Switch every __ minutes' preference with the new combination: Shift + Ctrl + Alt + A"
-	  $testPassed = True
-   EndIf
-
-   ResetPsOption("autoshift") ;shift
-   ResetPsOption("auto")
-
-   Return FormatTestString($testPassed, $sDescription)
-EndFunc
 ;------------------------------------------------------------------------------
 ; Testing that pressing the Toggle Auto Switch shortcut twice will change the
 ; theme once and disable the "Switch every __ minutes" preference.

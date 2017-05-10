@@ -1,3 +1,7 @@
+/* global Components, Services, PersonaSwitcher, ADDON_DISABLE, 
+LightweightThemeManager, AddonManager */
+'use strict';
+
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import("resource://gre/modules/Console.jsm");
@@ -6,34 +10,23 @@ Cu.import('resource://gre/modules/AddonManager.jsm');
 var stringBundle = Services.strings.createBundle(
     'chrome://personaswitcher/locale/personaswitcher.properties?' + 
         Math.random());
-var styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"].
-                            getService(Ci.nsIStyleSheetService);
-var uri = Services.io.newURI("chrome://personaswitcher/skin/toolbar-button.css",
-                             null, null);
 
 function startup(data, reason) 
 {    
-    //https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
-    //load preferences
+    // https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
+    // load preferences
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/prefs.js',
             { pref: setDefaultPref });
         
     Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
     
-    //https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
+    // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
     let context = this;
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/ui.js',
                       context, "UTF-8" /* The script's encoding */);
 
-
-    //https://blog.mozilla.org/addons/2014/03/06/australis-for-add-on-developers-2/
-    //Loading the stylesheet into all windows is a noticeable hit on performance 
-    //but is necessary for Thunderbird compatibility
-    styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET);
-
-  
     forEachOpenWindow(loadIntoWindow);
     Services.wm.addListener(WindowListener);
 
@@ -46,9 +39,9 @@ function startup(data, reason)
 
 function shutdown(data, reason) 
 {
-    //Clears the cache on disable so reloading the addon when debugging works
-    //properly
-    //http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
+    // Clears the cache on disable so reloading the addon when debugging works
+    // properly
+    // http://stackoverflow.com/questions/24711069/firefox-restartless-bootstrap-extension-script-not-reloading
     if (reason == ADDON_DISABLE) 
     {
         Services.obs.notifyObservers(null, "startupcache-invalidate", null);
@@ -58,14 +51,9 @@ function shutdown(data, reason)
     PersonaSwitcher.prefs.removeObserver ('', PersonaSwitcher.prefsObserver);
     Services.wm.removeListener(WindowListener);
     AddonManager.removeAddonListener(PersonaSwitcher.AddonListener);
-    Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');    
+    Cu.unload('chrome://personaswitcher/content/PersonaSwitcher.jsm');   
   
-    if (styleSheetService.sheetRegistered(uri, styleSheetService.USER_SHEET)) 
-    {
-        styleSheetService.unregisterSheet(uri, styleSheetService.USER_SHEET);
-    }
-  
-    //https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_10_Bypass_cache_when_loading_properties_files/
+    // https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_10_Bypass_cache_when_loading_properties_files/
     // HACK WARNING: The Addon Manager does not properly clear all addon related
     //               caches on update; in order to fully update images and 
     //               locales, their caches need clearing here
@@ -74,7 +62,7 @@ function shutdown(data, reason)
 
 function install(data, reason) 
 {
-    //install stuff here
+    // install stuff here
 }
 
 function uninstall(data, reason) 
@@ -101,15 +89,16 @@ function unloadFromWindow(window)
         doc.getElementById("personaswitcher-tools-submenu");
     let keySet = doc.getElementById("personaSwitcherKeyset");
 
-    if(menuPersonaSwitcher !== null) 
+    if(null !== menuPersonaSwitcher) 
     {
         menuPersonaSwitcher.parentNode.removeChild(menuPersonaSwitcher);        
     }
-    if (submenuPersonaSwitcher !== null) 
+    if (null !== submenuPersonaSwitcher) 
     {
-        submenuPersonaSwitcher.parentNode.removeChild(submenuPersonaSwitcher);        
+        submenuPersonaSwitcher.parentNode.removeChild(
+            submenuPersonaSwitcher);        
     }
-    if(keySet !== null) 
+    if(null !== keySet) 
     {
         keySet.parentNode.removeChild(keySet);
     }
@@ -131,28 +120,37 @@ var WindowListener =
         function onWindowLoad()
         {
             window.removeEventListener('load', onWindowLoad);
-            if (window.document.documentElement.getAttribute('windowtype') == 
-                'navigator:browser')
+            if ('navigator:browser' == 
+                window.document.documentElement.getAttribute('windowtype'))
             {
                 loadIntoWindow(window);
             }
         }
         window.addEventListener('load', onWindowLoad);
     },
-    onCloseWindow: function (xulWindow) {},
-    onWindowTitleChange: function (xulWindow, newTitle) {}
+    onCloseWindow: function (xulWindow) 
+    {
+        
+    },
+    onWindowTitleChange: function (xulWindow, newTitle) 
+    {
+        
+    }
 };
 
-//Message handler for communication with embedded WebExtension
+// Message handler for communication with embedded WebExtension
 function messageHandler(message, sender, sendResponse) 
 {
     switch (message.command)
     {
         case "Check-For-Theme-List-Change":
-            if (PersonaSwitcher.themeListChanged) {
+            if (PersonaSwitcher.themeListChanged) 
+            {
                 sendResponse({themeListChanged: true});
                 PersonaSwitcher.themeListChanged = false;
-            } else {
+            } 
+            else 
+            {
                 sendResponse({themeListChanged: false});
             }
             break;
@@ -160,17 +158,18 @@ function messageHandler(message, sender, sendResponse)
             PersonaSwitcher.getPersonas();
             let checkForDefault = new Promise(loadDefaultIfNeeded);
 
-            checkForDefault.then( () => {
+            checkForDefault.then(() => 
+            {
                 sendResponse({
                     themes: PersonaSwitcher.currentThemes, 
                     defaults: PersonaSwitcher.defaultThemes
                 });
                 PersonaSwitcher.themeListChanged = false;
             });
-            //Because we are leaving the message handler before sendResponse is
-            //is called due to the aSync nature of promises, we have to return 
-            //true to indicate we are going to send a response.
-            //http://stackoverflow.com/questions/40772929/promise-from-browser-runtime-sendmessage-fulfilling-prior-to-asynchronous-call
+            // Because we are leaving the message handler before sendResponse is
+            // is called due to the aSync nature of promises, we have to return 
+            // true to indicate we are going to send a response.
+            // http://stackoverflow.com/questions/40772929/promise-from-browser-runtime-sendmessage-fulfilling-prior-to-asynchronous-call
             return true;
             break;
         case "Switch-Themes":
@@ -197,14 +196,14 @@ function messageHandler(message, sender, sendResponse)
     }
 }
 
-function loadDefaultIfNeeded(resolve, reject) {
+function loadDefaultIfNeeded(resolve, reject) 
+{
     var defaults = PersonaSwitcher.defaultThemes;
     var defaultName = defaults[defaults.length-1].name;
 
-    if('undefined' === typeof(defaultName)) {
-        AddonManager.getAddonByID
-        (
-            PersonaSwitcher.defaultThemeId,
+    if('undefined' === typeof(defaultName)) 
+    {
+        AddonManager.getAddonByID(PersonaSwitcher.defaultThemeId,
             function (theme)
             {
                 if (null !== theme)
@@ -222,7 +221,9 @@ function loadDefaultIfNeeded(resolve, reject) {
                 resolve();
             }
         );
-    } else {
+    } 
+    else 
+    {
         var defaultTheme = 
         {
             id: PersonaSwitcher.defaultTheme.id,
@@ -235,7 +236,8 @@ function loadDefaultIfNeeded(resolve, reject) {
     }
 }
 
-//Handles copying the preference values from the webextension to the legacy code
+// Handles copying the preference values from the webextension to the legacy code
+
 function setPreference(preference, value) 
 {
     switch(preference) 
@@ -394,7 +396,7 @@ function setPreference(preference, value)
     }
 }
 
-//UI Injection
+// UI Injection
 function injectMainMenu(doc) 
 {
     let menuBar;
@@ -414,17 +416,18 @@ function injectMainMenu(doc)
             break;
     }
         
-    //PersonaSwitcher menu that is added to the main menubar
+    // PersonaSwitcher menu that is added to the main menubar
     let menuPersonaSwitcher = doc.createElement("menu");
     menuPersonaSwitcher.setAttribute("id", "personaswitcher-main-menubar");
     menuPersonaSwitcher.setAttribute("label",
                 stringBundle.GetStringFromName('personaswitcher-menu.label'));
     let menuPSPopup = doc.createElement("menupopup");
     menuPSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
-    menuPSPopup.addEventListener
-    (
-        'popuphidden',
-        function() { PersonaSwitcher.popupHidden(); },
+    menuPSPopup.addEventListener('popuphidden',
+        function() 
+        { 
+            PersonaSwitcher.popupHidden(); 
+        },
         false
     );
     menuPersonaSwitcher.appendChild(menuPSPopup);
@@ -447,17 +450,18 @@ function injectSubMenu(doc)
             break;
     }
     
-    //SubMenu that is inserted into the Tools Menu
+    // SubMenu that is inserted into the Tools Menu
     let submenuPersonaSwitcher = doc.createElement("menu");
     submenuPersonaSwitcher.setAttribute("id", "personaswitcher-tools-submenu");
     submenuPersonaSwitcher.setAttribute("label", 
         stringBundle.GetStringFromName('personaswitcher-menu.label'));
     let submenuPSPopup = doc.createElement("menupopup");
     submenuPSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
-    submenuPSPopup.addEventListener
-    (
-        'popuphidden',
-        function() { PersonaSwitcher.popupHidden(); },
+    submenuPSPopup.addEventListener('popuphidden',
+        function() 
+        { 
+            PersonaSwitcher.popupHidden(); 
+        },
         false
     );
     submenuPersonaSwitcher.appendChild(submenuPSPopup);
@@ -466,7 +470,7 @@ function injectSubMenu(doc)
 
 function addKeyset(doc) 
 {
-    //http://forums.mozillazine.org/viewtopic.php?t=2711165
+    // http://forums.mozillazine.org/viewtopic.php?t=2711165
     var mainWindow;
     switch (PersonaSwitcher.XULAppInfo.name)
     {
@@ -486,8 +490,8 @@ function addKeyset(doc)
     mainWindow.appendChild(keyset);    
 }
 
-//https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences
-//Default Preferences Setup
+// https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences
+// Default Preferences Setup
 function getGenericPref(branch, prefName)
 {
     switch (branch.getPrefType(prefName))
@@ -539,7 +543,7 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
         createInstance(Components.interfaces.nsISupportsString);
     string.data = text;
     branch = branch ? branch : Services.prefs;
-    branch.setComplexValue( prefName, 
+    branch.setComplexValue(prefName, 
                             Components.interfaces.nsISupportsString,
                             string);
 }
@@ -554,9 +558,9 @@ function removeUserPrefs()
     "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
     "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
     "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
-    "preview", "preview-delay", "icon-preview", "tools-submenu", "main-menubar", 
-    "debug", "notification-workaround", "toolbox-minheight", "startup-switch", 
-    "fastswitch", "current"];
+    "preview", "preview-delay", "icon-preview", "tools-submenu", 
+    "main-menubar", "debug", "notification-workaround", 
+    "toolbox-minheight", "startup-switch", "fastswitch", "current"];
     
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService).

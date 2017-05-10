@@ -1,3 +1,5 @@
+/* global browser */
+'use strict';
 
 var backgroundPage;
 function appendMenu(page) 
@@ -10,7 +12,8 @@ function appendMenu(page)
         ]);
     getPreferences.then((results) => 
     {
-        backgroundPage.logger.log("Creating a new menu: " + results[2].themeListChanged);
+        backgroundPage.logger.log(
+            "Creating a new menu: " + results[2].themeListChanged);
         if(results[2].themeListChanged) 
         {
             var gettingMenuData = backgroundPage.getMenuData();
@@ -19,8 +22,10 @@ function appendMenu(page)
             .then(() => 
             {
                 document.body.appendChild(backgroundPage.browserActionMenu);
-                if(results[1].current !== results[0].current) {
-                    backgroundPage.setCurrentTheme(results[1].current, results[0].current);
+                if(results[1].current !== results[0].current) 
+                {
+                    backgroundPage.setCurrentTheme(
+                        results[1].current, results[0].current);
                 }
             })
             .catch(backgroundPage.handleError);
@@ -28,8 +33,10 @@ function appendMenu(page)
         else 
         {
             document.body.appendChild(backgroundPage.browserActionMenu);
-            if(results[1].current !== results[0].current) {
-                backgroundPage.setCurrentTheme(results[1].current, results[0].current);
+            if(results[1].current !== results[0].current) 
+            {
+                backgroundPage.setCurrentTheme(
+                    results[1].current, results[0].current);
             }
         }
     });
@@ -37,17 +44,18 @@ function appendMenu(page)
 
 function removeMenu() 
 {
-    //The ownerDocument is set as the last DOM that the element was assigned to.
-    //If the menu's ownerDocument remains this window, it will be marked as a 
-    //deadObject when this window finishes unloading. Since we don't want to 
-    //have to rebuild it, we need to assign it to a window that isn't going to
-    //be closed.
+    // The ownerDocument is set as the last DOM that the element was assigned to.
+    // If the menu's ownerDocument remains this window, it will be marked as a 
+    // deadObject when this window finishes unloading. Since we don't want to 
+    // have to rebuild it, we need to assign it to a window that isn't going to
+    // be closed.
     backgroundPage.document.body.appendChild(backgroundPage.browserActionMenu);
 }
 
 var gettingBackgroundPage = browser.runtime.getBackgroundPage();
 gettingBackgroundPage.then(appendMenu);
 window.addEventListener("unload", removeMenu);
-window.addEventListener("click", function(clickEvent) {
+window.addEventListener("click", function(clickEvent) 
+{
     window.close();
 });

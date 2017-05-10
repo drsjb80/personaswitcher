@@ -108,7 +108,7 @@ EndFunc
 ; Returns - Theme changed to default	True
 ;           Theme unchanged				False
 ; ==============================================================================
-Func ResetToDefaultTheme()
+Func ResetToDefaultThemeFF()
    WinActivate("[CLASS:MozillaWindowClass]")
    WinWaitActive("[CLASS:MozillaWindowClass]")
 
@@ -132,6 +132,7 @@ Func ResetToDefaultTheme()
    If _FFPrefGet("lightweightThemes.selectedThemeID") == "" Then
 	  return True
    Else
+	  MsgBox(0, "", "error")
 	  return False
    EndIf
 EndFunc

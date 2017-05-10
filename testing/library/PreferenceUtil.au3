@@ -84,7 +84,7 @@ Func SetPsOption(Const $sOption, Const $value, $copyToClipboard = False)
 		 _FFTabClose()
 		 _FFLoadWait()
 		 OpenPersonaSwitcherPrefs()
-		 Return _FFCmd('window.content.document.getElementsByClassName("inline-options-browser")[0]._contentWindow.document.getElementById("' & $sOptionId & '").value')
+		 Return String(_FFCmd('window.content.document.getElementsByClassName("inline-options-browser")[0]._contentWindow.document.getElementById("' & $sOptionId & '").value'))
 	  EndIf
 
 	  Return True
@@ -118,16 +118,7 @@ Func GetIdFromPref(Const $sOption)
 EndFunc
 
 
-; Copies the text from the focued field and returns the clipboard contents
-Func GetTextFromFocusedField()
-   Send("^a")
-   Sleep(500)
-   Send("^c")
-   Sleep(500)
-   Return ClipGet()
-EndFunc
-
-
+; helper functions for get and set preference functions
 Func GetPrefKeyArray()
    Local $prefMapKey[46]
 
