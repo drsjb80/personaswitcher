@@ -14,7 +14,7 @@ var stringBundle = Services.strings.createBundle(
 function startup(data, reason) 
 {    
     // https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_D:_Loading_Scripts
-    // load preferences
+
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/prefs.js',
             { pref: setDefaultPref });
@@ -25,16 +25,19 @@ function startup(data, reason)
     let context = this;
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/ui.js',
-                      context, "UTF-8" /* The script's encoding */);
+            context, "UTF-8");
 
     forEachOpenWindow(loadIntoWindow);
     Services.wm.addListener(WindowListener);
 
-    data.webExtension.startup().then(api => 
-    {
-        const {browser} = api;
-        browser.runtime.onMessage.addListener(messageHandler);
-    });    
+    data.webExtension.startup().then
+    (
+        api => 
+        {
+            const {browser} = api;
+            browser.runtime.onMessage.addListener(messageHandler);
+        }
+    );    
 }
 
 function shutdown(data, reason) 
