@@ -1,266 +1,214 @@
 {
-  "extensionName": {
-    "message": "Persona Switcher",
-    "description": "Name of the extension."
-  },
-
-	"extensionShortName": {
-    "message": "PSwitcher",
-    "description": "Short name of the extension."
-  },
-	
-  "extensionDescription": {
-    "message": "Quickly switch between your personas or reset it back to the default.",
-    "description": "Description of the extension."
-  },
-  
-  "ps_noPersonas": {
-	"message": "No Personas Found",
-	"description": "No Personas Found text"
-  },
-  
-  "ps_menuLabel": {
-	"message": "Persona Switcher",
-	"description": "Menu Label text"
-  },
-  
-  "ps_buttonLabel": {
-	"message": "PSwitcher",
-	"description": "Button Label text"
-  },
-  
-  "ps_toolTip": {
-	"message": "Click to access your personas",
-	"description": "Tooltip text"
-  },
-  
-   "ps_default": {
-	"message": "Default",
-	"description": "Default text"
-  },
-  
-   "about": {
-	"message": "About",
-	"description": "The word 'About'"
-  },
-  
-   "version": {
-	"message": "Version:",
-	"description": "The word 'Version'"
-  },
-  
-   "createdBy": {
-	"message": "Created By:",
-	"description": "The words 'Created By'"
-  },
-  
-   "homepage": {
-	"message": "Home Page:",
-	"description": "The words 'Home Page'"
-  },
-  
-   "options_title": {
-	"message": "Persona Switcher preferences",
-	"description": "Title of the options menu"
-  },
-  
-  "options_pane1": {
-	"message": "Persona Switcher preferences",
-	"description": "Title of the options menu pane"
-  },
-  
-  "options_kbshortcuts_title": {
-	"message": "Keyboard shortcuts",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_default": {
-	"message": "Default persona key combination:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_rotate": {
-	"message": "Rotate persona key combination:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_toggle": {
-	"message": "Toggle auto-switch key combination:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_auto": {
-	"message": "Automatic rotation",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_menushortcuts": {
-	"message": "Menu shortcut keys (Not on OS X)",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_access": {
-	"message": "Main menu shortcut key:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_activate": {
-	"message": "PSwitcher menu shortcut key:",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_kbshortcuts_tools": {
-  "message": "Persona Switcher tools menu shortcut key:",
-  "description": "Test displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_key": {
-	"message": "Key",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_shift": {
-	"message": "Shift",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_control": {
-	"message": "Control",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_alt": {
-	"message": "Alt",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_meta": {
-	"message": "Meta",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_accel": {
-	"message": "Accel",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_os": {
-	"message": "OS",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_menuShortcuts_hint": {
-  "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_options_title": {
-	"message": "Options",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_autoevery_switch": {
-	"message": "Switch every",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_autoevery_minutes": {
-	"message": "minutes.",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_autoevery_hint":{
-  "message": "Values between 1 and 999",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_random_desc": {
-	"message": "Switch to a random persona instead of the least recent.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_startupSwitch_desc": {
-	"message": "Rotate on startup.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_toolboxMinHeight_desc": {
-	"message": "Minimum height of top toolbox:",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_toolboxMinHeight_hint": {
-  "message": "Values between 0 and ",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_preview_desc": {
-	"message": "Preview personas on menu selection with",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_previewDelay_desc": {
-	"message": "(ms) delay.",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_previewDelay_hint": {
-  "message": "Values between 0 and 10000",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_iconPreview_desc": {
-	"message": "Add icon preview to menu items.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_menus_title": {
-	"message": "Persona menu locations",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_toolsSubmenu": {
-	"message": "Tools menu.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_mainMenuBar": {
-	"message": "Main menu bar.",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_advanced_button": {
-  "message": "Advanced Options...",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_advanced_options": {
-  "message": "Advanced Options",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_debug": {
-  "message": "Debug",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_fast_switch": {
-  "message": "Quickly switch through personas",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_toolboxMaxHeight_desc": {
-  "message": "Maximum height of top toolbox:",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_ok_button": {
-  "message": "Ok",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_reset_button": {
-  "message": "Reset",
-  "description": "Text displayed in the options pane"
-  }
+    "about": {
+        "description": "The word 'About'",
+        "message": "About"
+    },
+    "createdBy": {
+        "description": "The words 'Created By'",
+        "message": "Created By:"
+    },
+    "extensionDescription": {
+        "description": "Description of the extension.",
+        "message": "Quickly switch between your personas or reset it back to the default."
+    },
+    "extensionName": {
+        "description": "Name of the extension.",
+        "message": "Persona Switcher"
+    },
+    "extensionShortName": {
+        "description": "Short name of the extension.",
+        "message": "PSwitcher"
+    },
+    "homepage": {
+        "description": "The words 'Home Page'",
+        "message": "Home Page:"
+    },
+    "options_advanced_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Advanced Options..."
+    },
+    "options_advanced_options": {
+        "description": "Text displayed in the options pane",
+        "message": "Advanced Options"
+    },
+    "options_autoevery_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Values between 1 and 999"
+    },
+    "options_autoevery_minutes": {
+        "description": "Text displayed in the options pane",
+        "message": "minutes."
+    },
+    "options_autoevery_switch": {
+        "description": "Text displayed in the options pane",
+        "message": "Switch every"
+    },
+    "options_debug": {
+        "description": "Text displayed in the options pane",
+        "message": "Debug"
+    },
+    "options_fast_switch": {
+        "description": "Text displayed in the options pane",
+        "message": "Quickly switch through personas"
+    },
+    "options_iconPreview_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Add icon preview to menu items."
+    },
+    "options_kbshortcuts_accel": {
+        "description": "Text displayed in the options pane",
+        "message": "Accel"
+    },
+    "options_kbshortcuts_access": {
+        "description": "Text displayed in the options pane",
+        "message": "Main menu shortcut key:"
+    },
+    "options_kbshortcuts_activate": {
+        "description": "Text displayed in the options pane",
+        "message": "PSwitcher menu shortcut key:"
+    },
+    "options_kbshortcuts_alt": {
+        "description": "Text displayed in the options pane",
+        "message": "Alt"
+    },
+    "options_kbshortcuts_auto": {
+        "description": "Text displayed in the options pane",
+        "message": "Automatic rotation"
+    },
+    "options_kbshortcuts_control": {
+        "description": "Text displayed in the options pane",
+        "message": "Control"
+    },
+    "options_kbshortcuts_default": {
+        "description": "Text displayed in the options pane",
+        "message": "Default persona key combination:"
+    },
+    "options_kbshortcuts_key": {
+        "description": "Text displayed in the options pane",
+        "message": "Key"
+    },
+    "options_kbshortcuts_menushortcuts": {
+        "description": "Text displayed in the options pane",
+        "message": "Menu shortcut keys (Not on OS X)"
+    },
+    "options_kbshortcuts_meta": {
+        "description": "Text displayed in the options pane",
+        "message": "Meta"
+    },
+    "options_kbshortcuts_os": {
+        "description": "Text displayed in the options pane",
+        "message": "OS"
+    },
+    "options_kbshortcuts_rotate": {
+        "description": "Text displayed in the options pane",
+        "message": "Rotate persona key combination:"
+    },
+    "options_kbshortcuts_shift": {
+        "description": "Text displayed in the options pane",
+        "message": "Shift"
+    },
+    "options_kbshortcuts_title": {
+        "description": "Text displayed in the options pane",
+        "message": "Keyboard shortcuts"
+    },
+    "options_kbshortcuts_toggle": {
+        "description": "Text displayed in the options pane",
+        "message": "Toggle auto-switch key combination:"
+    },
+    "options_kbshortcuts_tools": {
+        "description": "Test displayed in the options pane",
+        "message": "Persona Switcher tools menu shortcut key:"
+    },
+    "options_mainMenuBar": {
+        "description": "Text displayed in the options pane",
+        "message": "Main menu bar."
+    },
+    "options_menuShortcuts_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P"
+    },
+    "options_menus_title": {
+        "description": "Text displayed in the options pane",
+        "message": "Persona menu locations"
+    },
+    "options_ok_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Ok"
+    },
+    "options_options_title": {
+        "description": "Text displayed in the options pane",
+        "message": "Options"
+    },
+    "options_pane1": {
+        "description": "Title of the options menu pane",
+        "message": "Persona Switcher preferences"
+    },
+    "options_previewDelay_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "(ms) delay."
+    },
+    "options_previewDelay_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Values between 0 and 10000"
+    },
+    "options_preview_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Preview personas on menu selection with"
+    },
+    "options_random_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Switch to a random persona instead of the least recent."
+    },
+    "options_reset_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Reset"
+    },
+    "options_startupSwitch_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Rotate on startup."
+    },
+    "options_title": {
+        "description": "Title of the options menu",
+        "message": "Persona Switcher preferences"
+    },
+    "options_toolboxMaxHeight_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Maximum height of top toolbox:"
+    },
+    "options_toolboxMinHeight_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Minimum height of top toolbox:"
+    },
+    "options_toolboxMinHeight_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Values between 0 and "
+    },
+    "options_toolsSubmenu": {
+        "description": "Text displayed in the options pane",
+        "message": "Tools menu."
+    },
+    "ps_buttonLabel": {
+        "description": "Button Label text",
+        "message": "PSwitcher"
+    },
+    "ps_default": {
+        "description": "Default text",
+        "message": "Default"
+    },
+    "ps_menuLabel": {
+        "description": "Menu Label text",
+        "message": "Persona Switcher"
+    },
+    "ps_noPersonas": {
+        "description": "No Personas Found text",
+        "message": "No Personas Found"
+    },
+    "ps_toolTip": {
+        "description": "Tooltip text",
+        "message": "Click to access your personas"
+    },
+    "version": {
+        "description": "The word 'Version'",
+        "message": "Version:"
+    }
 }

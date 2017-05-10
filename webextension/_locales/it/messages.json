@@ -1,266 +1,214 @@
 {
-  "extensionName": {
-    "message": "Persona Switcher",
-    "description": "Name of the extension."
-  },
-
-	"extensionShortName": {
-    "message": "PSwitcher",
-    "description": "Short name of the extension."
-  },
-	
-  "extensionDescription": {
-    "message": "Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facoltà di ritorno al tema Predefinito. Possibilità di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox/Thunderbird/Seamonkey.",
-    "description": "Description of the extension."
-  },
-  
-  "ps_noPersonas": {
-	"message": "Nessun Tema Disponibile",
-	"description": "No Personas Found text"
-  },
-  
-  "ps_menuLabel": {
-	"message": "Persona Switcher",
-	"description": "Menu Label text"
-  },
-  
-  "ps_buttonLabel": {
-	"message": "PSwitcher",
-	"description": "Button Label text"
-  },
-  
-  "ps_toolTip": {
-	"message": "Premi per accedere ai Temi",
-	"description": "Tooltip text"
-  },
-  
-   "ps_default": {
-	"message": "Predefinito",
-	"description": "Default text"
-  },
-  
-   "about": {
-	"message": "Info",
-	"description": "The word 'About'"
-  },
-  
-   "version": {
-	"message": "Versione:",
-	"description": "The word 'Version'"
-  },
-  
-   "createdBy": {
-	"message": "Realizzato da:",
-	"description": "The words 'Created By'"
-  },
-  
-   "homepage": {
-	"message": "Sito Ufficiale:",
-	"description": "The words 'Home Page'"
-  },
-  
-   "options_title": {
-	"message": "Persona Switcher: Settaggi di Configurazione",
-	"description": "Title of the options menu"
-  },
-  
-  "options_pane1": {
-	"message": "Persona Switcher: Settaggi di Configurazione",
-	"description": "Title of the options menu pane"
-  },
-  
-  "options_kbshortcuts_title": {
-	"message": "Scorciatoie da Tastiera - Combinazione Tasti",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_default": {
-	"message": "Tema Predefinito:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_rotate": {
-	"message": "Cambio Tema:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_toggle": {
-	"message": "Attiva/Disattiva Cambio Automatico:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_auto": {
-	"message": "Cambio Automatico del Tema",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_menushortcuts": {
-	"message": "Tasti scorciatoia del Menu (Non su OS X)",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_access": {
-	"message": "Menu Principale:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_activate": {
-	"message": "PSwitcher Menu:",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_kbshortcuts_tools": {
-  "message": "Persona Switcher tools menu shortcut key:",
-  "description": "Test displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_key": {
-	"message": "Tasto",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_shift": {
-	"message": "Shift",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_control": {
-	"message": "Control",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_alt": {
-	"message": "Alt",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_meta": {
-	"message": "Meta",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_accel": {
-	"message": "Accel",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_kbshortcuts_os": {
-	"message": "OS",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_menuShortcuts_hint": {
-  "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_options_title": {
-	"message": "Opzioni",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_autoevery_switch": {
-	"message": "Cambia Tema ogni",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_autoevery_minutes": {
-	"message": "Minuti/o.",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_autoevery_hint":{
-  "message": "Values between 1 and 999",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_random_desc": {
-	"message": "Cambia Tema a caso anziché dal meno recente.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_startupSwitch_desc": {
-	"message": "Cambia Tema ad ogni avvio.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_toolboxMinHeight_desc": {
-	"message": "Altezza minima della Toolbox superiore (in Firefox e SeaMonkey):",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_toolboxMinHeight_hint": {
-  "message": "Values between 0 and ",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_preview_desc": {
-	"message": "Anteprima del Tema selezionato nella lista          Ritardata di:",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_previewDelay_desc": {
-	"message": "(ms)",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_previewDelay_hint": {
-  "message": "Values between 0 and 10000",
-  "description": "Text displayed in the options pane"
-  },
-  
-  "options_iconPreview_desc": {
-	"message": "Aggiungi icona di Anteprima nel listato.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_menus_title": {
-	"message": "Posizioni del Menu Persona",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_toolsSubmenu": {
-	"message": "Nel Menu Strumenti.",
-	"description": "Text displayed in the options pane"
-  },
-  
-  "options_mainMenuBar": {
-	"message": "Nella Menu-Bar Principale.",
-	"description": "Text displayed in the options pane"
-  },
-
-  "options_advanced_button": {
-  "message": "Advanced Options...",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_advanced_options": {
-  "message": "Advanced Options",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_debug": {
-  "message": "Debug",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_fast_switch": {
-  "message": "Quickly switch through personas",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_toolboxMaxHeight_desc": {
-  "message": "Maximum height of top toolbox:",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_ok_button": {
-  "message": "Ok",
-  "description": "Text displayed in the options pane"
-  },
-
-  "options_reset_button": {
-  "message": "Reset",
-  "description": "Text displayed in the options pane"
-  }
+    "about": {
+        "description": "The word 'About'",
+        "message": "Info"
+    },
+    "createdBy": {
+        "description": "The words 'Created By'",
+        "message": "Realizzato da:"
+    },
+    "extensionDescription": {
+        "description": "Description of the extension.",
+        "message": "Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facolt\u00e0 di ritorno al tema Predefinito. Possibilit\u00e0 di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox."
+    },
+    "extensionName": {
+        "description": "Name of the extension.",
+        "message": "Persona Switcher"
+    },
+    "extensionShortName": {
+        "description": "Short name of the extension.",
+        "message": "PSwitcher"
+    },
+    "homepage": {
+        "description": "The words 'Home Page'",
+        "message": "Sito Ufficiale:"
+    },
+    "options_advanced_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Advanced Options..."
+    },
+    "options_advanced_options": {
+        "description": "Text displayed in the options pane",
+        "message": "Advanced Options"
+    },
+    "options_autoevery_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Values between 1 and 999"
+    },
+    "options_autoevery_minutes": {
+        "description": "Text displayed in the options pane",
+        "message": "Minuti/o."
+    },
+    "options_autoevery_switch": {
+        "description": "Text displayed in the options pane",
+        "message": "Cambia Tema ogni"
+    },
+    "options_debug": {
+        "description": "Text displayed in the options pane",
+        "message": "Debug"
+    },
+    "options_fast_switch": {
+        "description": "Text displayed in the options pane",
+        "message": "Quickly switch through personas"
+    },
+    "options_iconPreview_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Aggiungi icona di Anteprima nel listato."
+    },
+    "options_kbshortcuts_accel": {
+        "description": "Text displayed in the options pane",
+        "message": "Accel"
+    },
+    "options_kbshortcuts_access": {
+        "description": "Text displayed in the options pane",
+        "message": "Menu Principale:"
+    },
+    "options_kbshortcuts_activate": {
+        "description": "Text displayed in the options pane",
+        "message": "PSwitcher Menu:"
+    },
+    "options_kbshortcuts_alt": {
+        "description": "Text displayed in the options pane",
+        "message": "Alt"
+    },
+    "options_kbshortcuts_auto": {
+        "description": "Text displayed in the options pane",
+        "message": "Cambio Automatico del Tema"
+    },
+    "options_kbshortcuts_control": {
+        "description": "Text displayed in the options pane",
+        "message": "Control"
+    },
+    "options_kbshortcuts_default": {
+        "description": "Text displayed in the options pane",
+        "message": "Tema Predefinito:"
+    },
+    "options_kbshortcuts_key": {
+        "description": "Text displayed in the options pane",
+        "message": "Tasto"
+    },
+    "options_kbshortcuts_menushortcuts": {
+        "description": "Text displayed in the options pane",
+        "message": "Tasti scorciatoia del Menu (Non su OS X)"
+    },
+    "options_kbshortcuts_meta": {
+        "description": "Text displayed in the options pane",
+        "message": "Meta"
+    },
+    "options_kbshortcuts_os": {
+        "description": "Text displayed in the options pane",
+        "message": "OS"
+    },
+    "options_kbshortcuts_rotate": {
+        "description": "Text displayed in the options pane",
+        "message": "Cambio Tema:"
+    },
+    "options_kbshortcuts_shift": {
+        "description": "Text displayed in the options pane",
+        "message": "Shift"
+    },
+    "options_kbshortcuts_title": {
+        "description": "Text displayed in the options pane",
+        "message": "Scorciatoie da Tastiera - Combinazione Tasti"
+    },
+    "options_kbshortcuts_toggle": {
+        "description": "Text displayed in the options pane",
+        "message": "Attiva/Disattiva Cambio Automatico:"
+    },
+    "options_kbshortcuts_tools": {
+        "description": "Test displayed in the options pane",
+        "message": "Persona Switcher tools menu shortcut key:"
+    },
+    "options_mainMenuBar": {
+        "description": "Text displayed in the options pane",
+        "message": "Nella Menu-Bar Principale."
+    },
+    "options_menuShortcuts_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P"
+    },
+    "options_menus_title": {
+        "description": "Text displayed in the options pane",
+        "message": "Posizioni del Menu Persona"
+    },
+    "options_ok_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Ok"
+    },
+    "options_options_title": {
+        "description": "Text displayed in the options pane",
+        "message": "Opzioni"
+    },
+    "options_pane1": {
+        "description": "Title of the options menu pane",
+        "message": "Persona Switcher: Settaggi di Configurazione"
+    },
+    "options_previewDelay_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "(ms)"
+    },
+    "options_previewDelay_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Values between 0 and 10000"
+    },
+    "options_preview_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Anteprima del Tema selezionato nella lista\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Ritardata di:"
+    },
+    "options_random_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Cambia Tema a caso anzich\u00e9 dal meno recente."
+    },
+    "options_reset_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Reset"
+    },
+    "options_startupSwitch_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Cambia Tema ad ogni avvio."
+    },
+    "options_title": {
+        "description": "Title of the options menu",
+        "message": "Persona Switcher: Settaggi di Configurazione"
+    },
+    "options_toolboxMaxHeight_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Maximum height of top toolbox:"
+    },
+    "options_toolboxMinHeight_desc": {
+        "description": "Text displayed in the options pane",
+        "message": "Altezza minima della Toolbox superiore (in Firefox e SeaMonkey):"
+    },
+    "options_toolboxMinHeight_hint": {
+        "description": "Text displayed in the options pane",
+        "message": "Values between 0 and "
+    },
+    "options_toolsSubmenu": {
+        "description": "Text displayed in the options pane",
+        "message": "Nel Menu Strumenti."
+    },
+    "ps_buttonLabel": {
+        "description": "Button Label text",
+        "message": "PSwitcher"
+    },
+    "ps_default": {
+        "description": "Default text",
+        "message": "Predefinito"
+    },
+    "ps_menuLabel": {
+        "description": "Menu Label text",
+        "message": "Persona Switcher"
+    },
+    "ps_noPersonas": {
+        "description": "No Personas Found text",
+        "message": "Nessun Tema Disponibile"
+    },
+    "ps_toolTip": {
+        "description": "Tooltip text",
+        "message": "Premi per accedere ai Temi"
+    },
+    "version": {
+        "description": "The word 'Version'",
+        "message": "Versione:"
+    }
 }
