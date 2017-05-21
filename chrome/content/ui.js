@@ -648,14 +648,10 @@ PersonaSwitcher.onWindowLoad = function (doc)
     }
     else
     {
-        // we already should have the default theme at this point, crosses
-        // fingers
+        // We already should have the default theme at this point, crosses
+        // fingers. We also should have set the theme already when the first
+        // window was opened so we do not switch to the current theme here.
         PersonaSwitcher.createStaticPopups(doc);
-        PersonaSwitcher.currentIndex =
-            PersonaSwitcher.prefs.getIntPref ("current");
-        PersonaSwitcher.switchTo(
-            PersonaSwitcher.currentThemes[PersonaSwitcher.currentIndex],
-            PersonaSwitcher.currentIndex);
     }
 
     PersonaSwitcher.setKeyset (doc);
