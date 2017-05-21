@@ -541,7 +541,7 @@ browser.contextMenus.onClicked.addListener((info) =>
         browser.runtime.openOptionsPage(); 
     });
 
-var logger;
+var logger = console;
 var nullLogger = {};
 nullLogger.log = function (s) 
 { 
@@ -567,7 +567,7 @@ function setLogger()
 
 function handleError(error) 
 {
-    logger.log(`Error: ${error}`);
+    logger.log(`${error}`);
 }
 
 handleStartup();
