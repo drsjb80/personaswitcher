@@ -67,7 +67,10 @@ function install(data, reason)
 
 function uninstall(data, reason) 
 {
-    removeUserPrefs();
+    if(ADDON_UNINSTALL === reason)
+    {
+        removeUserPrefs();
+    }
 }
 
 function loadIntoWindow(window) 
@@ -106,7 +109,7 @@ function unloadFromWindow(window)
 
 function forEachOpenWindow(applyThisFunc)
 {
-    PersonaSwitcher.allWindows(applyThisFunc);
+    PersonaSwitcher.allWindows(applyThisFunc);    
 }
 
 var WindowListener = 
@@ -171,6 +174,9 @@ function messageHandler(message, sender, sendResponse)
             // true to indicate we are going to send a response.
             // http://stackoverflow.com/questions/40772929/promise-from-browser-runtime-sendmessage-fulfilling-prior-to-asynchronous-call
             return true;
+            break;
+        case "Return-All-Prefs":
+            sendResponse(getAllPrefs());
             break;
         case "Switch-Themes":
             PersonaSwitcher.switchTo(message.theme, message.index);
@@ -394,6 +400,48 @@ function setPreference(preference, value)
             PersonaSwitcher.prefs.setBoolPref("debug", value);
             break;
     }
+}
+
+function getAllPrefs()
+{
+    var userPreferences = [
+    "defshift", "defcontrol", "defalt", "defmeta", "defaccel", "defos", 
+    "defkey", "rotshift", "rotcontrol", "rotalt", "rotmeta", "rotaccel", 
+    "rotos", "rotkey", "autoshift", "autocontrol", "autoalt", "autometa", 
+    "autoaccel", "autoos", "autokey", "activateshift", "activatecontrol", 
+    "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
+    "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
+    "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
+    "preview", "preview-delay", "icon-preview", "tools-submenu", 
+    "main-menubar", "debug", "notification-workaround", 
+    "toolbox-minheight", "startup-switch", "fastswitch", "current"];
+
+    var prefType;
+    var prefValue;
+    var prefsObj = {};
+    for(var pref of userPreferences) 
+    {
+        prefType = PersonaSwitcher.prefs.getPrefType(pref);
+        switch(prefType) 
+        {
+            case PersonaSwitcher.prefs.PREF_STRING:
+                prefValue = PersonaSwitcher.prefs.getCharPref(pref);
+                break;
+            case PersonaSwitcher.prefs.PREF_INT:
+                prefValue = PersonaSwitcher.prefs.getIntPref(pref).toString();
+                break;
+            case PersonaSwitcher.prefs.PREF_BOOL:
+                prefValue = PersonaSwitcher.prefs.getBoolPref(pref).toString();
+                break;
+            case PersonaSwitcher.prefs.PREF_INVALID:
+            default:
+                continue;
+        }
+
+        prefsObj[pref] = prefValue;
+    }
+
+    return prefsObj;  
 }
 
 // UI Injection

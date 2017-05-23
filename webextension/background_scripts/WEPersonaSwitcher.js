@@ -32,75 +32,142 @@ function loadDefaultsIfNeeded(prefs)
 
 function loadDefaults()
 {
-    var setting = browser.storage.local.set(
+    var getLegacyPrefs = browser.runtime.sendMessage({command: "Return-All-Prefs"});
+
+    return getLegacyPrefs
+        .then(function(prefs) 
         {
-            defaults_loaded: true,
+            return Promise.resolve(buildPrefsStorageArg(prefs));            
+        })
+        .then(function(prefsStorageArg)
+        {
+            browser.storage.local.set(prefsStorageArg).then(
+                function() 
+                { 
+                    return Promise.resolve();
+                });
+        });        
+}
 
-            defaultKeyShift: false,
-            defaultKeyControl: true,
-            defaultKeyAlt: true,
-            defaultKeyMeta: false,
-            defaultKeyAccel: false,
-            defaultKeyOS: false,
-            defaultKey: "D",
+function buildPrefsStorageArg(prefs) 
+{
+    // The arrays hold the keys for the preferences in the bootstrap addon,
+    // the WebExtension, and the default values for the preferences. 
+    // The index for a particular preference MUST be kept consistent between
+    // all three arrays.
+    var prefKeyOld = [
+        "defshift", "defcontrol", "defalt", "defmeta", "defaccel", "defos",
+        "defkey", "rotshift", "rotcontrol", "rotalt", "rotmeta", "rotaccel",
+        "rotos", "rotkey", "autoshift", "autocontrol", "autoalt", "autometa",
+        "autoaccel", "autoos", "autokey", "activateshift", "activatecontrol",
+        "activatealt", "activatemeta", "activateaccel", "activateos",
+        "activatekey", "toolsshift", "toolscontrol", "toolsalt", "toolsmeta",
+        "toolsaccel", "toolsos", "toolskey", "accesskey", "auto", "autominutes",
+        "random", "preview", "preview-delay", "icon-preview", "tools-submenu",
+        "main-menubar", "debug", "toolbox-minheight", "startup-switch",
+        "fastswitch", "current"];
 
-            rotateKeyShift: false,
-            rotateKeyControl: true,
-            rotateKeyAlt: true,
-            rotateKeyMeta: false,
-            rotateKeyAccel: false,
-            rotateKeyOS: false,
-            rotateKey: "R",
+    var prefKeyWE = [
+        "defaultKeyShift", "defaultKeyControl", "defaultKeyAlt",
+        "defaultKeyMeta", "defaultKeyAccel", "defaultKeyOS", "defaultKey",
+        "rotateKeyShift", "rotateKeyControl", "rotateKeyAlt", "rotateKeyMeta",
+        "rotateKeyAccel", "rotateKeyOS", "rotateKey", "autoKeyShift",
+        "autoKeyControl", "autoKeyAlt", "autoKeyMeta", "autoKeyAccel",
+        "autoKeyOS", "autoKey", "activateKeyShift", "activateKeyControl",
+        "activateKeyAlt", "activateKeyMeta", "activateKeyAccel",
+        "activateKeyOs", "activateKey", "toolsKeyShift", "toolsKeyControl",
+        "toolsKeyAlt", "toolsKeyMeta", "toolsKeyAccel", "toolsKeyOs",
+        "toolsKey", "accessKey", "auto", "autoMinutes", "random", "preview",
+        "previewDelay", "iconPreview", "toolsMenu", "mainMenuBar", "debug",
+        "toolboxMinHeight", "startupSwitch", "fastSwitch", "current"];
 
-            autoKeyShift: false,
-            autoKeyControl: true,
-            autoKeyAlt: true,
-            autoKeyMeta: false,
-            autoKeyAccel: false,
-            autoKeyOS: false,
-            autoKey: "A",
+    var defaultVals = [
+        'false', 'true', 'true', 'false', 'false', 'false', 'D',
+        'false', 'true', 'true', 'false', 'false', 'false', 'R',
+        'false', 'true', 'true', 'false', 'false', 'false', 'A',
+        'false', 'true', 'true', 'false', 'false', 'false', 'P',
+        'false', 'true', 'true', 'false', 'false', 'false', 'M',
+        'P', 'false', '30', 'false', 'false', '0', 'true', 'true',
+        'false', 'false', '0', 'false', 'false', '0'];
 
-            accessKey: "P",
 
-            activateKeyShift: false,
-            activateKeyControl: true,
-            activateKeyAlt: true,
-            activateKeyMeta: false,
-            activateKeyAccel: false,
-            activateKeyOs: false,
-            activateKey: "P",
-            
-            toolsKeyShift: false,
-            toolsKeyControl: true,
-            toolsKeyAlt: true,
-            toolsKeyMeta: false,
-            toolsKeyAccel: false,
-            toolsKeyOs: false,
-            toolsKey: "M",
+    var prefsStorageArg = {};
+    // WebExtension only preferences are simply set to the default values.
+    prefsStorageArg['toolboxMaxHeight'] = 200;
+    prefsStorageArg['defaults_loaded'] = true;
 
-            auto: false,
-            autoMinutes: 30,
-            random: false,
-            startupSwitch: false,
-            preview: false,
-            previewDelay: 0,
-            iconPreview: true,
-            toolboxMinHeight: 0,
-            toolsMenu: true,
-            mainMenuBar: false,
-            debug: false,
-            fastSwitch: false,
-            toolboxMaxHeight: 200,
+    // All other preferences are assigned either the value present in the 
+    // equivalent legacy preference or the default value if no existing value
+    // could be found.
+    for(let index = 0; index < prefKeyWE.length; index++)
+    {
+        var oldValue = prefs[prefKeyOld[index]];
+        var valueToStore = 
+            (null === oldValue || 'undefined' === typeof(oldValue)) 
+                ? defaultVals[index] : oldValue;
 
-            // hidden preferences
-            current: 0
-        });
-    return setting.then(
-        function() 
-        { 
-            return Promise.resolve();
-        }, 
-        handleError);
+        switch(prefKeyWE[index])
+        {
+            case 'defaultKeyShift':
+            case 'defaultKeyControl':
+            case 'defaultKeyAlt':
+            case 'defaultKeyMeta':
+            case 'defaultKeyAccel':
+            case 'defaultKeyOS':
+            case 'rotateKeyShift':
+            case 'rotateKeyControl':
+            case 'rotateKeyAlt':
+            case 'rotateKeyMeta':
+            case 'rotateKeyAccel':
+            case 'rotateKeyOS':
+            case 'autoKeyShift':
+            case 'autoKeyControl':
+            case 'autoKeyAlt':
+            case 'autoKeyMeta':
+            case 'autoKeyAccel':
+            case 'autoKeyOS':
+            case 'activateKeyShift':
+            case 'activateKeyControl':
+            case 'activateKeyAlt':
+            case 'activateKeyMeta':
+            case 'activateKeyAccel':
+            case 'activateKeyOs':            
+            case 'toolsKeyShift':
+            case 'toolsKeyControl':
+            case 'toolsKeyAlt':
+            case 'toolsKeyMeta':
+            case 'toolsKeyAccel':
+            case 'toolsKeyOs':
+            case 'auto':
+            case 'random':
+            case 'startupSwitch':
+            case 'preview':
+            case 'iconPreview':
+            case 'toolsMenu':
+            case 'mainMenuBar':
+            case 'debug':
+            case 'fastSwitch':
+                prefsStorageArg[prefKeyWE[index]] = (valueToStore === 'true');
+                break;
+            case 'toolsKey':
+            case 'activateKey':
+            case 'accessKey':
+            case 'autoKey':
+            case 'rotateKey':
+            case 'defaultKey':
+                prefsStorageArg[prefKeyWE[index]] = valueToStore;
+                break;
+            case 'autoMinutes':
+            case 'previewDelay':
+            case 'toolboxMinHeight':
+            case 'toolboxMaxHeight':
+            case 'current':
+                prefsStorageArg[prefKeyWE[index]] = parseInt(valueToStore);
+                break;
+        }
+    }
+
+    return prefsStorageArg;
 }
 
 function getMenuData() 
@@ -541,7 +608,7 @@ browser.contextMenus.onClicked.addListener((info) =>
         browser.runtime.openOptionsPage(); 
     });
 
-var logger;
+var logger = console;
 var nullLogger = {};
 nullLogger.log = function (s) 
 { 
@@ -567,7 +634,7 @@ function setLogger()
 
 function handleError(error) 
 {
-    logger.log(`Error: ${error}`);
+    logger.log(`${error}`);
 }
 
 handleStartup();
