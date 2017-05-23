@@ -1,4 +1,4 @@
-/Applications/Firefox.app/Contents/MacOS/firefox -P dev &
+/Applications/Firefox.app/Contents/MacOS/firefox -marionette -P dev &
 /Applications/Firefox.app/Contents/MacOS/firefox -P noPP &
 /Applications/Firefox.app/Contents/MacOS/firefox -P devzero &
 /Applications/Firefox.app/Contents/MacOS/firefox -chromebug
@@ -6,6 +6,7 @@
 /Applications/Firefox.app/Contents/MacOS/firefox-bin --ProfileManager
 ----
 sh -x make
+eslint . | more
 ----
 vi install.rdf chrome/content/about.xul # version changes
 ----

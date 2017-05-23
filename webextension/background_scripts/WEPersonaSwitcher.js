@@ -2,9 +2,9 @@
 /* eslint no-constant-condition: 0 */
 'use strict';
 
-function handleStartup() 
+var handleStartup = function() 
 {
-    var checkDefaultsLoaded = browser.storage.local.get("defaults_loaded");
+    let checkDefaultsLoaded = browser.storage.local.get("defaults_loaded");
     checkDefaultsLoaded
         .then(loadDefaultsIfNeeded)
         .then(setLogger)
@@ -12,60 +12,73 @@ function handleStartup()
         .then(getMenuData)
         .then(buildMenu)
         .then(rotateOnStartup)
-        .then
-        (
+        .then(
             function() 
             {
-                return browser.storage.onChanged.addListener
-                    (handlePreferenceChange);
+                return browser.storage
+                    .onChanged.addListener(handlePreferenceChange);
             }
         )
         .catch(handleError);
-}
+};
 
 // Verify if we need to load the default preferences by checking if the 
 // default_loaded flag is undefined. 
-function loadDefaultsIfNeeded(prefs) 
+var loadDefaultsIfNeeded = function(prefs) 
 {
     if ('undefined' === typeof(prefs.defaults_loaded)) 
     {
         return loadDefaults();
     } 
     return Promise.resolve();
-}
+};
 
-function loadDefaults()
+var loadDefaults = function()
 {
-    var setting = browser.storage.local.set
-    (
+    let setting = browser.storage.local.set(
         {
             defaults_loaded: true,
 
-            defaultKeyShift: false, defaultKeyControl: true,
-            defaultKeyAlt: true, defaultKeyMeta: false,
-            defaultKeyAccel: false, defaultKeyOS: false,
+            defaultKeyShift: false,
+            defaultKeyControl: true,
+            defaultKeyAlt: true,
+            defaultKeyMeta: false,
+            defaultKeyAccel: false,
+            defaultKeyOS: false,
             defaultKey: "D",
 
-            rotateKeyShift: false, rotateKeyControl: true,
-            rotateKeyAlt: true, rotateKeyMeta: false,
-            rotateKeyAccel: false, rotateKeyOS: false,
+            rotateKeyShift: false,
+            rotateKeyControl: true,
+            rotateKeyAlt: true,
+            rotateKeyMeta: false,
+            rotateKeyAccel: false,
+            rotateKeyOS: false,
             rotateKey: "R",
 
-            autoKeyShift: false, autoKeyControl: true,
-            autoKeyAlt: true, autoKeyMeta: false,
-            autoKeyAccel: false, autoKeyOS: false,
+            autoKeyShift: false,
+            autoKeyControl: true,
+            autoKeyAlt: true,
+            autoKeyMeta: false,
+            autoKeyAccel: false,
+            autoKeyOS: false,
             autoKey: "A",
 
             accessKey: "P",
 
-            activateKeyShift: false, activateKeyControl: true,
-            activateKeyAlt: true, activateKeyMeta: false,
-            activateKeyAccel: false, activateKeyOs: false,
+            activateKeyShift: false,
+            activateKeyControl: true,
+            activateKeyAlt: true,
+            activateKeyMeta: false,
+            activateKeyAccel: false,
+            activateKeyOs: false,
             activateKey: "P",
 
-            toolsKeyShift: false, toolsKeyControl: true,
-            toolsKeyAlt: true, toolsKeyMeta: false,
-            toolsKeyAccel: false, toolsKeyOs: false,
+            toolsKeyShift: false,
+            toolsKeyControl: true,
+            toolsKeyAlt: true,
+            toolsKeyMeta: false,
+            toolsKeyAccel: false,
+            toolsKeyOs: false,
             toolsKey: "M",
 
             auto: false,
@@ -87,33 +100,31 @@ function loadDefaults()
         }
     );
 
-    return setting.then
-    (
+    return setting.then(
         function() 
         { 
             return Promise.resolve();
         }, 
         handleError
     );
-}
+};
 
-function getMenuData() 
+var getMenuData = function() 
 {
-    var menuPreferences = ["iconPreview", "preview", "previewDelay", "current"];
-    var getData = Promise.all
-    (
+    let menuPreferences = ["iconPreview", "preview", "previewDelay", "current"];
+    let getData = Promise.all(
         [
             browser.storage.local.get(menuPreferences),
             browser.runtime.sendMessage({command: "Return-Theme-List"})
         ]
     );
     return Promise.resolve(getData);
-}
+};
 
 var currentThemes;
 var defaultThemes;
 var browserActionMenu;
-function buildMenu(data) 
+var buildMenu = function(data) 
 {
     logger.log("Menu ", browserActionMenu);
 
@@ -122,15 +133,15 @@ function buildMenu(data)
     currentThemes = data[1].themes;
     defaultThemes = data[1].defaults;
 
-    for (var index = 0; index < currentThemes.length; index++) 
+    for (let index = 0; index < currentThemes.length; index++) 
     {        
-        browserActionMenu.appendChild
-            (buildMenuItem(currentThemes[index], data[0], index));
+        browserActionMenu.appendChild (buildMenuItem(
+            currentThemes[index], data[0], index));
     }
 
     insertSeparator();
 
-    for (index = 0; index < defaultThemes.length; index++) 
+    for (let index = 0; index < defaultThemes.length; index++) 
     {        
         browserActionMenu.
             appendChild(buildMenuItem(defaultThemes[index], data[0],
@@ -142,12 +153,12 @@ function buildMenu(data)
 
 function buildMenuItem(theme, prefs, theIndex) 
 {
-    var themeChoice = document.createElement("option");
+    let themeChoice = document.createElement("option");
     themeChoice.setAttribute("class", "button theme");
 
-    var textNode = document.createTextNode(theme.name);
+    let textNode = document.createTextNode(theme.name);
     themeChoice.appendChild(textNode);
-    themeChoice.insertBefore(createIcon( theme.iconURL, prefs.iconPreview),
+    themeChoice.insertBefore(createIcon(theme.iconURL, prefs.iconPreview),
         textNode);
 
     if (theIndex === prefs.current) 
@@ -165,11 +176,11 @@ function buildMenuItem(theme, prefs, theIndex)
 
     themeChoice.addEventListener('click', clickListener(theme, theIndex));
     return themeChoice;
-}
+};
 
-function createIcon(iconURL, iconPreview) 
+var createIcon = function(iconURL, iconPreview) 
 {
-    var themeImg = document.createElement("img");
+    let themeImg = document.createElement("img");
     themeImg.setAttribute("class", "button icon");
     themeImg.setAttribute("src", iconURL);
 
@@ -178,25 +189,28 @@ function createIcon(iconURL, iconPreview)
         themeImg.style.display = "none";
     }    
     return themeImg;
-}
+};
 
-function insertSeparator() 
+var insertSeparator = function() 
 {
-    var separator = document.createElement("hr");
+    let separator = document.createElement("hr");
     separator.setAttribute("class", "menu-separator");
     browserActionMenu.appendChild(separator);
-}
+};
 
-var clickListener = function(theTheme, theIndex) 
+var clickListener = function (theTheme, theIndex) 
 { 
     return function() 
     {
         stopRotateAlarm(); 
-        browser.storage.local.get("current").then
-            ((result) => { setCurrentTheme(theIndex, result.current); });
+        browser.storage.local.get("current").then(
+            (result) =>
+            {
+                setCurrentTheme(theIndex, result.current);
+            }
+        );
 
-        browser.runtime.sendMessage
-        (
+        browser.runtime.sendMessage(
             {
                 command: "Switch-Themes",
                 theme: theTheme,
@@ -215,11 +229,13 @@ var mouseOverListener = function(theTheme, previewDelay)
     return function() 
     { 
         const delayInMinutes = previewDelay/MS_TO_MINUTE_CONVERSION;
-        var innerAlarmListener = function(alarmInfo) 
+        let innerAlarmListener = function(alarmInfo) 
         {
-            browser.runtime.sendMessage
-            (
-                { command: "Preview-Theme", theme: theTheme }
+            browser.runtime.sendMessage(
+                {
+                    command: "Preview-Theme",
+                    theme: theTheme
+                }
             ); 
         };
 
@@ -235,16 +251,18 @@ var mouseOutListener = function(theTheme)
     { 
         browser.alarms.clear("previewAlarm");
         browser.alarms.onAlarm.removeListener(previewAlarmListener);
-        browser.runtime.sendMessage
-        (
-            { command: "End-Preview", theme: theTheme }
+        browser.runtime.sendMessage(
+            {
+                command: "End-Preview",
+                theme: theTheme
+            }
         ); 
     };
 };
 
-function toggleMenuIcons(iconsShown) 
+var toggleMenuIcons = function (iconsShown) 
 {
-    var displayValue;
+    let displayValue;
     if (true === iconsShown) 
     {
         displayValue = "inline";
@@ -254,16 +272,16 @@ function toggleMenuIcons(iconsShown)
         displayValue = "none";
     }        
 
-    var icons = browserActionMenu.querySelectorAll(".icon");
-    for (var index = 0; index < icons.length; index++) 
+    let icons = browserActionMenu.querySelectorAll(".icon");
+    for (let index = 0; index < icons.length; index++) 
     {
         logger.log("Icon Node", icons[index]);
         icons[index].style.display = displayValue;
     }
-}
+};
 
 var rotateAlarmListener;
-function startRotateAlarm() 
+var startRotateAlarm = function() 
 {    
     logger.log("In Rotate Alarm");
 
@@ -271,9 +289,9 @@ function startRotateAlarm()
     var checkRotatePref = browser.storage.local.
         get(["auto", "autoMinutes", "fastSwitch"]);
 
-    return checkRotatePref.then
-    (
-        (results) => {
+    return checkRotatePref.then(
+        (results) =>
+        {
             // Because the WebExtension can't be notified to turn on/off
             // the rotate when the associated shortcut is pressed and
             // processed in the bootstrap code, we have to run the alarm
@@ -300,16 +318,16 @@ function startRotateAlarm()
             return Promise.resolve();
         }
     );
-}
+};
 
-function stopRotateAlarm() 
+var stopRotateAlarm = function() 
 {
     if ('undefined' !== typeof(rotateAlarmListener)) 
     {
         browser.alarms.clear("rotateAlarm");
         browser.alarms.onAlarm.removeListener(rotateAlarmListener);        
     }
-}
+};
 
 // Because the legacy bootstrap code cannot initiate contact with the
 // embedded WebExtension, and because the shortcuts are still handled by
@@ -323,18 +341,16 @@ function stopRotateAlarm()
 // auto preference is true. This is not optimal from a performance
 // standpoint but is necessary until the shortcuts can be migrated to the
 // WebExtension code.
-function autoRotate() 
+var autoRotate = function() 
 {
-    var checkRotatePref = Promise.all
-    (
+    let checkRotatePref = Promise.all(
         [
             browser.storage.local.get("auto"),
             browser.runtime.sendMessage({command: "Return-Pref-Auto"})
         ]
     );    
 
-    checkRotatePref.then
-    (
+    checkRotatePref.then(
         (results) => 
         {
             if (true === results[1].auto) 
@@ -350,9 +366,9 @@ function autoRotate()
             }
 
         }, handleError);
-}
+};
 
-function rotate() 
+var rotate = function() 
 {
     if (1 >= currentThemes.length) return;
 
@@ -360,27 +376,25 @@ function rotate()
     // currentIndex in the bootstrap code is always as (or more) accurate than 
     // the currentIndex stored in the Webextension due to use of the rotate 
     // shortcut. 
-    var getRotatePref = Promise.all
-    (
+    let getRotatePref = Promise.all(
         [
             browser.storage.local.get(["random", "current"]),
             browser.runtime.sendMessage({command: "Get-Current-Index"})
         ]
     );
 
-    getRotatePref.then
-    (
+    getRotatePref.then(
         (results) => 
         {
             logger.log ("Current index before ", results[1].current);
-            var newIndex = results[1].current;
+            let newIndex = results[1].current;
 
             if (true === results[0].random)
             {
-                var prevIndex = newIndex;
+                let prevIndex = newIndex;
                 // pick a number between 1 and the end until a new index is
                 // found
-                while(newIndex === prevIndex) 
+                while (newIndex === prevIndex) 
                 {
                     newIndex = Math.floor ((Math.random() *
                         (currentThemes.length-1)) + 1);
@@ -390,7 +404,7 @@ function rotate()
             {
                 // If a default theme is active, rotate to the first
                 // non-default theme
-                if(newIndex > currentThemes.length-1) 
+                if (newIndex > currentThemes.length-1) 
                 {
                     newIndex = 0;
                 } 
@@ -402,8 +416,7 @@ function rotate()
 
             logger.log ("Current index after ", newIndex);
             setCurrentTheme(newIndex, results[0].current);
-            browser.runtime.sendMessage
-            (
+            browser.runtime.sendMessage(
                 {
                     command: "Switch-Themes",
                     theme: currentThemes[newIndex],
@@ -412,15 +425,14 @@ function rotate()
             );
         }
     );    
-}
+};
 
-function rotateOnStartup() 
+var rotateOnStartup = function() 
 {
     logger.log("Rotate on Startup");
 
-    var checkRotateOnStartup = browser.storage.local.get("startupSwitch");
-    checkRotateOnStartup.then
-    (
+    let checkRotateOnStartup = browser.storage.local.get("startupSwitch");
+    checkRotateOnStartup.then(
         (prefs) => 
         {
             if(true === prefs.startupSwitch) 
@@ -429,27 +441,27 @@ function rotateOnStartup()
             }
         }
     );
-}
+};
 
-function setCurrentTheme(newIndex, oldIndex)
+var setCurrentTheme = function(newIndex, oldIndex)
 {
-    var themes = browserActionMenu.children;
+    let themes = browserActionMenu.children;
     themes[oldIndex].selected = false;
     themes[newIndex].selected = true;
 
     if(newIndex !== oldIndex)
     {
-        var updatingCurrentIndex = browser.storage.local.
+        let updatingCurrentIndex = browser.storage.local.
             set({current: newIndex});
         updatingCurrentIndex.catch(handleError);  
     }
-}
+};
 
-function handlePreferenceChange(changes, area) 
+var handlePreferenceChange = function(changes, area) 
 { 
-    var changedPrefs = Object.keys(changes);
+    let changedPrefs = Object.keys(changes);
 
-    for (var pref of changedPrefs) 
+    for (let pref of changedPrefs) 
     {
         if ('undefined' !== typeof(changes[pref].newValue) && 
             changes[pref].oldValue !== changes[pref].newValue) 
@@ -457,15 +469,14 @@ function handlePreferenceChange(changes, area)
             reactToPrefChange(pref, changes[pref]);
         }
     }
-}
+};
 
-function reactToPrefChange(prefName, prefData) 
+var reactToPrefChange = function(prefName, prefData) 
 {
     switch (prefName) 
     {
         case 'iconPreview':
-            browser.runtime.sendMessage
-            (
+            browser.runtime.sendMessage(
                 {
                     command: "Set-Preference",
                     preference: prefName,
@@ -476,8 +487,7 @@ function reactToPrefChange(prefName, prefData)
             break;
         case 'preview':
         case 'previewDelay':
-            browser.runtime.sendMessage
-            (
+            browser.runtime.sendMessage(
                 {
                     command: "Set-Preference",
                     preference: prefName,
@@ -487,8 +497,7 @@ function reactToPrefChange(prefName, prefData)
             getMenuData().then(buildMenu, handleError);
             break;
         case 'debug':
-            browser.runtime.sendMessage
-            (
+            browser.runtime.sendMessage(
                 {
                     command: "Set-Preference",
                     preference: prefName,
@@ -498,8 +507,7 @@ function reactToPrefChange(prefName, prefData)
             setLogger();
             break;
         case 'autoMinutes':
-            browser.runtime.sendMessage
-            (
+            browser.runtime.sendMessage(
                 {
                     command: "Set-Preference",
                     preference: prefName,
@@ -516,39 +524,57 @@ function reactToPrefChange(prefName, prefData)
             stopRotateAlarm();
             startRotateAlarm();
             // falls through
-        case 'toolboxMinHeight':
-        case 'startupSwitch':
-        case 'random':
-        case 'mainMenuBar':
-        case 'toolsMenu':
+        case 'toolboxMinHeight':    // falls through
+        case 'startupSwitch':       // falls through
+        case 'random':              // falls through
+        case 'mainMenuBar':         // falls through
+        case 'toolsMenu':           // falls through
 
-        case 'defaultKeyShift': case 'defaultKeyControl': case 'defaultKeyAlt':
-        case 'defaultKeyMeta': case 'defaultKeyAccel': case 'defaultKeyOS':
-        case 'defaultKey':
+        case 'defaultKeyShift':     // falls through
+        case 'defaultKeyControl':   // falls through
+        case 'defaultKeyAlt':       // falls through
+        case 'defaultKeyMeta':      // falls through
+        case 'defaultKeyAccel':     // falls through
+        case 'defaultKeyOS':        // falls through
+        case 'defaultKey':          // falls through
 
-        case 'rotateKeyShift': case 'rotateKeyControl': case 'rotateKeyAlt':
-        case 'rotateKeyMeta': case 'rotateKeyAccel': case 'rotateKeyOS':
-        case 'rotateKey':
+        case 'rotateKeyShift':      // falls through
+        case 'rotateKeyControl':    // falls through
+        case 'rotateKeyAlt':        // falls through
+        case 'rotateKeyMeta':       // falls through
+        case 'rotateKeyAccel':      // falls through
+        case 'rotateKeyOS':         // falls through
+        case 'rotateKey':           // falls through
 
-        case 'autoKeyShift': case 'autoKeyControl': case 'autoKeyAlt':
-        case 'autoKeyMeta': case 'autoKeyAccel': case 'autoKeyOS':
-        case 'autoKey':
+        case 'autoKeyShift':        // falls through
+        case 'autoKeyControl':      // falls through
+        case 'autoKeyAlt':          // falls through
+        case 'autoKeyMeta':         // falls through
+        case 'autoKeyAccel':        // falls through
+        case 'autoKeyOS':           // falls through
+        case 'autoKey':             // falls through
 
-        case 'accessKey':
+        case 'accessKey':           // falls through
 
-        case 'activateKeyShift': case 'activateKeyControl':
-        case 'activateKeyAlt': case 'activateKeyMeta':
-        case 'activateKeyAccel': case 'activateKeyOs':
-        case 'activateKey':
+        case 'activateKeyShift':    // falls through
+        case 'activateKeyControl':  // falls through
+        case 'activateKeyAlt':      // falls through
+        case 'activateKeyMeta':     // falls through
+        case 'activateKeyAccel':    // falls through
+        case 'activateKeyOs':       // falls through
+        case 'activateKey':         // falls through
 
-        case 'toolsKeyShift': case 'toolsKeyControl': case 'toolsKeyAlt':
-        case 'toolsKeyMeta': case 'toolsKeyAccel': case 'toolsKeyOs':
-        case 'toolsKey':
+        case 'toolsKeyShift':       // falls through
+        case 'toolsKeyControl':     // falls through
+        case 'toolsKeyAlt':         // falls through
+        case 'toolsKeyMeta':        // falls through
+        case 'toolsKeyAccel':       // falls through
+        case 'toolsKeyOs':          // falls through
+        case 'toolsKey':            // falls through
 
-        case 'current':
+        case 'current':             // falls through
         case 'toolboxMaxHeight':
-            browser.runtime.sendMessage
-            (
+            browser.runtime.sendMessage(
                 {
                     command: "Set-Preference",
                     preference: prefName,
@@ -559,10 +585,9 @@ function reactToPrefChange(prefName, prefData)
         default:
             logger.log(prefName, " " + prefData.newValue);
     }
-}
+};
 
-browser.contextMenus.create
-(
+browser.contextMenus.create(
     {
         id: "PSOptions",
         title: "Persona Switcher Options",
@@ -570,8 +595,7 @@ browser.contextMenus.create
     }
 );
 
-browser.contextMenus.onClicked.addListener
-(
+browser.contextMenus.onClicked.addListener(
     (info) => 
     {
         browser.runtime.openOptionsPage(); 
@@ -582,15 +606,13 @@ var logger;
 var nullLogger = {};
 nullLogger.log = function (s) 
 { 
-    'use strict'; 
     return; 
 };
 
-function setLogger() 
+var setLogger = function() 
 {
-    var checkIfDebugging = browser.storage.local.get("debug");
-    return checkIfDebugging.then
-    (
+    let checkIfDebugging = browser.storage.local.get("debug");
+    return checkIfDebugging.then(
         (result) => 
         {
             if (true === result.debug) 
@@ -604,11 +626,11 @@ function setLogger()
             return Promise.resolve();
         }
     );
-}
+};
 
-function handleError(error) 
+var handleError = function(error) 
 {
     logger.log(`Error: ${error}`);
-}
+};
 
 handleStartup();

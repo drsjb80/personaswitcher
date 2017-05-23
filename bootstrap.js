@@ -22,17 +22,15 @@ function startup(data, reason)
     Cu.import('chrome://personaswitcher/content/PersonaSwitcher.jsm');
     
     // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIJSSubScriptLoader
-    let context = this;
     Services.scriptloader.
         loadSubScript('chrome://personaswitcher/content/ui.js',
-            context, "UTF-8");
+            this, "UTF-8");
 
     forEachOpenWindow(loadIntoWindow);
     Services.wm.addListener(WindowListener);
 
-    data.webExtension.startup().then
-    (
-        api => 
+    data.webExtension.startup().then (
+        (api) =>
         {
             const {browser} = api;
             browser.runtime.onMessage.addListener(messageHandler);
@@ -92,15 +90,17 @@ function unloadFromWindow(window)
         doc.getElementById("personaswitcher-tools-submenu");
     let keySet = doc.getElementById("personaSwitcherKeyset");
 
-    if(null !== menuPersonaSwitcher) 
+    if (null !== menuPersonaSwitcher) 
     {
         menuPersonaSwitcher.parentNode.removeChild(menuPersonaSwitcher);        
     }
+
     if (null !== submenuPersonaSwitcher) 
     {
         submenuPersonaSwitcher.parentNode.removeChild(
             submenuPersonaSwitcher);        
     }
+
     if(null !== keySet) 
     {
         keySet.parentNode.removeChild(keySet);
@@ -116,10 +116,10 @@ var WindowListener =
 {
     onOpenWindow: function (xulWindow)
     {
-        var window = 
-            xulWindow.
-                QueryInterface(Components.interfaces.nsIInterfaceRequestor).
-                    getInterface(Components.interfaces.nsIDOMWindow);
+        var window = xulWindow.
+            QueryInterface(Components.interfaces.nsIInterfaceRequestor).
+                getInterface(Components.interfaces.nsIDOMWindow);
+
         function onWindowLoad()
         {
             window.removeEventListener('load', onWindowLoad);
@@ -133,11 +133,9 @@ var WindowListener =
     },
     onCloseWindow: function (xulWindow) 
     {
-        
     },
     onWindowTitleChange: function (xulWindow, newTitle) 
     {
-        
     }
 };
 
@@ -161,20 +159,25 @@ function messageHandler(message, sender, sendResponse)
             PersonaSwitcher.getPersonas();
             let checkForDefault = new Promise(loadDefaultIfNeeded);
 
-            checkForDefault.then(() => 
-            {
-                sendResponse({
-                    themes: PersonaSwitcher.currentThemes, 
-                    defaults: PersonaSwitcher.defaultThemes
-                });
-                PersonaSwitcher.themeListChanged = false;
-            });
-            // Because we are leaving the message handler before sendResponse is
-            // is called due to the aSync nature of promises, we have to return 
-            // true to indicate we are going to send a response.
+            checkForDefault.then (
+                () => 
+                {
+                    sendResponse (
+                        {
+                            themes: PersonaSwitcher.currentThemes, 
+                            defaults: PersonaSwitcher.defaultThemes
+                        }
+                    );
+                    PersonaSwitcher.themeListChanged = false;
+                }
+            );
+
+            // Because we are leaving the message handler before
+            // sendResponse is is called due to the aSync nature of
+            // promises, we have to return true to indicate we are going to
+            // send a response.
             // http://stackoverflow.com/questions/40772929/promise-from-browser-runtime-sendmessage-fulfilling-prior-to-asynchronous-call
             return true;
-            break;
         case "Switch-Themes":
             PersonaSwitcher.switchTo(message.theme, message.index);
             break;    
@@ -206,7 +209,8 @@ function loadDefaultIfNeeded(resolve, reject)
 
     if('undefined' === typeof(defaultName)) 
     {
-        AddonManager.getAddonByID(PersonaSwitcher.defaultThemeId,
+        AddonManager.getAddonByID (
+            PersonaSwitcher.defaultThemeId,
             function (theme)
             {
                 if (null !== theme)
@@ -239,8 +243,8 @@ function loadDefaultIfNeeded(resolve, reject)
     }
 }
 
-// Handles copying the preference values from the webextension to the legacy code
-
+// Handles copying the preference values from the webextension to the
+// legacy code
 function setPreference(preference, value) 
 {
     switch(preference) 
@@ -423,10 +427,12 @@ function injectMainMenu(doc)
     let menuPersonaSwitcher = doc.createElement("menu");
     menuPersonaSwitcher.setAttribute("id", "personaswitcher-main-menubar");
     menuPersonaSwitcher.setAttribute("label",
-                stringBundle.GetStringFromName('personaswitcher-menu.label'));
+        stringBundle.GetStringFromName('personaswitcher-menu.label'));
+
     let menuPSPopup = doc.createElement("menupopup");
     menuPSPopup.setAttribute("id", "personaswitcher-main-menubar-popup");
-    menuPSPopup.addEventListener('popuphidden',
+    menuPSPopup.addEventListener (
+        'popuphidden',
         function() 
         { 
             PersonaSwitcher.popupHidden(); 
@@ -458,9 +464,11 @@ function injectSubMenu(doc)
     submenuPersonaSwitcher.setAttribute("id", "personaswitcher-tools-submenu");
     submenuPersonaSwitcher.setAttribute("label", 
         stringBundle.GetStringFromName('personaswitcher-menu.label'));
+
     let submenuPSPopup = doc.createElement("menupopup");
     submenuPSPopup.setAttribute("id", "personaswitcher-tools-submenu-popup");
-    submenuPSPopup.addEventListener('popuphidden',
+    submenuPSPopup.addEventListener (
+        'popuphidden',
         function() 
         { 
             PersonaSwitcher.popupHidden(); 
@@ -494,7 +502,6 @@ function addKeyset(doc)
 }
 
 // https://developer.mozilla.org/en-US/Add-ons/How_to_convert_an_overlay_extension_to_restartless#Step_4_Manually_handle_default_preferences
-// Default Preferences Setup
 function getGenericPref(branch, prefName)
 {
     switch (branch.getPrefType(prefName))
@@ -546,24 +553,26 @@ function setUCharPref(prefName, text, branch) // Unicode setCharPref
         createInstance(Components.interfaces.nsISupportsString);
     string.data = text;
     branch = branch ? branch : Services.prefs;
-    branch.setComplexValue(prefName, 
-                            Components.interfaces.nsISupportsString,
-                            string);
+    branch.setComplexValue(prefName, Components.interfaces.nsISupportsString,
+        string);
 }
 
 function removeUserPrefs() 
 {
-    var userPreferences = [
-    "defshift", "defcontrol", "defalt", "defmeta", "defaccel", "defos", 
-    "defkey", "rotshift", "rotcontrol", "rotalt", "rotmeta", "rotaccel", 
-    "rotos", "rotkey", "autoshift", "autocontrol", "autoalt", "autometa", 
-    "autoaccel", "autoos", "autokey", "activateshift", "activatecontrol", 
-    "activatealt", "activatemeta", "activateaccel", "activateos", "activatekey",
-    "toolsshift", "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel",
-    "toolsos", "toolskey", "accesskey", "auto", "autominutes", "random", 
-    "preview", "preview-delay", "icon-preview", "tools-submenu", 
-    "main-menubar", "debug", "notification-workaround", 
-    "toolbox-minheight", "startup-switch", "fastswitch", "current"];
+    var userPreferences =
+    [
+        "defshift", "defcontrol", "defalt", "defmeta", "defaccel", "defos",
+        "defkey", "rotshift", "rotcontrol", "rotalt", "rotmeta",
+        "rotaccel", "rotos", "rotkey", "autoshift", "autocontrol",
+        "autoalt", "autometa", "autoaccel", "autoos", "autokey",
+        "activateshift", "activatecontrol", "activatealt", "activatemeta",
+        "activateaccel", "activateos", "activatekey", "toolsshift",
+        "toolscontrol", "toolsalt", "toolsmeta", "toolsaccel", "toolsos",
+        "toolskey", "accesskey", "auto", "autominutes", "random",
+        "preview", "preview-delay", "icon-preview", "tools-submenu",
+        "main-menubar", "debug", "notification-workaround",
+        "toolbox-minheight", "startup-switch", "fastswitch", "current"
+    ];
     
     var userBranch = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService).
