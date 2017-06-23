@@ -229,13 +229,14 @@ function onError(error)
     console.log(`Error: ${error}`);
 }
 
+// https://developer.mozilla.org/en-US/docs/Displaying_web_content_in_an_extension_without_security_issues
 function localizeHtmlPage()
 {
     var objects = document.getElementsByName("i18n");
     for (var j = 0; j < objects.length; j++)
     {    
         var obj = objects[j];
-        obj.innerHTML = browser.i18n.getMessage(obj.id.toString());
+        obj.textContent = browser.i18n.getMessage(obj.id.toString());
     }
 }
 
@@ -258,7 +259,7 @@ function updateMaxHeight(value)
 {
         toolboxMinHeightObject.max = value;
         var maxHeightHintObject = document.getElementById("maxHeight");
-        maxHeightHintObject.innerHTML = toolboxMinHeightObject.max;
+        maxHeightHintObject.textContent = toolboxMinHeightObject.max;
 }
 
 function updateToolsMenuShortcutDisplay()
