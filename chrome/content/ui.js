@@ -315,30 +315,7 @@ PersonaSwitcher.themeMonitor = function()
     }
     catch (e1)
     {
-    // http://mxr.mozilla.org/firefox/source/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
-    // http://www.oxymoronical.com/experiments/apidocs/interface/nsIExtensionManager
-    // http://www.oxymoronical.com/experiments/apidocs/interface/nsIAddonInstallListener
-    // https://github.com/ehsan/mozilla-cvs-history/blob/master/toolkit/mozapps/extensions/public/nsIExtensionManager.idl
-
-    // 550   const unsigned long TYPE_THEME = 0x04;
-    // 559   readonly attribute long type;
-
-    // can we pretend add-ons aren't removed until reboot because there is no
-    // listener?
-        PersonaSwitcher.logger.log ('trying ExtensionManager');
-        try
-        {
-            PersonaSwitcher.extensionManager =
-                Components.classes['@mozilla.org/extensions/manager;1'].
-                    getService(Components.interfaces.nsIExtensionManager);
-            PersonaSwitcher.logger.log ('using ExtensionManager');
-            PersonaSwitcher.extensionManager.
-                addInstallListener(PersonaSwitcher.ExtensionListener);
-        }
-        catch (e2)
-        {
-            PersonaSwitcher.logger.log ('completely failed');
-        }
+        PersonaSwitcher.logger.log ('completely failed to load addonManager');
     }
 };
 
