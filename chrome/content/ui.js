@@ -562,7 +562,7 @@ PersonaSwitcher.removeStaticPopups = function (doc)
         // not all windows have this popup
         if (item)
         {
-            item.setAttribute ('onpopupshowing',
+            item.addEventListener ('popupshowing',
                 'PersonaSwitcher.createMenuPopup (event);');
         }
     }
