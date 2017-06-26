@@ -224,10 +224,10 @@ function buildMenuItem(theme, prefs, theIndex)
 
     if (true === prefs.preview) 
     {
-        themeChoice.addEventListener('mouseover',
-                        mouseOverListener(theme, prefs.previewDelay));
-        themeChoice.addEventListener('mouseout',
-                        mouseOutListener(theme, prefs.preview));
+        themeChoice.addEventListener('mouseenter',
+                        mouseEnterListener(theme, prefs.previewDelay));
+        themeChoice.addEventListener('mouseleave',
+                        mouseLeaveListener(theme, prefs.preview));
     }
     themeChoice.addEventListener('click', clickListener(theme, theIndex));
     return themeChoice;
@@ -274,7 +274,7 @@ var clickListener = function(theTheme, theIndex)
 };
 
 var previewAlarmListener;
-var mouseOverListener = function(theTheme, previewDelay) 
+var mouseEnterListener = function(theTheme, previewDelay) 
 {
     const MS_TO_MINUTE_CONVERSION = 60000;
     return function() 
@@ -295,7 +295,7 @@ var mouseOverListener = function(theTheme, previewDelay)
     };
 };
 
-var mouseOutListener = function(theTheme) 
+var mouseLeaveListener = function(theTheme) 
 { 
     return function() 
     { 
