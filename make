@@ -1,6 +1,6 @@
-rm personaswitcher_bootstrap.xpi
+rm personaswitcher.xpi
 
-zip personaswitcher_bootstrap.xpi \
+zip personaswitcher.xpi \
     bootstrap.js \
     install.rdf \
     chrome.manifest \
