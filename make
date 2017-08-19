@@ -32,4 +32,5 @@ zip personaswitcher.xpi \
 	webextension/icons/PersonaSwitcher48.png \
 	webextension/icons/PersonaSwitcher64.png \
 	webextension/preferences/options.html \
-	webextension/preferences/options.js
+	webextension/preferences/options.js \
+    chrome/skin/PersonaSwitcher32.png
