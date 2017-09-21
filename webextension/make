@@ -1,0 +1,20 @@
+rm personaswitcher.zip
+
+zip personaswitcher.zip \
+	manifest.json \
+	_locales/en_US/messages.json \
+	_locales/zh_TW/messages.json \
+	_locales/zh_CN/messages.json \
+	_locales/de/messages.json \
+	_locales/it/messages.json \
+	background_scripts/WEPersonaSwitcher.js \
+	browser_action/popup.css \
+	browser_action/popup.html \
+	browser_action/popup.js \
+	icons/PersonaSwitcher16.png \
+	icons/PersonaSwitcher24.png \
+	icons/PersonaSwitcher32.png \
+	icons/PersonaSwitcher48.png \
+	icons/PersonaSwitcher64.png \
+	preferences/options.html \
+	preferences/options.js
