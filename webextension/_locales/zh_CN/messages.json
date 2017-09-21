@@ -1,0 +1,214 @@
+﻿{
+    "extensionName": {
+        "message": "选项",
+        "description": "Name of the extension."
+    },
+    "extensionShortName": {
+        "message": "选项",
+        "description": "Short name of the extension."
+    },
+    "extensionDescription": {
+        "message":"本软件为您提供通过菜单或是敲键形式，快速切换浏览器的个人设定和原始设定背景图案的功能。 还可以定时自动播放所有背景图案， 本软件可在Firefox浏览器上安装使用。",
+        "description": "Description of the extension."
+    },
+    "ps_noPersonas": {
+        "message": "找不到面板",
+        "description": "No Personas Found text"
+    },
+    "ps_menuLabel": {
+        "message": "面板",
+        "description": "Menu Label text"
+    },
+    "ps_buttonLabel": {
+        "message": "面板",
+        "description": "Button Label text"
+    },
+    "ps_toolTip": {
+        "message": "快速更换，预览面板",
+        "description": "Tooltip text"
+    },
+    "ps_default": {
+        "message": "预设面板",
+        "description": "Default text"
+    },
+    "about": {
+        "message": "关于",
+        "description": "The word 'About'"
+    },
+    "version": {
+        "message": "版本：",
+        "description": "The word 'Version'"
+    },
+    "createdBy": {
+        "message": "作者：",
+        "description": "The words 'Created By'"
+    },
+    "homepage": {
+        "message": " 首页",
+        "description": "The words 'Home Page'"
+    },
+    "options_title": {
+        "message": "选项",
+        "description": "Title of the options menu"
+    },
+    "options_pane1": {
+        "message": "选项",
+        "description": "Title of the options menu pane"
+    },
+    "options_kbshortcuts_default": {
+        "message": "切换至默认面板:  ALT + SHIFT + D",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_rotate": {
+        "message": "切换至其他面板:  ALT + SHIFT + R",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_toggle": {
+        "message": "切换为自动轮换: ALT + SHIFT + A",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_auto": {
+        "message": "Automatic rotation",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_menushortcuts": {
+        "message": "「面板」选单快捷键 (于 OS X 无效)",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_access": {
+        "message": "第一种快捷键：",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_activate": {
+        "message": "第二种快捷键：  ALT + SHIFT + P",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_tools": {
+        "message": "Persona Switcher tools menu shortcut key:",
+        "description": "Test displayed in the options pane"
+    },
+    "options_kbshortcuts_key": {
+        "message": "按键",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_shift": {
+        "message": "Shift",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_control": {
+        "message": "Control",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_alt": {
+        "message": "Alt",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_meta": {
+        "message": "Meta",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_accel": {
+        "message": "Accel",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_os": {
+        "message": "OS",
+        "description": "Text displayed in the options pane"
+    },
+    "options_kbshortcuts_title": {
+        "message": "快捷键",
+        "description": "Text displayed in the options pane"
+    },
+    "options_menuShortcuts_hint": {
+        "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
+        "description": "Text displayed in the options pane"
+    },
+    "options_options_title": {
+        "message": "选项",
+        "description": "Text displayed in the options pane"
+    },
+    "options_autoevery_switch": {
+        "message": "每当经过",
+        "description": "Text displayed in the options pane"
+    },
+    "options_autoevery_minutes": {
+        "message": "分钟时轮换",
+        "description": "Text displayed in the options pane"
+    },
+    "options_autoevery_hint":{
+        "message": "Values between 1 and 999",
+        "description": "Text displayed in the options pane"
+    },
+    "options_random_desc": {
+        "message": "不以固定的顺序更换面板。",
+        "description": "Text displayed in the options pane"
+    },
+    "options_startupSwitch_desc": {
+        "message": "开启 Firefox 时立即更换一次面板",
+        "description": "Text displayed in the options pane"
+    },
+    "options_toolboxMinHeight_desc": {
+        "message": "　   限制上方工具列最低高度至：",
+        "description": "Text displayed in the options pane"
+    },
+    "options_toolboxMinHeight_hint": {
+        "message": "Values between 0 and ",
+        "description": "Text displayed in the options pane"
+    },
+    "options_preview_desc": {
+        "message": "光标停留于选单选项​​经过一千分之",
+        "description": "Text displayed in the options pane"
+    },
+    "options_previewDelay_desc": {
+        "message": "秒后预览",
+        "description": "Text displayed in the options pane"
+    },
+    "options_previewDelay_hint": {
+        "message": "Values between 0 and 10000",
+        "description": "Text displayed in the options pane"
+    },
+    "options_iconPreview_desc": {
+        "message": "Add icon preview to menu items.",
+        "description": "Text displayed in the options pane"
+    },
+    "options_menus_title": {
+        "message": "将［面板］选单预示显示於 (至少勾一项才能以快捷键呼叫［面板］选单)",
+        "description": "Text displayed in the options pane"
+    },
+    "options_toolsSubmenu": {
+        "message": "选单列 －工具 (仅适用第二种快捷键)",
+        "description": "Text displayed in the options pane"
+    },
+    "options_mainMenuBar": {
+        "message": "选单列 (适用一，二种快捷键)",
+        "description": "Text displayed in the options pane"
+    },
+    "options_advanced_button": {
+        "message": "Advanced Options...",
+        "description": "Text displayed in the options pane"
+    },
+    "options_advanced_options": {
+        "message": "Advanced Options",
+        "description": "Text displayed in the options pane"
+    },
+    "options_debug": {
+        "message": "Debug",
+        "description": "Text displayed in the options pane"
+    },
+    "options_fast_switch": {
+        "message": "Quickly switch through personas",
+        "description": "Text displayed in the options pane"
+    },
+    "options_toolboxMaxHeight_desc": {
+        "message": "Maximum height of top toolbox:",
+        "description": "Text displayed in the options pane"
+    },
+    "options_ok_button": {
+        "message": "Ok",
+        "description": "Text displayed in the options pane"
+    },
+    "options_reset_button": {
+        "message": "Reset",
+        "description": "Text displayed in the options pane"
+    }
+}

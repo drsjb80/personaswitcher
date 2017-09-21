@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			fieldset {
+				white-space: nowrap;
+				width: auto;
+			}
+			body {
+				overflow: auto;
+			}
+			#advancedOptions {
+				display: none
+			}
+			#keyboardShortcutTitles, #keyboardShortcutKeys,
+			#menuShortcutTitles, #menuShortcutKeys, #toolboxHint,
+			#previewDelayHint, #autoMinutesHint{
+				display: inline-block;
+				vertical-align: text-top;
+			}
+			#keyboardShortcutTitles, #keyboardShortcutKeys{
+				line-height: 165%
+			}
+			#menuShortcutTitles, #menuShortcutKeys{
+				line-height: 150%
+			}
+		</style>
+	</head>
+
+	<body>
+	  <form>
+	  	<fieldset>
+			<legend><font size="4"><b><element name="i18n" id="options_kbshortcuts_title"></element></b></font></legend><br>
+				<font size="2">
+				<div name="i18n" id="options_kbshortcuts_activate"></div><br>
+				<div name="i18n" id="options_kbshortcuts_default"></div><br>
+				<div name="i18n" id="options_kbshortcuts_rotate"></div><br>
+				<div name="i18n" id="options_kbshortcuts_toggle"></div><br>
+				</font>
+		</fieldset><br>
+		<fieldset>		
+			<legend><font size="4"><b><element name="i18n" id="options_title"></element></b></font></legend>
+			<fieldset>
+				<legend><element name="i18n" id="options_options_title"></element></legend><br>
+				<div>
+					<input 
+						type="checkbox"
+						id="auto"
+						tabindex="1">
+					<label for="auto"><element name="i18n" id="options_autoevery_switch"></element></label>
+					<div id="autoMinutesHint">
+						<input 
+							type="number"
+							id="auto-minutes"
+							size="1"
+							min="1"
+							max="999"
+							tabindex="2">
+						<label for="auto-minutes"><element name="i18n" id="options_autoevery_minutes"></element></label><br>
+						<label>&ensp;<small><element name="i18n" id="options_autoevery_hint"></element></small></label>
+					</div>
+				</div>
+				<div>
+					<input 
+						type="checkbox"
+						id="random"
+						tabindex="3">
+					<label for="random"><element name="i18n" id="options_random_desc"></element></label>
+				</div><br>
+				<div>
+					<input
+						type="checkbox"
+						id="startup-switch"
+						tabindex="4">
+					<label for="startup-switch"><element name="i18n" id="options_startupSwitch_desc"></element></label>
+				</div><br>
+				<div>
+					<input
+						type="checkbox"
+						id="preview"
+						tabindex="5">
+					<label for="preview"><element name="i18n" id="options_preview_desc"></element></label>
+					<div id="previewDelayHint">
+						<input
+							type="number"
+							id="preview-delay"
+							size="5"
+							min="0"
+							max="10000"
+							increment="10"
+							tabindex="6">
+						<label for="preview-delay"><element name="i18n" id="options_previewDelay_desc"></element></label><br>
+						<label>&nbsp;<small><element name="i18n" id="options_previewDelay_hint"></element></small></label>
+					</div>
+				</div>
+				<div>
+					<input
+						type="checkbox"
+						id="icon-preview"
+						tabindex="7">
+					<label for="icon-preview"><element name="i18n" id="options_iconPreview_desc"></element></label>
+				</div><br>
+			</fieldset><br>
+			<fieldset>
+				<legend><element name="i18n" id="options_menus_title"></element></legend>
+				<div>
+					<input
+						type="checkbox"
+						id="tools-menu"
+						tabindex="8">
+					<label for="tools-menu"><element name="i18n" id="options_toolsSubmenu"></element></label>
+				</div><br>
+			</fieldset><br>
+			<button type="button" id="advancedButton" tabindex="9"><element name="i18n" id="options_advanced_button"></element></button><br><br>
+			<fieldset id="advancedOptions">
+				<legend><element name="i18n" id="options_advanced_options"></element></legend>
+				<div>
+					<input 
+						type="checkbox"
+						id="debug"
+						tabindex="10">
+					<label for="debug"><element name="i18n" id="options_debug"></element></label>
+				</div><br>
+				<div>
+					<input 
+						type="checkbox"
+						id="fast-switch"
+						tabindex="11">
+					<label for="fast-switch"><element name="i18n" id="options_fast_switch"></element></label>
+				</div><br>
+			</fieldset><br>
+			<button type="submit"><element name="i18n" id="options_ok_button"></element></button>
+			<button type="reset"><element name="i18n" id="options_reset_button"></element></button>
+		</fieldset>
+	  </form>
+	  <script src="options.js"></script>
+	</body>
+
+</html>

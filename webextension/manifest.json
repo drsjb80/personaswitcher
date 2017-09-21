@@ -1,0 +1,71 @@
+{
+    "applications": {
+        "gecko": {
+            "id": "drsjb80@gmail.com"
+        }
+    },
+    "background": {
+        "scripts": [
+            "background_scripts/WEPersonaSwitcher.js"
+        ]
+    },
+    "browser_action": {
+        "browser_style": true,
+        "default_icon": {
+            "16": "icons/PersonaSwitcher16.png",
+            "32": "icons/PersonaSwitcher32.png",
+            "64": "icons/PersonaSwitcher64.png"
+        },
+        "default_popup": "browser_action/popup.html",
+        "default_title": "PersonaSwitcherMenu"
+    },
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Alt+Shift+P"
+            }
+        },
+        "switch_to_default" : {
+           "suggested_key": {
+                "default": "Alt+Shift+D"
+            } 
+        },
+        "rotate" : {
+           "suggested_key": {
+                "default": "Alt+Shift+R"
+            } 
+        },
+        "toggle_autoswitch" : {
+           "suggested_key": {
+                "default": "Alt+Shift+A"
+            } 
+        }
+
+    },
+    "default_locale": "en_US",
+    "description": "__MSG_extensionDescription__",
+    "developer": {
+        "name": "Steve Beaty",
+        "url": "https://github.com/drsjb80/personaswitcher"
+    },
+    "icons": {
+        "48": "icons/PersonaSwitcher48.png"
+    },
+    "manifest_version": 2,
+    "name": "__MSG_extensionName__",
+    "options_ui": {
+        "browser_style": true,
+        "page": "preferences/options.html"
+    },
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage",
+        "alarms",
+        "contextMenus",
+        "menus",
+        "management"
+    ],
+    "short_name": "__MSG_extensionShortName__",
+    "version": "5.0.0"
+}
