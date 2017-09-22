@@ -296,7 +296,7 @@ function removeToolsSubmenu()
     // context menu Options Page item. If more items are added to the context
     // later, this may need to be changed to removing all the tools menu items 
     // individually.
-    browser.menus.removeAll().then(buildContextMenu);
+    return browser.menus.removeAll().then(buildContextMenu);
 }
 
 function buildContextMenu() 
@@ -305,6 +305,12 @@ function buildContextMenu()
     {
           id: "PSOptions",
           title: "Persona Switcher Options",
+          contexts: ["browser_action"]
+    });
+    browser.contextMenus.create(
+    {
+          id: "ReloadThemes",
+          title: "Refresh PSwitcher Themes",
           contexts: ["browser_action"]
     });
 }
@@ -690,7 +696,7 @@ function findActiveCurrentTheme()
             return currentIndex;
         }
     }
-    
+
     return findActiveDefaultTheme();
 }
 
@@ -794,13 +800,19 @@ browser.contextMenus.onClicked.addListener((info) =>
 {
 
     logger.log("Context menu id:", info.menuItemId);
-    if("PSOptions" === info.menuItemId)
+    switch(info.menuItemId)
     {
-        browser.runtime.openOptionsPage(); 
-    }
-    else 
-    {
-        toolsMenuThemeSelect(parseInt(info.menuItemId));
+        case "PSOptions":
+            browser.runtime.openOptionsPage(); 
+            break;
+        case "ReloadThemes":
+            removeToolsSubmenu().then(getMenuData)
+                                .then(buildMenu)
+                                .then(buildToolsSubmenu)
+                                .catch(handleError);
+            break;
+        default:
+            toolsMenuThemeSelect(parseInt(info.menuItemId));
     }
 });
 
