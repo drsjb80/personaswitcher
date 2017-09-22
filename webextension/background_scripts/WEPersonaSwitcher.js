@@ -73,6 +73,7 @@ function buildPrefsStorageArg()
     prefsStorageArg.autoMinutes = 30;
     prefsStorageArg.previewDelay = 0;
     prefsStorageArg.current = 0;
+    prefsStorageArg.currentThemeId = null;
     prefsStorageArg.defaults_loaded = true;
 
     return prefsStorageArg;
@@ -80,7 +81,8 @@ function buildPrefsStorageArg()
 
 function getMenuData() 
 {
-    var menuPreferences = ["iconPreview", "preview", "previewDelay", "current"];
+    var menuPreferences = ["iconPreview", "preview", "previewDelay", "current",
+                            "currentThemeId"];
     var getData = Promise.all([
         browser.storage.local.get(menuPreferences),
         browser.management.getAll()
@@ -92,8 +94,14 @@ function buildMenu(data)
 {
     logger.log("Menu ", browserActionMenu);
     sortThemes(data[1]);
+    data[0].current = validateCurrentIndex(data[0].current,
+                                           data[0].currentThemeId);
     browserActionMenu = document.createElement("div");
     browserActionMenu.setAttribute("class", "menu");
+    // Skip one index value between current and default themes to make it
+    // map easier to the index values of the children of browserActionmenu where  
+    // the skipped index corresponds to the separator child node between theme 
+    // types
     var indexOffset = currentThemes.length+1;
     for (let index = 0; index < currentThemes.length; index++) 
     {        
@@ -134,6 +142,10 @@ function buildMenuItem(theme, prefs, theIndex)
     {
         themeChoice.selected = true;
         currentThemeId = theme.id;
+        if(prefs.currentThemeId !== currentThemeId)
+        {
+            browser.storage.local.set({"currentThemeId": currentThemeId});
+        }
     }
 
     if (true === prefs.preview) 
@@ -177,7 +189,7 @@ var clickListener = function(theTheme, theIndex)
             {
                 logger.log("current: ", result.current);
                 switchTheme(theTheme.id, result.current);
-                setCurrentTheme(theIndex, result.current);
+                setCurrentTheme(theIndex, result.current, true);
             });
         startRotateAlarm(); 
     };
@@ -261,11 +273,11 @@ function buildToolsSubmenu(current)
                 });
 
             for(let index = 0; index < defaultThemes.length; index++) 
-{
+            {
                 browser.menus.create({
-                  id: String(index + currentThemes.length),
+                  id: String(index + currentThemes.length + 1),
                   type: 'radio',
-                  checked: current === index,
+                  checked: (current - (currentThemes.length + 1)) === index,
                   title: defaultThemes[index].name,
                   contexts: ["tools_menu"]// ,
                   // icons: {
@@ -377,7 +389,7 @@ function rotate()
 
         logger.log ("Current index after ", newIndex);
         switchTheme(currentThemes[newIndex].id);
-        setCurrentTheme(newIndex, results.current);
+        setCurrentTheme(newIndex, results.current, true);
     });    
 }
 
@@ -409,7 +421,7 @@ function endThemePreview()
     switchTheme(currentThemeId);
 }
 
-function setCurrentTheme(newIndex, oldIndex)
+function setCurrentTheme(newIndex, oldIndex, updateToolsMenu)
 {
     if(newIndex < currentThemes.length) 
     {
@@ -417,10 +429,11 @@ function setCurrentTheme(newIndex, oldIndex)
     }
     else
     {
-        currentThemeId = defaultThemes[newIndex - currentThemes.length].id;
+        logger.log(newIndex, " ", currentThemes.length);
+        currentThemeId = defaultThemes[newIndex - (currentThemes.length+1)].id;
     }
+    browser.storage.local.set({'currentThemeId': currentThemeId});
 
-    logger.log(loadedThemes.length, " ", oldIndex);
     if('undefined' !== typeof(oldIndex) && oldIndex < loadedThemes.length) 
     {
         loadedThemes[oldIndex].selected = false;
@@ -433,14 +446,23 @@ function setCurrentTheme(newIndex, oldIndex)
                                         set({current: newIndex});
         updatingCurrentIndex.catch(handleError); 
 
-        browser.storage.local.get("toolsMenu").then((prefs) =>
+        if(true === updateToolsMenu)
         {
-            logger.log("Tools Menu set: ", prefs.toolsMenu, newIndex);
-            if(true === prefs.toolsMenu) 
-{
-                browser.contextMenus.update(String(newIndex), {checked: true});
-            }
-        }); 
+            browser.storage.local.get("toolsMenu").then((prefs) =>
+            {
+                logger.log("Tools Menu set: ", prefs.toolsMenu, newIndex);
+                if(true === prefs.toolsMenu) 
+                {
+                    let updateToolMenu = browser.contextMenus
+                                    .update(String(oldIndex), {checked: false});
+                    updateToolMenu.catch(handleError);
+                    
+                    updateToolMenu = browser.contextMenus
+                                    .update(String(newIndex), {checked: true});
+                    updateToolMenu.catch(handleError);
+                }
+            }); 
+        }
     }
 }
 
@@ -452,7 +474,7 @@ function activateDefault()
     var getCurrentTheme = browser.storage.local.get("current");
     getCurrentTheme.then((pref) =>
         {
-            setCurrentTheme(indexOfDefault, pref.current);
+            setCurrentTheme(indexOfDefault, pref.current, true);
         }
     );
 }
@@ -550,6 +572,120 @@ function sortThemes(addonInfos)
     logger.log ("User installed themes", " " + currentThemes.length);
 }
 
+// Assumes currentThemes and defaultThemes are accurate
+// (IE sortThemes has been called previously)
+// Additional complexity is meant to increase performance for larger theme
+// lists where iterating through the entire list is a performance hit. Otherwise
+// the findCurrentActiveTheme function would be sufficient.
+function validateCurrentIndex(current, currentThemeId) 
+{
+    // On first run, the currentThemeId will be null. 
+    if('undefined' === typeof(currentThemeId) || null === currentThemeId)
+    {
+        return findCurrentActiveTheme();
+    }
+
+    var result = checkDefaultTheme(current, currentThemeId);
+
+    if(false !== result)
+    {
+        return result;
+    }
+
+    // ensure the current index is within valid range
+    if(currentThemes.length <= current)
+    {
+        current = currentThemes.length-1;
+    }
+
+    // locate the index of the activeThemeId
+    var relativePos = currentThemeId.localeCompare(currentThemes[current].id);
+    var newIndex = current;
+    while(SAME !== relativePos)
+    {
+        if(APPEARS_HIGHER_IN_LIST === relativePos)
+        {
+            newIndex--;
+        }
+        else // APPEARS_LOWER_IN_LIST
+        {
+            newIndex++;
+        }
+
+        // if the currentThemeId is not found, assign to default theme
+        if(0 > newIndex || currentThemes.length >= newIndex)
+        {
+            newIndex = currentThemes.length + defaultThemes.length;
+            break;
+        }
+
+        relativePos = currentThemeId.localeCompare(currentThemes[newIndex].id);
+    }
+
+    // If the supposed active theme is not enabled, find the real active theme
+    // This can happen when a theme is enabled / disabled manually or when a
+    // theme is installed or uninstalled
+    if(false === currentThemes[newIndex].enabled) 
+    {
+        return findCurrentActiveTheme();
+    }
+
+    if(current !== newIndex)
+    {
+        current = newIndex;
+        browser.storage.local.set({'current': current});
+    }
+
+    return current;
+}
+
+function findCurrentActiveTheme()
+{
+    var currentIndex;
+    for(currentIndex = 0; currentIndex < currentThemes.length; currentIndex++)
+    {
+        if(true === currentThemes[currentIndex].enabled)
+        {            
+            browser.storage.local.set({'current': currentIndex});
+            return currentIndex;
+        }
+    }
+
+    for(currentIndex = 0; currentIndex < defaultThemes.length; currentIndex++)
+    {
+        if(true === currentThemes[currentIndex].enabled)
+        {
+            currentIndex = currentIndex + currentThemes.length + 1;
+            browser.storage.local.set({'current': currentIndex});
+            return currentIndex;
+        }
+    }
+
+    // should never get here
+    return 0;
+}
+
+function checkDefaultTheme(current, currentThemeId)
+{
+    for(let index = 0; index < defaultThemes.length; index++)
+    {
+        if(defaultThemes[index].id === currentThemeId)
+        {
+            if(false === defaultThemes[index].enabled)
+            {
+                return findCurrentActiveTheme();
+            }
+            else if(index + currentThemes.length + 1 != current)
+            {
+                current = index + currentThemes.length + 1;
+                browser.storage.local.set({'current': current});
+            }
+            return current;
+        }
+    }
+    return false;
+}
+
 function extractDefaults() 
 {
     defaultThemes = [];
@@ -568,6 +704,7 @@ function extractDefaults()
         }
         else if(isDefaultTheme(theme.name)) 
         {
+            logger.log(theme.name, " " + theme.id);
             defaultThemes.push(theme);
             currentThemes.splice(index, 1);
             index--;
@@ -623,13 +760,13 @@ browser.contextMenus.onClicked.addListener((info) =>
         }
         else
         {
-            themeId = defaultThemes[index-currentThemes.length].id;
+            themeId = defaultThemes[index-(currentThemes.length+1)].id;
         }
         switchTheme(themeId);
 
         browser.storage.local.get("current").then((pref) =>
             {
-                setCurrentTheme(index, pref.current);
+                setCurrentTheme(index, pref.current, true);
             });
     }
 });
