@@ -1,6 +1,6 @@
  ### Known Outstanding issues ###
  * **BUGS**
-   * Installing or uninstalling a theme will cause Personaswitcher to crash when the browser is restarted. <- FIX ME!
+   * they are there... find them!
  * **Feature Loss Due to Framework Limitations**
    * Icons on the menus (Waiting on further implementation of the management API)
    * Automatically updating menus when themes are added or removed (Waiting on further implementation of the management API)
