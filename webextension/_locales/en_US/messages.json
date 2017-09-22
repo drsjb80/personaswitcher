@@ -187,6 +187,14 @@
         "description": "Text displayed in the options pane",
         "message": "Tools menu."
     },
+    "options_usefultips_title": {
+        "description": "The words 'Useful Tips'",
+        "message": "Useful Tips"
+    },
+    "options_usefultips_tip1": {
+        "description": "Tip indicating quick access to options",
+        "message": "Right click on the toolbar button to quickly access this options page or to refresh the list of themes."
+    },
     "ps_buttonLabel": {
         "description": "Button Label text",
         "message": "PSwitcher"
