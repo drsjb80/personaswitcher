@@ -163,6 +163,10 @@
         "description": "Text displayed in the options pane",
         "message": "Reset"
     },
+    "options_refresh_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Refresh Themes"
+    },
     "options_startupSwitch_desc": {
         "description": "Text displayed in the options pane",
         "message": "Wechsel beim Start."

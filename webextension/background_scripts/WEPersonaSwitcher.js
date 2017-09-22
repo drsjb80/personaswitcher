@@ -255,7 +255,6 @@ function buildToolsSubmenu(current)
         {
             for(let index = 0; index < currentThemes.length; index++) 
             {
-                logger.log("Adding to Tools theme: ", String(index));
                 browser.menus.create({
                   id: String(index),
                   type: 'radio',
@@ -796,6 +795,14 @@ function toolsMenuThemeSelect(index)
         });
 }
 
+function reloadThemes() 
+{
+    removeToolsSubmenu().then(getMenuData)
+                        .then(buildMenu)
+                        .then(buildToolsSubmenu)
+                        .catch(handleError);
+}
+
 browser.contextMenus.onClicked.addListener((info) => 
 {
 
@@ -806,10 +813,7 @@ browser.contextMenus.onClicked.addListener((info) =>
             browser.runtime.openOptionsPage(); 
             break;
         case "ReloadThemes":
-            removeToolsSubmenu().then(getMenuData)
-                                .then(buildMenu)
-                                .then(buildToolsSubmenu)
-                                .catch(handleError);
+            reloadThemes();
             break;
         default:
             toolsMenuThemeSelect(parseInt(info.menuItemId));

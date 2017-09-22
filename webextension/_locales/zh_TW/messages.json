@@ -183,6 +183,10 @@
         "message": "Reset",
         "description": "Text displayed in the options pane"
     },
+    "options_refresh_button": {
+        "description": "Text displayed in the options pane",
+        "message": "Refresh Themes"
+    },
     "options_ok_button": {
         "message": "Ok",
         "description": "Text displayed in the options pane"

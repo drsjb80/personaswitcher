@@ -66,6 +66,12 @@ function resetOptions()
     }); 
 }
 
+function reloadThemes()
+{
+    var backgroundPage = browser.extension.getBackgroundPage();
+    backgroundPage.reloadThemes();
+}
+
 function onError(error) 
 {
     console.log(`Error: ${error}`);
@@ -101,5 +107,7 @@ document.addEventListener('DOMContentLoaded', loadOptions);
 document.addEventListener('DOMContentLoaded', localizeHtmlPage);
 document.querySelector("form").addEventListener("submit", saveOptions);
 document.querySelector("form").addEventListener("reset", resetOptions);
-document.getElementById("advancedButton").addEventListener(
-    "click", displayAdvanced);
+document.getElementById("refreshButton")
+        .addEventListener("click", reloadThemes);
+document.getElementById("advancedButton")
+        .addEventListener("click", displayAdvanced);
