@@ -582,7 +582,7 @@ function extractDefaults()
                 defaultNotFound = SAME !== theme.name.localeCompare("Default");
             }
         }
-        else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Default")) 
+        else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Light")) 
         {
             break;
         }
@@ -598,6 +598,8 @@ function isDefaultTheme(themeName)
 {
     return  "Compact Dark"  === themeName || 
             "Compact Light" === themeName || 
+            "Dark"          === themeName || 
+            "Light"         === themeName ||
             "Default"       === themeName;
 }
 
