@@ -255,6 +255,7 @@ function buildToolsSubmenu(current)
         {
             for(let index = 0; index < currentThemes.length; index++) 
             {
+                logger.log("Adding to Tools theme: ", String(index));
                 browser.menus.create({
                   id: String(index),
                   type: 'radio',
@@ -422,6 +423,22 @@ function endThemePreview()
 }
 
 function setCurrentTheme(newIndex, oldIndex, updateToolsMenu)
+{  
+
+    if(newIndex !== oldIndex)
+    {
+        updateCurrentThemeId(newIndex);
+        updateCurrentIndex(newIndex);        
+        updateBrowserActionSelection(newIndex, oldIndex);
+
+        if(true === updateToolsMenu)
+        {            
+            updateToolsMenuSelection(newIndex, oldIndex);            
+        }
+    }
+}
+
+function updateCurrentThemeId(newIndex) 
 {
     if(newIndex < currentThemes.length) 
     {
@@ -429,52 +446,68 @@ function setCurrentTheme(newIndex, oldIndex, updateToolsMenu)
     }
     else
     {
-        logger.log(newIndex, " ", currentThemes.length);
+        logger.log(newIndex, newIndex - (currentThemes.length+1));
         currentThemeId = defaultThemes[newIndex - (currentThemes.length+1)].id;
     }
     browser.storage.local.set({'currentThemeId': currentThemeId});
+}
 
+function updateCurrentIndex(newIndex)
+{
+    var updatingCurrentIndex = browser.storage.local.set({current: newIndex});
+            updatingCurrentIndex.catch(handleError); 
+}
+
+function updateBrowserActionSelection(newIndex, oldIndex)
+{
     if('undefined' !== typeof(oldIndex) && oldIndex < loadedThemes.length) 
-    {
-        loadedThemes[oldIndex].selected = false;
-    }
-    loadedThemes[newIndex].selected = true;    
-
-    if(newIndex !== oldIndex)
-    {
-        var updatingCurrentIndex = browser.storage.local.
-                                        set({current: newIndex});
-        updatingCurrentIndex.catch(handleError); 
-
-        if(true === updateToolsMenu)
         {
-            browser.storage.local.get("toolsMenu").then((prefs) =>
-            {
-                logger.log("Tools Menu set: ", prefs.toolsMenu, newIndex);
-                if(true === prefs.toolsMenu) 
-                {
-                    let updateToolMenu = browser.contextMenus
-                                    .update(String(oldIndex), {checked: false});
-                    updateToolMenu.catch(handleError);
-                    
-                    updateToolMenu = browser.contextMenus
-                                    .update(String(newIndex), {checked: true});
-                    updateToolMenu.catch(handleError);
-                }
-            }); 
+            loadedThemes[oldIndex].selected = false;
         }
-    }
+        loadedThemes[newIndex].selected = true;  
+}
+
+function updateToolsMenuSelection(newIndex, oldIndex)
+{
+    browser.storage.local.get("toolsMenu").then((prefs) =>
+        {
+            if(true === prefs.toolsMenu) 
+            {
+                logger.log("Tools Menu Selection: ", String(newIndex));
+                // ...??? The manual update of checked: true correctly updating
+                // the newly checked item and unchecking the old only works
+                // when the new item appears after the old checked item in the
+                // context menu. Currently the best work around is simply to
+                // always uncheck the old item before checking the new.                
+                let updateToolMenu = browser.contextMenus
+                          .update(String(oldIndex), {checked: false});
+                    updateToolMenu.catch(handleError);
+
+                updateToolMenu = 
+                    browser.contextMenus
+                           .update(String(newIndex), {checked: true});
+                updateToolMenu.catch(handleError);
+            }
+        }); 
 }
 
 function activateDefault()
 {
     logger.log("in activateDefault");
-    let indexOfDefault = currentThemes.length + defaultThemes.length;
+    let index; 
+    for(index = 0; index < defaultThemes.length; index++)
+    {
+        if(defaultTheme.id === defaultThemes[index].id)
+        {
+            index = index + currentThemes.length + 1;
+            break;
+        }
+    }
     switchTheme(defaultTheme.id);
     var getCurrentTheme = browser.storage.local.get("current");
     getCurrentTheme.then((pref) =>
         {
-            setCurrentTheme(indexOfDefault, pref.current, true);
+            setCurrentTheme(index, pref.current, true);
         }
     );
 }
@@ -708,12 +741,6 @@ function extractDefaults()
             defaultThemes.push(theme);
             currentThemes.splice(index, 1);
             index--;
-            // Currently the if is not needed as Default is the last of the
-            // defaults to check for. However, in case we expand the list of
-            // defaults in the future to include a default that appears lower in
-            // the list we need to make sure we don't override this flag once
-            // Default has been found. Note: the last if will have to be changed
-            // in such a case as well.
             if(defaultNotFound) 
             {
                 defaultNotFound = SAME !== theme.name.localeCompare("Default");
@@ -740,6 +767,40 @@ function isDefaultTheme(themeName)
             "Default"       === themeName;
 }
 
+function toolsMenuThemeSelect(index)
+{
+    logger.log("Context menu id:", index);
+    let themeId;
+    if(index < currentThemes.length)
+    {
+        themeId = currentThemes[index].id;
+    }
+    else
+    {
+        themeId = defaultThemes[index-(currentThemes.length+1)].id;
+    }
+    switchTheme(themeId);
+
+    browser.storage.local.get("current").then((pref) =>
+        {
+            // Because Mozilla automatically separates the the items above
+            // and below a separator into distinct groups, when switching
+            // from a default theme to a user installed, or vice versa, the
+            // old group's radio button must be disabled manually 
+            if((pref.current < currentThemes.length  &&
+                index > currentThemes.length) ||
+               (pref.current > currentThemes.length  &&
+                index < currentThemes.length))
+            {
+                let updateToolMenu = browser.contextMenus
+                      .update(String(pref.current), {checked: false});
+                    updateToolMenu.catch(handleError);
+            }
+            
+            setCurrentTheme(index, pref.current, false);
+        });
+}
+
 browser.contextMenus.onClicked.addListener((info) => 
 {
 
@@ -750,24 +811,7 @@ browser.contextMenus.onClicked.addListener((info) =>
     }
     else 
     {
-        let index = parseInt(info.menuItemId);
-        logger.log("Context menu id:");
-        logger.log(index);
-        let themeId;
-        if(index < currentThemes.length)
-        {
-            themeId = currentThemes[index].id;
-        }
-        else
-        {
-            themeId = defaultThemes[index-(currentThemes.length+1)].id;
-        }
-        switchTheme(themeId);
-
-        browser.storage.local.get("current").then((pref) =>
-            {
-                setCurrentTheme(index, pref.current, true);
-            });
+        toolsMenuThemeSelect(parseInt(info.menuItemId));
     }
 });
 
