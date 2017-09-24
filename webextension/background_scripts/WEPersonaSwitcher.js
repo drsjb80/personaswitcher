@@ -1,7 +1,6 @@
 /* global browser */
 /* eslint no-constant-condition: 0 */
 
-
 const APPEARS_HIGHER_IN_LIST = -1;
 const SAME = 0;
 const APPEARS_LOWER_IN_LIST = 1;
@@ -38,11 +37,11 @@ function handleStartup()
 // default_loaded flag is undefined. 
 function loadDefaultsIfNeeded(prefs) 
 {
-        if ('undefined' === typeof(prefs.defaults_loaded)) 
-        {
-            return loadDefaults();
-        } 
-        return Promise.resolve();
+    if ('undefined' === typeof(prefs.defaults_loaded)) 
+    {
+        return loadDefaults();
+    } 
+    return Promise.resolve();
 }
 
 function loadDefaults()
@@ -144,7 +143,8 @@ function buildMenuItem(theme, prefs, theIndex)
         currentThemeId = theme.id;
         if(prefs.currentThemeId !== currentThemeId)
         {
-            browser.storage.local.set({"currentThemeId": currentThemeId});
+            browser.storage.local.set({"currentThemeId": currentThemeId})
+                .catch(handleError);
         }
     }
 
@@ -159,8 +159,9 @@ function buildMenuItem(theme, prefs, theIndex)
     return themeChoice;
 }
 
-    
-function createIcon(iconURL, iconPreview) 
+// Function is unused at present. Uncomment for use when the management API is
+// developed sufficiently to allow the addition of icons to the menu   
+/* function createIcon(iconURL, iconPreview) 
 {
     var themeImg = document.createElement("img");
     themeImg.setAttribute("class", "button icon");
@@ -171,7 +172,7 @@ function createIcon(iconURL, iconPreview)
         themeImg.style.display = "none";
     }    
     return themeImg;
-}
+}*/
 
 function insertSeparator() 
 {
@@ -262,7 +263,7 @@ function buildToolsSubmenu(current)
                   title: currentThemes[index].name,
                   contexts: ["tools_menu"]// ,
                   // icons: {
-                  // 16: browserActionMenu.children()[0].children()[1].getAttribute("src"),
+                  // '16': currentThemes[index].icons[0].url}
                 });
             }
 
@@ -281,7 +282,7 @@ function buildToolsSubmenu(current)
                   title: defaultThemes[index].name,
                   contexts: ["tools_menu"]// ,
                   // icons: {
-                  // 16: browserActionMenu.children()[0].children()[1].getAttribute("src"),
+                  // '16': currentThemes[index].icons[0].url}
                 });
             }
         }
@@ -292,21 +293,21 @@ function removeToolsSubmenu()
 {
     // Because menus.remove is limited to one item at a time and is asynchronous
     // it is currently quicker to simply removal all items and then replace the
-    // context menu Options Page item. If more items are added to the context
-    // later, this may need to be changed to removing all the tools menu items 
-    // individually.
+    // context menu Options Page and reload Themes items. If more items are 
+    // added to the context menu later, this may need to be changed to removing 
+    // all the tools menu items individually.
     return browser.menus.removeAll().then(buildContextMenu);
 }
 
 function buildContextMenu() 
 { 
-    browser.contextMenus.create(
+    browser.menus.create(
     {
           id: "PSOptions",
           title: "Persona Switcher Options",
           contexts: ["browser_action"]
     });
-    browser.contextMenus.create(
+    browser.menus.create(
     {
           id: "ReloadThemes",
           title: "Refresh PSwitcher Themes",
@@ -454,7 +455,8 @@ function updateCurrentThemeId(newIndex)
         logger.log(newIndex, newIndex - (currentThemes.length+1));
         currentThemeId = defaultThemes[newIndex - (currentThemes.length+1)].id;
     }
-    browser.storage.local.set({'currentThemeId': currentThemeId});
+    browser.storage.local.set({'currentThemeId': currentThemeId})
+        .catch(handleError);
 }
 
 function updateCurrentIndex(newIndex)
@@ -484,12 +486,12 @@ function updateToolsMenuSelection(newIndex, oldIndex)
                 // when the new item appears after the old checked item in the
                 // context menu. Currently the best work around is simply to
                 // always uncheck the old item before checking the new.                
-                let updateToolMenu = browser.contextMenus
+                let updateToolMenu = browser.menus
                           .update(String(oldIndex), {checked: false});
                     updateToolMenu.catch(handleError);
 
                 updateToolMenu = 
-                    browser.contextMenus
+                    browser.menus
                            .update(String(newIndex), {checked: true});
                 updateToolMenu.catch(handleError);
             }
@@ -530,7 +532,8 @@ function handlePreferenceChange(changes, area)
       for (var pref of changedPrefs) 
       {
         if ('undefined' !== typeof(changes[pref].newValue) && 
-            changes[pref].oldValue !== changes[pref].newValue) 
+            changes[pref].oldValue !== changes[pref].newValue &&
+            'local' === area) 
         {
             reactToPrefChange(pref, changes[pref]);
         }
@@ -618,95 +621,54 @@ function sortThemes(addonInfos)
 
 // Assumes currentThemes and defaultThemes are accurate
 // (IE sortThemes has been called previously)
-// Additional complexity is meant to increase performance for larger theme
-// lists where iterating through the entire list is a performance hit. Otherwise
-// the findCurrentActiveTheme function would be sufficient.
 function validateCurrentIndex(current, currentThemeId) 
 {
     // On first run, the currentThemeId will be null. 
     if('undefined' === typeof(currentThemeId) || null === currentThemeId)
     {
-        return findActiveCurrentTheme();
+        return findActiveTheme();
     }
 
-    var result = findActiveDefaultTheme();
-
-    if(false !== result)
+    let themesToCheck;
+    let themeIndex;
+    if(currentThemes.length < current)
     {
-        return result;
+        themesToCheck = defaultThemes;
+        themeIndex = current - (currentThemes.length + 1);
     }
-
-    // If a default theme is not active, but the current id points to a default
-    // theme, the search area cannot be truncated
-    if(currentThemes.length <= current)
+    else
     {
-        return findActiveCurrentTheme();
+        themesToCheck = currentThemes;
+        themeIndex = current;
     }
 
-    // locate the index of the activeThemeId
-    var relativePos = currentThemeId.localeCompare(currentThemes[current].id);
-    var newIndex = current;
-    while(SAME !== relativePos)
+    if(true === themesToCheck[themeIndex].enabled)
     {
-        if(APPEARS_HIGHER_IN_LIST === relativePos)
-        {
-            newIndex--;
-        }
-        else // APPEARS_LOWER_IN_LIST
-        {
-            newIndex++;
-        }
-
-        // if the currentThemeId is not found, assign to index 0
-        if(0 > newIndex || currentThemes.length >= newIndex)
-        {
-            newIndex = 0;
-            break;
-        }
-
-        relativePos = currentThemeId.localeCompare(currentThemes[newIndex].id);
+        return current;
     }
-
-    // If the supposed active theme is not enabled, find the real active theme
-    // This can happen when a theme is enabled / disabled manually or when a
-    // theme is installed or uninstalled
-    if(false === currentThemes[newIndex].enabled) 
+    else
     {
-        return findActiveCurrentTheme();
-    }
-
-    if(current !== newIndex)
-    {
-        current = newIndex;
-        browser.storage.local.set({'current': current});
-    }
-
-    return current;
+        return findActiveTheme();
+    }    
 }
 
-function findActiveCurrentTheme()
+function findActiveTheme()
 {
-    var currentIndex;
-    for(currentIndex = 0; currentIndex < currentThemes.length; currentIndex++)
+    for(let index = 0; index < currentThemes.length; index++)
     {
-        if(true === currentThemes[currentIndex].enabled)
+        if(true === currentThemes[index].enabled)
         {            
-            browser.storage.local.set({'current': currentIndex});
-            return currentIndex;
+            updateCurrentIndex(index);
+            return index;
         }
     }
 
-    return findActiveDefaultTheme();
-}
-
-function findActiveDefaultTheme()
-{
     for(let index = 0; index < defaultThemes.length; index++)
     {
         if(true === defaultThemes[index].enabled)
         {
             index = index + currentThemes.length + 1;
-            browser.storage.local.set({'current': index});
+            updateCurrentIndex(index);
             return index;
         }
     }
@@ -734,7 +696,7 @@ function extractDefaults()
             logger.log(theme.name, " " + theme.id);
             defaultThemes.push(theme);
             currentThemes.splice(index, 1);
-            index--;
+            index -= 1; // ESLint set to no unary operators?
             if(defaultNotFound) 
             {
                 defaultNotFound = SAME !== theme.name.localeCompare("Default");
@@ -786,7 +748,7 @@ function toolsMenuThemeSelect(index)
                (pref.current > currentThemes.length  &&
                 index < currentThemes.length))
             {
-                let updateToolMenu = browser.contextMenus
+                let updateToolMenu = browser.menus
                       .update(String(pref.current), {checked: false});
                     updateToolMenu.catch(handleError);
             }
@@ -803,7 +765,7 @@ function reloadThemes()
                         .catch(handleError);
 }
 
-browser.contextMenus.onClicked.addListener((info) => 
+browser.menus.onClicked.addListener((info) => 
 {
 
     logger.log("Context menu id:", info.menuItemId);
@@ -822,34 +784,34 @@ browser.contextMenus.onClicked.addListener((info) =>
 
 browser.commands.onCommand.addListener(function(command) 
 {
-  switch (command) 
-{
-    case "switch_to_default":
-        activateDefault();
-        break;
-    case "rotate":
-        rotate();
-        break;
-    case "toggle_autoswitch":
-        var getAutoPref = browser.storage.local.get("auto");
-        getAutoPref.then((pref) => 
-            {
-                browser.storage.local.set({'auto': !pref.auto})
-                    .catch(handleError);
-                logger.log("Auto: ", !pref.auto);
-            }
-        );
-        break;
-    default:
-        // should never get here
-        logger.log(command, " not recognized");
-        break;
-  }
+    switch (command) 
+    {
+        case "switch_to_default":
+            activateDefault();
+            break;
+        case "rotate":
+            rotate();
+            break;
+        case "toggle_autoswitch":
+            var getAutoPref = browser.storage.local.get("auto");
+            getAutoPref.then((pref) => 
+                {
+                    browser.storage.local.set({'auto': !pref.auto})
+                        .catch(handleError);
+                    logger.log("Auto: ", !pref.auto);
+                }
+            );
+            break;
+        default:
+            // should never get here
+            logger.log(command, " not recognized");
+            break;
+    }
 });
 
 var logger = console;
 var nullLogger = {};
-nullLogger.log = function (s) 
+nullLogger.log = function () 
 { 
     return; 
 };

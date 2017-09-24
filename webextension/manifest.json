@@ -1,7 +1,8 @@
 {
     "applications": {
         "gecko": {
-            "id": "drsjb80@gmail.com"
+            "id": "drsjb80@gmail.com",
+            "strict_min_version": "55.0"
         }
     },
     "background": {
@@ -62,7 +63,6 @@
         "tabs",
         "storage",
         "alarms",
-        "contextMenus",
         "menus",
         "management"
     ],

@@ -1,6 +1,5 @@
 /* global browser */
 
-
 var backgroundPage;
 function appendMenu(page) 
 {
