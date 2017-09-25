@@ -22,7 +22,7 @@ function handleStartup()
     .then(setLogger)
     .then(startRotateAlarm)
     .then(getMenuData)
-    .then(buildMenu)
+    .then(buildBrowserActionMenu)
     .then(buildToolsSubmenu)
     .then(buildContextMenu)
     .then(rotateOnStartup)
@@ -45,37 +45,24 @@ function loadDefaultsIfNeeded(prefs)
 }
 
 function loadDefaults()
-{
-    return Promise.resolve(buildPrefsStorageArg())
-        .then(function(prefsStorageArg)
-        {
-            browser.storage.local.set(prefsStorageArg).then(
-                function() 
-                { 
-                    return Promise.resolve();
-                });
-        });        
-}
+{   
+    let preferences = {};
 
-function buildPrefsStorageArg() 
-{
-    var prefsStorageArg = {};
+    preferences.auto = false;
+    preferences.random = false;
+    preferences.startupSwitch = false;
+    preferences.preview = false;
+    preferences.iconPreview = true;
+    preferences.toolsMenu = false;
+    preferences.debug = false;
+    preferences.fastSwitch = false;
+    preferences.autoMinutes = 30;
+    preferences.previewDelay = 0;
+    preferences.current = 0;
+    preferences.currentThemeId = null;
+    preferences.defaults_loaded = true; 
 
-    prefsStorageArg.auto = false;
-    prefsStorageArg.random = false;
-    prefsStorageArg.startupSwitch = false;
-    prefsStorageArg.preview = false;
-    prefsStorageArg.iconPreview = true;
-    prefsStorageArg.toolsMenu = false;
-    prefsStorageArg.debug = false;
-    prefsStorageArg.fastSwitch = false;
-    prefsStorageArg.autoMinutes = 30;
-    prefsStorageArg.previewDelay = 0;
-    prefsStorageArg.current = 0;
-    prefsStorageArg.currentThemeId = null;
-    prefsStorageArg.defaults_loaded = true;
-
-    return prefsStorageArg;
+    return browser.storage.local.set(preferences);
 }
 
 function getMenuData() 
@@ -89,7 +76,7 @@ function getMenuData()
     return Promise.resolve(getData);
 }
 
-function buildMenu(data) 
+function buildBrowserActionMenu(data) 
 {
     logger.log("Menu ", browserActionMenu);
     sortThemes(data[1]);
@@ -228,7 +215,9 @@ var mouseLeaveListener = function(elementClass, preview)
     };
 };
 
-function toggleMenuIcons(iconsShown) 
+// Function is unused at present. Uncomment for use when the management API is
+// developed sufficiently to allow the addition of icons to the menu   
+/* function toggleMenuIcons(iconsShown) 
 {
     var displayValue;
     if (true === iconsShown) 
@@ -246,7 +235,7 @@ function toggleMenuIcons(iconsShown)
         logger.log("Icon Node", icons[index]);
         icons[index].style.display = displayValue;
     }
-}
+}*/
 
 function buildToolsSubmenu(current) 
 {
@@ -282,7 +271,7 @@ function buildToolsSubmenu(current)
                   title: defaultThemes[index].name,
                   contexts: ["tools_menu"]// ,
                   // icons: {
-                  // '16': currentThemes[index].icons[0].url}
+                  // '16': defaultThemes[index].icons[0].url}
                 });
             }
         }
@@ -323,7 +312,7 @@ function startRotateAlarm()
                             get(["auto", "autoMinutes", "fastSwitch"]);
     return checkRotatePref.then((results) => 
     { 
-        if (true === results.auto) 
+        if (true === results.auto || true === results.fastSwitch) 
         {    
             const periodInMinutes = results.fastSwitch ? THREE_SECONDS :
                                                          results.autoMinutes;
@@ -353,11 +342,11 @@ function stopRotateAlarm()
 
 function autoRotate() 
 {
-    var checkRotatePref = browser.storage.local.get("auto");    
+    var checkRotatePref = browser.storage.local.get(["auto", "fastSwitch"]);    
         
-    checkRotatePref.then((result) => 
+    checkRotatePref.then((results) => 
     {
-        if (true === result.auto) 
+        if (true === results.auto || true === results.fastSwitch) 
         {
             rotate();
         }
@@ -488,10 +477,9 @@ function updateToolsMenuSelection(newIndex, oldIndex)
                 // always uncheck the old item before checking the new.                
                 let updateToolMenu = browser.menus
                           .update(String(oldIndex), {checked: false});
-                    updateToolMenu.catch(handleError);
+                updateToolMenu.catch(handleError);
 
-                updateToolMenu = 
-                    browser.menus
+                updateToolMenu = browser.menus
                            .update(String(newIndex), {checked: true});
                 updateToolMenu.catch(handleError);
             }
@@ -503,8 +491,8 @@ function activateDefault()
     logger.log("in activateDefault");
     let index = getDefaultThemeIndex();    
     switchTheme(defaultTheme.id);
-    var getCurrentTheme = browser.storage.local.get("current");
-    getCurrentTheme.then((pref) =>
+    var getOldThemeIndex = browser.storage.local.get("current");
+    getOldThemeIndex.then((pref) =>
         {
             setCurrentTheme(index, pref.current, true);
         }
@@ -545,11 +533,14 @@ function reactToPrefChange(prefName, prefData)
     switch (prefName) 
     {
         case 'iconPreview':
-            toggleMenuIcons(prefData.newValue);
+            // Function is unused at present. Uncomment for use when the
+            // management API is developed sufficiently to allow the addition   
+            // of icons to the menu 
+            // toggleMenuIcons(prefData.newValue);
             break;
         case 'preview':
         case 'previewDelay':
-            getMenuData().then(buildMenu, handleError);
+            getMenuData().then(buildBrowserActionMenu, handleError);
             break;
         case 'debug':
             setLogger();
@@ -646,10 +637,9 @@ function validateCurrentIndex(current, currentThemeId)
     {
         return current;
     }
-    else
-    {
-        return findActiveTheme();
-    }    
+    
+    return findActiveTheme();
+        
 }
 
 function findActiveTheme()
@@ -750,7 +740,7 @@ function toolsMenuThemeSelect(index)
             {
                 let updateToolMenu = browser.menus
                       .update(String(pref.current), {checked: false});
-                    updateToolMenu.catch(handleError);
+                updateToolMenu.catch(handleError);
             }
             
             setCurrentTheme(index, pref.current, false);
@@ -760,7 +750,7 @@ function toolsMenuThemeSelect(index)
 function reloadThemes() 
 {
     removeToolsSubmenu().then(getMenuData)
-                        .then(buildMenu)
+                        .then(buildBrowserActionMenu)
                         .then(buildToolsSubmenu)
                         .catch(handleError);
 }
