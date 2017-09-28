@@ -60,7 +60,7 @@ function loadOptions()
 function resetOptions()
 {
     var backgroundPage = browser.extension.getBackgroundPage();
-    backgroundPage.loadDefaults().then(function() 
+    backgroundPage.loadDefaultPrefs().then(function() 
     {  
         loadOptions();
     }); 
@@ -69,7 +69,7 @@ function resetOptions()
 function reloadThemes()
 {
     var backgroundPage = browser.extension.getBackgroundPage();
-    backgroundPage.reloadThemes();
+    backgroundPage.rebuildMenus();
 }
 
 function onError(error) 

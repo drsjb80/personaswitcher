@@ -7,7 +7,12 @@
     },
     "background": {
         "scripts": [
-            "background_scripts/WEPersonaSwitcher.js"
+            "background_scripts/prefs.js",
+            "background_scripts/themes.js",
+            "background_scripts/menus.js",
+            "background_scripts/listeners.js",
+            "background_scripts/rotate.js",
+            "background_scripts/startup.js"
         ]
     },
     "browser_action": {
