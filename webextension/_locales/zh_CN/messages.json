@@ -164,7 +164,7 @@
         "description": "Text displayed in the options pane"
     },
     "options_previewDelay_hint": {
-        "message": "Values between 0 and 10000",
+        "message": "Values between 100 and 10000",
         "description": "Text displayed in the options pane"
     },
     "options_iconPreview_desc": {

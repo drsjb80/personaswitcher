@@ -44,7 +44,7 @@ function loadDefaultPrefs()
     preferences.debug = false;
     preferences.fastSwitch = false;
     preferences.autoMinutes = 30;
-    preferences.previewDelay = 0;
+    preferences.previewDelay = 100;
     preferences.current = 0;
     preferences.currentThemeId = null;
     preferences.defaults_loaded = true; 
