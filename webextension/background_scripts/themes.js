@@ -1,5 +1,6 @@
-/* global browser */
-"use strict";
+/* global browser, updateBrowserActionSelection, updateToolsMenuSelection,
+   logger, handleError */
+
 
 const APPEARS_HIGHER_IN_LIST = -1;
 const SAME = 0;

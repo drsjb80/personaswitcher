@@ -28,7 +28,7 @@ function saveOptions(e)
             startupSwitch: startupSwitchObject.checked,
             preview: previewObject.checked,
             previewDelay: parseInt(previewDelayObject.value),
-            //iconPreview: iconPreviewObject.checked,
+            // iconPreview: iconPreviewObject.checked,
             toolsMenu: toolsMenuObject.checked,
             debug: debugObject.checked,
             fastSwitch: fastSwitchObject.checked
@@ -47,7 +47,7 @@ function loadOptions()
         startupSwitchObject.checked = result.startupSwitch;
         previewObject.checked = result.preview;
         previewDelayObject.value = result.previewDelay;
-        //iconPreviewObject.checked = result.iconPreview;
+        // iconPreviewObject.checked = result.iconPreview;
         toolsMenuObject.checked = result.toolsMenu;
         debugObject.checked = result.debug;
         fastSwitchObject.checked = result.fastSwitch;

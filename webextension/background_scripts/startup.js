@@ -1,5 +1,7 @@
-/* global browser */
-"use strict";
+/* global browser, startRotateAlarm, getMenuData, buildBrowserActionMenu,
+   buildToolsSubmenu, buildContextMenu, rotateOnStartup, handlePrefChange,
+   rebuildMenus, toolsMenuThemeSelect, activateDefaultTheme, rotate */
+
 
 function handleStartup() 
 {

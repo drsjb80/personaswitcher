@@ -1,5 +1,6 @@
-/* global browser */
-"use strict";
+/* global browser, logger, handleError, currentThemes, switchTheme,
+   setCurrentTheme */
+
 
 var rotateAlarmListener;
 

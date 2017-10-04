@@ -1,5 +1,6 @@
-/* global browser */
-"use strict";
+/* global browser, logger, stopRotateAlarm, startRotateAlarm, switchTheme,
+   setCurrentTheme, startThemePreview, endThemePreview */
+
 
 var previewAlarmListener;
 

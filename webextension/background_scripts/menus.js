@@ -1,5 +1,6 @@
-/* global browser */
-"use strict";
+/* global browser, logger, sortThemes, validateCurrentIndex, currentThemes,
+   defaultThemes, mouseLeaveListener, currentThemeId, handleError,
+   mouseEnterListener, mouseLeaveListener, clickListener */
 
 var browserActionMenu;
 var loadedThemes;

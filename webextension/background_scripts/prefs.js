@@ -1,5 +1,6 @@
-/* global browser */
-"use strict";
+/* global browser, getMenuData, buildBrowserActionMenu, handleError, setLogger,
+   stopRotateAlarm, startRotateAlarm, buildToolsSubmenu, removeToolsSubmenu */
+
 
 function handlePrefChange(changes, area) 
 { 

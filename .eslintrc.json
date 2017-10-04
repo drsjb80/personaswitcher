@@ -204,7 +204,7 @@
             }
         ],
         "no-unused-expressions": "error",
-		"no-unused-vars": "warn",
+		"no-unused-vars": "off",
         "no-use-before-define": "off",
         "no-useless-call": "error",
         "no-useless-computed-key": "error",
