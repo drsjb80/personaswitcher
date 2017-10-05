@@ -50,8 +50,9 @@
     },
     "default_locale": "en_US",
     "description": "__MSG_extensionDescription__",
+    "author": "Steve Beaty",
     "developer": {
-        "name": "Steve Beaty",
+        "name": "Jason Gould",
         "url": "https://github.com/drsjb80/personaswitcher"
     },
     "icons": {
