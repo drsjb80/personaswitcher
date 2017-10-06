@@ -37,20 +37,19 @@ function saveOptions(e)
 }
 
 function loadOptions()
-{
- 
-    function updateOptionsDisplay(result)
+{ 
+    function updateOptionsDisplay(prefs)
     {        
-        autoObject.checked = result.auto;
-        autoMinutesObject.value = result.autoMinutes;
-        randomObject.checked = result.random;
-        startupSwitchObject.checked = result.startupSwitch;
-        previewObject.checked = result.preview;
-        previewDelayObject.value = result.previewDelay;
-        // iconPreviewObject.checked = result.iconPreview;
-        toolsMenuObject.checked = result.toolsMenu;
-        debugObject.checked = result.debug;
-        fastSwitchObject.checked = result.fastSwitch;
+        autoObject.checked = prefs.auto;
+        autoMinutesObject.value = prefs.autoMinutes;
+        randomObject.checked = prefs.random;
+        startupSwitchObject.checked = prefs.startupSwitch;
+        previewObject.checked = prefs.preview;
+        previewDelayObject.value = prefs.previewDelay;
+        // iconPreviewObject.checked = prefs.iconPreview;
+        toolsMenuObject.checked = prefs.toolsMenu;
+        debugObject.checked = prefs.debug;
+        fastSwitchObject.checked = prefs.fastSwitch;
     }
 
     var getPrefs = browser.storage.local.get(preferences);    

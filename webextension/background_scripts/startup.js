@@ -24,9 +24,9 @@ function handleStartup()
 
 // Verify if we need to load the default preferences by checking if the 
 // default_loaded flag is undefined. 
-function loadDefaultPrefsIfNeeded(prefs) 
+function loadDefaultPrefsIfNeeded(pref) 
 {
-    if ('undefined' === typeof(prefs.defaults_loaded)) 
+    if ('undefined' === typeof(pref.defaults_loaded)) 
     {
         return loadDefaultPrefs();
     } 
@@ -64,9 +64,9 @@ nullLogger.log = function ()
 function setLogger() 
 {
     var checkIfDebugging = browser.storage.local.get("debug");
-    return checkIfDebugging.then((result) => 
+    return checkIfDebugging.then((pref) => 
     {
-        if (true === result.debug) 
+        if (true === pref.debug) 
         {
             logger = console;
         } 
@@ -86,7 +86,7 @@ function handleError(error)
 browser.menus.onClicked.addListener((info) => 
 {
 
-    logger.log("Context menu id:", info.menuItemId);
+    logger.log(`Context menu item clicked ${info.menuItemId}`);
     switch(info.menuItemId)
     {
         case "PSOptions":
@@ -116,13 +116,13 @@ browser.commands.onCommand.addListener(function(command)
                 {
                     browser.storage.local.set({'auto': !pref.auto})
                         .catch(handleError);
-                    logger.log("Auto: ", !pref.auto);
+                    logger.log(`Auto: ${!pref.auto}`);
                 }
             );
             break;
         default:
             // should never get here
-            logger.log(command, " not recognized");
+            logger.log(`${command} not recognized`);
             break;
     }
 });

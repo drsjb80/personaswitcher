@@ -27,7 +27,7 @@ function reactToPrefChange(prefName, prefData)
             // of icons to the menu 
             // toggleMenuIcons(prefData.newValue);
             break;
-        case 'preview':
+        case 'preview': // falls through to previewDelay
         case 'previewDelay':
             getMenuData().then(buildBrowserActionMenu, handleError);
             break;
@@ -45,8 +45,7 @@ function reactToPrefChange(prefName, prefData)
                 }
             });
             break;
-        case 'fastSwitch':
-            // falls through to auto
+        case 'fastSwitch': // falls through to auto
         case 'auto':
             if(true === prefData.newValue) 
             {
@@ -61,9 +60,9 @@ function reactToPrefChange(prefName, prefData)
             if(true === prefData.newValue) 
             {
                 var getCurrentIndex = browser.storage.local.get("current");
-                getCurrentIndex.then((result) =>
+                getCurrentIndex.then((pref) =>
                 {
-                    buildToolsSubmenu(result.current);                    
+                    buildToolsSubmenu(pref.current);                    
                 });
             } 
             else
