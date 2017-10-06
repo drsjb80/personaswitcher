@@ -1,3 +1,12 @@
+Can no longer
+choose keyboard shortcuts
+change navigation bar height
+have PS on main menu
+small preview icons on the menu
+automatic updating on theme addition/removal
+
+hg clone https://hg.mozilla.org/releases/mozilla-beta/ beta
+
 https://developer.mozilla.org/en-US/docs/Tools/Browser_Toolbox
     Developer -> Browser console
     Cmd + Opt + Shift + I

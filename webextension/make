@@ -1,6 +1,6 @@
-rm personaswitcher.xpi
+rm personaswitcher.zip
 
-zip personaswitcher.xpi \
+zip personaswitcher.zip \
     _locales/de/messages.json \
     _locales/en_US/messages.json \
     _locales/it/messages.json \
