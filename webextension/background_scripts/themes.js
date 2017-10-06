@@ -26,18 +26,12 @@ function endThemePreview()
     switchTheme(currentThemeId);
 }
 
-function setCurrentTheme(newIndex, oldIndex, updateToolsMenu)
+function setCurrentTheme(newIndex, oldIndex)
 {  
     if(newIndex !== oldIndex)
     {
         updateCurrentThemeId(newIndex);
-        updateCurrentIndex(newIndex);        
-        updateBrowserActionSelection(newIndex, oldIndex);
-
-        if(true === updateToolsMenu)
-        {            
-            updateToolsMenuSelection(newIndex, oldIndex);            
-        }
+        updateCurrentIndex(newIndex);
     }
 }
 
@@ -49,7 +43,6 @@ function updateCurrentThemeId(newIndex)
     }
     else
     {
-        logger.log(newIndex, newIndex - (currentThemes.length+1));
         currentThemeId = defaultThemes[newIndex - (currentThemes.length+1)].id;
     }
     browser.storage.local.set({'currentThemeId': currentThemeId})
@@ -58,20 +51,22 @@ function updateCurrentThemeId(newIndex)
 
 function updateCurrentIndex(newIndex)
 {
-    var updatingCurrentIndex = browser.storage.local.set({current: newIndex});
+    let updatingCurrentIndex = browser.storage.local.set({current: newIndex});
     updatingCurrentIndex.catch(handleError); 
 }
 
 
 function activateDefaultTheme()
 {
-    logger.log("In activateDefaultTheme");
+    logger.log("Activating default theme");
     let index = getDefaultThemeIndex();    
     switchTheme(defaultTheme.id);
-    var getOldThemeIndex = browser.storage.local.get("current");
+    let getOldThemeIndex = browser.storage.local.get("current");
     getOldThemeIndex.then((pref) =>
         {
-            setCurrentTheme(index, pref.current, true);
+            setCurrentTheme(index, pref.current);
+            updateBrowserActionSelection(index, pref.current);
+            updateToolsMenuSelection(index, pref.current);
         }
     );
 }
@@ -102,7 +97,7 @@ function sortThemes(addonInfos)
         }
     }
 
-    logger.log ("Themes found", " " + currentThemes.length);
+    logger.log (`Themes found ${currentThemes.length}`);
 
     currentThemes.
         sort(function (a, b) 
@@ -110,7 +105,7 @@ function sortThemes(addonInfos)
             return a.name.localeCompare(b.name); 
         });
     extractDefaultThemes();
-    logger.log ("User installed themes", " " + currentThemes.length);
+    logger.log (`User installed themes ${currentThemes.length}`);
 }
 
 // Assumes currentThemes and defaultThemes are accurate
@@ -187,10 +182,10 @@ function extractDefaultThemes()
         }
         else if(isDefaultTheme(theme.name)) 
         {
-            logger.log(theme.name, " " + theme.id);
+            logger.log(`${theme.name} ${theme.id}`);
             defaultThemes.push(theme);
             currentThemes.splice(index, 1);
-            index -= 1; // ESLint set to no unary operators?
+            index -= 1;
             if(defaultNotFound) 
             {
                 defaultNotFound = SAME !== theme.name.localeCompare("Default");
@@ -219,7 +214,7 @@ function isDefaultTheme(themeName)
 
 function toolsMenuThemeSelect(index)
 {
-    logger.log("Context menu id:", index);
+    logger.log(`Selecting theme ${index}`);
     let themeId;
     if(index < currentThemes.length)
     {
@@ -247,6 +242,7 @@ function toolsMenuThemeSelect(index)
                 updateToolMenu.catch(handleError);
             }
             
-            setCurrentTheme(index, pref.current, false);
+            setCurrentTheme(index, pref.current);
+            updateBrowserActionSelection(index, pref.current);
         });
 }

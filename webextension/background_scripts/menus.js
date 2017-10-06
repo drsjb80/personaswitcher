@@ -18,37 +18,39 @@ function getMenuData()
 
 function buildBrowserActionMenu(data) 
 {
+    let prefs = data[0];
+    let themes = data[1];  
     logger.log("Start building BAMenu");
-    sortThemes(data[1]);
-    data[0].current = validateCurrentIndex(data[0].current,
-                                           data[0].currentThemeId);
+
+    sortThemes(themes);
+    prefs.current = validateCurrentIndex(prefs.current, prefs.currentThemeId);
     browserActionMenu = document.createElement("div");
     browserActionMenu.setAttribute("class", "menu");
     for (let index = 0; index < currentThemes.length; index++) 
     {        
         browserActionMenu.
-            appendChild(buildMenuItem(currentThemes[index], data[0], index));
+            appendChild(buildMenuItem(currentThemes[index], prefs, index));
     }
 
     insertSeparator();
 
     // Skip one index value between current and default themes to make it
-    // map easier to the index values of the children of browserActionmenu where  
+    // map easier to the index values of the children of browserActionMenu where  
     // the skipped index corresponds to the separator child node between theme 
     // types
     var indexOffset = currentThemes.length+1;
     for (let index = 0; index < defaultThemes.length; index++) 
     {        
         browserActionMenu.
-            appendChild(buildMenuItem(defaultThemes[index], data[0],
+            appendChild(buildMenuItem(defaultThemes[index], prefs,
                                                     index + indexOffset));
     }
 
     browserActionMenu.addEventListener('mouseleave',
-                    mouseLeaveListener('browserActionMenu', data[0].preview));
+                    mouseLeaveListener('browserActionMenu', prefs.preview));
     loadedThemes = browserActionMenu.children;
     logger.log("End building BAMenu");
-    return data[0].current;
+    return prefs.current;
 }
 
 function buildMenuItem(theme, prefs, theIndex) 
@@ -132,9 +134,9 @@ function insertSeparator()
 
 function buildToolsSubmenu(current) 
 {
-    browser.storage.local.get("toolsMenu").then((prefs) =>
+    browser.storage.local.get("toolsMenu").then((pref) =>
     {
-        if(true === prefs.toolsMenu)
+        if(true === pref.toolsMenu)
         {
             for(let index = 0; index < currentThemes.length; index++) 
             {
@@ -209,16 +211,16 @@ function updateBrowserActionSelection(newIndex, oldIndex)
 
 function updateToolsMenuSelection(newIndex, oldIndex)
 {
-    browser.storage.local.get("toolsMenu").then((prefs) =>
+    browser.storage.local.get("toolsMenu").then((pref) =>
         {
-            if(true === prefs.toolsMenu) 
+            if(true === pref.toolsMenu) 
             {
-                logger.log("Tools Menu Selection: ", String(newIndex));
+                logger.log(`Setting tools menu selection to ${newIndex}`);
                 // ...??? The manual update of checked: true correctly updating
                 // the newly checked item and unchecking the old only works
                 // when the new item appears after the old checked item in the
                 // context menu. Currently the best work around is simply to
-                // always uncheck the old item before checking the new.                
+                // always uncheck the old item.                
                 let updateToolMenu = browser.menus
                           .update(String(oldIndex), {checked: false});
                 updateToolMenu.catch(handleError);

@@ -1,5 +1,6 @@
 /* global browser, logger, stopRotateAlarm, startRotateAlarm, switchTheme,
-   setCurrentTheme, startThemePreview, endThemePreview */
+   setCurrentTheme, startThemePreview, endThemePreview,
+   updateBrowserActionSelection, updateToolsMenuSelection */
 
 
 var previewAlarmListener;
@@ -11,9 +12,11 @@ var clickListener = function(theTheme, theIndex)
         stopRotateAlarm(); 
         browser.storage.local.get("current").then((result) => 
             {
-                logger.log("current: ", result.current);
+                logger.log(`Switching from ${result.current} to ${theIndex}`);
                 switchTheme(theTheme.id, result.current);
-                setCurrentTheme(theIndex, result.current, true);
+                setCurrentTheme(theIndex, result.current);
+                updateBrowserActionSelection(theIndex, result.current);
+                updateToolsMenuSelection(theIndex, result.current);
             });
         startRotateAlarm(); 
     };
