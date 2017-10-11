@@ -112,23 +112,30 @@ function sortThemes(addonInfos)
 // (IE sortThemes has been called previously)
 function validateCurrentIndex(current, currentThemeId) 
 {
-    // On first run, the currentThemeId will be null. 
-    if('undefined' === typeof(currentThemeId) || null === currentThemeId)
+    // On first run, the currentThemeId will be null. The current index skips
+    // the index value at currentThemes.length to account for the separator. So,
+    // if the current index is equal to currentThemes.length the theme list has
+    // changed and the new active theme must be found.
+    if('undefined' === typeof(currentThemeId) || null === currentThemeId
+        || currentThemes.length === current)
     {
         return findActiveTheme();
     }
 
     let themesToCheck;
     let themeIndex;
+    logger.log(`User themes ${currentThemes.length}, Current index ${current}`);
     if(currentThemes.length < current)
     {
         themesToCheck = defaultThemes;
         themeIndex = current - (currentThemes.length + 1);
+        logger.log(`Validating default theme ${themeIndex}`);
     }
     else
     {
         themesToCheck = currentThemes;
-        themeIndex = current;
+        themeIndex = current;        
+        logger.log(`Validating user installed theme ${themeIndex}`);
     }
 
     if(true === themesToCheck[themeIndex].enabled)
