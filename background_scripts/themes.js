@@ -115,9 +115,13 @@ function validateCurrentIndex(current, currentThemeId)
     // On first run, the currentThemeId will be null. The current index skips
     // the index value at currentThemes.length to account for the separator. So,
     // if the current index is equal to currentThemes.length the theme list has
-    // changed and the new active theme must be found.
-    if('undefined' === typeof(currentThemeId) || null === currentThemeId
-        || currentThemes.length === current)
+    // changed and the new active theme must be found. Likewise, if the current
+    // index is greater than the last possible default theme index, the theme
+    // list has changed and the new active theme must be found.
+    if('undefined' === typeof(currentThemeId) || 
+        null === currentThemeId ||
+        currentThemes.length === current ||
+        current > currentThemes.length + defaultThemes.length)
     {
         return findActiveTheme();
     }
