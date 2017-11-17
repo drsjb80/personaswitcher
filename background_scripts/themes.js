@@ -5,6 +5,7 @@
 const APPEARS_HIGHER_IN_LIST = -1;
 const SAME = 0;
 const APPEARS_LOWER_IN_LIST = 1;
+const NUM_DEFAULT_THEMES = 3;
 
 var currentThemeId;
 var currentThemes = [];
@@ -90,9 +91,9 @@ function sortThemes(addonInfos)
     currentThemes = [];
     for(let info of addonInfos) 
     {
-        if("theme" === info.type) 
+        if("theme" === info.type)
         {
-            logger.log(info.name, info);
+            logger.log(info.name, info.id);
             currentThemes.push(info);            
         }
     }
@@ -177,34 +178,31 @@ function findActiveTheme()
 function extractDefaultThemes() 
 {
     defaultThemes = [];
+    var numDefaultsFound = 0;
     var defaultNotFound = true;
     var theme;
     logger.log("Segregating default themes");
-    // We do not want to iterate over the array backwards as that would
-    // necessitate evaluation of a majority of the array and we want to make
-    // this as quick as possible. As such, we account for the removal of items
-    // while iterating over the array by decrementing the index to compensate.
+    // We do not want to iterate over more of the array than we have to. So we
+    // break out once we have found all the pre-installed default themes.
     for(let index = 0; index < currentThemes.length; index++) 
     {
         theme = currentThemes[index];
-        if(APPEARS_HIGHER_IN_LIST === theme.name.localeCompare("Compact Dark")) 
-        {
-            continue;
-        }
-        else if(isDefaultTheme(theme.name)) 
+        if(isDefaultTheme(theme.id)) 
         {
             logger.log(`${theme.name} ${theme.id}`);
+            numDefaultsFound += 1;
             defaultThemes.push(theme);
             currentThemes.splice(index, 1);
             index -= 1;
             if(defaultNotFound) 
             {
-                defaultNotFound = SAME !== theme.name.localeCompare("Default");
+                defaultNotFound = SAME !== theme.id
+                    .localeCompare("{972ce4c6-7e08-4474-a285-3208198ce6fd}");
             }
-        }
-        else if(APPEARS_LOWER_IN_LIST === theme.name.localeCompare("Light")) 
-        {
-            break;
+            if(NUM_DEFAULT_THEMES == numDefaultsFound)
+            {
+                break;
+            }
         }
     }
 
@@ -214,13 +212,13 @@ function extractDefaultThemes()
     }
 }
 
-function isDefaultTheme(themeName)
+function isDefaultTheme(themeId)
 {
-    return  "Compact Dark"  === themeName || 
-            "Compact Light" === themeName || 
-            "Dark"          === themeName || 
-            "Light"         === themeName ||
-            "Default"       === themeName;
+    return  "firefox-compact-dark@mozilla.org@personas.mozilla.org"  
+                === themeId || 
+            "firefox-compact-light@mozilla.org@personas.mozilla.org" 
+                === themeId || 
+            "{972ce4c6-7e08-4474-a285-3208198ce6fd}" === themeId;
 }
 
 function toolsMenuThemeSelect(index)
