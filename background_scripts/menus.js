@@ -69,7 +69,7 @@ function buildMenuItem(theme, prefs, theIndex)
     if (theIndex === prefs.current) 
     {
         themeChoice.selected = true;
-        currentThemeId = theme.id;
+        let currentThemeId = theme.id;
         if(prefs.currentThemeId !== currentThemeId)
         {
             browser.storage.local.set({"currentThemeId": currentThemeId})
