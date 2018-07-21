@@ -196,8 +196,9 @@ function extractDefaultThemes()
             index -= 1;
             if(defaultNotFound) 
             {
-                defaultNotFound = SAME !== theme.id
-                    .localeCompare("{972ce4c6-7e08-4474-a285-3208198ce6fd}");
+                defaultNotFound =
+                    (SAME !== theme.id.localeCompare("{972ce4c6-7e08-4474-a285-3208198ce6fd}") &&
+                     SAME !== theme.id.localeCompare("default-theme@mozilla.org"));
             }
             if(NUM_DEFAULT_THEMES == numDefaultsFound)
             {
@@ -214,11 +215,10 @@ function extractDefaultThemes()
 
 function isDefaultTheme(themeId)
 {
-    return  "firefox-compact-dark@mozilla.org@personas.mozilla.org"  
-                === themeId || 
-            "firefox-compact-light@mozilla.org@personas.mozilla.org" 
-                === themeId || 
-            "{972ce4c6-7e08-4474-a285-3208198ce6fd}" === themeId;
+    return  "firefox-compact-dark@mozilla.org@personas.mozilla.org"  === themeId ||
+            "firefox-compact-light@mozilla.org@personas.mozilla.org" === themeId ||
+            "default-theme@mozilla.org" === themeId ||
+            "{972ce4c6-7e08-4474-a285-3208198ce6fd}" === themeId; //Legacy default theme uuid for older versions of FF
 }
 
 function toolsMenuThemeSelect(index)
