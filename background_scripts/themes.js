@@ -10,7 +10,10 @@ const NUM_DEFAULT_THEMES = 3;
 var currentThemeId;
 var currentThemes = [];
 var defaultThemes = [];
-var defaultTheme = {id: '{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
+// Legacy default theme ID:
+//var defaultTheme = {id: '{972ce4c6-7e08-4474-a285-3208198ce6fd}'};
+// TODO: add in logic at startup that assigns the correct default theme id based on FF version
+var defaultTheme = {id: 'default-theme@mozilla.org'};
 
 function switchTheme(newId)
 {
