@@ -8,11 +8,8 @@
 sh -x make
 eslint . | more
 ----
-vi install.rdf chrome/content/about.xul # version changes
-----
-cp -f personaswitcher.xpi ~/VirtualBox\ Shared/
-----
-cp personaswitcher.xpi personaswitcher-`cat VERSION`.xpi
+vi manifest.json # version changes
+git tag -a v5.0.5 -m "version 5.0.5"
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
@@ -20,3 +17,5 @@ cp personaswitcher.xpi personaswitcher-`cat VERSION`.xpi
 open https://addons.mozilla.org/en-US/developers/addon/personaswitcher/versions
 open https://hg.mozilla.org/mozilla-central/tags
 open https://www.mozilla.org/en-US/about/forums/
+----
+~/Downloads/sonar-scanner-3.0.3.778-macosx/bin/sonar-scanner   -Dsonar.projectKey=personaswitcher   -Dsonar.sources=.   -Dsonar.host.url=http://localhost:9000   -Dsonar.login=81d2adb05c018b4a4888e090c4ce2270dabc67ba
