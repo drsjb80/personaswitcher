@@ -1,3 +1,3 @@
-Matthew Williams
-TJ Virbick
-Serena Zarate
+Matthew Williams,
+TJ Virbick,
+Serena Zarate,
