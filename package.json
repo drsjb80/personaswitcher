@@ -7,8 +7,9 @@
     "doc": "doc"
   },
   "scripts": {
-    "lint": "eslint \"./**/*.js\"",
-    "test": "git"
+    "lint": "./node_modules/.bin/eslint . ./**/*.js",
+    "build": "...",
+    "test": "..."
   },
   "repository": {
     "type": "git",
