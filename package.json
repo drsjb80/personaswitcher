@@ -7,7 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "lint": "eslint \"./**/*.js\""
+    "lint": "eslint \"./**/*.js\"",
     "test": "git"
   },
   "repository": {
