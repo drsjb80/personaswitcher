@@ -1,0 +1,28 @@
+{
+  "name": "personaswitcher",
+  "version": "1.0.0",
+  "description": "Helps switch between themes",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "lint": "eslint \"./**/*.js\""
+    "test": "git"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snz16/personaswitcher.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snz16/personaswitcher/issues"
+  },
+  "homepage": "https://github.com/snz16/personaswitcher#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-markdown": "^1.0.1"
+  }
+}
