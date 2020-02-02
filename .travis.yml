@@ -2,18 +2,13 @@
 language: node_js
 node_js:
   - "6"
-
-script:
-  - npm run lint
-  - npm run build
-  - npm test
-
+  
 # SonarCloud support
-addons:
-  sonarcloud:
-    organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
-    token:
-      secure: "team4" # encrypted value of your token
-script:
-  # other script steps might be done before running the actual analysis
-  - sonar-scanner
+#addons:
+#  sonarcloud:
+#    organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
+#    token:
+#      secure: "team4" # encrypted value of your token
+#script:
+#  # other script steps might be done before running the actual analysis
+#  - sonar-scanner
