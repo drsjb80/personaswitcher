@@ -1,1 +1,3 @@
-James Coleman
+## Authors  
+* James Coleman
+* Selamawit Abdo
