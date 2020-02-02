@@ -1,3 +1,14 @@
+# Javascript suppport 
+language: node_js
+node_js:
+  - "6"
+
+script:
+  - npm run lint
+  - npm run build
+  - npm test
+
+# SonarCloud support
 addons:
   sonarcloud:
     organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
