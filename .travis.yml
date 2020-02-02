@@ -1,14 +1,14 @@
 # Javascript suppport 
 language: node_js
-#node_js:
-#  - "6"
+
+dist: trusty
   
-# SonarCloud support
-#addons:
-#  sonarcloud:
-#    organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
-#    token:
-#      secure: "team4" # encrypted value of your token
-#script:
-#  # other script steps might be done before running the actual analysis
-#  - sonar-scanner
+addons:
+  sonarcloud:
+    organization: "cs3250team4"
+    token:
+      secure: "**************************" # encrypted value of your token
+
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis  
+  - sonar-scanner
