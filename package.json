@@ -1,7 +1,7 @@
 {
-  "name": "how-to-contribute-to-open-source",
+  "name": "personaswitcher",
   "version": "1.0.0",
-  "description": "This is a list of resources for people who are new to contributing to open source.",
+  "description": "This cycles through various themes for Fire Fox",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FreeCodeCamp/how-to-contribute-to-open-source.git"
+    "url": "git+https://github.com/AlanisK/personaswitcher"
   },
   "author": "",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/FreeCodeCamp/how-to-contribute-to-open-source/issues"
   },
-  "homepage": "https://github.com/FreeCodeCamp/how-to-contribute-to-open-source#readme"
+  "homepage": "https://github.com/AlanisK/personaswitcher#readme"
 }
