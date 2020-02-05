@@ -5,3 +5,4 @@
 * Hector Delgado
 * Brendan Bassett
 * Liang Chen
+* Connor Drummond
