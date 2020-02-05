@@ -7,8 +7,4 @@ addons:
       secure: 38585901c1313ff64e0619dfb8a7ef6174011989 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - sonar-scanner
-
-
-
-  
+- sonar-scanner
