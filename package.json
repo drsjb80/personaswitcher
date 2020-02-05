@@ -1,0 +1,53 @@
+{
+
+  "name": "personaswitcher",
+
+  "version": "1.0.0",
+
+  "description": "This cycles through various themes for Fire Fox",
+
+  "main": "index.js",
+
+  "dependencies": {},
+
+  "devDependencies": {
+
+    "eslint": "^3.19.0",
+
+    "eslint-plugin-json": "^1.2.0",
+
+    "eslint-plugin-markdown": "^1.0.0-beta.6"
+
+  },
+
+  "scripts": {
+
+    "lint": "eslint . --ext .json --ext .md",
+
+    "pretest": "npm run lint",
+
+    "test": "echo \"No tests\""
+
+  },
+
+  "repository": {
+
+    "type": "git",
+
+    "url": "git+https://github.com/AlanisK/personaswitcher"
+
+  },
+
+  "author": "",
+
+  "license": "BSD-3-Clause",
+
+  "bugs": {
+
+    "url": "https://github.com/FreeCodeCamp/how-to-contribute-to-open-source/issues"
+
+  },
+
+  "homepage": "https://github.com/AlanisK/personaswitcher#readme"
+
+}
