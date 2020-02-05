@@ -1,0 +1,9 @@
+{
+ ...
+ "scripts": {
+  "lint": "./node_modules/.bin/eslint **/*.js",
+  "build": "...",
+  "test": "..."
+ }
+ ...
+}
