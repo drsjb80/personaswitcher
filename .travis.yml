@@ -1,0 +1,12 @@
+language: node_js
+node_js: - '6'
+before_install: if [[ 6.13.6 != 3* ]]; then npm i -g npm@3; fi
+cache:  directories:    - node_modules
+sudo: false
+addons:
+  sonarcloud:
+    organization: "persona" # the key of the org you chose at step #3
+    token:
+      secure: "KxbyB1Lhy7AuJhFNcsWy+IJ1q66RfSsxhRaJEPu10gpe9erWmLh4Bo4S5smfvsfG55DTm49Tgnlx+hQwD8d/pjvRP3F/UXaW4d2U1pI7pYgOx06NT3souLTfwC7AYPPtB4vfXmuijFJUvZg4Iky5CWb74W+PZtf42sUU3R8+9/D64Er0hFtu3jmt/i5u/XX3hfqMUN3Ax5jeJdtrM2HM2aUkgE7yg3jPLQRVn+Lp8k6hyH1f4twAYcJ/1yvDC2WHQECIBHxlVaorZldQnUM2Z48g6XwwTfsAqEz6dPOu6XCt9gAz2ahS2NJbtdRilzNiDNGlBohHiTjwSZcPp+qwLswo4zhYkdSt6npU6vzNuEydUtmnyjv1aHJ6IkannqdipzEL4VpWkwoleSAYKg8fN9cautDZMGwEd9H7dHticBSxzVXzVntI3dqpoTDQOz33h71j6+HgeCmq4xgKIe+q4c+mNhxyC+zCHGP5GuNMc1TJUNqp0pl3+NK8mEgGw61tWuN19pJQoP8j/92meqhKF3SwmeUG3zfmStcOcTfdAeu5mcCXL2lJtSJK61GanniCBDN086PE2ROU4jzrvABFzoxw5beNwhg5KaT8gWcVVvwydhsPYPNRtWW6NFd58ICBA+o4J5gku6Gaix9jqfNV90ti9M+gMNhmdXOLldodf0U="  script:
+script:
+  - sonar-scanner
