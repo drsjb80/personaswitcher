@@ -3,3 +3,4 @@
 * Selamawit Abdo
 * Nestor Ayala
 * Hector Delgado
+* Brendan Bassett
