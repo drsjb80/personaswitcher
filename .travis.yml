@@ -2,5 +2,17 @@ language: node_js
 node_js:
   - "12.14.1"
 
+addons:
+  sonarcloud:
+    organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
+    token:
+      secure: "mqDOzjrEvYNDQNSKjTROL6T5lCWKwFgXVx4K6U/uRyKqpbQFkSvyLqf0MMLnq9hDKK6yWThxskH2TvXDobQcn658XUdIGmDlxMxadgFZ8gerWy
+      2bgDOn+4j1ynRVuLbi72QF33tEX20Vja6+oRV0BcV2oCsXF03KFSrwRS/kXL5uqS68RXzl3tYQZcrkgjxfGLG8cN0g393wZNG6r09++vgDPIdSGnUi
+      7tbG8vlqIdWLFpH6LJKQa7kDjsMJe5dvnJKyRpaU3rNKqEN1BN+CSW+r+pzBSnBpdX5tWwA85VaY8PSSyhCHiyNncLqbzWtho+4O0U89+mSaDpD5w
+      e7RhkaFLlC9Ss0MY4wdUaamaO3YySlytK/BzHglkS3vV/hjzkKsDUZTxCjG+Cgf2AbNXgAdNbWfoffATx+ItpCXm05WI7BJlZKKHxgDLK8+gO+4Ex
+      v6K6zqeZkKPlmQ8Ag3WSFQQ+LK2S0w4euY556NmS4DQJiebte4RKywFQKYZSUYcb5m7gN9baMqYlCpZkhrQadR7XnSS8oj/7YSpXx1zh3lqcBRpqV
+      E87R8i0wu+LpO+xdW30cicFEG2BiKnNPYrjlHohkREy/vYwdcYOh1o6OeAN5bvFUNBG6e/mKyUr48wRvJXio1aE8w8OJBP3amz2IFBTKtLXjj+nPia
+      FFwxKc="
 script:
   - npm run lint
+  - sonar-scanner
