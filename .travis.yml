@@ -1,5 +1,11 @@
 language: node_js
-node_js: - '6'
-before_install: if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
-cache:  directories:    - node_modules
-sudo: false
+dist: trusty
+addons:
+  sonarcloud:
+    organization: "jhawk1196"
+    token:
+      secure: 0ed4cd0592d17933dcbcf9d1677baba1d4107f4d
+
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner
