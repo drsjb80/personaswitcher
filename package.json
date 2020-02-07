@@ -13,7 +13,9 @@
     "eslint-plugin-markdown": "^1.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint . --ext .json --ext .md",
+    "pretest": "npm run lint",
+    "test": "echo \"No tests\""
   },
   "repository": {
     "type": "git",
