@@ -1,12 +1,29 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "commonjs": true,
+        "es6": true,
+        "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
     "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
+    "plugins": [
+        "react",
+        "json",
+        "markdown"
+    ],
     "rules": {
         "accessor-pairs": "error",
         "array-bracket-spacing": [
@@ -117,7 +134,7 @@
         "no-catch-shadow": "error",
         "no-compare-neg-zero": "error",
         "no-confusing-arrow": "error",
-		"no-console": "off",
+        "no-console": "off",
         "no-continue": "off",
         "no-div-regex": "error",
         "no-duplicate-imports": "error",
@@ -204,7 +221,7 @@
             }
         ],
         "no-unused-expressions": "error",
-		"no-unused-vars": "off",
+        "no-unused-vars": "off",
         "no-use-before-define": "off",
         "no-useless-call": "error",
         "no-useless-computed-key": "error",
