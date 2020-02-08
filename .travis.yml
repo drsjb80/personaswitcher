@@ -6,7 +6,7 @@ addons:
   sonarcloud:
     organization: "snz16" # the key of the org you chose at step #3
     token:
-      secure: "UAd2YU3yPPyHkFmbTTCOGSxkIECYnbt6wYqlSkRHek9PB/KkUMabtWIfR54HRC3R83rWXqxVAyeppcxpxaK7e+uhQLcuTCiXElNPe9SUVlXVeNbivezZiWhNoUnC+xIkeFQ046E/cvjCsQn6rpC1AbCv2QjyeS4s2J5jzlSwBQk/TCvZLqbwmxZSXFqe/eGS1+cIvpQbpxiiG1e1ZmqXeBqdkhwhyN+Ozp9mZeZlM3gasjw2qDgfR342cFBTL4eyL/cNnrDY0CWXP5Py/NQ/jIkqN39f392b/Em0VDqXVGlNtpdEr2Xgve04yVMssfSTffO2XB3Hs8kGyeO4NALmk4Z/+4bfN7wbtHj5CWGdS3w1UrUbp/wgPH9HX++QdvAXgQZbsQIUda0vj7XpcRxl7kl7a0r/N3tftVD5Rwy6E2ovfeZaHzM4zLco0tqbH9W4Cz/q/NpZHTe28ugRJXF/t6bEotc6qFPPcthiqH9GibH/JEPE0ITzbxbub5xACuYv4UaWhkouv7KymnvPQtbAvXYxQZOyaaumHlOsJCfwEKiEOehHfeCUHdvMOkHAegEKmAchPRIby2RaeBUC/gnJCuHuT+8WqS2UOFzaDxGjw6dTxsVVAysqH8P5tpck7BYQ67/XpsHevt28P9EKj8sPRwkgZFvxy12fcTV0/SKDS70="
+      secure: SONAR_TOKEN
 
 script:
   - npm run lint
