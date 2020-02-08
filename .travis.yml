@@ -6,7 +6,7 @@ addons:
   sonarcloud:
     organization: "snz16" # the key of the org you chose at step #3
     token:
-      secure: SONAR_TOKEN
+      secure: ${{ secrets.SONAR_TOKEN }}
 
 script:
   - npm run lint
