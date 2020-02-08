@@ -6,13 +6,14 @@ addons:
   sonarcloud:
     organization: "snz16" # the key of the org you chose at step #3
     token:
-      secure: "mqDOzjrEvYNDQNSKjTROL6T5lCWKwFgXVx4K6U/uRyKqpbQFkSvyLqf0MMLnq9hDKK6yWThxskH2TvXDobQcn658XUdIGmDlxMxadgFZ8gerWy
-      2bgDOn+4j1ynRVuLbi72QF33tEX20Vja6+oRV0BcV2oCsXF03KFSrwRS/kXL5uqS68RXzl3tYQZcrkgjxfGLG8cN0g393wZNG6r09++vgDPIdSGnUi
-      7tbG8vlqIdWLFpH6LJKQa7kDjsMJe5dvnJKyRpaU3rNKqEN1BN+CSW+r+pzBSnBpdX5tWwA85VaY8PSSyhCHiyNncLqbzWtho+4O0U89+mSaDpD5w
-      e7RhkaFLlC9Ss0MY4wdUaamaO3YySlytK/BzHglkS3vV/hjzkKsDUZTxCjG+Cgf2AbNXgAdNbWfoffATx+ItpCXm05WI7BJlZKKHxgDLK8+gO+4Ex
-      v6K6zqeZkKPlmQ8Ag3WSFQQ+LK2S0w4euY556NmS4DQJiebte4RKywFQKYZSUYcb5m7gN9baMqYlCpZkhrQadR7XnSS8oj/7YSpXx1zh3lqcBRpqV
-      E87R8i0wu+LpO+xdW30cicFEG2BiKnNPYrjlHohkREy/vYwdcYOh1o6OeAN5bvFUNBG6e/mKyUr48wRvJXio1aE8w8OJBP3amz2IFBTKtLXjj+nPia
-      FFwxKc="
+      secure: "RFSowhDDX5D5atHMGw2ebOV8GKfqehmrH5Dp5ASjhvcBXxZS71pmVGviOwTLd3vrJSeyZbpidXQiY9lCZK1GG5ZJAAeHGJ40MuNxy
+      CR6kTNElgsHN+hmqcDsttazusRUGNyU+UM0q1F601dZbbqoaemwBqMF3RvLP8cbRQahto9WOJ7NtRrPIDPIcFdO0izZJ1EGouX35mhVdVX6alV
+      K2p37AO5Aralgtt+fnWWIntpVd3cjsNfEo3ayW/Lq3tT9TzinK5eQSNuUS2ep1SL6HkzsNi0X8e5mmxMY6+dcCJhVpABCKZsdQmbpwnBxMhl/m
+      YjZqdSO2ZIkMHCTJJVxmAttwdo8OK8OjWMCjnDY0nIyatLS6gTRba4q6Pk1kP3Z/z7XqrUQhZBs6ZU238MW/0iwbFL8Q/MnbY62e2KT/km8H4g0
+      /beJiENaR3EPGLak5m3bvc6iou4kfs9eQPNba4dEcuNq/ZGoiqFUJ/enCFe+dYop+WFS9l9E/g6KFFovJJ7D6FdlExjWRlB/W96RsF8EPRegNz
+      zxNivJ/iIfFQEkm8x55cMP6j2EeEHdHDn01RX3QKVtTQtyGGGyMTTqvqsCXjRUuRYBr4F6xDblF1Md08TPCFuP6cabQFm0QQLOiQcIAMAzmXZho
+      1wL5TR78nIsbMAGBE1tVjBlpYslGzE="
+
 script:
   - npm run lint
   - sonar-scanner
