@@ -1,5 +1,5 @@
-Matthew Williams
-TJ Virbick
-Gabe Tena
+Matthew Williams,
+Serena Zarate,
+TJ Vibick,
+Gabriel Tena,
 Thu Thach
-Serena Zarate
