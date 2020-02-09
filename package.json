@@ -21,9 +21,8 @@
   },
 
   "scripts": {
-
-    "lint": "eslint . --ext .json --ext .md",
-
+    // -Old and possible wrong - "lint": "eslint . --ext .json --ext .md",
+    "./node_modules/.bin/eslint **/*.js" // Possibly correct line
     "pretest": "npm run lint",
 
     "test": "echo \"No tests\""
