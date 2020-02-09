@@ -1,10 +1,9 @@
+--- 
+before_install: "if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi"
 language: node_js
-node_js:  - '6'
-before_install: if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
-cache: directories: - node_modules
-
-script:
-- npm run lint
-- npm run build
-- npm test
-- "0.10"
+node_js: "6"
+script: 
+  - "npm run lint"
+  - "npm run build"
+  - "npm test"
+  - "0.10"
