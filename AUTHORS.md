@@ -5,4 +5,4 @@
 - Donnie Gilbert: [@donnie721](https://github.com/donnie721)
 - Echglene Woy: [@ehhglen](https://github.com/ehhglen)
 - Zakaria Husein: [@zak-sw](https://github.com/zak-sw)
-- Khadar Mohamed: [@engineer-khadar]
+- Khadar Mohamed: [@engineer-khadar] (https://github.com/engineer-khadar)
