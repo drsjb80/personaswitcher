@@ -5,7 +5,7 @@ cache:  directories:    - node_modules
 sudo: false
 
 script: 
-	- npm run lint
-	- npm run build
-	- npm test
-	- "0.10"
+  - npm run lint
+  - npm run build
+  - npm test
+  - "0.10"
