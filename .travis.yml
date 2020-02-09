@@ -1,9 +1,9 @@
-language: javascript
+language: node_js
 
-before_install:
-  - npm install -g web-ext
+node_js:
+  - "6"
 
 script:
-  - web-ext lint
-  - web-ext build
-
+  - npm run lint
+  - npm run build
+  - npm test
