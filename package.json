@@ -13,7 +13,7 @@
     "eslint-plugin-markdown": "^1.0.1"
   },
   "scripts": {
-    "lint": "eslint \"./**/*.js\""
+    "lint": "eslint \"./**/*.js\"",
     "pretest": "npm run lint",
     "test": "echo \"No tests\""
   },
