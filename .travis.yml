@@ -1,7 +1,7 @@
 language: javascript
 
 before_install:
-        - npm install --global web-ext
+        - npm install --global web-ext || true
 
 script:
         - web-ext lint
