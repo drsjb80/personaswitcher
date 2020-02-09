@@ -1,5 +1,5 @@
 ## Authors
-# 404!  
+#### 404! Group name not found  
 * James Coleman
 * Selamawit Abdo
 * Nestor Ayala
