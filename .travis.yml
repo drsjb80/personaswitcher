@@ -5,4 +5,4 @@ before_install:
 
 script:
         - web-ext lint
-        - web-ext build
+        - web-ext run
