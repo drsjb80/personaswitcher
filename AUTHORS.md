@@ -4,4 +4,4 @@
 - Anthony Irwin: [@anthonyi7](https://github.com/anthonyi7)
 - Donnie Gilbert: [@donnie721](https://github.com/donnie721)
 - Echglene Woy: [@ehhglen](https://github.com/ehhglen)
-- Zakaria Husei: [@zak-sw](https://github.com/zak-sw)
+- Zakaria Husein: [@zak-sw](https://github.com/zak-sw)
