@@ -5,3 +5,4 @@ Authors
 - Kane Egan
 - Steve Hulac
 - Jay (Justin) Herrera
+- Matthew Harvey
