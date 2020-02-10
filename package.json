@@ -10,12 +10,7 @@
     "eslint-plugin-markdown": "^1.0.0-beta.6"
   },
   "scripts": {
-<<<<<<< HEAD
-    // -Old and possible wrong - "lint": "eslint . --ext .json --ext .md",
-    "./node_modules/.bin/eslint **/*.js" // Possibly correct line
-=======
-    "lint": "eslint . --ext .json --ext .md",
->>>>>>> 2c9b3e5d980162fab82c01420bf5bd6d240f5213
+    "lint": "./node_modules/.bin/eslint **/*.js",
     "pretest": "npm run lint",
     "test": "echo \"No tests\""
   },
