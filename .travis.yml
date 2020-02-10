@@ -1,6 +1,9 @@
 language: node_js
 node_js:
-  - "12.14.1"
+  - "stable"
+
+before_install:
+  - npm install -g web-ext
 
 addons:
   sonarcloud:
@@ -8,5 +11,5 @@ addons:
     token: $SONAR_TOKEN
 
 script:
-  - npm run lint
+  - web-ext lint
   - sonar-scanner
