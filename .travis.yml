@@ -7,8 +7,9 @@ before_install:
 
 addons:
   sonarcloud:
-    organization: "snz16" # the key of the org you chose at step #3
-    token: $SONAR_TOKEN
+    organization: "snz16"
+    token:
+      secure: "A46dwEB+64vuxi+KYgR0TtHKyTuV/74hW3JEPn6syakGTohfGvJhyMCKyuL2Cz6WuszEAG295ORs9qBYODwWlw4t0DJNNaY2DWKP7TICm0lriTH71KFvQ2xmGH456aBbF3H12DoorMbv5YNBjQbvd4lwCveWOHuwS1QGo7RVOnq33bTA/JvOhqMUBQjSIb/5Ykz2LVdPBgSkRwjyEaNKCoJkb9PI5DQGjIrqWNxG/vDrCPLQatQXZRBbcUlJT0N/xcHJoa259UFw2AipatS10IQ4mhXuMUx4jb7Bben6VThPxq8+D+fKOhL0YqJfHX+4pBoNhdeNbuh6k1dY1eY8AjU/dD754ZSgtI0nQTSd0F04U6G0FAvsDjCdZ7M4uGx3R6jEyWRWeKFJus/fL4XypNI8D6/EJwGK7MYcticPysV+xrPv8W+Y73bg0l2X/gikv2+97YUz0RxzrT5IGs89OtuX4PbYh9EdFtUBaVDy0XQwYnIBTSwGkOnAkmt1cpdv0Fu5pa/jw+az2Jk4mWWhdFCXTBbXzgC/Hf+Sf+jMF1T0rO0OpdeP4tLCD3mUnVgBp7A6xpXpb3CUlO4Y9K1Lj/vIETMaOSi7m8uLXSyKqgmJZLQ4ZIV+i/oXXTXbnLbs3/2/JpbXhAHPbEElntDOVWTfj+P2PF1FWXzR3kypKEQ="
 
 script:
   - web-ext lint
