@@ -7,7 +7,7 @@ before_install:
 
 addons:
   sonarcloud:
-    organization: "Snz16" # the key of the org you chose at step #3
+    organization: "snz16" # the key of the org you chose at step #3
     token: $SONAR_TOKEN
 
 script:
