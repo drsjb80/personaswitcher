@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - "stable"
 
+dist: trusty
+
 before_install:
   - npm install -g web-ext
 
@@ -9,8 +11,7 @@ addons:
   sonarcloud:
     organization: "snz16"
     token:
-      secure: "I6sDQFLUz3z+1RtAq8Tl9UxuCoI9RhBqq/RzNyyKNhdErEjIFr3ArDisDd5sDZwDG+Mc6ko05pe9LriRsvIB4gSdPZio/4b6mb2XSLkFXD850BFq8S/awVWsPWIhW5ek5gsTW5XlrOlNtxful+eXe2W7Z98Svc2fCFFMR8ZY/Xb3KdY5neJ4mU69MYPqZclssXLewKJm9Hpcs9bnr3HuzAhbMO02/Xkxiq+NDd5xy/1zeaM28U+WawDH/slmup4gZrE1UDPAhoOAKPCTJ2gz0I1X+u56Vli2D4RXpKV65eZUXKNdwFnEROEQcfXaGWxJfjeBaSmGaWNxACCQfIEd2UAecTDs+jM6cAuI0dH2nDtfdnQfr15nct2nlxapyPF6acYvkoMVHMBmPuKCa3LwgeMbgnz0qgUKnkQ8hF/QxyG77VwW0b9B1I6cpsrh+xItx1LSMTNNO0HWkC4xjyXbrNVPDEEJZ2xqEHzK/L3zCQSPoW9CLnS8pbFE81RmxUUwis3Pku9hHaqeGVhmMsObXrRabGSqCkbpUBj06jpvc8NWf4/tyhIlgh+BXCMymp3mXkDwFLCmqChfBUNRRm7Zza1Tul1UbSuKTi0TSOsoN6RdxXlfpwT5w40kqowRNSthdE9zX3uMw6hWvhxLTTQ70kcsGwA7l2DVO9gB9Ezcv9Y="
-
+      secure: "YmS652kTR7u1tSYjGCwsn42aTWWUFf5Ezw2xyp3txYk5QyV504cl8MxVmqOXKNWKmsGzHgRa+yUXJXznduEbD/BvulrTfaMvGBZAJV+kBZ2o4MpLmtVf8SpUEhKsSpIXA9rnaqcbsmRZIvNy+9eIsIDxDQkHt54+AwLpiTULqJLJ+kjjuaTKjLGwQQA2yWrzaJMr2A7BLiDYMdOpioLFzw/PVbnKAv5H1Z2MDtAQ2oPmXbtVe0VpzJ6c0q7U5P8+GSWgl+UC+R6LnKQSBeKnCCvflIaEWcWWZt6oZJwcwIvKE4AJZjsMmUayI0mCrdE/MxY1S+LAwvVEVgd5k6vzyz4Z4zLkusFG7imghgHgK0MOTzqnJWm4lZX1WQVZjTTSJZkErZpTZwoClZ+tTA0uZ/ZY//AR7edrhgTpbTHtojGBjzhR7A4wfYeVpw65AkQvJmfmkXF7iymdqDv1XZPcdlatp2d4gFTTmCjtUrFSRuJgfT2bAGwq9+UeUN7Kfsc8BLAOSyNZNYw1Q1yZjQ225mHloznDy8cGM6FhwNw5QsNq/rudyn/qQdmsSlbMR8rgP0mdMT/dnJsCVXgN5THfYUghXI6YQE3kWa7CyZ9h2zGgDaZNBhY2VVm9UJNYKWVU+j7KhdaiEA7g4Wu8NaPzE03IADzOqgfZsO+pT2Ej8QA="
 script:
   - web-ext lint
   - sonar-scanner -X
