@@ -1,14 +1,9 @@
 language: node_js
 
 node_js:
-
   - "6"
-
-
-
-before_install: if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
-cache:  directories:    - node_modules
-sudo: false
-
-
-//This code is from https://www.freecodecamp.org/news/how-to-stop-errors-before-they-ever-hit-your-codebase-with-travis-ci-and-eslint-7a5a6b1fcd4a/
+  
+script:
+  - npm run lint
+  - npm run build
+  - npm test
