@@ -9,9 +9,8 @@ before_install:
 addons:
   sonarcloud:
     organization: "snz16"
-    token:
-      secure: p4KdGT39jnlJI6/6PSPp8G7EmW2ASiHFXULCtXzUzRqtkTH+dZtzPb/8OOlQivH6jRX+6jin8rrNo3QCs2UWynnO9ZFw9htKGCLduwEv7nBiU0sinY8FkaiDOv5lqvmZIiVI7/lpA4dNPeSMNqB5ofSOJV7kFcT2WEfuiXq3F02q77Ql2Ipjie00B178A7eqYzbY9dCiB399HILQRFnxQbjYp5vGDOo3CZYr3sFapnDh8cTkpyfDj/THJ3tJh287ezVYjrDQStcRCAm1EY7cLcIHCmVme3jZ0LVYxT5XAHF/T0LbovH+V4EVLRlTKUkwYY9ABwSf673mDy3gTslbOmQ2DTCrE+cxCzPcQRnJVpt+lxztOSgGfrVex1zz1EZl/CC4IR+SlQ4L332lHeQ7/sjc94XKWRYIcp6ATpX55NE0UGAO5RBTs+30KbHQkHY/HmNfIBQP8OY+VNrIxBesXrOidA+nVC9bplBdOU1r5WNTGqQTwHncW6sc6BWQyxrs9Te6LWY3hNO88psz02x7h7nyeKXo+ZTtIn9sUTShQz1tp/UFk07Foppo4Bdr9EoLXoeijPe9KIOUsKGrjJLHbM4ANhl+/GmoegCDRwNOfJQxHm1Ebn/ivT4TymvRncmz/ZPpXj4wJJNj85LpUhsJz31kf02imtrKtr1sUD/K9p4=
-    
+    token: $SONAR_TOKEN
+
 script:
   - web-ext lint
   - sonar-scanner -X
