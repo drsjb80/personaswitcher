@@ -13,4 +13,4 @@ addons:
 
 script:
   - web-ext lint
-  - sonar-scanner -X
+  - sonar-scanner
