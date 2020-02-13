@@ -1,5 +1,5 @@
-language: node_js
 dist: trusty
+language: node_js
 node_js:
   - "stable"
 
@@ -10,8 +10,8 @@ addons:
   sonarcloud:
     organization: "snz16"
     token:
-      secure: "J3FFYNOdZ1EVbQUUJS/G0T9BU7A9TgtDBTsnynDFEWJNyP8zu+637aKv3Eafr2NjLdTnhmUAs6jqpbjDIUBJeDTZH9OxoygYajNm/NOYpBXWKJ20ZWcsf8xp6zSnRSTjiqOeACa6PeVrYGmKm/v+gupcjT0Gs/F4k/6ZF6OVPbgrcgs3OtfEQKFDrj3SJAwQ6DV5AQngoeHsia/M3juop650F2IUOA67A4sPLwahwDo0EYq6PlEmIY7LZHf9Q20AdeBAnGoUoqn3cS5tDJCQ06TqXhc7cUuZdjN+cerAAOLQ2Wl9S6mW+S4xSfnW7dOCsVa9hrwVMhqKz6eSMNOH6ErII/qRxrzmXMenhyO+oB7NJMZMj638QIfVLxMmN63PLaVxInKjOqlHUyBVMASndYcOkRSpsYM5wYnLR2+b/lCSFopCeM5cxe2avO0b10CYKZSM+8QmOZADpOXih5jDDMJiXCuhAXIKfHEJA71U/FPMKIECISfU46HmVUyurIsP0vnwZvW1w68YziQVbaJ8e+RM3z0jjYCwoOQ7xpVhS7veiFbQP3UoBPGjAMGT44PRNu3muelif7E/wDmVpgxrKtRunkDb38c7VuvWoKusNEyrq1U47NBcjb16yP/az8m4yCKdq6aFPNnnw12RaazjxTSelnUXWr0ZCOGLeko+Yhk="
-
+      secure: p4KdGT39jnlJI6/6PSPp8G7EmW2ASiHFXULCtXzUzRqtkTH+dZtzPb/8OOlQivH6jRX+6jin8rrNo3QCs2UWynnO9ZFw9htKGCLduwEv7nBiU0sinY8FkaiDOv5lqvmZIiVI7/lpA4dNPeSMNqB5ofSOJV7kFcT2WEfuiXq3F02q77Ql2Ipjie00B178A7eqYzbY9dCiB399HILQRFnxQbjYp5vGDOo3CZYr3sFapnDh8cTkpyfDj/THJ3tJh287ezVYjrDQStcRCAm1EY7cLcIHCmVme3jZ0LVYxT5XAHF/T0LbovH+V4EVLRlTKUkwYY9ABwSf673mDy3gTslbOmQ2DTCrE+cxCzPcQRnJVpt+lxztOSgGfrVex1zz1EZl/CC4IR+SlQ4L332lHeQ7/sjc94XKWRYIcp6ATpX55NE0UGAO5RBTs+30KbHQkHY/HmNfIBQP8OY+VNrIxBesXrOidA+nVC9bplBdOU1r5WNTGqQTwHncW6sc6BWQyxrs9Te6LWY3hNO88psz02x7h7nyeKXo+ZTtIn9sUTShQz1tp/UFk07Foppo4Bdr9EoLXoeijPe9KIOUsKGrjJLHbM4ANhl+/GmoegCDRwNOfJQxHm1Ebn/ivT4TymvRncmz/ZPpXj4wJJNj85LpUhsJz31kf02imtrKtr1sUD/K9p4=
+    
 script:
   - web-ext lint
   - sonar-scanner -X
