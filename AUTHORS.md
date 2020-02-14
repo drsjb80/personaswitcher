@@ -7,4 +7,3 @@ Authors
 - Jay (Justin) Herrera
 - Matt Harvey
 
-This is for demo day.
