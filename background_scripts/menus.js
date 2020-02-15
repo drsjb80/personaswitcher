@@ -239,3 +239,4 @@ function rebuildMenus()
                         .then(buildToolsSubmenu)
                         .catch(handleError);
 }
+browser.theme.onUpdated.addListener(rebuildMenus);
