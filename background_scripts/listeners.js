@@ -54,4 +54,4 @@ var mouseLeaveListener = function(elementClass, preview)
     };
 };
 
-//var themeListener = 
+browser.theme.onUpdated.addListener(rebuildMenus);

@@ -98,8 +98,6 @@ function sortThemes(addonInfos)
         {
             logger.log(info.name, info.id);
             currentThemes.push(info); 
-            //refresh menu after addinga theme
-            //rebuildMenus();
         }
     }
 
