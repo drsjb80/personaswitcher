@@ -1,6 +1,7 @@
 /* global browser, startRotateAlarm, getMenuData, buildBrowserActionMenu,
    buildToolsSubmenu, buildContextMenu, rotateOnStartup, handlePrefChange,
-   rebuildMenus, toolsMenuThemeSelect, activateDefaultTheme, rotate */
+   rebuildMenus, updateBrowserActionMenu, toolsMenuThemeSelect,
+   activateDefaultTheme, rotate */
 
 
 function handleStartup() 
@@ -94,6 +95,9 @@ browser.menus.onClicked.addListener((info) =>
             break;
         case "ReloadThemes":
             rebuildMenus();
+            break;
+        case "UpdateBrowserActionMenu":
+            updateBrowserActionMenu();
             break;
         default:
             toolsMenuThemeSelect(parseInt(info.menuItemId));
