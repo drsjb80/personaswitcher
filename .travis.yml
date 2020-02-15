@@ -10,8 +10,10 @@ addons:
   sonarcloud:
     organization: "persona"
     token: $SONAR_TOKEN
-
-
-script:
-  - web-ext lint
-  - sonar-scanner
+jobs:
+  include:
+  - stage: "Run Tests and SonarCloud Analysis"
+    script:
+    - npm test
+    - web-ext lint
+    - sonar-scanner -Dsonar.projectKey=$SONAR_PROJECT_KEY
