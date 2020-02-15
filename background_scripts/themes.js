@@ -97,7 +97,9 @@ function sortThemes(addonInfos)
         if("theme" === info.type)
         {
             logger.log(info.name, info.id);
-            currentThemes.push(info);            
+            currentThemes.push(info); 
+            //refresh menu after addinga theme
+            //rebuildMenus();
         }
     }
 

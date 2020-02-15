@@ -53,3 +53,5 @@ var mouseLeaveListener = function(elementClass, preview)
         }
     };
 };
+
+//var themeListener = 
