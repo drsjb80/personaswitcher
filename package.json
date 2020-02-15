@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "This cycles through various themes for Fire Fox",
   "main": "index.js",
-  "dependencies": {},
   "devDependencies": {
-    "eslint": "^3.19.0",
-    "eslint-plugin-json": "^1.2.0",
-    "eslint-plugin-markdown": "^1.0.0-beta.6"
+    "eslint": "^6.8.0",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-markdown": "^1.0.1"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint **/*.js",
