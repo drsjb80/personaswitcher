@@ -239,3 +239,7 @@ function rebuildMenus()
                         .then(buildToolsSubmenu)
                         .catch(handleError);
 }
+
+browser.theme.onUpdated.addListener(rebuildMenus);
+
+// Source: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/theme/onUpdated
