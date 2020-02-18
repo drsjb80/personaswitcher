@@ -1,6 +1,6 @@
-const isDefaultTheme = require('./isDefaultTheme');
+const themes = require('./themes');
 
 test('test the isDefaultTheme function', () => {
-  expect(isDefaultTheme("firefox-compact-dark@mozilla.org")).toBe(true);
-  expect(isDefaultTheme("this_is_a_random_string")).toBe(false);
+  expect(themes.isDefaultTheme("firefox-compact-dark@mozilla.org")).toBe(true);
+  expect(themes.isDefaultTheme("this_is_a_random_string")).toBe(false);
 });

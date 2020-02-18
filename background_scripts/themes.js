@@ -271,4 +271,4 @@ function toolsMenuThemeSelect(index)
         });
 }
 
-module.exports = isDefaultTheme;
+module.exports = { isDefaultTheme: isDefaultTheme };
