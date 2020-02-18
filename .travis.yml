@@ -1,4 +1,6 @@
 language: node_js
+node_js:
+  - 12.15.0
 dist: trusty
 addons:
   sonarcloud:
@@ -6,7 +8,12 @@ addons:
     token:
       secure: 0ed4cd0592d17933dcbcf9d1677baba1d4107f4d
 
+before_install:
+  - npm i -g npm@6.13.4
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - sonar-scanner
-  - npm install -g eslint
+  - npm i --build-from-resource jest
+  - npm i --build-from-resource jest coveralls
+  - npm run test
+  - npm run coveralls

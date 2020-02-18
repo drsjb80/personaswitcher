@@ -270,3 +270,5 @@ function toolsMenuThemeSelect(index)
             updateBrowserActionSelection(index, pref.current);
         });
 }
+
+module.exports = { isDefaultTheme: isDefaultTheme };
