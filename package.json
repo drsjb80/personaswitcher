@@ -1,0 +1,11 @@
+{
+  "name": "personaswitcher",
+  "version": "1.0.0",
+  "dependencies": {
+    
+  },
+  "scripts": {
+    "test": "jest",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+  }
+}
