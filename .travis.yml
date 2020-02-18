@@ -11,5 +11,5 @@ script:
   - sonar-scanner
   - npm i --save-dev jest
   - npm i --save-dev jest coveralls
-  - npm run test --passWithNoTests
+  - npm run test
   - npm run coveralls
