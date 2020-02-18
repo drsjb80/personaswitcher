@@ -6,7 +6,7 @@ addons:
   sonarcloud:
     organization: "jhawk1196"
     token:
-      secure: 0ed4cd0592d17933dcbcf9d1677baba1d4107f4d
+      secure: ${SONAR_TOKEN}
 
 before_install:
   - npm i -g npm@6.13.4
