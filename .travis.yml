@@ -9,7 +9,7 @@ addons:
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - sonar-scanner
-  - npm i --save-dev jest
-  - npm i --save-dev jest coveralls
+  - npm i -g jest
+  - npm i -g jest coveralls
   - npm run test
   - npm run coveralls
