@@ -97,16 +97,25 @@ function updateBrowserActionMenu(data)
     sortThemes(themes);
     prefs.current = validateCurrentIndex(prefs.current, prefs.currentThemeId);
 
+    // Removes currently loaded themes, leaving the default firefox themes.
     for(let index = 0; index < loadedThemes.length; index++)
     {
-        for(let step = 0; step < loadedThemes.length; step++)
+        if("hr" === loadedThemes[index].tagName)
         {
-            if(loadedThemes[index].id === currentThemes[step].id)
-            {
-                logger.log("found matching theme");
-            }
+            break;
+        }
+        else
+        {
+            loadedThemes[index].remove();
         }
     }
+
+    let nodesToAdd = [];
+    for (let index = 0; index < currentThemes.length; index++)
+    {
+        nodesToAdd[index] = buildMenuItem(currentThemes[index], prefs, index);
+    }
+    browserActionMenu.prepend(nodesToAdd);
 }
 
 // Function is unused at present. Uncomment for use when the management API is
