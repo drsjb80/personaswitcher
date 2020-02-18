@@ -13,3 +13,4 @@ script:
   - npm i -g jest coveralls
   - npm run test
   - npm run coveralls
+  - npm bugs personaswitcher
