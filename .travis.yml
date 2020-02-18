@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 12.15.0
+  - stable
 dist: trusty
 addons:
   sonarcloud:
@@ -9,7 +9,7 @@ addons:
       secure: ${SONAR_TOKEN}
 
 before_install:
-  - npm i -g npm@6.13.4
+  - npm i -g latest-version
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - sonar-scanner
