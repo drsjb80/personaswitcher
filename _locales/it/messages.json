@@ -9,15 +9,15 @@
     },
     "extensionDescription": {
         "description": "Description of the extension.",
-        "message": "Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Persona con opzione di Anteprima, e facolt\u00e0 di ritorno al tema Predefinito. Possibilit\u00e0 di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox."
+        "message": "Cambio rapido tramite menu o per mezzo di scorciatorie da tastiera, fra i Temi di Theme con opzione di Anteprima, e facolt\u00e0 di ritorno al tema Predefinito. Possibilit\u00e0 di cambio automatico a tempo del Tema o ad ogni riavvio di FireFox."
     },
     "extensionName": {
         "description": "Name of the extension.",
-        "message": "Persona Switcher"
+        "message": "Thematic"
     },
     "extensionShortName": {
         "description": "Short name of the extension.",
-        "message": "PSwitcher"
+        "message": "Thematic"
     },
     "homepage": {
         "description": "The words 'Home Page'",
@@ -49,7 +49,7 @@
     },
     "options_fast_switch": {
         "description": "Text displayed in the options pane",
-        "message": "Quickly switch through personas"
+        "message": "Quickly switch through themes"
     },
     "options_iconPreview_desc": {
         "description": "Text displayed in the options pane",
@@ -65,7 +65,7 @@
     },
     "options_kbshortcuts_activate": {
         "description": "Text displayed in the options pane",
-        "message": "PSwitcher menu shortcut key: ALT + SHIFT + P"
+        "message": "Thematic menu shortcut key: ALT + SHIFT + P"
     },
     "options_kbshortcuts_alt": {
         "description": "Text displayed in the options pane",
@@ -117,7 +117,7 @@
     },
     "options_kbshortcuts_tools": {
         "description": "Test displayed in the options pane",
-        "message": "Persona Switcher tools menu shortcut key:"
+        "message": "Thematic tools menu shortcut key:"
     },
     "options_mainMenuBar": {
         "description": "Text displayed in the options pane",
@@ -125,11 +125,11 @@
     },
     "options_menuShortcuts_hint": {
         "description": "Text displayed in the options pane",
-        "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P"
+        "message": "Note: Thematic toolbar menu button shortcut: Alt + Shift + P"
     },
     "options_menus_title": {
         "description": "Text displayed in the options pane",
-        "message": "Posizioni del Menu Persona"
+        "message": "Posizioni del Menu Theme"
     },
     "options_ok_button": {
         "description": "Text displayed in the options pane",
@@ -141,7 +141,7 @@
     },
     "options_pane1": {
         "description": "Title of the options menu pane",
-        "message": "Persona Switcher: Settaggi di Configurazione"
+        "message": "Thematic: Settaggi di Configurazione"
     },
     "options_previewDelay_desc": {
         "description": "Text displayed in the options pane",
@@ -173,7 +173,7 @@
     },
     "options_title": {
         "description": "Title of the options menu",
-        "message": "Persona Switcher: Settaggi di Configurazione"
+        "message": "Thematic: Settaggi di Configurazione"
     },
     "options_toolboxMaxHeight_desc": {
         "description": "Text displayed in the options pane",
@@ -199,23 +199,23 @@
         "description": "Tip indicating quick access to options",
         "message": "Right click on the toolbar button to quickly access this options page or to refresh the list of themes."
     },
-    "ps_buttonLabel": {
+    "tm_buttonLabel": {
         "description": "Button Label text",
-        "message": "PSwitcher"
+        "message": "Thematic"
     },
-    "ps_default": {
+    "tm_default": {
         "description": "Default text",
         "message": "Predefinito"
     },
-    "ps_menuLabel": {
+    "tm_menuLabel": {
         "description": "Menu Label text",
-        "message": "Persona Switcher"
+        "message": "Thematic"
     },
-    "ps_noPersonas": {
-        "description": "No Personas Found text",
+    "tm_noThemes": {
+        "description": "No Themes Found text",
         "message": "Nessun Tema Disponibile"
     },
-    "ps_toolTip": {
+    "tm_toolTip": {
         "description": "Tooltip text",
         "message": "Premi per accedere ai Temi"
     },

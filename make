@@ -15,11 +15,11 @@ zip personaswitcher.zip \
     browser_action/popup.css \
     browser_action/popup.html \
     browser_action/popup.js \
-    icons/PersonaSwitcher16.png \
-    icons/PersonaSwitcher24.png \
-    icons/PersonaSwitcher32.png \
-    icons/PersonaSwitcher48.png \
-    icons/PersonaSwitcher64.png \
+    icons/Thematic16.png \
+    icons/Thematic24.png \
+    icons/Thematic32.png \
+    icons/Thematic48.png \
+    icons/Thematic64.png \
     manifest.json \
     preferences/options.html \
     preferences/options.js
