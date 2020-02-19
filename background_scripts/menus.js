@@ -89,36 +89,6 @@ function buildMenuItem(theme, prefs, theIndex)
     return themeChoice;
 }
 
-function updateBrowserActionMenu(data)
-{
-    let prefs = data[0];
-    let themes = data[1];
-    logger.log("Updating menu themes");
-
-    sortThemes(themes);
-    prefs.current = validateCurrentIndex(prefs.current, prefs.currentThemeId);
-
-    // Removes currently loaded themes, leaving the default firefox themes.
-    for(let index = 0; index < loadedThemes.length; index++)
-    {
-        if("hr" === loadedThemes[index].tagName)
-        {
-            break;
-        }
-        else
-        {
-            loadedThemes[index].remove();
-        }
-    }
-
-    let nodesToAdd = [];
-    for (let index = 0; index < currentThemes.length; index++)
-    {
-        nodesToAdd[index] = buildMenuItem(currentThemes[index], prefs, index);
-    }
-    browserActionMenu.prepend(nodesToAdd);
-}
-
 // Function is unused at present. Uncomment for use when the management API is
 // developed sufficiently to allow the addition of icons to the menu   
 /* function createIcon(iconURL, iconPreview) 
@@ -176,7 +146,7 @@ function buildToolsSubmenu(current)
                   type: 'radio',
                   checked: current === index,
                   title: currentThemes[index].name,
-                  contexts: ["tools_menu"]
+                  contexts: ["tools_menu"]// ,
                   // icons: {
                   // '16': currentThemes[index].icons[0].url}
                 });
@@ -222,18 +192,6 @@ function buildContextMenu()
           title: "Persona Switcher Options",
           contexts: ["browser_action"]
     });
-    browser.menus.create(
-    {
-          id: "ReloadThemes",
-          title: "Refresh PSwitcher Themes",
-          contexts: ["browser_action"]
-    });
-    browser.menus.create(
-        {
-            id: "UpdateBrowserActionMenu",
-            title: "Test update browser action menu",
-            contexts: ["browser_action"]
-        });
 }
 
 
