@@ -1,6 +1,6 @@
 /* global browser, logger, stopRotateAlarm, startRotateAlarm, switchTheme,
    setCurrentTheme, startThemePreview, endThemePreview,
-   updateBrowserActionSelection, updateToolsMenuSelection */
+   updateBrowserActionSelection, updateToolsMenuSelection, queueMenuRebuild */
 
 
 var previewAlarmListener;
@@ -54,4 +54,4 @@ var mouseLeaveListener = function(elementClass, preview)
     };
 };
 
-browser.theme.onUpdated.addListener(rebuildMenus);
+browser.theme.onUpdated.addListener(queueMenuRebuild);

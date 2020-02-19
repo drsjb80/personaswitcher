@@ -4,6 +4,7 @@
 
 var browserActionMenu;
 var loadedThemes;
+let menuRebuildTimeoutID;
 
 function getMenuData() 
 {
@@ -78,7 +79,7 @@ function buildMenuItem(theme, prefs, theIndex)
         }
     }
 
-    if (prefs.preview  === true) 
+    if (true  === prefs.preview) 
     {
         themeChoice.addEventListener('mouseenter',
                         mouseEnterListener(theme, prefs.previewDelay));
@@ -233,4 +234,15 @@ function rebuildMenus()
                         .then(buildBrowserActionMenu)
                         .then(buildToolsSubmenu)
                         .catch(handleError);
+
+    menuRebuildTimeoutID = undefined;
+}
+
+function queueMenuRebuild()
+{
+    if ('number' === typeof menuRebuildTimeoutID)
+    {
+        clearTimeout(menuRebuildTimeoutID);
+    }
+    menuRebuildTimeoutID =  setTimeout(rebuildMenus, 1000);
 }
