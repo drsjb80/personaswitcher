@@ -53,3 +53,5 @@ var mouseLeaveListener = function(elementClass, preview)
         }
     };
 };
+
+browser.theme.onUpdated.addListener(rebuildMenus);
