@@ -92,9 +92,6 @@ browser.menus.onClicked.addListener((info) =>
         case "PSOptions":
             browser.runtime.openOptionsPage(); 
             break;
-        case "ReloadThemes":
-            rebuildMenus();
-            break;
         default:
             toolsMenuThemeSelect(parseInt(info.menuItemId));
     }
