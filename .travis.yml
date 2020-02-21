@@ -16,3 +16,4 @@ script:
     - sonar-scanner
 
 // Code retrieved from :https://asus-aics.github.io/DeveloperGuide/pages/020_sonar_cloud/
+
