@@ -187,14 +187,14 @@ function buildContextMenu()
 { 
     browser.menus.create(
     {
-          id: "PSOptions",
-          title: "Persona Switcher Options",
+          id: "TMOptions",
+          title: "Thematic Options",
           contexts: ["browser_action"]
     });
     browser.menus.create(
     {
           id: "ReloadThemes",
-          title: "Refresh PSwitcher Themes",
+          title: "Refresh Thematic Themes",
           contexts: ["browser_action"]
     });
 }

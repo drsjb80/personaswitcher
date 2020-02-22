@@ -12,11 +12,11 @@
         "description": "Description of the extension."
     },
     "extensionName": {
-        "message": "Persona Switcher",
+        "message": "Thematic",
         "description": "Name of the extension."
     },
     "extensionShortName": {
-        "message": "PSwitcher",
+        "message": "Thematic",
         "description": "Short name of the extension."
     },
     "homepage": {
@@ -68,7 +68,7 @@
         "description": "Text displayed in the options pane"
     },
     "options_kbshortcuts_tools": {
-        "message": "Persona Switcher tools menu shortcut key:",
+        "message": "Thematic tools menu shortcut key:",
         "description": "Test displayed in the options pane"
     },
     "options_kbshortcuts_key": {
@@ -100,7 +100,7 @@
         "description": "Text displayed in the options pane"
     },
     "options_menuShortcuts_hint": {
-        "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
+        "message": "Note: Thematic toolbar menu button shortcut: Alt + Shift + P",
         "description": "Text displayed in the options pane"
     },
     "options_options_title": {
@@ -108,11 +108,11 @@
         "description": "Text displayed in the options pane"
     },
     "options_pane1": {
-        "message": "Persona Switcher 選項",
+        "message": "Thematic 選項",
         "description": "Title of the options menu pane"
     },
     "options_title": {
-        "message": "Persona Switcher 選項",
+        "message": "Thematic 選項",
         "description": "Title of the options menu"
     },
     "options_random_desc": {
@@ -172,7 +172,7 @@
         "description": "Text displayed in the options pane"
     },
     "options_fast_switch": {
-        "message": "Quickly switch through personas",
+        "message": "Quickly switch through themes",
         "description": "Text displayed in the options pane"
     },
     "options_toolboxMaxHeight_desc": {
@@ -191,23 +191,23 @@
         "message": "Ok",
         "description": "Text displayed in the options pane"
     },
-    "ps_buttonLabel": {
+    "tm_buttonLabel": {
         "message": "面板",
         "description": "Button Label text"
     },
-    "ps_default": {
+    "tm_default": {
         "message": "預設面板",
         "description": "Default text"
     },
-    "ps_menuLabel": {
+    "tm_menuLabel": {
         "message": "面板",
         "description": "Menu Label text"
     },
-    "ps_noPersonas": {
+    "tm_noThemes": {
         "message": "找不到面板",
-        "description": "No Personas Found text"
+        "description": "No Themes Found text"
     },
-    "ps_toolTip": {
+    "tm_toolTip": {
         "message": "快速更換、預覽面板。",
         "description": "Tooltip text"
     },
