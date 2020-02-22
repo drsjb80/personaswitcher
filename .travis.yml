@@ -13,7 +13,7 @@ script:
 #   sonarcloud:
 #     organization: "asus-aics"
 #     token:
-#       secure: INSERT TOKE
+#       secure:84cbdb5fe9fe5fbd0341d61a18288126960da2a8
 
 # Java .travis.yml sample
 # jobs:
@@ -21,7 +21,7 @@ script:
 #     - stage: "Unit Tests & SonarCloud Analysis"
 #       script:
 #         - gradle jacocoTestReport
-#         - gradle sonarqube -Dsonar.login=INSERT_TOKEN-Dsonar.projectKey=PROJECT_KEY
+#         - gradle sonarqube -Dsonar.login=84cbdb5fe9fe5fbd0341d61a18288126960da2a8-Dsonar.projectKey=CuylerE_personaswithcer
 
 # Node.js .travis.yml sample
 # jobs:
@@ -29,4 +29,4 @@ script:
 #     - stage: "Run Tests & SonarCloud Analysis"
 #       script:
 #         - npm test
-#         - sonar-scanner -Dsonar.projectKey=PROJECT_KEY
+#         - sonar-scanner -Dsonar.projectKey=CuylerE_personaswithcer
