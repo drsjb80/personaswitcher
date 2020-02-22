@@ -2,9 +2,18 @@ language: node_js
 node_js:
   - "stable"
 
+addons:
+  sonarcloud:
+    organization: "int-thumbwar-1-2-3-4"
+    token:
+      secure: "7eae69201e1cb231ae6b0b083b408b65be4ad15d" # encrypted value of your token
+
+
 before_install:
   - npm install -g web-ext
 
 script:
   - web-ext lint
   - web-ext build
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner
