@@ -185,7 +185,7 @@ function removeToolsSubmenu()
     return browser.menus.removeAll().then(buildContextMenu);
 }
 
-function buildContextMenu() 
+function buildContextMenu()
 { 
     browser.menus.create(
     {
@@ -200,7 +200,6 @@ function buildContextMenu()
             contexts: ["browser_action"]
         });
 }
-
 
 function updateBrowserActionSelection(newIndex, oldIndex)
 {
@@ -248,7 +247,8 @@ function queueMenuRebuild()
 {
     if ('number' === typeof menuRebuildTimeoutID)
     {
-        clearTimeout(menuRebuildTimeoutID);
+        // clearTimeout(menuRebuildTimeoutID);
+        return;
     }
     menuRebuildTimeoutID =  setTimeout(rebuildMenus, 1000);
 }
