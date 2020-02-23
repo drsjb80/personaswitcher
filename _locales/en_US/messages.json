@@ -43,6 +43,18 @@
         "description": "Text displayed in the options pane",
         "message": "Switch every"
     },
+	"options_height":{
+		"description": "Text displayed in the options pane",
+        "message": "Height change to"
+	},
+	"options_heightAdjustment":{
+		"description": "Text displayed in the options pane",
+        "message": "px."
+	},
+	"options_heightAdjust":{
+		"description": "Text displayed in the options pane",
+        "message": "Values between 10 and 100"
+	},
     "options_debug": {
         "description": "Text displayed in the options pane",
         "message": "Debug"
