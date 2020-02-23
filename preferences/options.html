@@ -3,6 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" id = "heightAdjustment" href="/Users/chen liang/AppData/Roaming/Mozilla/Firefox/Profiles/wweple11.default-release/chrome/userChrome.css">
 		<style>
 			fieldset {
 				white-space: nowrap;
@@ -14,9 +15,10 @@
 			#advancedOptions {
 				display: none
 			}
+			
 			#keyboardShortcutTitles, #keyboardShortcutKeys,
 			#menuShortcutTitles, #menuShortcutKeys, #toolboxHint,
-			#previewDelayHint, #autoMinutesHint{
+			#previewDelayHint, #autoMinutesHint,#heightAdjustment{
 				display: inline-block;
 				vertical-align: text-top;
 			}
@@ -66,6 +68,7 @@
 						<label>&ensp;<small><element name="i18n" id="options_autoevery_hint"></element></small></label>
 					</div>
 				</div>
+				
 				<div>
 					<input 
 						type="checkbox"
@@ -79,6 +82,24 @@
 						id="startup-switch"
 						tabindex="4">
 					<label for="startup-switch"><element name="i18n" id="options_startupSwitch_desc"></element></label>
+				</div><br>
+				<div>
+					<input
+						type="checkbox"
+						id="height"
+						tabindex="12">
+					<label for="height"><element name="i18n" id="options_height"></element></label>
+					<div id="heightAdjustment">
+						<input
+							type="number"
+							id="heightAdjust"
+							size="1"
+							min="10"
+							max="100"
+							tabindex="13">
+						<label for="heightAdjust"><element name="i18n" id="options_heightAdjustment"></element></label><br>
+						<label>&ensp;<small><element name="i18n" id="options_heightAdjust"></element></small></label>
+					</div>
 				</div><br>
 				<div>
 					<input
@@ -99,6 +120,7 @@
 						<label>&nbsp;<small><element name="i18n" id="options_previewDelay_hint"></element></small></label>
 					</div>
 				</div>
+
 				<!--<div>
 					<input
 						type="checkbox"
