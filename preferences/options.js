@@ -3,7 +3,7 @@
 
 var preferences = ["auto", "autoMinutes", "random", "startupSwitch", "preview",
                     "previewDelay", "iconPreview", "toolsMenu", "debug", 
-                    "fastSwitch"];
+                    "fastSwitch","height","heightAdjust"];
 
 
 var autoObject = document.querySelector("#auto");
@@ -16,6 +16,11 @@ var iconPreviewObject = document.querySelector("#icon-preview");
 var toolsMenuObject = document.querySelector("#tools-menu");
 var debugObject = document.querySelector("#debug");
 var fastSwitchObject = document.querySelector("#fast-switch");
+var heightObject = document.querySelector("#height");
+var heightAdjustObject = document.querySelector("#heightAdjust");
+
+
+
 
 function saveOptions(e)
 {
@@ -31,7 +36,10 @@ function saveOptions(e)
             // iconPreview: iconPreviewObject.checked,
             toolsMenu: toolsMenuObject.checked,
             debug: debugObject.checked,
-            fastSwitch: fastSwitchObject.checked
+            fastSwitch: fastSwitchObject.checked,
+			height: heightObject.checked,
+			heightAdjust: parseInt(heightObject.value)
+
         });
     setting.catch(onError);
 }
@@ -50,6 +58,8 @@ function loadOptions()
         toolsMenuObject.checked = prefs.toolsMenu;
         debugObject.checked = prefs.debug;
         fastSwitchObject.checked = prefs.fastSwitch;
+		heightObject.checked = pref.height;
+		heightAdjustObject.value = pref.heightAdjust;
     }
 
     var getPrefs = browser.storage.local.get(preferences);    
