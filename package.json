@@ -1,11 +1,25 @@
 {
-  "name": "personaswitcher",
+  "name": "mypackage",
   "version": "1.0.0",
-  "dependencies": {
-    "jest": "^25.1.0"
+  "description": "unit tests",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
   },
   "scripts": {
-    "test": "jest",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jhawk1196/personaswitcher.git"
+  },
+  "author": "rhietzman4",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jhawk1196/personaswitcher/issues"
+  },
+  "homepage": "https://github.com/Jhawk1196/personaswitcher#readme",
+  "devDependencies": {
+    "jest": "^25.1.0"
   }
 }

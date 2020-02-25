@@ -102,5 +102,5 @@ function rotate()
         setCurrentTheme(newIndex, prefs.current);
         updateBrowserActionSelection(newIndex, prefs.current);
         updateToolsMenuSelection(newIndex, prefs.current);
-    });    
+    });
 }
