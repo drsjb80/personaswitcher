@@ -8,15 +8,16 @@
   },
   "scripts": {
     "test": "jest"
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Jhawk1196/personaswitcher.git"
   },
-  "author": "rhietzman4",
+  "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Jhawk1196/personaswitcher/issues"
+    "url": "https://github.com/Jhawk1196/personaswitcher"
   },
   "homepage": "https://github.com/Jhawk1196/personaswitcher#readme",
   "devDependencies": {
