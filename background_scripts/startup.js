@@ -89,7 +89,7 @@ browser.menus.onClicked.addListener((info) =>
     logger.log(`Context menu item clicked ${info.menuItemId}`);
     switch(info.menuItemId)
     {
-        case "PSOptionsK":
+        case "PSOptions":
             browser.runtime.openOptionsPage(); 
             break;
         case "ReloadThemes":

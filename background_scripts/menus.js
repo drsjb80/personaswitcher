@@ -19,7 +19,6 @@ function getMenuData()
 
 function buildBrowserActionMenu(data) 
 {
-
     let prefs = data[0];
     let themes = data[1];  
     logger.log("Start building BAMenu");
@@ -79,7 +78,7 @@ function buildMenuItem(theme, prefs, theIndex)
         }
     }
 
-    if (true  === prefs.preview) 
+    if (true === prefs.preview) 
     {
         themeChoice.addEventListener('mouseenter',
                         mouseEnterListener(theme, prefs.previewDelay));
