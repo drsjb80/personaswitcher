@@ -47,6 +47,8 @@ function loadDefaultPrefs()
     preferences.fastSwitch = false;
     preferences.autoMinutes = 30;
     preferences.previewDelay = 100;
+    preferences.height = false;
+    preferences.heightAdjust = 40;
     preferences.current = 0;
     preferences.currentThemeId = null;
     preferences.defaults_loaded = true; 
