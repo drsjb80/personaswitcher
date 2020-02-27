@@ -193,11 +193,11 @@ function buildContextMenu()
           contexts: ["browser_action"]
     });
     browser.menus.create(
-        {
-            id: "ReloadThemes",
-            title: "Refresh PSwitcher Themes",
-            contexts: ["browser_action"]
-        });
+    {
+        id: "ReloadThemes",
+        title: "Refresh PSwitcher Themes",
+        contexts: ["browser_action"]
+    });
 }
 
 function updateBrowserActionSelection(newIndex, oldIndex)
