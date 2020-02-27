@@ -70,6 +70,12 @@ function reactToPrefChange(prefName, prefData)
                 removeToolsSubmenu();
             }
             break;
+		case 'height':
+			if(true === prefData.newValue) 
+            {
+                var getCurrentIndex = browser.storage.local.get("current");
+                getCurrentIndex.then(pref = pref.current);
+            } 
         default:
             // ignore the others
     }
