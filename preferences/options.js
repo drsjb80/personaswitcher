@@ -38,7 +38,7 @@ function saveOptions(e)
             debug: debugObject.checked,
             fastSwitch: fastSwitchObject.checked,
 			height: heightObject.checked,
-			heightAdjust: parseInt(heightObject.value)
+			heightAdjust: parseInt(heightAdjustObject.value)
 
         });
     setting.catch(onError);
@@ -58,8 +58,8 @@ function loadOptions()
         toolsMenuObject.checked = prefs.toolsMenu;
         debugObject.checked = prefs.debug;
         fastSwitchObject.checked = prefs.fastSwitch;
-		heightObject.checked = pref.height;
-		heightAdjustObject.value = pref.heightAdjust;
+		heightObject.checked = prefs.height;
+		heightAdjustObject.value = prefs.heightAdjust;
     }
 
     var getPrefs = browser.storage.local.get(preferences);    
