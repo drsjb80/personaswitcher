@@ -8,3 +8,25 @@ before_install:
 script:
   - web-ext lint
   - web-ext build
+
+#addons:
+#   sonarcloud:
+#     organization: "asus-aics"
+#     token:
+#       secure:84cbdb5fe9fe5fbd0341d61a18288126960da2a8
+
+# Java .travis.yml sample
+# jobs:
+#   include:
+#     - stage: "Unit Tests & SonarCloud Analysis"
+#       script:
+#         - gradle jacocoTestReport
+#         - gradle sonarqube -Dsonar.login=84cbdb5fe9fe5fbd0341d61a18288126960da2a8-Dsonar.projectKey=CuylerE_personaswitcher
+
+# Node.js .travis.yml sample
+# jobs:
+#   include:
+#     - stage: "Run Tests & SonarCloud Analysis"
+#       script:
+#         - npm test
+#         - sonar-scanner -Dsonar.projectKey=CuylerE_personaswitcher
