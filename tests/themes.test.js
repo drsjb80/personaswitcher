@@ -11,3 +11,10 @@ test('one default theme', () => {
     themes.defaultThemes = [{"id": "foo"}, {"id": "bar"}];
     expect(getDefaultThemeIndex()).toBe(2);
 });
+
+/*
+if (typeof jesting !== 'undefined') {
+    module.exports = { themes, getDefaultThemeIndex };
+}
+*/
+
