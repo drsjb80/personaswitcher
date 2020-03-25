@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "jest": "^25.1.0"
+  },
+  "jest": {
+    "globals": {
+      "jesting": true,
+      "browser": {
+        "theme": {
+          "onUpdated": {
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
