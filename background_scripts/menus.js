@@ -4,6 +4,7 @@
 
 var browserActionMenu;
 var loadedThemes;
+let menuRebuildTimeoutID;
 
 function getMenuData() 
 {
@@ -183,7 +184,7 @@ function removeToolsSubmenu()
     return browser.menus.removeAll().then(buildContextMenu);
 }
 
-function buildContextMenu() 
+function buildContextMenu()
 { 
     browser.menus.create(
     {
@@ -193,12 +194,11 @@ function buildContextMenu()
     });
     browser.menus.create(
     {
-          id: "ReloadThemes",
-          title: "Refresh PSwitcher Themes",
-          contexts: ["browser_action"]
+        id: "ReloadThemes",
+        title: "Refresh PSwitcher Themes",
+        contexts: ["browser_action"]
     });
 }
-
 
 function updateBrowserActionSelection(newIndex, oldIndex)
 {
@@ -238,4 +238,16 @@ function rebuildMenus()
                         .then(buildBrowserActionMenu)
                         .then(buildToolsSubmenu)
                         .catch(handleError);
+
+    menuRebuildTimeoutID = undefined;
+}
+
+function queueMenuRebuild()
+{
+    if ('number' === typeof menuRebuildTimeoutID)
+    {
+        // clearTimeout(menuRebuildTimeoutID);
+        return;
+    }
+    menuRebuildTimeoutID =  setTimeout(rebuildMenus, 1000);
 }
