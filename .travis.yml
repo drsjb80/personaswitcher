@@ -13,7 +13,8 @@ dist: trusty
 addons:
   sonarcloud:
     organization: "cs3250team4"
-    token: cs3250team4
+    token:
+      secure: 6135cee7db96ec3578027dbcb40f1a8117fab13a 
 script:
 
 - sonar-scanner
