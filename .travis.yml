@@ -14,7 +14,7 @@ addons:
   sonarcloud:
     organization: "cs3250team4"
     token:
-      secure: 4fddf3700dde7836f559c9a32978b5752de0ef35 
+      secure: "luGzjUk1uj+ikzKiNMt6Ybq0+Kl8cyU7Ld40lgpb9Wmx3ODLQ2grZ5JmNfPrOQqx00hCFl+B3Ih23+389egRMDzSttNh6M64Tx9U0lgHPDmgIsCKxpU9jlmQ+wY76AUmcb9NH4JUkdt3gJonDFlq84Sz7Rc7AagOmK7KTx274usXcyQapMQc/8TWONv/LfowmiTTArPfoMFQI1+4DKQYhFlIfIyoiQGvKb5LfDTVNnna7zsiH5HEyfXADIIPe+ZI0l6CyMUVvlpet9u5/YnR2qYswh9h5BZvG0dN0xvsyPyXUFmTqLgyLo/bjEX1Oetj8Txd3TaLh1vxv9SDWwNR/AR5e9PnFMmBfgI9q/Xt3MuuY2ZL/XEs1HDb9XQqp/pSLSXMpUY1Djh1kTlCxUiyse6UnHD70jWW+ikuGQ5zr9Ok3cpHTUKwjUEgCJkkpEMPddVS+SZlzgQlPF8ch9rtVZ3U9IYYMKUm8C3dhBYVuwvEZfvYsFQJPc4ymVKQsaiSbIwPpJb3NxTzMqMRDDEbUvx4lbdTEgLFbBh1l4a04LAnwIEjc8L8fPPLZNtgxh6kjMZsdS4SgMVliTls3cQWIfxgPKsh1s8la9rmY5/ysPndoXd7fNMf8klza/3JRdV9xqnqTriVSafr8dGqAwiNrdkUWgt1iCqDc6Ci2RKH2XA="
 
 script:
 - sonar-scanner
