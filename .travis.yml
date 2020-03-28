@@ -14,7 +14,7 @@ addons:
   sonarcloud:
     organization: "cs3250team4"
     token:
-      secure: team4 
+      secure: 0caeff2a9080b34e18406a7e7a40a4a10bda34bb 
 script:
 
 - sonar-scanner
