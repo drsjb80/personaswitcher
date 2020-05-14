@@ -2,7 +2,6 @@
    setCurrentTheme, startThemePreview, endThemePreview,
    updateBrowserActionSelection, updateToolsMenuSelection */
 
-
 var previewAlarmListener;
 
 var clickListener = function(theTheme, theIndex) 

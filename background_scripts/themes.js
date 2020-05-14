@@ -20,18 +20,18 @@ function switchTheme(newId)
     browser.management.setEnabled(newId, true);
 }
 
-function startThemePreview(theme) 
+function startThemePreview(theme)
 {
     switchTheme(theme.id);
 }
 
-function endThemePreview() 
-{    
+function endThemePreview()
+{
     switchTheme(currentThemeId);
 }
 
 function setCurrentTheme(newIndex, oldIndex)
-{  
+{
     if(newIndex !== oldIndex)
     {
         updateCurrentThemeId(newIndex);
@@ -39,9 +39,9 @@ function setCurrentTheme(newIndex, oldIndex)
     }
 }
 
-function updateCurrentThemeId(newIndex) 
+function updateCurrentThemeId(newIndex)
 {
-    if(newIndex < currentThemes.length) 
+    if(newIndex < currentThemes.length)
     {
         currentThemeId = currentThemes[newIndex].id;
     }
@@ -56,14 +56,14 @@ function updateCurrentThemeId(newIndex)
 function updateCurrentIndex(newIndex)
 {
     let updatingCurrentIndex = browser.storage.local.set({current: newIndex});
-    updatingCurrentIndex.catch(handleError); 
+    updatingCurrentIndex.catch(handleError);
 }
 
 
 function activateDefaultTheme()
 {
     logger.log("Activating default theme");
-    let index = getDefaultThemeIndex();    
+    let index = getDefaultThemeIndex();
     switchTheme(defaultTheme.id);
     let getOldThemeIndex = browser.storage.local.get("current");
     getOldThemeIndex.then((pref) =>
@@ -89,24 +89,24 @@ function getDefaultThemeIndex()
     return index;
 }
 
-function sortThemes(addonInfos) 
+function sortThemes(addonInfos)
 {
     currentThemes = [];
-    for(let info of addonInfos) 
+    for(let info of addonInfos)
     {
         if("theme" === info.type)
         {
             logger.log(info.name, info.id);
-            currentThemes.push(info);            
+            currentThemes.push(info);
         }
     }
 
     logger.log (`Themes found ${currentThemes.length}`);
 
     currentThemes.
-        sort(function (a, b) 
-        { 
-            return a.name.localeCompare(b.name); 
+        sort(function (a, b)
+        {
+            return a.name.localeCompare(b.name);
         });
     extractDefaultThemes();
     logger.log (`User installed themes ${currentThemes.length}`);
@@ -114,7 +114,7 @@ function sortThemes(addonInfos)
 
 // Assumes currentThemes and defaultThemes are accurate
 // (IE sortThemes has been called previously)
-function validateCurrentIndex(current, currentThemeId) 
+function validateCurrentIndex(current, currentThemeId)
 {
     // On first run, the currentThemeId will be null. The current index skips
     // the index value at currentThemes.length to account for the separator. So,
@@ -122,7 +122,7 @@ function validateCurrentIndex(current, currentThemeId)
     // changed and the new active theme must be found. Likewise, if the current
     // index is greater than the last possible default theme index, the theme
     // list has changed and the new active theme must be found.
-    if('undefined' === typeof(currentThemeId) || 
+    if('undefined' === typeof(currentThemeId) ||
         null === currentThemeId ||
         currentThemes.length === current ||
         current > currentThemes.length + defaultThemes.length)
@@ -142,7 +142,7 @@ function validateCurrentIndex(current, currentThemeId)
     else
     {
         themesToCheck = currentThemes;
-        themeIndex = current;        
+        themeIndex = current;
         logger.log(`Validating user installed theme ${themeIndex}`);
     }
 
@@ -150,9 +150,9 @@ function validateCurrentIndex(current, currentThemeId)
     {
         return current;
     }
-    
+
     return findActiveTheme();
-        
+
 }
 
 function findActiveTheme()
@@ -160,7 +160,7 @@ function findActiveTheme()
     for(let index = 0; index < currentThemes.length; index++)
     {
         if(true === currentThemes[index].enabled)
-        {            
+        {
             updateCurrentIndex(index);
             return index;
         }
@@ -178,7 +178,7 @@ function findActiveTheme()
     return false;
 }
 
-function extractDefaultThemes() 
+function extractDefaultThemes()
 {
     defaultThemes = [];
     var numDefaultsFound = 0;
@@ -187,17 +187,17 @@ function extractDefaultThemes()
     logger.log("Segregating default themes");
     // We do not want to iterate over more of the array than we have to. So we
     // break out once we have found all the pre-installed default themes.
-    for(let index = 0; index < currentThemes.length; index++) 
+    for(let index = 0; index < currentThemes.length; index++)
     {
         theme = currentThemes[index];
-        if(isDefaultTheme(theme.id)) 
+        if(isDefaultTheme(theme.id))
         {
             logger.log(`${theme.name} ${theme.id}`);
             numDefaultsFound += 1;
             defaultThemes.push(theme);
             currentThemes.splice(index, 1);
             index -= 1;
-            if(defaultNotFound) 
+            if(defaultNotFound)
             {
                 defaultNotFound =
                     (SAME !== theme.id.localeCompare("{972ce4c6-7e08-4474-a285-3208198ce6fd}") &&
@@ -210,7 +210,7 @@ function extractDefaultThemes()
         }
     }
 
-    if(defaultNotFound) 
+    if(defaultNotFound)
     {
         defaultThemes.push(defaultTheme);
     }
@@ -227,7 +227,7 @@ function isDefaultTheme(themeId)
     return defaults.includes(themeId);
 
     /*
-    return "firefox-compact-dark@mozilla.org@personas.mozilla.org"  === themeId 
+    return "firefox-compact-dark@mozilla.org@personas.mozilla.org"  === themeId
     || "firefox-compact-light@mozilla.org@personas.mozilla.org" === themeId
     || "firefox-compact-dark@mozilla.org"  === themeId
     || "firefox-compact-light@mozilla.org" === themeId
@@ -255,7 +255,7 @@ function toolsMenuThemeSelect(index)
             // Because Mozilla automatically separates the the items above
             // and below a separator into distinct groups, when switching
             // from a default theme to a user installed, or vice versa, the
-            // old group's radio button must be disabled manually 
+            // old group's radio button must be disabled manually
             if((pref.current < currentThemes.length  &&
                 index > currentThemes.length) ||
                (pref.current > currentThemes.length  &&
@@ -265,8 +265,10 @@ function toolsMenuThemeSelect(index)
                       .update(String(pref.current), {checked: false});
                 updateToolMenu.catch(handleError);
             }
-            
+
             setCurrentTheme(index, pref.current);
             updateBrowserActionSelection(index, pref.current);
         });
 }
+
+module.exports = { isDefaultTheme: isDefaultTheme };
