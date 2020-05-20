@@ -11,23 +11,23 @@
         "message":"本软件为您提供通过菜单或是敲键形式，快速切换浏览器的个人设定和原始设定背景图案的功能。 还可以定时自动播放所有背景图案， 本软件可在Firefox浏览器上安装使用。",
         "description": "Description of the extension."
     },
-    "ps_noPersonas": {
+    "tm_noThemes": {
         "message": "找不到面板",
-        "description": "No Personas Found text"
+        "description": "No Themes Found text"
     },
-    "ps_menuLabel": {
+    "tm_menuLabel": {
         "message": "面板",
         "description": "Menu Label text"
     },
-    "ps_buttonLabel": {
+    "tm_buttonLabel": {
         "message": "面板",
         "description": "Button Label text"
     },
-    "ps_toolTip": {
+    "tm_toolTip": {
         "message": "快速更换，预览面板",
         "description": "Tooltip text"
     },
-    "ps_default": {
+    "tm_default": {
         "message": "预设面板",
         "description": "Default text"
     },
@@ -76,7 +76,7 @@
         "description": "Text displayed in the options pane"
     },
     "options_menuShortcuts_hint": {
-        "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
+        "message": "Note: Thematic toolbar menu button shortcut: Alt + Shift + P",
         "description": "Text displayed in the options pane"
     },
     "options_options_title": {
@@ -152,7 +152,7 @@
         "description": "Text displayed in the options pane"
     },
     "options_fast_switch": {
-        "message": "Quickly switch through personas",
+        "message": "Quickly switch through themes",
         "description": "Text displayed in the options pane"
     },
     "options_toolboxMaxHeight_desc": {

@@ -9,15 +9,15 @@
     },
     "extensionDescription": {
         "description": "Description of the extension.",
-        "message": "Schneller Wechsel zwischen ihren Personas oder zur\u00fcck zu den Standardeinstellungen \u00fcber das Men\u00fc oder der Tastatur. Sie k\u00f6nnen auch automatisch durch alle Themen in einem Intervall ihrer Wahl wechseln. Arbeitet mit Firefox."
+        "message": "Schneller Wechsel zwischen ihren Themes oder zur\u00fcck zu den Standardeinstellungen \u00fcber das Men\u00fc oder der Tastatur. Sie k\u00f6nnen auch automatisch durch alle Themen in einem Intervall ihrer Wahl wechseln. Arbeitet mit Firefox."
     },
     "extensionName": {
         "description": "Name of the extension.",
-        "message": "Persona Switcher"
+        "message": "Thematic"
     },
     "extensionShortName": {
         "description": "Short name of the extension.",
-        "message": "PSwitcher"
+        "message": "Thematic"
     },
     "homepage": {
         "description": "The words 'Home Page'",
@@ -49,7 +49,7 @@
     },
     "options_fast_switch": {
         "description": "Text displayed in the options pane",
-        "message": "Quickly switch through personas"
+        "message": "Quickly switch through themes"
     },
     "options_iconPreview_desc": {
         "description": "Text displayed in the options pane",
@@ -61,11 +61,11 @@
     },
     "options_menuShortcuts_hint": {
         "description": "Text displayed in the options pane",
-        "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P"
+        "message": "Note: Thematic toolbar menu button shortcut: Alt + Shift + P"
     },
     "options_menus_title": {
         "description": "Text displayed in the options pane",
-        "message": "Persona Men\u00fc Orte"
+        "message": "Theme Men\u00fc Orte"
     },
     "options_ok_button": {
         "description": "Text displayed in the options pane",
@@ -77,7 +77,7 @@
     },
     "options_pane1": {
         "description": "Title of the options menu pane",
-        "message": "Persona Switcher Einstellungen"
+        "message": "Thematic Einstellungen"
     },
     "options_previewDelay_desc": {
         "description": "Text displayed in the options pane",
@@ -93,7 +93,7 @@
     },
     "options_random_desc": {
         "description": "Text displayed in the options pane",
-        "message": "Wechsel zu einer zuf\u00e4lligen Persona anstelle des Letzten verwendeten."
+        "message": "Wechsel zu einer zuf\u00e4lligen Theme anstelle des Letzten verwendeten."
     },
     "options_reset_button": {
         "description": "Text displayed in the options pane",
@@ -109,7 +109,7 @@
     },
     "options_title": {
         "description": "Title of the options menu",
-        "message": "Persona Switcher Einstellungen"
+        "message": "Thematic Einstellungen"
     },
     "options_toolboxMaxHeight_desc": {
         "description": "Text displayed in the options pane",
@@ -135,23 +135,23 @@
         "description": "Tip indicating quick access to options",
         "message": "Right click on the toolbar button to quickly access this options page or to refresh the list of themes."
     },
-    "ps_buttonLabel": {
+    "tm_buttonLabel": {
         "description": "Button Label text",
-        "message": "PSwitcher"
+        "message": "Thematic"
     },
-    "ps_default": {
+    "tm_default": {
         "description": "Default text",
         "message": "Standardeinstellungen"
     },
-    "ps_menuLabel": {
+    "tm_menuLabel": {
         "description": "Menu Label text",
-        "message": "Persona Switcher"
+        "message": "Thematic"
     },
-    "ps_noPersonas": {
-        "description": "No Personas Found text",
-        "message": "Keine Persona gefunden"
+    "tm_noThemes": {
+        "description": "No Themes Found text",
+        "message": "Keine Themes gefunden"
     },
-    "ps_toolTip": {
+    "tm_toolTip": {
         "description": "Tooltip text",
         "message": "Klick zum"
     },

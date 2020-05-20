@@ -9,7 +9,7 @@ sh -x make
 eslint . | more
 ----
 vi manifest.json # version changes
-git tag -a v5.0.5 -m "version 5.0.5"
+git tag -a v5.0.6 -m "version 5.0.6"
 ----
 /Applications/SeaMonkey.app/Contents/MacOS/seamonkey &
 /Applications/Thunderbird.app/Contents/MacOS/thunderbird &
