@@ -55,70 +55,6 @@
         "description": "Text displayed in the options pane",
         "message": "Aggiungi icona di Anteprima nel listato."
     },
-    "options_kbshortcuts_accel": {
-        "description": "Text displayed in the options pane",
-        "message": "Accel"
-    },
-    "options_kbshortcuts_access": {
-        "description": "Text displayed in the options pane",
-        "message": "Menu Principale:"
-    },
-    "options_kbshortcuts_activate": {
-        "description": "Text displayed in the options pane",
-        "message": "PSwitcher menu shortcut key: ALT + SHIFT + P"
-    },
-    "options_kbshortcuts_alt": {
-        "description": "Text displayed in the options pane",
-        "message": "Alt"
-    },
-    "options_kbshortcuts_auto": {
-        "description": "Text displayed in the options pane",
-        "message": "Cambio Automatico del Tema"
-    },
-    "options_kbshortcuts_control": {
-        "description": "Text displayed in the options pane",
-        "message": "Control"
-    },
-    "options_kbshortcuts_default": {
-        "description": "Text displayed in the options pane",
-        "message": "Tema Predefinito:  ALT + SHIFT + D"
-    },
-    "options_kbshortcuts_key": {
-        "description": "Text displayed in the options pane",
-        "message": "Tasto"
-    },
-    "options_kbshortcuts_menushortcuts": {
-        "description": "Text displayed in the options pane",
-        "message": "Tasti scorciatoia del Menu (Non su OS X)"
-    },
-    "options_kbshortcuts_meta": {
-        "description": "Text displayed in the options pane",
-        "message": "Meta"
-    },
-    "options_kbshortcuts_os": {
-        "description": "Text displayed in the options pane",
-        "message": "OS"
-    },
-    "options_kbshortcuts_rotate": {
-        "description": "Text displayed in the options pane",
-        "message": "Cambio Tema:  ALT + SHIFT + R"
-    },
-    "options_kbshortcuts_shift": {
-        "description": "Text displayed in the options pane",
-        "message": "Shift"
-    },
-    "options_kbshortcuts_title": {
-        "description": "Text displayed in the options pane",
-        "message": "Scorciatoie da Tastiera - Combinazione Tasti"
-    },
-    "options_kbshortcuts_toggle": {
-        "description": "Text displayed in the options pane",
-        "message": "Attiva/Disattiva Cambio Automatico: ALT + SHIFT + A"
-    },
-    "options_kbshortcuts_tools": {
-        "description": "Test displayed in the options pane",
-        "message": "Persona Switcher tools menu shortcut key:"
-    },
     "options_mainMenuBar": {
         "description": "Text displayed in the options pane",
         "message": "Nella Menu-Bar Principale."
@@ -192,8 +128,8 @@
         "message": "Nel Menu Strumenti."
     },
     "options_usefultips_title": {
-        "description": "The words 'Useful Tips'",
-        "message": "Useful Tips"
+        "description": "The word 'Tips'",
+        "message": "Tips"
     },
     "options_usefultips_tip1": {
         "description": "Tip indicating quick access to options",

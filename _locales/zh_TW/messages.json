@@ -39,66 +39,6 @@
         "message": "快捷鍵",
         "description": "Text displayed in the options pane"
     },
-    "options_kbshortcuts_default": {
-        "message": "切換至預設面板:  ALT + SHIFT + D",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_rotate": {
-        "message": "切換至其他面板:  ALT + SHIFT + R",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_toggle": {
-        "message": "切換為自動更換: ALT + SHIFT + A",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_auto": {
-        "message": "Automatic rotation",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_menushortcuts": {
-        "message": "「面板」選單快捷鍵",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_access": {
-        "message": "第一種快捷鍵：　Alt +",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_activate": {
-        "message": "第二種快捷鍵：  ALT + SHIFT + P",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_tools": {
-        "message": "Persona Switcher tools menu shortcut key:",
-        "description": "Test displayed in the options pane"
-    },
-    "options_kbshortcuts_key": {
-        "message": "按鍵",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_shift": {
-        "message": "Shift",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_control": {
-        "message": "Control",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_alt": {
-        "message": "Alt",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_meta": {
-        "message": "Meta",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_accel": {
-        "message": "Accel",
-        "description": "Text displayed in the options pane"
-    },
-    "options_kbshortcuts_os": {
-        "message": "OS",
-        "description": "Text displayed in the options pane"
-    },
     "options_menuShortcuts_hint": {
         "message": "Note: Persona Switcher toolbar menu button shortcut: Alt + Shift + P",
         "description": "Text displayed in the options pane"
@@ -216,8 +156,8 @@
         "description": "The word 'Version'"
     },
     "options_usefultips_title": {
-        "description": "The words 'Useful Tips'",
-        "message": "Useful Tips"
+        "description": "The word 'Tips'",
+        "message": "Tips"
     },
     "options_usefultips_tip1": {
         "description": "Tip indicating quick access to options",

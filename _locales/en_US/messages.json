@@ -31,13 +31,9 @@
         "description": "Text displayed in the options pane",
         "message": "Advanced Options"
     },
-    "options_autoevery_hint": {
-        "description": "Text displayed in the options pane",
-        "message": "Values between 1 and 999"
-    },
     "options_autoevery_minutes": {
         "description": "Text displayed in the options pane",
-        "message": "minutes."
+        "message": "minutes, between 1 and 999."
     },
     "options_autoevery_switch": {
         "description": "Text displayed in the options pane",
@@ -54,70 +50,6 @@
     "options_iconPreview_desc": {
         "description": "Text displayed in the options pane",
         "message": "Add icon preview to menu items."
-    },
-    "options_kbshortcuts_accel": {
-        "description": "Text displayed in the options pane",
-        "message": "Accel"
-    },
-    "options_kbshortcuts_access": {
-        "description": "Text displayed in the options pane",
-        "message": "Main menu shortcut key:"
-    },
-    "options_kbshortcuts_activate": {
-        "description": "Text displayed in the options pane",
-        "message": "PSwitcher menu shortcut key: ALT + SHIFT + P"
-    },
-    "options_kbshortcuts_alt": {
-        "description": "Text displayed in the options pane",
-        "message": "Alt"
-    },
-    "options_kbshortcuts_auto": {
-        "description": "Text displayed in the options pane",
-        "message": "Automatic rotation"
-    },
-    "options_kbshortcuts_control": {
-        "description": "Text displayed in the options pane",
-        "message": "Control"
-    },
-    "options_kbshortcuts_default": {
-        "description": "Text displayed in the options pane",
-        "message": "Default persona shortcut key: ALT + SHIFT + D"
-    },
-    "options_kbshortcuts_key": {
-        "description": "Text displayed in the options pane",
-        "message": "Key"
-    },
-    "options_kbshortcuts_menushortcuts": {
-        "description": "Text displayed in the options pane",
-        "message": "Menu shortcut keys (Not on OS X)"
-    },
-    "options_kbshortcuts_meta": {
-        "description": "Text displayed in the options pane",
-        "message": "Meta"
-    },
-    "options_kbshortcuts_os": {
-        "description": "Text displayed in the options pane",
-        "message": "OS"
-    },
-    "options_kbshortcuts_rotate": {
-        "description": "Text displayed in the options pane",
-        "message": "Rotate persona shortcut key: ALT + SHIFT + R"
-    },
-    "options_kbshortcuts_shift": {
-        "description": "Text displayed in the options pane",
-        "message": "Shift"
-    },
-    "options_kbshortcuts_title": {
-        "description": "Title for the shortcuts panel",
-        "message": "Keyboard shortcuts"
-    },
-    "options_kbshortcuts_toggle": {
-        "description": "Text displayed in the options pane",
-        "message": "Toggle auto-switch shortcut key: ALT + SHIFT + A"
-    },
-    "options_kbshortcuts_tools": {
-        "description": "Test displayed in the options pane",
-        "message": "Persona Switcher tools menu shortcut key:"
     },
     "options_mainMenuBar": {
         "description": "Text displayed in the options pane",
@@ -145,11 +77,7 @@
     },
     "options_previewDelay_desc": {
         "description": "Text displayed in the options pane",
-        "message": "(ms) delay."
-    },
-    "options_previewDelay_hint": {
-        "description": "Text displayed in the options pane",
-        "message": "Values between 100 and 10000"
+        "message": "(ms) delay, values between 100 and 10000."
     },
     "options_preview_desc": {
         "description": "Text displayed in the options pane",
@@ -189,15 +117,19 @@
     },
     "options_toolsSubmenu": {
         "description": "Text displayed in the options pane",
-        "message": "Tools menu."
+        "message": "Add to Tools menu."
     },
     "options_usefultips_title": {
-        "description": "The words 'Useful Tips'",
-        "message": "Useful Tips"
+        "description": "The word 'Tips'",
+        "message": "Tips"
     },
     "options_usefultips_tip1": {
         "description": "Tip indicating quick access to options",
         "message": "Right click on the toolbar button to quickly access this options page or to refresh the list of themes."
+    },
+    "options_usefultips_tip2": {
+        "description": "Tip indicating keyboard mapping.",
+        "message": "See https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox for instructions on how to set the keyboard shortcuts. Short story: click on the gear above and choose Manage Extension Shortcuts."
     },
     "ps_buttonLabel": {
         "description": "Button Label text",
