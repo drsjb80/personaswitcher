@@ -127,15 +127,11 @@
         "description": "Tip indicating quick access to options",
         "message": "Right click on the toolbar button to quickly access this options page or to refresh the list of themes."
     },
-<<<<<<< HEAD
     "options_usefultips_tip2": {
         "description": "Tip indicating keyboard mapping.",
         "message": "See https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox for instructions on how to set the keyboard shortcuts. Short story: click on the gear above and choose Manage Extension Shortcuts."
     },
-    "ps_buttonLabel": {
-=======
     "tm_buttonLabel": {
->>>>>>> 517e83002ae102b263393567ebf1e9bb9a398717
         "description": "Button Label text",
         "message": "Thematic"
     },

@@ -1,6 +1,6 @@
-rm personaswitcher.zip
+rm thematic.zip
 
-zip personaswitcher.zip \
+zip thematic.zip \
     _locales/de/messages.json \
     _locales/en_US/messages.json \
     _locales/it/messages.json \

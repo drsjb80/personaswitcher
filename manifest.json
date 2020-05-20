@@ -1,7 +1,7 @@
 {
     "applications": {
         "gecko": {
-            "id": "drsjb80@gmail.com",
+            "id": "thematic@drb80.addons.mozilla.org",
             "strict_min_version": "57.0"
         }
     },
@@ -23,7 +23,7 @@
             "64": "icons/Thematic64.png"
         },
         "default_popup": "browser_action/popup.html",
-        "default_title": "ThematicMenu"
+        "default_title": "Thematic"
     },
     "commands": {
         "_execute_browser_action": {
@@ -52,8 +52,8 @@
     "description": "__MSG_extensionDescription__",
     "author": "Steve Beaty",
     "developer": {
-        "name": "Jason Gould",
-        "url": "https://github.com/drsjb80/personaswitcher"
+        "name": "Steve Beaty",
+        "url": "https://github.com/drsjb80/thematic"
     },
     "icons": {
         "48": "icons/Thematic48.png"
@@ -71,5 +71,5 @@
         "management"
     ],
     "short_name": "__MSG_extensionShortName__",
-    "version": "5.0.6"
+    "version": "1.0.0"
 }

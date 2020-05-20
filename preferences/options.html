@@ -38,7 +38,7 @@
                 <label for="preview" name="i18n"
                     id="options_preview_desc"></label>
 
-                <input id="previewDelayHint" type="number" value="100"
+                <input type="number" value="100"
                     id="preview-delay" size="5" min="100" max="10000"
                     step="10" tabindex="6">
                 <label for="preview-delay" name="i18n"
@@ -59,17 +59,18 @@
                     id="options_toolsSubmenu"></label>
             </div>
 
-            <h3>Advanced</h3> <!-- fixme -->
+            <button name="i18n" id="options_advanced_options"></button>
+            <div id="advancedOptions" style="display:none">
+                <div>
+                    <input type="checkbox" id="debug" tabindex="10">
+                    <label for="debug" name="i18n" id="options_debug"></label>
+                </div>
 
-            <div>
-                <input type="checkbox" id="debug" tabindex="10">
-                <label for="debug" name="i18n" id="options_debug"></label>
-            </div>
-
-            <div>
-                <input type="checkbox" id="fast-switch" tabindex="11">
-                <label for="fast-switch" name="i18n"
-                    id="options_fast_switch"></label>
+                <div>
+                    <input type="checkbox" id="fast-switch" tabindex="11">
+                    <label for="fast-switch" name="i18n"
+                        id="options_fast_switch"></label>
+                </div>
             </div>
 
             <br/>

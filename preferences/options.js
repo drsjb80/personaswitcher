@@ -106,7 +106,5 @@ document.addEventListener('DOMContentLoaded', loadOptions);
 document.addEventListener('DOMContentLoaded', localizeHtmlPage);
 document.querySelector("form").addEventListener("submit", saveOptions);
 document.querySelector("form").addEventListener("reset", resetOptions);
-document.getElementById("refreshButton")
-        .addEventListener("click", reloadThemes);
-document.getElementById("advancedButton")
-        .addEventListener("click", displayAdvanced);
+document.getElementById("options_refresh_button").addEventListener("click", reloadThemes);
+document.getElementById("options_advanced_options").addEventListener("click", displayAdvanced);
